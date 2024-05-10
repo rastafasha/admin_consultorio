@@ -1,0 +1,303 @@
+<div class="page-wrapper">
+    <div class="content">
+    
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="row">
+                <div class="col-sm-12">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a routerLink="/laboratory/list">Laboratory </a></li>
+                        <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
+                        <li class="breadcrumb-item active">Edit/ Add: Laboratory </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- /Page Header -->
+        <div class="row">
+            <!-- paciente -->
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form enctype="multipart/form-data">
+                            
+                            <!-- paciente -->
+                            <div class="row align-items-center py-4" >
+                                <div class="col-12 py-4">
+                                    <h4>Datos del Paciente</h4>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label >N.Documento <span class="login-danger">*</span></label>
+                                        <input class="form-control"  name="n_doc"  disabled [(ngModel)]="n_doc" type="text"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">  
+                                    <div class="form-group local-forms">
+                                        <label >First Name <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="name"  disabled [(ngModel)]="name" type="text"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label >Last Name <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="surname"  disabled [(ngModel)]="surname" type="text"  >
+                                    </div>
+                                </div>
+                               
+                                <div class="col-12 col-md-3">
+                                    <div class="form-group local-forms">
+                                        <label >Mobile <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="phone"  disabled [(ngModel)]="phone" type="text"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-3">  
+                                    <div class="form-group local-forms">
+                                        <label >Nombre Acompañante <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="name_companion"  disabled [(ngModel)]="name_companion" type="text"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-3">  
+                                    <div class="form-group local-forms">
+                                        <label >Apellido Acompañante <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="surname_companion"  disabled [(ngModel)]="surname_companion" type="text"  >
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+
+                                    <div class="form-group ">
+                                        <div _ngcontent-rhp-c92="" class="card-header d-flex justify-content-between align-items-center">
+                                            <h5 _ngcontent-rhp-c92="" class="card-title">Laboratorio?</h5>
+                                            <div _ngcontent-rhp-c92="" class="status-toggle d-flex justify-content-between align-items-center">
+                                                <input _ngcontent-rhp-c92="" type="checkbox" id="laboratory" disabled  class="check" name="laboratory" [checked]="laboratory == true" [ngModelOptions]="{standalone: true}" [(ngModel)]="laboratory">
+                                                <label _ngcontent-rhp-c92="" for="laboratory" class="checktoggle" value="true">checkbox</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center" >
+                                    <div class="col-12">
+                                        <div class="form-group local-forms">
+                                            <label>Antecedentes Alergicos </label>
+                                            <textarea class="form-control" name="antecedent_alerg" disabled [(ngModel)]="antecedent_alerg" rows="4" cols="30"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- paciente -->
+                            <div class="row align-items-center" >
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="form-group local-forms">
+                                        <label>Diagnostico/Revisión <span class="login-danger">*</span></label>
+                                        <textarea class="form-control" name="description" disabled [(ngModel)]="description" rows="4" cols="30"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="table-responsive">
+                                        <table class="table mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Descripción</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let medicina of medical; let i = index">
+                                                    <td>
+                                                        Medicamento: {{medicina.name_medical}}
+                                                        <br>
+                                                        uso: {{medicina.uso}}
+                                                    </td>
+                                                    
+                                                </tr>
+                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row align-items-center" >
+                                
+                                
+                               <div class="row">
+                                
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="col-xl-12">
+                                        <label class="form-label">Suibir Archivos: *</label>
+                                    </div>
+                                    <div class="col-5">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="customFile" multiple="true"   (change)="processFile($event)">
+                                            <label class="custom-file-label" for="customFile">Seleccione archivo(s)</label>
+                                        </div>
+                                    </div>
+                                    <div class="row align-items-center" >
+                                        <div class="card card-flush">
+                                            <!--begin::Header-->
+                                            <div class="card-header pt-7">
+                                                <!--begin::Title-->
+                                                <h3 class="card-title align-items-start flex-column">
+                                                    <span class="card-label fw-bolder text-dark">Lista de Archivos</span>
+                                                </h3>
+                                                <div class="card-toolbar">
+                                                </div>
+                                            </div>
+                                            <!--end::Header-->
+                                            <!--begin::Body-->
+                                            <div class="card-body">
+                                                <!--begin::Scroll-->
+                                                <div class="hover-scroll-overlay-y pe-6 me-n6">
+                                                    <ng-container *ngFor="let FILE of FILES">
+                                                        <!--begin::Item-->
+                                                    <div class="rounded border-gray-300 border-1 border-gray-300 border-dashed px-7 py-3 mb-6">
+                                                        <!--begin::Info-->
+                                                        <div class="d-flex flex-stack mb-3">
+                                                            <!--begin::Wrapper-->
+                                                            <div class="me-3">
+                                                                <!--begin::Icon-->
+                                                               
+                                                                <img src="assets/svg/doc.svg" class="w-50px ms-n1 me-1" alt="">
+                                                                <!--end::Icon-->
+                                                                <!--begin::Title-->
+                                                                <a href="#" onclick="return false;" class="text-gray-800 text-hover-primary fw-bolder">{{FILE.name}}</a>
+                                                                <!--end::Title-->
+                                                            </div>
+                                                            <!--end::Wrapper-->
+                                                        </div>
+                                                        <!--end::Info-->
+                                                        <!--begin::Customer-->
+                                                        <div class="d-flex flex-stack">
+                                                            <!--begin::Name-->
+                                                            <span class="text-gray-400 fw-bolder">Size:
+                                                            <a href="#" onclick="return false;" class="text-gray-800 text-hover-primary fw-bolder">{{FILE.size}} Kb.</a></span>
+                                                            <!--end::Name-->
+                                                            <!--begin::Label-->
+                                                            <span class="badge badge-light-success">Activo</span>
+                                                            <button class="btn btn-danger btn-sm" (click)="deleteDocument(i)">x</button>
+                                                            <!--end::Label-->
+                                                        </div>
+                                                        <!--end::Customer-->
+                                                    </div>
+                                                    <!--end::Item-->
+                                                    </ng-container>
+                                                    
+                                                    
+                                                </div>
+                                                <!--end::Scroll-->
+                                            </div>
+                                            <!--end::Body-->
+                                        </div>
+                                        <!-- validaciones -->
+                                        <div class="form-group row" *ngIf="text_success">
+                                            <div class="col-12">
+                                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                    <strong>Exito!</strong>{{text_success}}.
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true"> </span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                
+                                        <div class="form-group row" *ngIf="text_validation">
+                                            <div class="col-12">
+                                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                                    <strong>!</strong> {{ text_validation }}.
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true"> </span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- validaciones -->
+                                        <div class="col-12">
+                                            <div class="doctor-submit text-end">
+                                                <button type="button" class="btn btn-primary submit-form me-2" (click)="save()">Actualizar</button>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="card card-flush">
+                                        <!--begin::Header-->
+                                        <div class="card-header pt-7">
+                                            <!--begin::Title-->
+                                            <h3 class="card-title align-items-start flex-column">
+                                                <span class="card-label fw-bolder text-dark">Lista de Archivos Agregados</span>
+                                            </h3>
+                                            <div class="card-toolbar">
+                                            </div>
+                                        </div>
+                                        <!--end::Header-->
+                                        <!--begin::Body-->
+                                        <div class="card-body">
+                                            <!--begin::Scroll-->
+                                            <div class="hover-scroll-overlay-y pe-6 me-n6">
+                                                <div class="col-xs-6">
+                                                    <ng-container *ngFor="let FILE of FilesAdded">
+                                                        <div class="filesAdded">
+                                                            <!--begin::Wrapper-->
+                                                            <div class="files">
+                                                               <a  href="javascript:void(0);" (click)="selectDoc(FILE)" data-bs-toggle="modal" [attr.data-bs-target]="'#view-doc-'+FILE.id">
+                                                                <img src="assets/svg/doc.svg" class="w-50px ms-n1 me-1 filesvg" alt="">
+                                                               </a>
+                                                                <div class="infofile">
+                                                                   <a  href="javascript:void(0);" (click)="selectDoc(FILE)"  data-bs-toggle="modal" [attr.data-bs-target]="'#view-doc-'+FILE.id" >
+                                                                       {{FILE.name_file}}</a>
+                                                                       <br>
+                                                                       <span class="text-gray-400 fw-bolder sizeee">Size:
+                                                                       <a href="#" onclick="return false;" class="text-gray-800 text-hover-primary fw-bolder">{{FILE.size}} Kb.</a></span>
+                                                                   </div> 
+                                                                   <button class="btn btn-danger btn-sm" (click)="deleteFile(FILE)">x</button> 
+                                                            </div>
+                                                            <!--end::Wrapper-->
+                                                        </div>
+                                                        <!--end::Info-->
+                                                        <!-- modal -->
+   
+
+
+                                                         <div [attr.id]="'view-doc-'+FILE.id" class="modal fade add-modal" role="dialog">
+                                                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="exampleModalLabel">{{FILE.name_file}}</h5>
+                                                                        <a href="javascript:void(0);" (click)="closeReload()" class="btn btn-white me-1" data-bs-dismiss="modal">Close</a>
+                                                                      </div>
+                                                                    <div class="modal-body text-center">
+                                                                        <embed [src]="getDocumentIframe(FILE.file)"  class="pdf-content"/>
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                          </div>
+   
+                                                           <!-- modal -->
+                                                    </ng-container>
+                                            </div>
+                                                
+                                                
+                                            </div>
+                                            <!--end::Scroll-->
+                                        </div>
+                                        <!--end::Body-->
+                                    </div>
+                                </div>
+                               </div>
+                                
+                            </div>
+                            
+                            
+                            
+                        </form>
+                        
+                    </div>
+                </div>	
+                	
+            </div>
+            <!-- fin paciente -->						
+        </div>
+    </div>
+</div>
+ 

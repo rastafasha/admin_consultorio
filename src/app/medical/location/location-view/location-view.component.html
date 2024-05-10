@@ -1,0 +1,203 @@
+<div class="page-wrapper">
+    <div class="content">
+    
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="row">
+                <div class="col-sm-12">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a routerLink="/location/list">Locations </a></li>
+                        <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
+                        <li class="breadcrumb-item active">View Location </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- /Page Header -->
+        <div class="row">
+            <div class="col-sm-12">
+            
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row" >
+                            <div class="col-12">
+                                <div class="form-heading">
+                                    <h4>Location Detail: {{location_selected.title}}</h4>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="row" >
+                                <div class="col-xs-12 col-sm-4">
+                                    <p><b>Location Name:</b>&nbsp;{{location_selected.title}}</p>
+                                    <p><b>City:</b>&nbsp;{{location_selected.city}}</p>
+                                    <p><b>State:</b>&nbsp;{{location_selected.state}}</p>
+                                    <p><b>Email:</b>&nbsp;{{location_selected.email}}</p>
+                                    <p><b>zip:</b>&nbsp;{{location_selected.zip}}</p>
+                                    <p><b>Phone 1:</b>&nbsp;{{location_selected.phone1}}</p>
+                                    <p><b>Phone 2:</b>&nbsp;{{location_selected.phone2}}</p>
+                                </div>
+                                <div class="col-xs-12 col-sm-4">
+                                    <img [src]="location_selected.avatar" style="width: 100%; margin-bottom: 20px;" alt="">
+                                    <p><b>Address:</b><br>
+                                        {{location_selected.address}}</p>
+                                </div>
+                                <div class="col-xs-12 col-sm-4">
+                                    <p>mapa</p>
+                                </div>
+                                
+                            </div>
+                            
+                            
+                        </div>
+                        
+                    </div>
+                </div>							
+            </div>
+            <!-- fin basico					 -->
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+            
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row" >
+                            <div class="col-12 ">
+                                <div class="form-heading">
+                                    <h4>Specialists: </h4>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="row align-items-center" >
+                                <table matSort  class="table border-0 custom-table comman-table datatable mb-0">
+                                    <thead>
+                                        <tr>
+                                            
+                                            <th mat-sort-header="avatars">Avatar</th>
+                                            <th mat-sort-header="names">Full Name</th>
+                                            <th mat-sort-header="emails">Email</th>
+                                            <th mat-sort-header="telefonos">Phone</th>
+                                            <!-- <th mat-sort-header="role">Role</th> -->
+                                            <th mat-sort-header="status">Status</th>
+                                            <th mat-sort-header="createds">Created At</th>
+                                             <th ></th> <!--acciones -->
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let specialist of specialists">
+                                            
+                                            <td>
+                                                <div *ngIf="!specialist.avatar">
+                                                    <img src="./assets/img/no-image.jpg" >
+                                                </div>
+                                                <div *ngIf="specialist.avatar">
+                                                    <img  [src]="specialist.avatar"  [alt]="specialist.name">
+                                                </div>
+                                            </td>
+                                            <td>
+                                              <a class="dropdown-item" [routerLink]="['/doctors/profile/', specialist.id]">
+                                                {{specialist.name + ' ' + (specialist.surname ? specialist.surname: '')}}
+                                              </a>
+                                            </td>
+                                            <td>{{specialist.email}}</td>
+                                            <td>{{specialist.phone}}</td>
+                                            <!-- <td>{{specialist.roles.name}}</td> -->
+                                            <td>
+                                              <span class="badge bg-danger"
+                                                  *ngIf="specialist.status === 'inactive'">Inactive</span>
+                                              <span class="badge bg-success"
+                                                  *ngIf="specialist.status === 'active'">Active</span>
+                                              <span class="badge bg-primary"
+                                                  *ngIf="specialist.status === 'incoming'">Incoming</span>
+                                              <span class="badge bg-dark"
+                                                  *ngIf="specialist.status === 'black list'">Black list</span>
+    
+                                          </td>
+                                            <td>{{specialist.created_at | date }}</td>
+                                            
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                
+                            </div>
+                            
+                            
+                        </div>
+                        
+                    </div>
+                </div>							
+            </div>
+            <div class="col-xs-12">
+            
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row" >
+                            <div class="col-12">
+                                <div class="form-heading">
+                                    <h4>Clients: </h4>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="row align-items-center" >
+                                
+                                
+                                <table matSort  class="table border-0 custom-table comman-table datatable mb-0">
+                                    <thead>
+                                        <tr>
+                                            
+                                            <th mat-sort-header="avatarp">Avatar</th>
+                                            <th mat-sort-header="namep">Full Name</th>
+                                            <th mat-sort-header="emailp">Email</th>
+                                            <th mat-sort-header="telefonop">Phone</th>
+                                            <th mat-sort-header="elegibilityp">Elegibility</th>
+                                            <th mat-sort-header="createdp">Created At</th>
+                                             <th ></th> <!--acciones -->
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let patient of patients">
+                                            
+                                            <td>
+                                                <div *ngIf="!patient.avatar">
+                                                    <img src="./assets/img/no-image.jpg" >
+                                                </div>
+                                                <div *ngIf="patient.avatar">
+                                                    <img  [src]="patient.avatar"  [alt]="patient.name">
+                                                </div> 
+                                            </td>
+                                            <td>
+                                              <a class="dropdown-item" [routerLink]="['/patients/profile/', patient.id]">
+                                                {{patient.name + ' ' + (patient.first_name ? patient.last_name: '')}}
+                                              </a>
+                                            </td>
+                                            <td>{{patient.email}}</td>
+                                            <td>{{patient.phone}}</td>
+                                            <td>
+                                              <span class="badge bg-danger"
+                                                  *ngIf="patient.eligibility === 'no'">No</span>
+                                              <span class="badge bg-success"
+                                                  *ngIf="patient.eligibility === 'active'">Yes</span>
+                                              <span class="badge bg-primary"
+                                                  *ngIf="patient.eligibility === 'pending'">Pending</span>
+    
+                                          </td>
+                                            <td>{{patient.created_at | date }}</td>
+                                            
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            
+                        </div>
+                        
+                    </div>
+                </div>							
+            </div>
+            
+        </div>
+    </div>
+</div>
+ 

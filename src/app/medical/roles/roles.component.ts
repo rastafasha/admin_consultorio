@@ -1,0 +1,82 @@
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { DataService } from 'src/app/shared/data/data.service';
+import { SideBarData, MenuItem } from 'src/app/shared/models/models';
+import { SideBarService } from 'src/app/shared/side-bar/side-bar.service';
+interface Route {
+  url: string;
+  // Add other properties if necessary
+}
+@Component({
+  selector: 'app-roles',
+  templateUrl: './roles.component.html',
+  styleUrls: ['./roles.component.scss']
+})
+export class RolesComponent {
+  public miniSidebar = 'false';
+  public expandMenu = 'false';
+  public mobileSidebar = 'false';
+  public sideBarActivePath = false;
+  public headerActivePath = false;
+  base = '';
+  page = '';
+  currentUrl = '';
+
+  constructor(private sideBar: SideBarService,public router: Router,private data: DataService,) 
+  {
+    this.sideBar.toggleSideBar.subscribe((res: string) => {
+      if (res == 'true') {
+        this.miniSidebar = 'true';
+      } else {
+        this.miniSidebar = 'false';
+      }
+    });
+
+    this.sideBar.toggleMobileSideBar.subscribe((res: string) => {
+      if (res == 'true' || res == 'true') {
+        this.mobileSidebar = 'true';
+      } else {
+        this.mobileSidebar = 'false';
+      }
+    });
+
+    this.sideBar.expandSideBar.subscribe((res: string) => {
+      this.expandMenu = res;
+      if (res == 'false' && this.miniSidebar == 'true') {
+        this.data.sideBar.map((mainMenus: SideBarData) => {
+          mainMenus.menu.map((resMenu: MenuItem) => {
+            resMenu.showSubRoute = false;
+          });
+        });
+      }
+      if (res == 'true' && this.miniSidebar == 'true') {
+        this.data.sideBar.map((mainMenus: SideBarData) => {
+          mainMenus.menu.map((resMenu: MenuItem) => {
+            const menuValue = sessionStorage.getItem('menuValue');
+            if (menuValue && menuValue == resMenu.menuValue) {
+              resMenu.showSubRoute = true;
+            } else {
+              resMenu.showSubRoute = false;
+            }
+          });
+        });
+      }
+    });
+    this.getRoutes(this.router);
+  }
+  public toggleMobileSideBar(): void {
+    this.sideBar.switchMobileSideBarPosition();
+    console.log(this.sideBar);
+  }
+  private getRoutes(route: Route): void {
+    if (
+      route.url.split('/')[2] === 'confirm-mail'
+    ) {
+      this.sideBarActivePath = false;
+      this.headerActivePath = false;
+    } else {
+      this.sideBarActivePath = true;
+      this.headerActivePath = true;
+    }
+  }
+}

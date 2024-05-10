@@ -1,0 +1,365 @@
+<div class="page-wrapper">
+    <div class="content">
+    
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="row">
+                <div class="col-sm-12">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a routerLink="/patients/list">Pacientes </a></li>
+                        <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
+                        <li class="breadcrumb-item active">Perfil de Paciente</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- /Page Header -->
+        <div class="row">
+            <div class="col-sm-12" *ngIf="patient_selected">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="about-info mb-10">
+                                    <h4>Perfil de Paciente </h4>
+                                </div>
+                                <div class="doctor-profile-head">
+                                    <!-- <div class="profile-bg-img">
+                                        <img  src="assets/img/profile-bg.jpg"  alt="Profile">
+                                    </div> -->
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-4">
+                                            <div class="profile-user-box">
+                                                <div class="profile-user-img">
+                                                    <div *ngIf="!patient_selected.avatar">
+                                                        <img src="./assets/img/no-image.jpg" >
+                                                    </div>
+                                                    <div *ngIf="patient_selected.avatar">
+                                                        <img  src="{{imagenSerUrl}}{{patient_selected.avatar}}"  [alt]="patient_selected.first_name">
+                                                    </div>
+                                                    <!-- <div *ngIf="patient_selected.avatar">
+                                                        <img  [src]="patient_selected.avatar"  [alt]="patient_selected.name">
+                                                    </div> -->
+                                                </div>
+                                                <div class="names-profiles">
+                                                    <h4>{{patient_selected.full_name}}</h4>
+                                                    <h5>Paciente</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 d-flex align-items-center">
+                                            <div class="follow-group">
+                                                <div class="doctor-follows">
+                                                    <h5>Citas Médicas</h5>
+                                                    <h4>{{num_appointment}}</h4>
+                                                </div>
+                                                <div class="doctor-follows">
+                                                    <h5>Inversion</h5>
+                                                    <h4>{{money_of_appointments|currency}}</h4>
+                                                </div>
+                                                <div class="doctor-follows">
+                                                    <h5>Citas Pendientes</h5>
+                                                    <h4>{{num_appointment_pendings}}</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 d-flex align-items-center">
+                                            <div class="follow-btn-group">
+                                                <a [routerLink]="['/patients/list/edit/', patient_id]" class="btn btn-info follow-btns">Edit</a>
+                                                <!-- <button type="submit" class="btn btn-info message-btns">Message</button> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>								
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="doctor-personals-grp">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="heading-detail ">
+                                        <h4 class="mb-3">Sobre Mí</h4>
+                                        <p>{{patient_selected.current_desease}}</p>
+                                    </div>
+                                    <div class="about-me-list">
+                                        <ul class="list-space">
+                                            <li>
+                                                <h4>Género</h4>
+                                                <span *ngIf="patient_selected.gender == 2">Femenino</span>
+                                                <span *ngIf="patient_selected.gender == 1">Masculino</span>
+                                            </li>
+                                            <li>
+                                                <h4>Educación</h4>
+                                                <span>{{patient_selected.education}}</span>
+                                            </li>
+                                            <li>
+                                                <h4>Birth Day</h4>
+                                                <span>{{patient_selected.birth_date}}</span>
+                                            </li>
+                                            <li>
+                                                <h4>Email</h4>
+                                                <span>{{patient_selected.email}}</span>
+                                            </li>
+                                            <li>
+                                                <h4>Teléfono</h4>
+                                                <span>{{patient_selected.phone}}</span>
+                                            </li>
+                                            <li>
+                                                <h4>N.Documento</h4>
+                                                <span>{{patient_selected.n_doc}}</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="doctor-personals-grp" >
+                            
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="heading-detail">
+                                        <h4 style="margin: 0; padding: 0; ">Signos Vitales: </h4>
+                                        <p style="margin: 0; padding: 0; padding-bottom: 10px;">Registrado: {{patient_selected.created_at|date}}</p>
+                                    </div>
+                                    <div class="skill-blk">
+                                        <div class="skill-statistics">
+                                            <div class="skills-head">
+                                                <h5>Presión Arterial (mm/hg)</h5>
+                                                <p>{{patient_selected.ta}}</p>
+                                            </div>
+                                            <div class="progress mb-0"  >
+                                                <div class="progress-bar bg-operations" role="progressbar" [style.width]="patient_selected.ta+''+'%'"  [attr.aria-valuenow]="patient_selected.ta" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </div>
+                                        <div class="skill-statistics">
+                                            <div class="skills-head">
+                                                <h5>Temperatura (•C)</h5>
+                                                <p>{{patient_selected.temperature}}</p>
+                                            </div>
+                                            <div class="progress mb-0"  >
+                                                <div class="progress-bar bg-haemoglobin" role="progressbar" [style.width]="patient_selected.temperature+''+'%'"  [attr.aria-valuenow]="patient_selected.temperature" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </div>
+                                        <div class="skill-statistics">
+                                            <div class="skills-head">
+                                                <h5>Frecuencia Cardiaca (por minuto)</h5>
+                                                <p>{{patient_selected.fc}}</p>
+                                            </div>
+                                            <div class="progress mb-0"  >
+                                                <div class="progress-bar bg-statistics" role="progressbar" [style.width]="patient_selected.fc+''+'%'"  [attr.aria-valuenow]="patient_selected.fc" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </div>
+                                        <div class="skill-statistics">
+                                            <div class="skills-head">
+                                                <h5>Frecuencia Respiratoria (por minuto) </h5>
+                                                <p>{{patient_selected.fr}}</p>
+                                            </div>
+                                            <div class="progress mb-0"  >
+                                                <div class="progress-bar bg-visit" role="progressbar" [style.width]="patient_selected.fr+''+'%'"  [attr.aria-valuenow]="patient_selected.fr" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </div>
+                                        <div class="skill-statistics">
+                                            <div class="skills-head">
+                                                <h5>Peso (Kg) </h5>
+                                                <p>{{patient_selected.peso}}</p>
+                                            </div>
+                                            <div class="progress mb-0"  >
+                                                <div class="progress-bar bg-visit" role="progressbar" [style.width]="patient_selected.peso+''+'%'"  [attr.aria-valuenow]="patient_selected.peso" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="doctor-personals-grp" *ngIf="patient_selected.person && patient_selected.person.name_companion">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="about-me-list">
+                                        <ul class="list-space">
+                                            
+                                            <li>
+                                                <h4>Acompañante</h4>
+                                                <span>{{patient_selected.person.name_companion+' '+patient_selected.person.surname_companion}}</span>
+                                            </li>
+                                            <li>
+                                                <h4>Teléfono Acompañante</h4>
+                                                <span>{{patient_selected.person.mobile_companion}}</span>
+                                            </li>
+                                            <li>
+                                                <h4>Relación Acompañante</h4>
+                                                <span>{{patient_selected.person.relationship_companion}}</span>
+                                            </li>
+
+                                            
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="doctor-personals-grp" *ngIf="patient_selected.person && patient_selected.person.name_responsable">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="about-me-list">
+                                        <ul class="list-space">
+                                            <li>
+                                                <h4>Responsable</h4>
+                                                <span>{{patient_selected.person.name_responsable+' '+patient_selected.person.surname_responsable}}</span>
+                                            </li>
+                                            <li>
+                                                <h4>Teléfono Responsable</h4>
+                                                <span>{{patient_selected.person.mobile_responsable}}</span>
+                                            </li>
+                                            <li>
+                                                <h4>Relación Responsable</h4>
+                                                <span>{{patient_selected.person.relationship_responsable}}</span>
+                                            </li>
+
+                                            
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="doctor-personals-grp">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="tab-content-set">
+                                        <ul class="nav">
+                                            <li>
+                                                <a href="#" onclick="return false;" [ngClass]="{'active': option_selected == 1}" (click)="optionSelected(1)"><span class="set-about-icon me-2"><img src="assets/img/icons/menu-icon-02.svg" alt=""></span>Sobre Mi</a>
+                                            </li>
+                                            <li>
+                                                <a href="#" onclick="return false;" [ngClass]="{'active': option_selected == 2}" (click)="optionSelected(2)"><span class="set-about-icon me-2"><img src="assets/img/icons/menu-icon-16.svg" alt=""></span>Citas Atendidas</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <ng-container *ngIf="option_selected == 1">
+                                        <div class="personal-list-out">
+                                            <div class="row">
+                                                <div class="col-xl-3 col-md-6">
+                                                    <div class="detail-personal">
+                                                        <h2>Nombre Completo</h2>
+                                                        <h3>{{patient_selected.full_name}}</h3>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xl-3 col-md-6">
+                                                    <div class="detail-personal">
+                                                        <h2>Teléfono móvil </h2>
+                                                        <h3>{{patient_selected.phone}}</h3>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xl-3 col-md-6">
+                                                    <div class="detail-personal">
+                                                        <h2>Email</h2>
+                                                        <h3>{{patient_selected.email}}</h3>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xl-3 col-md-6">
+                                                    <div class="detail-personal">
+                                                        <h2>Dirección</h2>
+                                                        <h3>{{patient_selected.address}}</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="hello-park">
+                                            <p><b>Antecedente Familiar:</b> {{patient_selected.antecedent_family}}</p>
+                                            <p><b>Antecedente Personal:</b> {{patient_selected.antecedent_personal}}</p>
+                                            <p><b>Antecedente Alergico:</b> {{patient_selected.antecedent_alerg}}</p>
+                                        </div>
+                                    </ng-container>
+                                    <ng-container *ngIf="option_selected == 2">
+                                        <div class="activity scrooldiv">
+                                            <div class="activity-box">
+                                                <ul class="activity-list">
+                                                    <ng-container *ngFor="let appointment of appointments">
+                                                        <li>
+                                                            <div class="activity-user">
+                                                                <a [routerLink]="routes.profile" [attr.title]="appointment.doctor.full_name" data-bs-toggle="tooltip" class="avatar">
+                                                                    <img [attr.alt]="appointment.doctor.full_name" [src]="appointment.doctor.avatar" class="img-fluid rounded-circle">
+                                                                </a>
+                                                            </div>
+                                                            <div class="activity-content timeline-group-blk">
+                                                                <div class="timeline-group flex-shrink-0">
+                                                                    <h4>{{appointment.date_appointment_format}}</h4>
+                                                                    <span class="time">{{appointment.format_hour_start+' - '+appointment.format_hour_end}}</span>
+                                                                </div>
+                                                                <div class="comman-activitys flex-grow-1">
+                                                                    <h3>{{appointment.doctor.full_name}} <span> <br>
+                                                                        Monto de la Cita: {{appointment.amount | currency}}  </span></h3>
+                                                                    <p *ngIf="appointment.appointment_attention">Diagnostico: {{appointment.appointment_attention.description}}</p>
+                                                                    <ng-container *ngIf="!appointment.appointment_attention">
+                                                                        <button class="custom-badge status-pink">Diagnostico: Pendiente</button>
+                                                                    </ng-container>
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </ng-container>
+                                                    
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                    
+                                    
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title ">Citas Pendientes</h4>
+                                </div>
+                                <div class="card-body p-0 table-dash">
+                                    <div class="table-responsive scrooldiv2">
+                                        <table matSort  class="table mb-0 border-0 datatable custom-table patient-profile-table">
+                                            <thead>
+                                                <tr>
+                                                    
+                                                    <th mat-sort-header="date">Date</th>
+                                                    <th mat-sort-header="doctor">Doctor</th>
+                                                    <th mat-sort-header="status">Status</th>
+                                                    <th mat-sort-header="statuspayment">Status Pago</th>
+                                                    <th mat-sort-header="charges">Monto ($)</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let data of appointment_pendings">
+                                                    
+                                                    <td >{{data.date_appointment_format}}</td>
+                                                    <td >{{data.doctor.full_name}}</td>
+                                                    <td>
+                                                        <button [ngClass]="{'status-green' : data.status === 2, 'status-pink' : data.status === 1}" class="custom-badge">{{data.status == 1 ? 'Pendiente' : 'Atendido'}}</button>
+                                                    </td>
+                                                    <td>
+                                                        <button [ngClass]="{'status-green' : data.status_pay === 1, 'status-pink' : data.status_pay === 2}" class="custom-badge">{{data.status_pay == 1 ? 'Pagado' : 'Deuda'}}</button>
+                                                    </td>
+                                                    <td>{{data.amount }}</td>
+                                                    <td class="text-end">
+                                                        <div class="dropdown dropdown-action">
+                                                            <a href="javascript:void(0);" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                            <div class="dropdown-menu dropdown-menu-end">
+                                                                <a class="dropdown-item" [routerLink]="['/appointments/list/edit/', data.id]"><i class="fa-solid fa-pen-to-square m-r-5"></i> Edit</a>
+                                                                <!-- <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete_appointment"><i class="fa fa-trash-alt m-r-5"></i> Delete</a> -->
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ 

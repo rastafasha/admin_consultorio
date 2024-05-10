@@ -1,0 +1,382 @@
+<div class="page-wrapper">
+    <div class="content">
+    
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="row">
+                <div class="col-sm-12">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a routerLink="/patients/list">Pacientes </a></li>
+                        <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
+                        <li class="breadcrumb-item active">Editar Paciente </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- /Page Header -->
+        <div class="row">
+            <!-- paciente -->
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form>
+                            <div class="row" >
+                                <div class="col-12">
+                                    <div class="form-heading">
+                                        <h4>Paciente Detalle: #{{patient_id}}</h4>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">  
+                                    <div class="form-group local-forms">
+                                        <label >Nombre<span class="login-danger">*</span></label>
+                                        <input class="form-control" name="name" [(ngModel)]="name" type="text"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label >Apellido <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="surname" [(ngModel)]="surname" type="text"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label >N.Documento <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="n_doc" [(ngModel)]="n_doc" type="text"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label >Teléfono móvil <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="phone" [(ngModel)]="phone" type="text"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label >Fecha de Nacimiento<span class="login-danger">*</span></label>
+                                        <input class="form-control datetimepicker" name="birth_date" [(ngModel)]="birth_date" type="text" matInput [matDatepicker]="picker"  >
+                                        <mat-datepicker #picker></mat-datepicker>
+                                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label >Profesión <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="education" [(ngModel)]="education" type="text"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group select-gender">
+                                        <label class="gen-label">Género<span class="login-danger">*</span></label>
+                                        <div class="form-check-inline">
+                                            <label class="form-check-label">
+                                                <input type="radio" name="gender" [value]="1" [(ngModel)]="gender" class="form-check-input">Masculino
+                                            </label>
+                                        </div>
+                                        <div class="form-check-inline">
+                                            <label class="form-check-label">
+                                                <input type="radio" name="gender" [value]="2" [(ngModel)]="gender" class="form-check-input">Femenino
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label >Email <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="email" [(ngModel)]="email" type="email"  >
+                                    </div>
+                                </div>
+                                
+                                
+                                
+                                <div class="col-12 col-sm-12">
+                                    <div class="form-group local-forms">
+                                        <label>Dirección  <span class="login-danger">*</span></label>
+                                        <textarea class="form-control" name="address" [(ngModel)]="address" rows="3" cols="30"></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-12 col-md-6 col-xl-6">
+                                    <div class="form-group local-top-form">
+                                        <label class="local-top">Foto <span class="login-danger">*</span></label>
+                                        <div class="settings-btn upload-files-avator">
+                                            <input type="file" accept="image/*" name="image" id="file" (change)="loadFile($event)" class="hide-input">
+                                            <label for="file" class="upload">Seleccione Foto</label>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="IMAGE_PREVISUALIZA">
+                                        <img [src]="IMAGE_PREVISUALIZA" style="width: 250px;" alt="">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-6">
+                                    <div class="form-group local-forms">
+                                        <label>Motivo de entrada  <span class="login-danger">*</span></label>
+                                        <textarea class="form-control" name="current_desease" [(ngModel)]="current_desease" rows="3" cols="30"></textarea>
+                                    </div>
+                                </div>
+                                <!-- validaciones -->
+                                <div class="form-group row" *ngIf="text_success">
+                                    <div class="col-12">
+                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                            <strong>Exito!</strong>{{text_success}}.
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true"> </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+        
+                                <div class="form-group row" *ngIf="text_validation">
+                                    <div class="col-12">
+                                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                            <strong>!</strong> {{ text_validation }}.
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true"> </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            <!-- validaciones -->
+                                <div class="col-12">
+                                    <div class="doctor-submit text-end">
+                                        <button type="button" class="btn btn-primary submit-form me-2" (click)="save()">Guardar</button>
+                                        <!-- <button type="submit" class="btn btn-primary cancel-form">Cancel</button> -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </form>
+                        
+                    </div>
+                </div>	
+                	
+            </div>
+            <!-- fin paciente -->					
+            <!-- antecedentes -->
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form>
+                            <div class="row" >
+                                <div class="col-12">
+                                    <div class="form-heading">
+                                        <h4>Patient Antecedents</h4>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-12 col-sm-4">
+                                    <div class="form-group local-forms">
+                                        <label>Antecedente Personal  <span class="login-danger">*</span></label>
+                                        <textarea class="form-control" name="antecedent_personal" [(ngModel)]="antecedent_personal" rows="3" cols="30"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-4">
+                                    <div class="form-group local-forms">
+                                        <label>Antecedente Familiar  <span class="login-danger">*</span></label>
+                                        <textarea class="form-control" name="antecedent_family" [(ngModel)]="antecedent_family" rows="3" cols="30"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-4">
+                                    <div class="form-group local-forms">
+                                        <label>Antecedente Alergico  <span class="login-danger">*</span></label>
+                                        <textarea class="form-control" name="antecedent_alerg" [(ngModel)]="antecedent_alerg" rows="3" cols="30"></textarea>
+                                    </div>
+                                </div>
+                                <!-- validaciones -->
+                            <div class="form-group row" *ngIf="valid_form_success">
+                                <div class="col-md-8">
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <strong>Exito!</strong>SE CREO CORRECTAMENTE.
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true"> </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div class="form-group row" *ngIf="text_validation">
+                                <div class="col-md-8">
+                                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                        <strong>!</strong> {{ text_validation }}.
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true"> </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- validaciones -->
+                                
+                                <div class="col-12">
+                                    <div class="doctor-submit text-end">
+                                        <button type="button" class="btn btn-primary submit-form me-2" (click)="save()">Guardar</button>
+                                        <!-- <button type="submit" class="btn btn-primary cancel-form">Cancel</button> -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </form>
+                        
+                    </div>
+                </div>
+                	
+            </div>
+            <!-- fin antecedentes -->	
+            <!-- acompañante -->
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form>
+                            <div class="row" >
+                                <div class="col-12">
+                                    <div class="form-heading">
+                                        <h4>Acompañate y/o Responsable</h4>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-3">  
+                                    <div class="form-group local-forms">
+                                        <label >Nombre Acompañante <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="name_companion" [(ngModel)]="name_companion" type="text"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-3">  
+                                    <div class="form-group local-forms">
+                                        <label >Apellido Acompañante <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="surname_companion" [(ngModel)]="surname_companion" type="text"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-3">  
+                                    <div class="form-group local-forms">
+                                        <label >Teléfono Acompañante <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="mobile_companion" [(ngModel)]="mobile_companion" type="text"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-3">  
+                                    <div class="form-group local-forms">
+                                        <label >Relación con el paciente <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="relationship_companion" [(ngModel)]="relationship_companion" type="text"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-3">  
+                                    <div class="form-group local-forms">
+                                        <label >Nombre del Responsable <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="name_responsable" [(ngModel)]="name_responsable" type="text"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-3">  
+                                    <div class="form-group local-forms">
+                                        <label >Apellido del Responsable <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="	surname_responsable" [(ngModel)]="surname_responsable" type="text"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-3">  
+                                    <div class="form-group local-forms">
+                                        <label >Teléfono del Responsable <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="mobile_responsable" [(ngModel)]="mobile_responsable" type="text"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-3">  
+                                    <div class="form-group local-forms">
+                                        <label >Relación con el paciente <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="relationship_responsable" [(ngModel)]="relationship_responsable" type="text"  >
+                                    </div>
+                                </div>
+                                <!-- validaciones -->
+                            <div class="form-group row" *ngIf="valid_form_success">
+                                <div class="col-md-8">
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <strong>Exito!</strong>SE CREO CORRECTAMENTE.
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true"> </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div class="form-group row" *ngIf="text_validation">
+                                <div class="col-md-8">
+                                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                        <strong>!</strong> {{ text_validation }}.
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true"> </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- validaciones -->
+                                
+                                <div class="col-12">
+                                    <div class="doctor-submit text-end">
+                                        <button type="button" class="btn btn-primary submit-form me-2" (click)="save()">Guardar</button>
+                                        <!-- <button type="submit" class="btn btn-primary cancel-form">Cancel</button> -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </form>
+                        
+                    </div>
+                </div>
+                	
+            </div>
+            <!-- fin acompañante -->	
+            <!-- signos vitales -->
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form>
+                            <div class="row" >
+                                <div class="col-12">
+                                    <div class="form-heading">
+                                        <h4>Signos Vitales</h4>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-3">  
+                                    <div class="form-group local-forms">
+                                        <label >Presión Arterial TA (mm/Hg)<span class="login-danger">*</span></label>
+                                        <input class="form-control" name="ta" [(ngModel)]="ta" type="number"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-3">  
+                                    <div class="form-group local-forms">
+                                        <label >Temperatura (ºC)<span class="login-danger">*</span></label>
+                                        <input class="form-control" name="temperature" [(ngModel)]="temperature" type="number"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-3">  
+                                    <div class="form-group local-forms">
+                                        <label >Frecuencia Card. (por minuto) <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="fc" [(ngModel)]="fc" type="number"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-3">  
+                                    <div class="form-group local-forms">
+                                        <label >Frecuencia Resp. (por minuto)<span class="login-danger">*</span></label>
+                                        <input class="form-control" name="fr" [(ngModel)]="fr" type="number"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-3">  
+                                    <div class="form-group local-forms">
+                                        <label >Peso (Kg) <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="peso" [(ngModel)]="peso" type="number"  >
+                                    </div>
+                                </div>
+                                
+                                
+                                <div class="col-12">
+                                    <div class="doctor-submit text-end">
+                                        <button type="button" class="btn btn-primary submit-form me-2" (click)="save()">Guardar</button>
+                                        <!-- <button type="submit" class="btn btn-primary cancel-form">Cancel</button> -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </form>
+                        
+                    </div>
+                </div>
+                	
+            </div>
+            <!-- fin signos vitales -->						
+        </div>
+    </div>
+</div>
+ 

@@ -1,0 +1,162 @@
+<div class="page-wrapper">
+    <!-- Page Content -->
+    <div class="content container-fluid">
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="row">
+                <div class="col-sm-12">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a [routerLink]="routes.adminDashboard">Dashboard </a></li>
+                        <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
+                        <li class="breadcrumb-item active">Configuración</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- /Page Header -->
+
+        <div class="settings-menu-links">
+            <ul class="nav nav-tabs menu-tabs">
+                <li class="nav-item active">
+                    <a class="nav-link" [routerLink]="routes.settings">Configuración General</a>
+                </li>
+                <!-- <li class="nav-item">
+                    <a class="nav-link" [routerLink]="routes.localizationDetails">Localization</a>
+                </li> -->
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="routes.paymentSettings">Configuración Pagos</a>
+                </li>
+                <!-- <li class="nav-item">
+                    <a class="nav-link" [routerLink]="routes.emailSettings">Email Settings</a>
+                </li> -->
+                <!-- <li class="nav-item">
+                    <a class="nav-link" [routerLink]="routes.socialSettings">Social Media Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="routes.socialLinks">Social Links</a>
+                </li> -->
+                <!-- <li class="nav-item">
+                    <a class="nav-link" [routerLink]="routes.seoSettings">SEO Settings</a>
+                </li> -->
+                <!-- <li class="nav-item">
+                    <a class="nav-link" [routerLink]="routes.themeSettings">Theme Settings</a>
+                </li> -->
+                <!-- <li class="nav-item">
+                    <a class="nav-link" [routerLink]="routes.changePassword">Change Password</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="routes.othersSettings">Others</a>
+                </li> -->
+            </ul>
+        </div>
+        
+        <div class="row">
+            
+            <div class="col-xs-12 col-sm-6 ">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Detalles de Dirección</h5>
+                    </div>
+                    <div class="card-body pt-0">
+                        <form>
+                            <div class="settings-form">
+                                <div class="form-group">
+                                    <label>Nombre Clínica o Consultorio <span class="star-red">*</span></label>
+                                    <input type="text" name="name" [(ngModel)]="name" class="form-control" placeholder=" Name">
+                                </div>
+                                <div class="form-group">
+                                    <label>Dirección <span class="star-red">*</span></label>
+                                    <input type="text" name="address" [(ngModel)]="address" class="form-control" placeholder="Enter Address">
+                                </div>
+                                <div class="form-group">
+                                    <label>Télefono <span class="star-red">*</span></label>
+                                    <input type="text" name="phone" [(ngModel)]="phone" class="form-control" placeholder="Enter phone">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Ciudad <span class="star-red">*</span></label>
+                                            <input type="text" name="city" [(ngModel)]="city" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Estado/Provincia <span class="star-red">*</span></label>
+                                            <input type="text" name="state" [(ngModel)]="state" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Zip/Código Postal <span class="star-red">*</span></label>
+                                            <input type="text" name="zip" [(ngModel)]="zip" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Pais <span class="star-red">*</span></label>
+                                            <input type="text" name="country" [(ngModel)]="country" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-12 col-md-6 col-xl-6">
+                                    <div class="form-group local-top-form">
+                                        <label class="local-top">Logo <span class="login-danger">*</span></label>
+                                        <div class="settings-btn upload-files-avator">
+                                            <input type="file" accept="image/*" name="image" id="file" (change)="loadFile($event)" class="hide-input">
+                                            <label for="file" class="upload">Seleccione Foto</label>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="FILE_AVATAR">
+                                        <img [src]="IMAGE_PREVISUALIZA" style="width: 250px;" alt="">
+                                    </div>
+                                </div> -->
+                                <div class="form-group mb-0">
+                                    <div class="settings-btns">
+                                        <button type="submit" class="border-0 btn btn-primary btn-gradient-primary btn-rounded" (click)="save()">Guardar</button>&nbsp;&nbsp;
+                                        <!-- <button type="submit" class="btn btn-secondary btn-rounded">Cancel</button> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6 ">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Detalles</h5>
+                        
+                    </div>
+                    <div class="card-body pt-0 dataconsult">
+                        <ng-container *ngFor="let setting of settings">
+                            <h4>Nombre de la Clínica o Consultorio</h4>
+                            <p>{{setting.name}}</p>
+                            <h4>Dirección</h4>
+                            <p>{{setting.address}}</p>
+                            <h4>Teléfono</h4>
+                            <p>{{setting.phone}}</p>
+                            <h4>Ciudad</h4>
+                            <p>{{setting.city}}</p>
+                            <h4>Estado/Provincia</h4>
+                            <p>{{setting.state}}</p>
+                            <h4>Zip/Código Postal</h4>
+                            <p>{{setting.zip}}</p>
+                            <h4>País</h4>
+                            <p>{{setting.country}}</p>
+                            <!-- <img class="logoav" [src]="setting.avatar" width="50" height="50" alt="">  -->
+
+                            <div class="clear"></div>
+                            <!-- <a class="btn btn-outline-danger btn-sm" href="#" onclick="return false;" (click)="deleteTipoPago(setting)" title="Edit">
+                                <i class="fa fa-trash pl--0"></i>
+                            </a> -->
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <!-- /Page Content -->
+</div>

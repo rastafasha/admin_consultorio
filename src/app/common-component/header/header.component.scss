@@ -1,0 +1,46 @@
+.header .header-left {
+    float: left;
+    height: 70px;
+    padding: 0 20px;
+    position: relative;
+    text-align: center;
+    width: 220px;
+    z-index: 1;
+    top: -9px;
+}
+
+.header-left-modif{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+.logoav{
+    grid-area: 1 / 1 / 3 / 2;
+    margin: 0 auto;
+    width: 80%;
+    height: 90%;
+}
+.ttapp{
+    grid-area: 1 / 2 / 2 / 4;
+    font-size: 14px;
+}
+.nmclin{
+    grid-area: 2 / 2 / 3 / 4;
+    font-size: 12px;
+}
+
+@media(max-width: 780px) {
+    .header .header-left {
+        width: 330px;
+    }
+    .logoav{
+        grid-area: 1 / 1 / 3 / 2;
+        margin: 0 auto;
+        width: 60%;
+        height: 90%;
+    }
+}
+
+

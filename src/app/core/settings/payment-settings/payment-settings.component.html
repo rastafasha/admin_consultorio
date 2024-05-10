@@ -1,0 +1,276 @@
+<div class="page-wrapper">
+    <!-- Page Content -->
+    <div class="content container-fluid">
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="row">
+                <div class="col-sm-12">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a [routerLink]="routes.adminDashboard">Dashboard </a></li>
+                        <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
+                        <li class="breadcrumb-item active">Configuración</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- /Page Header -->
+
+        <div class="settings-menu-links">
+            <ul class="nav nav-tabs menu-tabs">
+                <li class="nav-item ">
+                    <a class="nav-link" [routerLink]="routes.settings">Configuración General</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" [routerLink]="routes.paymentSettings">Configuración Pagos</a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="row">
+            <div class="tab-pane" id="address" role="tabpanel" aria-labelledby="address-tab">
+                
+                <div class="rbt-dashboard-table table-responsive "  >
+                   <div class="row">
+                    <div class="col-xs-12 col-sm-5" *ngIf="!tipoSeleccionado">
+                        <form  class="rbt-profile-row rbt-default-form row row--15">
+                            <div class="form-group col-xs-12">
+                                <label for="exampleInputEmail1">Tipo de Pago<span class="required">*</span></label>
+                                <select name="tipo" id="input" class="form-control" [(ngModel)]="tipo" (change)="selectedTypeEdit($event.target.value)">
+                                    <option value="seleccione">Seleccione</option>
+                                    <option value="paypal">Paypal</option>
+                                    <option value="transferencia">Transferencia Bancaria</option>
+                                    <option value="pagomovil">Pago Móvil</option>
+                                </select>
+        
+                            </div>
+                            <div class="clear"></div>
+                            <!-- paypal -->
+                        <div *ngIf="pagoSeleccionado == 'paypal'" class="card p-3">
+                            <div class="card-body">
+                                <h4>Paypal</h4>
+                                <div class="col-xs-12 ">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Email</label>
+                                        <input name="email" [(ngModel)]="email" type="text" class="form-control">
+                                    </div>
+                                    <!-- <div class="form-group col-sm-6">
+                                        <label for="exampleInputEmail1">Modo Prueba?<span class="required">*</span></label>
+                                        <select name="" id="input" class="form-control" [(ngModel)]="sandboxMode">
+                                            <option value="">Seleccione</option>
+                                            <option value="true">Si</option>
+                                            <option value="false">No</option>
+                                        </select>
+    
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label for="exampleInputEmail1">Paypal Secret key</label>
+                                        <input [(ngModel)]="paypalSecret" type="text" class="form-control">
+                                    </div> -->
+                                </div>
+                                <div class="col-xs-12 ">
+                                    <!-- <div class="form-group col-sm-6">
+                                        <label for="exampleInputEmail1">ClientId Paypal</label>
+                                        <input [(ngModel)]="clientId" type="text" class="form-control">
+                                    </div> -->
+                                    
+                                </div>
+                                <!-- <input type="hidden" [(ngModel)]="id"> -->
+                                <button (click)="save()" class="btn btn-primary">Submit</button>
+                            </div>
+                           
+                        </div>
+                        <!-- paypal -->
+                        <!-- transferencia -->
+                        <div *ngIf="pagoSeleccionado == 'transferencia'"  class="card p-3">
+                            <div class="card-body">
+                                <h4>Transferencia</h4>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-6">
+                                        <div class="form-group col-xs-12">
+                                            <label for="exampleInputEmail1">Tipo de Cuenta<span class="required">*</span></label>
+                                            <select name="bankAccountType" id="input" class="form-control" [(ngModel)]="bankAccountType">
+                                                <option value="">Seleccione</option>
+                                                <option value="ahorro">Ahorro</option>
+                                                <option value="corriente">Corriente</option>
+                                                <option value="cheques">de cheques</option>
+                                            </select>
+        
+                                        </div>
+                                        <div class="form-group col-xs-12">
+                                            <label for="exampleInputEmail1">Nombre del Banco</label>
+                                            <input [(ngModel)]="bankName" name="bankName" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6">
+        
+                                        <div class="form-group col-xs-12">
+                                            <label for="exampleInputEmail1">Cuenta Bancaria</label>
+                                            <input [(ngModel)]="bankAccount" name="bankAccount" type="text" class="form-control">
+                                        </div>
+                                        <div class="form-group col-xs-12">
+                                            <label for="exampleInputEmail1">Usuario (opcional)</label>
+                                            <input [(ngModel)]="user" name="user" type="text" class="form-control">
+                                        </div>
+        
+                                    </div>
+                                </div>
+                                <input type="hidden" [(ngModel)]="id">
+                            <button (click)="save()" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </div>
+                        <!-- transferencia -->
+                        <!-- pagomovil -->
+                        <div *ngIf="pagoSeleccionado == 'pagomovil'" class="card p-3">
+                            <div class="card-body">
+                                <h4>Pago Móvil</h4>
+                                <div class="row">
+                                    <div class="form-group col-xs-12 col-sm-6">
+                                        <label for="exampleInputEmail1">Ci o RIF</label>
+                                        <input [(ngModel)]="ciorif" name="ciorif" type="text" class="form-control">
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-6">
+                                        <label for="exampleInputEmail1">Télefono</label>
+                                        <input [(ngModel)]="telefono" name="telefono" type="text" class="form-control">
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-6">
+                                        <label for="exampleInputEmail1">Nombre del Banco</label>
+                                        <input [(ngModel)]="bankName" name="bankName" type="text" class="form-control">
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-6">
+                                        <label for="exampleInputEmail1">Cuenta Bancaria</label>
+                                        <input [(ngModel)]="bankAccount" name="bankAccount" type="text" class="form-control">
+                                    </div>
+    
+                                </div>
+                                <!-- <input type="hidden" [(ngModel)]="id"> -->
+                                    <button (click)="save()" class="btn btn-primary">Guardar</button>
+                            </div>    
+                        </div>
+                        <!-- pagomovil  -->
+                        </form>
+                    </div>
+                    <div class="col-xs-12 col-sm-7" *ngIf="!tipoSeleccionado">
+                        <div class="card">
+                            <div class="card-body">
+                                <table class="rbt-table table">
+                                    <thead>
+                                        <tr>
+                                            <th>Tipo</th>
+                                            <th>Nombre</th>
+                                            <th>Status</th>
+                                            <th>Activar</th>
+                                            <th>Opciones</th>
+                                        </tr>
+                                    </thead>
+        
+                                    <tbody>
+                                        <ng-container *ngFor="let tipodepago of tiposdepagos">
+                                            <tr>
+                                                <td>{{tipodepago.tipo}}</td>
+                                                <td>{{tipodepago.bankName}}</td>
+                                                <td>
+                                                    <span class="badge bg-success" *ngIf="tipodepago.status === 'ACTIVE'">Activo</span>
+                                                    <span class="badge bg-danger" *ngIf="tipodepago.status === 'INACTIVE'">Inactivo</span>
+                                                </td>
+                                                <td>
+                                                    <!-- <div class="status-toggle d-flex justify-content-between align-items-center">
+                                                        <input type="checkbox"  class="check"  [checked]="{'check': tipodepago.status === 'ACTIVO'}" [(ngModel)]="tipodepago.status" (change)="cambiarStatus(tipodepago)">
+                                                        <label  class="checktoggle">checkbox</label>
+                                                    </div> -->
+
+                                                    <select
+                                                    class="form-control form-select-solid fw-bolder"
+                                                    name="status" [(ngModel)]="tipodepago.status" (change)="cambiarStatus(tipodepago)"
+                                                    placeholder="status">
+                                                      <option value="">Seleccione</option>
+                                                      <option value="ACTIVE">Activo</option>
+                                                      <option value="INACTIVE">Inactivo</option>
+                                                      </select>
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-outline-primary btn-sm"
+                                                            href="#" onclick="return false;" (click)="selectedType(tipodepago)" title="Edit"><i class="fa fa-eye pl--0"></i></a>
+                                                    <a class="btn btn-outline-danger btn-sm"
+                                                            href="#" onclick="return false;" (click)="deleteTipoPago(tipodepago)" title="Edit"><i class="fa fa-trash pl--0"></i></a>
+                                                </td>
+                                            </tr>
+                                        </ng-container>
+                                       
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                   </div>
+                    
+                </div>
+                <div class="col-xs-12 col-sm-7 col-sm-push-3" *ngIf="tipoSeleccionado">
+                    <div class="card"  >
+                        <div class="card-body">
+                            
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-6">
+                                        <div class="rbt-form-group">
+                                            <b >
+                                                Tipo de Pago</b><br>
+                                            {{tipoSeleccionado.tipo}}
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6" *ngIf="tipoSeleccionado.email">
+                                        <div class="rbt-form-group">
+                                            <b >
+                                               Email</b><br>
+                                            {{tipoSeleccionado.email}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-6" *ngIf="tipoSeleccionado.ciorif">
+                                        <div class="rbt-form-group">
+                                            <b >
+                                                ci orif</b><br>
+                                                {{tipoSeleccionado.ciorif}}
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6" *ngIf="tipoSeleccionado.telefono">
+                                        <div class="rbt-form-group">
+                                            <b > Teléfono</b><br>
+                                            {{tipoSeleccionado.telefono}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-6" *ngIf="tipoSeleccionado.bankName">
+                                        <div class="rbt-form-group">
+                                            <b > Nombre del Banco</b><br>
+                                            {{tipoSeleccionado.bankName}}
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6" *ngIf="tipoSeleccionado.bankAccount">
+                                        <div class="rbt-form-group">
+                                            <b > Cuenta Bancaria</b><br>
+                                            {{tipoSeleccionado.bankAccount}}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                               
+                                
+                        </div>
+                            
+                            
+                    </div>
+                </div>
+                <div *ngIf="tipoSeleccionado">
+                    <button class="btn btn-primary btn-sm" (click)="tipoSeleccionado = null">Regresar</button>
+                </div>
+                <!-- Start Profile Row  -->
+                
+                <!-- End Profile Row  -->
+            </div>
+        </div>
+    </div>
+    <!-- /Page Content -->
+</div>

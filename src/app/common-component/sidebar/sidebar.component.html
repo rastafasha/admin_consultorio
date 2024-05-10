@@ -1,0 +1,60 @@
+<div class="sidebar" id="sidebar" (mouseover)="miniSideBarMouseHover('over')" (mouseout)="miniSideBarMouseHover('out')">
+  <ng-scrollbar>
+    <div id="sidebar-menu" class="sidebar-menu">
+      <ul>
+        <ng-container *ngFor="let mainTittle of sidebarData">
+          <li class="menu-title">
+            <span>{{ mainTittle.tittle | titlecase }}</span>
+          </li>
+          <ng-container *ngFor="let menu of mainTittle.menu">
+            <li *ngIf="menu.hasSubRoute === false">
+              <a [class.active]="base === menu.base" [routerLink]="menu.route"><span class="menu-side"><i class="fa"
+                    [class]="menu.icon" *ngIf="menu.faIcon === true"></i><img [src]="menu.img" alt="" /></span>
+                <span>{{ menu.menuValue | titlecase }}</span></a>
+            </li>
+            <li class="submenu" *ngIf="menu.hasSubRoute === true">
+              <a [class.active]="base === menu.base  " (click)="expandSubMenus(menu)"
+                href="javascript:void(0)" [ngClass]="{ subdrop: menu.showSubRoute === true }"><span class="menu-side"><i
+                    class="fa" [class]="menu.icon" *ngIf="menu.faIcon === true"></i><img [src]="menu.img"
+                    alt="" /></span>
+                <span> {{ menu.menuValue | titlecase }}</span>
+                <span class="menu-arrow"></span></a>
+              <ul>
+                <ng-container *ngFor="let subMenus of menu.subMenus">
+                  <li [ngClass]="
+                        menu.showSubRoute === true
+                          ? 'd-block'
+                          : 'd-none'
+                      ">
+                    <a [routerLink]="subMenus.route" *ngIf="subMenus.show_nav" [class.active]="currentUrl === subMenus.base">
+                      {{ subMenus.menuValue | titlecase }}
+                    </a>
+                  </li>
+                </ng-container>
+
+              </ul>
+            </li>
+          </ng-container>
+        </ng-container>
+      </ul>
+      
+      <div class="logout-btn">
+        <!-- <a (click)="installPWA()" style="cursor:pointer"><span class="menu-side"><img src="assets/img/icons/menu-icon-01.svg" alt="" /></span>
+          <span>Instalar App (Sólo Chrome) </span></a> -->
+          <a (click)="logout()" style="cursor:pointer"><span class="menu-side"><img src="assets/img/icons/logout.svg" alt="" /></span>
+            <span>Salir</span></a>
+      </div>
+    </div>
+    
+    <!-- <h6 style="font-size: 9px;padding: 10px;color: #b6b4b4;">
+      Comercializado por: <br>
+      <a href="https://iketid.net" target="_blank" style="color: #403f3f;">Iketid</a>
+      <br>
+      Desarrollado por: <br>
+      <a href="https://malcolmcordova.com/" target="_blank" style="color: #403f3f;">Malcolm Córdova</a><br> -->
+    <p style="font-size: 10px; padding-left: 15px;">
+      Copyright © {{year}} Health Connect me <br> 
+      Todos los Derechos Reservados.
+    </p>
+  </ng-scrollbar>
+</div>

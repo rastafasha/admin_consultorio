@@ -1,0 +1,168 @@
+<div class="page-wrapper">
+    <div class="content">
+    
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="row">
+                <div class="col-sm-12">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a routerLink="/staffs/list">Staffs </a></li>
+                        <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
+                        <li class="breadcrumb-item active">Personal Agregar </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- /Page Header -->
+        <div class="row">
+            <div class="col-sm-12">
+            
+                <div class="card">
+                    <div class="card-body">
+                        <form>
+                            <div class="row" >
+                                <div class="col-12">
+                                    <div class="form-heading">
+                                        <h4>Personal Detalle</h4>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">  
+                                    <div class="form-group local-forms">
+                                        <label >Nombre <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="name" [(ngModel)]="name" type="text"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label >Apellido <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="surname" [(ngModel)]="surname" type="text"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label >Teléfono <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="mobile" [(ngModel)]="mobile" type="text"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-6">
+                                    <div class="form-group local-forms">
+                                        <label >Email <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="email" [(ngModel)]="email" type="email"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-6">
+                                    <div class="form-group local-forms">
+                                        <label >Contraseña <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="password" [(ngModel)]="password" type="password"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-6">
+                                    <div class="form-group local-forms">
+                                        <label >Confirmar Contraseña <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="password_confirmation" [(ngModel)]="password_confirmation" type="password"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-6">
+                                    <div class="form-group local-forms">
+                                        <label >Fecha de Nacimiento  <span class="login-danger">*</span></label>
+                                        <input class="form-control datetimepicker" name="birth_date" [(ngModel)]="birth_date" type="text" matInput [matDatepicker]="picker"  >
+                                        <mat-datepicker #picker></mat-datepicker>
+                                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-6">
+                                    <div class="form-group select-gender">
+                                        <label class="gen-label">Género<span class="login-danger">*</span></label>
+                                        <div class="form-check-inline">
+                                            <label class="form-check-label">
+                                                <input type="radio" name="gender" value="1" [(ngModel)]="gender" class="form-check-input">Masculino
+                                            </label>
+                                        </div>
+                                        <div class="form-check-inline">
+                                            <label class="form-check-label">
+                                                <input type="radio" name="gender" value="2" [(ngModel)]="gender" class="form-check-input">Femenino
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label >Educación <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="education" [(ngModel)]="education" type="text"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label >Designación <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="designation" [(ngModel)]="designation" type="text"  >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label >Roles <span class="login-danger">*</span></label>
+                                        <mat-select [(ngModel)]="selectedValue" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Select Role">
+                                            <mat-option *ngFor="let data of roles" [value]="data.id">
+                                            {{data.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-12">
+                                    <div class="form-group local-forms">
+                                        <label>Dirección  <span class="login-danger">*</span></label>
+                                        <textarea class="form-control" name="address" [(ngModel)]="address" rows="3" cols="30"></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-12 col-md-6 col-xl-6">
+                                    <div class="form-group local-top-form">
+                                        <label class="local-top">Avatar <span class="login-danger">*</span></label>
+                                        <div class="settings-btn upload-files-avator">
+                                            <input type="file" accept="image/*" name="image" id="file" (change)="loadFile($event)" class="hide-input">
+                                            <label for="file" class="upload">Seleccione foto</label>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="FILE_AVATAR">
+                                        <img [src]="IMAGE_PREVISUALIZA" style="width: 250px;" alt="">
+                                    </div>
+                                </div>
+                                <!-- validaciones -->
+                                <div class="form-group row" *ngIf="text_success">
+                                    <div class="col-12">
+                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                            <strong>Exito!</strong>{{text_success}}.
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true"> </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+        
+                                <div class="form-group row" *ngIf="text_validation">
+                                    <div class="col-12">
+                                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                            <strong>!</strong> {{ text_validation }}.
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true"> </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- validaciones -->
+                                <div class="col-12">
+                                    <div class="doctor-submit text-end">
+                                        <button type="button" class="btn btn-primary submit-form me-2" (click)="save()">Guardar</button>
+                                        <!-- <button type="submit" class="btn btn-primary cancel-form">Cancel</button> -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </form>
+                        
+                    </div>
+                </div>							
+            </div>					
+        </div>
+    </div>
+</div>
+ 
