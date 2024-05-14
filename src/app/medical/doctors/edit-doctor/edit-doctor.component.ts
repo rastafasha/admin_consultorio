@@ -21,6 +21,7 @@ export class EditDoctorComponent {
   public password_confirmation: string = '';
   public birth_date: string = '';
   public gender: number = 1;
+  public precio_cita: number;
   public education: string = '';
   public designation: string = '';
   public address: string = '';
@@ -169,6 +170,9 @@ export class EditDoctorComponent {
     }
     if(this.designation ){
       formData.append('designation', this.designation);
+    }
+    if(this.precio_cita ){
+      formData.append('precio_cita', this.precio_cita+'');
     }
 
     // if(this.selectedValueLocation ){

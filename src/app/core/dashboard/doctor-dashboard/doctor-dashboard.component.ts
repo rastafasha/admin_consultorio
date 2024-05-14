@@ -20,6 +20,7 @@ import {
 import { DashboardService } from '../service/dashboard.service';
 import { DoctorService } from 'src/app/medical/doctors/service/doctor.service';
 import { ActivatedRoute } from '@angular/router';
+import { PatientMService } from 'src/app/medical/patient-m/service/patient-m.service';
 interface data {
   value: string ;
 }
@@ -96,10 +97,12 @@ export class DoctorDashboardComponent {
   public user:any;
 
   public appointment_pendings: any =[];
+  public doctorPatientList: any =[];
 
   constructor(
     public dashboardService:DashboardService,
     public doctorService:DoctorService,
+    public patientService:PatientMService,
     public activatedRoute:ActivatedRoute,
   ) {
     this.chartOptionsOne = {
@@ -258,7 +261,8 @@ export class DoctorDashboardComponent {
 
     let USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER: '');
-    // console.log(this.user);
+    this.doctor_id = this.user.id;
+    console.log(this.doctor_id);
 
     if(this.user.roles[0]==='DOCTOR'){
 
@@ -282,6 +286,8 @@ export class DoctorDashboardComponent {
   
     })
   }
+
+  
 
 
   
@@ -319,6 +325,7 @@ export class DoctorDashboardComponent {
       this.num_appointments_total_pending_current= resp.num_appointments_total_pending_current;
       this.num_appointments_total_pending_before= resp.num_appointments_total_pending_before;
       this.porcentaje_dtpn= resp.porcentaje_dtpn;
+      this.doctorPatientList= resp.patientsbydoc.data;
     });
   }
   dashboardDoctorProfileYear(){

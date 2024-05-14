@@ -371,12 +371,19 @@ export class DataService {
               show_nav: true,
             },
             {
-              menuValue: 'Listado',
+              menuValue: 'Listado superamdin',
               route: routes.patientsList,
               base: routes.patientsList,
               permision: 'list_patient',
               show_nav: true,
             },
+            // {
+            //   menuValue: 'Listado',
+            //   route: routes.patientsListDoctor,
+            //   base: routes.patientsListDoctor,
+            //   permision: 'list_patient_doctor',
+            //   show_nav: true,
+            // },
             {
               menuValue: 'Edit Paciente',
               route: routes.editPatient,
@@ -409,12 +416,19 @@ export class DataService {
               show_nav: true,
             },
             {
-              menuValue: 'Listado',
+              menuValue: 'Listado (S)',
               route: routes.appointmentList,
               base: routes.appointmentList,
               permision: 'list_appointment',
               show_nav: true,
             },
+            // {
+            //   menuValue: 'Listado',
+            //   route: routes.appointmentListDoct,
+            //   base: routes.appointmentListDoct,
+            //   permision: 'list_appointment_doctor',
+            //   show_nav: true,
+            // },
            
             {
               menuValue: 'Edit Appointment',

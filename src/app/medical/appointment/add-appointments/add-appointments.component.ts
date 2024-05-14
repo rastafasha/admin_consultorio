@@ -4,6 +4,7 @@ import { routes } from 'src/app/shared/routes/routes';
 import { AppointmentService } from '../service/appointment.service';
 import { DoctorService } from '../../doctors/service/doctor.service';
 import { SettignService } from 'src/app/core/settings/settigs.service';
+import { RolesService } from '../../roles/service/roles.service';
 
 @Component({
   selector: 'app-add-appointments',
@@ -39,17 +40,21 @@ export class AddAppointmentsComponent {
   patient:any = [];
   DOCTORS:any = [];
   DOCTOR:any = [];
+  roles:any = [];
   DOCTOR_SELECTED:any;
   
   selected_segment_hour:any;
   
   tiposdepagos:any;
+  user:any;
+  doctor_id:any;
   
 
   constructor(
     public appointmentService:AppointmentService,
     public doctorService:DoctorService,
     public settigService: SettignService,
+    public roleService: RolesService,
     public router: Router
   ){
 
@@ -58,6 +63,13 @@ export class AddAppointmentsComponent {
   ngOnInit(): void {
     this.doctorService.closeMenuSidebar();
     window.scrollTo(0, 0);
+    let USER = localStorage.getItem("user");
+    this.user = JSON.parse(USER ? USER: '');
+    this.doctor_id = this.user.id;
+    this.user = this.roleService.authService.user;
+    this.roles = this.user.roles[0];
+    // console.log(this.doctor_id);
+
     this.appointmentService.listConfig().subscribe((resp:any)=>{
       this.hours = resp.hours;
       this.specialities = resp.specialities;

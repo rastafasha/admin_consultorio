@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { routes } from 'src/app/shared/routes/routes';
 import { AppointmentService } from '../service/appointment.service';
+import { RolesService } from '../../roles/service/roles.service';
 
 @Component({
   selector: 'app-edit-appointments',
@@ -35,22 +36,31 @@ export class EditAppointmentsComponent {
 
   DOCTORS:any = [];
   DOCTOR:any = [];
+  roles:any = [];
   DOCTOR_SELECTED:any;
 
   selected_segment_hour:any;
 
   appointment_id:any;
   appointment_selected:any;
+  user:any;
+  doctor_id:any;
 
   constructor(
     public appointmentService:AppointmentService,
     public router: Router,
+    public roleService: RolesService,
     public ativatedRoute: ActivatedRoute
   ){
 
   }
 
   ngOnInit(): void {
+    let USER = localStorage.getItem("user");
+    this.user = JSON.parse(USER ? USER: '');
+    this.doctor_id = this.user.id;
+    this.user = this.roleService.authService.user;
+    this.roles = this.user.roles[0];
     window.scrollTo(0, 0);
     this.getDatos();
     this.ativatedRoute.params.subscribe((resp:any)=>{

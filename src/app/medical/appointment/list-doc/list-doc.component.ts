@@ -1,24 +1,24 @@
 import { Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { routes } from 'src/app/shared/routes/routes';
-import { PatientMService } from '../service/patient-m.service';
+import { AppointmentService } from '../service/appointment.service';
 import { FileSaverService } from 'ngx-filesaver';
-import { DoctorService } from '../../doctors/service/doctor.service';
 import * as XLSX from 'xlsx';
 import jspdf from 'jspdf';
+import { DoctorService } from '../../doctors/service/doctor.service';
 import { RolesService } from '../../roles/service/roles.service';
 import { ActivatedRoute } from '@angular/router';
 
-declare var $:any;  
+declare var $:any;
 @Component({
-  selector: 'app-list-patient-m',
-  templateUrl: './list-patient-m.component.html',
-  styleUrls: ['./list-patient-m.component.scss']
+  selector: 'app-list-doc',
+  templateUrl: './list-doc.component.html',
+  styleUrls: ['./list-doc.component.scss']
 })
-export class ListPatientMComponent {
+export class ListDocComponent {
   public routes = routes;
 
-  public patientList: any = [];
+  public appointmentList: any = [];
   dataSource!: MatTableDataSource<any>;
 
   public showFilter = false;
@@ -35,37 +35,45 @@ export class ListPatientMComponent {
   public pageSelection: Array<any> = [];
   public totalPages = 0;
 
-  public patient_generals:any = [];
-  public doctorPatientList:any = [];
-  public patient_id:any;
-  public patient_selected:any;
+  public appointment_generals:any = [];
+  public appointment_id:any;
+  public appointment:any;
+  public appointment_selected:any;
   public text_validation:any;
+  public speciality_id:number= 0;
+  public date = null;
+  specialities:any = [];
+  hours:any;
+
+  confimation:any= null;
   public user:any;
   public doctor_id:any;
-  public roles:any;
 
   constructor(
-    public patientService: PatientMService,
+    public appointmentService: AppointmentService,
     public doctorService: DoctorService,
+    private fileSaver: FileSaverService,
+    private ativatedRoute: ActivatedRoute,
     public roleService: RolesService,
-    public ativatedRoute: ActivatedRoute,
-    private fileSaver: FileSaverService
     ){
 
   }
   ngOnInit() {
     window.scrollTo(0, 0);
     this.doctorService.closeMenuSidebar();
-    this.getTableData();
+    
+    // this.getSpecialities();
     let USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER: '');
-    this.doctor_id = this.user.id;
+    // this.doctor_id = this.user.id;
     this.user = this.roleService.authService.user;
-    this.roles = this.user.roles[0];
 
     this.ativatedRoute.params.subscribe((resp:any)=>{
       this.doctor_id = resp.doctor_id;
-     });
+      console.log(this.doctor_id);
+    });
+
+    this.getTableData();
   }
 
   isPermission(permission:string){
@@ -78,61 +86,62 @@ export class ListPatientMComponent {
     return false;
   }
 
+
+  
+
   private getTableData(page=1): void {
-    this.patientList = [];
+    this.appointmentList = [];
     this.serialNumberArray = [];
 
-    this.patientService.listPatients(page, this.searchDataValue).subscribe((resp:any)=>{
+    this.appointmentService.listAppointmentDocts(this.doctor_id, page, this.searchDataValue,  this.date).subscribe((resp:any)=>{
       // console.log(resp);
 
       this.totalDataPatient = resp.total;
-      this.patientList = resp.patients.data;
-      this.patient_id = resp.patients.id;
+      this.appointmentList = resp.appointments.data;
+      this.appointment_id = resp.appointments.id;
       // this.getTableDataGeneral();
-      this.dataSource = new MatTableDataSource<any>(this.patientList);
+      this.dataSource = new MatTableDataSource<any>(this.appointmentList);
       this.calculateTotalPages(this.totalDataPatient, this.pageSize);
     })
   }
 
- 
-
   getTableDataGeneral(){
-    this.patientList = [];
+    this.appointmentList = [];
     this.serialNumberArray = [];
     
-    this.patient_generals.map((res: any, index: number) => {
+    this.appointment_generals.map((res: any, index: number) => {
       const serialNumber = index + 1;
       if (index >= this.skip && serialNumber <= this.limit) {
        
-        this.patientList.push(res);
+        this.appointmentList.push(res);
         this.serialNumberArray.push(serialNumber);
       }
     });
-    this.dataSource = new MatTableDataSource<any>(this.patientList);
+    this.dataSource = new MatTableDataSource<any>(this.appointmentList);
     this.calculateTotalPages(this.totalDataPatient, this.pageSize);
   }
   selectUser(staff:any){
-    this.patient_selected = staff;
+    this.appointment_selected = staff;
   }
 
   deletePatient(){
-    this.patientService.deletePatient(this.patient_selected.id).subscribe((resp:any)=>{
+    this.appointmentService.deleteAppointment(this.appointment_selected.id).subscribe((resp:any)=>{
       // console.log(resp);
 
       if(resp.message == 403){
         this.text_validation = resp.message_text;
       }else{
 
-        let INDEX = this.patientList.findIndex((item:any)=> item.id == this.patient_selected.id);
+        let INDEX = this.appointmentList.findIndex((item:any)=> item.id == this.appointment_selected.id);
       if(INDEX !=-1){
-        this.patientList.splice(INDEX,1);
+        this.appointmentList.splice(INDEX,1);
 
         $('#delete_patient').hide();
         $("#delete_patient").removeClass("show");
         $(".modal-backdrop").remove();
         $("body").removeClass();
         $("body").removeAttr("style");
-        this.patient_selected = null;
+        this.appointment_selected = null;
         this.getTableData();
       }
       }
@@ -151,12 +160,12 @@ export class ListPatientMComponent {
   }
 
   public sortData(sort: any) {
-    const data = this.patientList.slice();
+    const data = this.appointmentList.slice();
 
     if (!sort.active || sort.direction === '') {
-      this.patientList = data;
+      this.appointmentList = data;
     } else {
-      this.patientList = data.sort((a, b) => {
+      this.appointmentList = data.sort((a, b) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const aValue = (a as any)[sort.active];
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -201,6 +210,8 @@ export class ListPatientMComponent {
     this.currentPage = 1;
     this.getTableData();
     this.searchDataValue = '';
+    this.speciality_id = 0;
+    this.date= null;
   }
 
   private calculateTotalPages(totalDataPatient: number, pageSize: number): void {
@@ -218,7 +229,6 @@ export class ListPatientMComponent {
     }
   }
 
-
   excelExport(){
     const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8';
     const EXCLE_EXTENSION = '.xlsx';
@@ -227,7 +237,7 @@ export class ListPatientMComponent {
 
 
     //custom code
-    const worksheet = XLSX.utils.json_to_sheet(this.patientList);
+    const worksheet = XLSX.utils.json_to_sheet(this.appointmentList);
 
     const workbook = {
       Sheets:{
@@ -240,7 +250,7 @@ export class ListPatientMComponent {
 
     const blobData = new Blob([excelBuffer],{type: EXCEL_TYPE});
 
-    this.fileSaver.save(blobData, "patients_db_appcitasmedicas",)
+    this.fileSaver.save(blobData, "citas_db_appcitasmedicas",)
 
   }
   csvExport(){
@@ -250,7 +260,7 @@ export class ListPatientMComponent {
     this.getTableDataGeneral();
 
     //custom code
-    const worksheet = XLSX.utils.json_to_sheet(this.patientList);
+    const worksheet = XLSX.utils.json_to_sheet(this.appointmentList);
 
     const workbook = {
       Sheets:{
@@ -263,7 +273,7 @@ export class ListPatientMComponent {
 
     const blobData = new Blob([excelBuffer],{type: CSV_TYPE});
 
-    this.fileSaver.save(blobData, "patients_db_appcitasmedicas", CSV_EXTENSION)
+    this.fileSaver.save(blobData, "citas_db_appcitasmedicas", CSV_EXTENSION)
 
   }
 
@@ -275,7 +285,7 @@ export class ListPatientMComponent {
 
 
     //custom code
-    const worksheet = XLSX.utils.json_to_sheet(this.patientList);
+    const worksheet = XLSX.utils.json_to_sheet(this.appointmentList);
 
     const workbook = {
       Sheets:{
@@ -288,14 +298,14 @@ export class ListPatientMComponent {
 
     const blobData = new Blob([excelBuffer],{type: TXT_TYPE});
 
-    this.fileSaver.save(blobData, "patients_db_appcitasmedicas", TXT_EXTENSION)
+    this.fileSaver.save(blobData, "citas_db_appcitasmedicas", TXT_EXTENSION)
 
   }
 
   pdfExport(){
     // var doc = new jspdf(); 
     
-    // const worksheet = XLSX.utils.json_to_sheet(this.patientList);
+    // const worksheet = XLSX.utils.json_to_sheet(this.staff_generals);
 
     // const workbook = {
     //   Sheets:{
@@ -306,11 +316,28 @@ export class ListPatientMComponent {
 
     // doc.html(document.body, {
     //   callback: function (doc) {
-    //     doc.save('patients_db_appcitasmedicas.pdf');
+    //     doc.save('staffs_db_appcitasmedicas.pdf');
     //   }
     // });
 
   }
 
+  cambiarStatus(data:any){
+    let VALUE = data.confimation;
+    console.log(VALUE);
+    
+    this.appointmentService.updateConfirmation(data, data.id).subscribe(
+      resp =>{
+        console.log(resp);
+        // Swal.fire('Actualizado', `actualizado correctamente`, 'success');
+        // this.toaster.open({
+        //   text:'Producto Actualizado!',
+        //   caption:'Mensaje de Validación',
+        //   type:'success',
+        // })
+        this.getTableData();
+      }
+    )
+  }
 
 }

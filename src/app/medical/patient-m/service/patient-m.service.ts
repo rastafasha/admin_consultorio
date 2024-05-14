@@ -18,12 +18,13 @@ export class PatientMService {
     let URL = url_servicios+'/patients?page='+page+"&search="+search;
     return this.http.get(URL, {headers:headers});
   }
-
-  getPatientsByDoctor(doctor_id:any){
+  listPatientDocts(doctor_id:any, page:number=1,  search:string=''){
     let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
-    let URL = url_servicios+'/patients/byDoctor/'+doctor_id;
+    let URL = url_servicios+'/patients/byDoctor/'+doctor_id+'/?page='+page+"&search="+search;
     return this.http.get(URL, {headers:headers});
   }
+
+  
   
   getPatient(user_id:any){
     let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})

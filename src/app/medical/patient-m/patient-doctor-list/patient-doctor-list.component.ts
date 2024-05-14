@@ -11,11 +11,11 @@ import { ActivatedRoute } from '@angular/router';
 
 declare var $:any;  
 @Component({
-  selector: 'app-list-patient-m',
-  templateUrl: './list-patient-m.component.html',
-  styleUrls: ['./list-patient-m.component.scss']
+  selector: 'app-patient-doctor-list',
+  templateUrl: './patient-doctor-list.component.html',
+  styleUrls: ['./patient-doctor-list.component.scss']
 })
-export class ListPatientMComponent {
+export class PatientDoctorListComponent {
   public routes = routes;
 
   public patientList: any = [];
@@ -56,16 +56,18 @@ export class ListPatientMComponent {
   ngOnInit() {
     window.scrollTo(0, 0);
     this.doctorService.closeMenuSidebar();
-    this.getTableData();
     let USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER: '');
-    this.doctor_id = this.user.id;
+    // this.doctor_id = this.user.id;
     this.user = this.roleService.authService.user;
     this.roles = this.user.roles[0];
-
+    
+    // this.getPatiensByDoctor();
+    
     this.ativatedRoute.params.subscribe((resp:any)=>{
       this.doctor_id = resp.doctor_id;
-     });
+    });
+    this.getTableData();
   }
 
   isPermission(permission:string){
@@ -82,8 +84,8 @@ export class ListPatientMComponent {
     this.patientList = [];
     this.serialNumberArray = [];
 
-    this.patientService.listPatients(page, this.searchDataValue).subscribe((resp:any)=>{
-      // console.log(resp);
+    this.patientService.listPatientDocts(this.doctor_id, page,this.searchDataValue).subscribe((resp:any)=>{
+      console.log(resp);
 
       this.totalDataPatient = resp.total;
       this.patientList = resp.patients.data;
@@ -94,7 +96,26 @@ export class ListPatientMComponent {
     })
   }
 
- 
+  getPatiensByDoctor(page=1){
+    // this.patientService.getPatientsByDoctor(this.user.id).subscribe((resp:any)=>{
+    //   console.log(resp);
+    //   this.doctorPatientList = resp.patients.data;
+    // })
+
+    this.doctorPatientList = [];
+    this.serialNumberArray = [];
+
+    this.patientService.listPatientDocts(this.user.id, page,this.searchDataValue).subscribe((resp:any)=>{
+      // console.log(resp);
+
+      this.totalDataPatient = resp.total;
+      this.patientList = resp.patients.data;
+      this.patient_id = resp.patients.id;
+      // this.getTableDataGeneral();
+      this.dataSource = new MatTableDataSource<any>(this.patientList);
+      this.calculateTotalPages(this.totalDataPatient, this.pageSize);
+    })
+  }
 
   getTableDataGeneral(){
     this.patientList = [];
@@ -311,6 +332,5 @@ export class ListPatientMComponent {
     // });
 
   }
-
 
 }

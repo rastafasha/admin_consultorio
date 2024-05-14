@@ -1,6 +1,13 @@
+// let USER = localStorage.getItem("user");
+//     var user = JSON.parse(USER ? USER: '');
+//     var doctor_id = user.id;
+//     var doctor2_id = user.id;
+
 export class routes {
 
   private static Url = '';
+
+  
 
   public static get baseUrl(): string {
     return this.Url;
@@ -77,6 +84,10 @@ export class routes {
   public static get appointmentList(): string {
     return this.baseUrl + '/appointments/list';
   }
+
+  // public static get appointmentListDoct(): string {
+  //   return this.baseUrl + '/appointments/list/doctor/'+doctor2_id;
+  // }
   // public static get editAppointment(): string {
   //   return this.baseUrl + '/appointments/edit-appointment';
   // }
@@ -284,6 +295,10 @@ export class routes {
   public static get patientsList(): string {
     return this.baseUrl + '/patients/list';
   }
+  // public static get patientsListDoctor(): string {
+  //   return this.baseUrl + '/patients/list/doctor/'+doctor_id;
+  // }
+  
   public static get addSalary(): string {
     return this.baseUrl + '/payroll/add-salary';
   }

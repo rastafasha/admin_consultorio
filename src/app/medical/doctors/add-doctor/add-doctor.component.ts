@@ -35,6 +35,7 @@ export class AddDoctorComponent {
 
   public text_success:string = '';
   public text_validation:string = '';
+  public precio_cita:number ;
 
   public speciality_id:any;
   public specialities:any = [];
@@ -135,6 +136,7 @@ export class AddDoctorComponent {
     formData.append('speciality_id', this.speciality_id);
     formData.append('imagen', this.FILE_AVATAR);
     formData.append('location_id', this.selectedValueLocation);
+    formData.append('precio_cita', this.precio_cita+'');
     let HOUR_SCHEDULES:any = [];
 
     this.days_week.forEach((day:any) => {

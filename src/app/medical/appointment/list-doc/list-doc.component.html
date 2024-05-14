@@ -6,16 +6,16 @@
             <div class="row">
                 <div class="col-sm-12">
                     <ul class="breadcrumb">
-                      <li class="breadcrumb-item"><a routerLink="/patients/list">Dashboard</a></li>
+                      <li class="breadcrumb-item"><a routerLink="/">Dashboard</a></li>
                         <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
-                        <li class="breadcrumb-item active">Patient List</li>
+                        <li class="breadcrumb-item active">Citas</li>
                     </ul>
                 </div>
             </div>
         </div>
         <!-- /Page Header -->
         
-        <div class="row" *ngIf="roles ==='SUPERADMIN'">
+        <div class="row">
             <div class="col-sm-12">
             
                 <div class="card card-table show-entire">
@@ -26,25 +26,45 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     <div class="doctor-table-blk">
-                                        <h3>Lista de Pacientes: </h3>
+                                        <h3>Citas</h3>
                                         <div class="doctor-search-blk">
                                             <div class="top-nav-search table-search-blk">
                                                     <input  class="form-control" placeholder="Search here" [(ngModel)]="searchDataValue"
                                                     (ngModelChange)="searchData()">
                                                     <a class="btn"><img src="assets/img/icons/search-normal.svg" alt=""></a>
                                             </div>
-                                            <div class="add-group">
-                                                <a routerLink="/patients/add" class="btn btn-primary add-pluss ms-2" *ngIf="isPermission('register_patient')"><img src="assets/img/icons/plus.svg" alt=""></a>
-                                                <a href="javascript:;" (click)="PageSize()" class="btn btn-primary doctor-refresh ms-2"><img src="assets/img/icons/re-fresh.svg" alt=""></a>
-                                            </div>
+                                            
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-auto text-end float-end ms-auto download-grp" *ngIf="isPermission('edit_patient')">
-                                     <!-- <a type="button" (click)="pdfExport()" class=" me-2"><img src="assets/img/icons/pdf-icon-01.svg"   alt="Export to Pdf"  title="Export to Pdf"></a> -->
-                                     <a type="button" (click)="txtExport()" class=" me-2"><img src="assets/img/icons/pdf-icon-02.svg"   alt="Export to TXT" title="Export to TXT"></a>
-                                     <a type="button" (click)="csvExport()" class=" me-2"><img src="assets/img/icons/pdf-icon-03.svg"    alt="Export to CSV" title="Export to CSV"></a>
-                                     <a type="button" (click)="excelExport()" ><img src="assets/img/icons/pdf-icon-04.svg"   alt="Export to XLS" title="Export to XLS"></a>
+                                <!-- <div class="col">
+                                  <div class="form-group local-forms">
+                                    <label >Speciality <span class="login-danger">*</span></label>
+                                    <mat-select [(ngModel)]="speciality_id" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Select Speciality">
+                                        <mat-option *ngFor="let data of specialities" [value]="data.id">
+                                        {{data.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </div>
+                                </div> -->
+                                <div class="col">
+                                  <div class="form-group local-forms">
+                                    <label >Fecha <span class="login-danger">*</span></label>
+                                    <input class="form-control datetimepicker" name="date" [(ngModel)]="date" type="date"   >
+                                  </div>
+                                </div>
+                                <div class="col">
+                                  <div class="add-group">
+                                    <a href="#" onclick="return false" (click)="searchData()" class="btn btn-dark add-pluss ms-2">filtro</a>
+                                    <a routerLink="/appointments/add" *ngIf="isPermission('register_appointment')" class="btn btn-primary add-pluss ms-2"><img src="assets/img/icons/plus.svg" alt=""></a>
+                                    <a href="javascript:;" (click)="PageSize()" class="btn btn-primary doctor-refresh ms-2"><img src="assets/img/icons/re-fresh.svg" alt=""></a>
+                                </div>
+                                </div>
+                                <div class="col-auto text-end float-end ms-auto download-grp" *ngIf="isPermission('edit_appointment')" >
+                                    <!-- <a type="button" (click)="pdfExport()" class=" me-2"><img src="assets/img/icons/pdf-icon-01.svg"   alt="Export to Pdf"  title="Export to Pdf"></a> -->
+                                    <a type="button" (click)="txtExport()" class=" me-2"><img src="assets/img/icons/pdf-icon-02.svg"   alt="Export to TXT" title="Export to TXT"></a>
+                                    <a type="button" (click)="csvExport()" class=" me-2"><img src="assets/img/icons/pdf-icon-03.svg"    alt="Export to CSV" title="Export to CSV"></a>
+                                    <a type="button" (click)="excelExport()" ><img src="assets/img/icons/pdf-icon-04.svg"   alt="Export to XLS" title="Export to XLS"></a>
                                     
                                 </div>
                             </div>
@@ -56,40 +76,54 @@
                                 <thead>
                                     <tr>
                                         
-                                        <th mat-sort-header="name">Nobre</th>
-                                        <th mat-sort-header="email">email</th>
-                                        <th mat-sort-header="especializacion">Profesión</th>
-                                        <th mat-sort-header="telefono">Teléfono</th>
-                                        <th mat-sort-header="n_doc">N. Documento</th>
+                                        <th mat-sort-header="name">Doctor</th>
+                                        <th mat-sort-header="email">Paciente</th>
+                                        <th mat-sort-header="especializacion">Fecha</th>
+                                        <th mat-sort-header="telefono">Hora</th>
+                                        <!-- <th mat-sort-header="n_doc">Especialidad</th> -->
+                                        <th mat-sort-header="status">Status</th>
+                                        <th mat-sort-header="cofirmado">Confirmado?</th>
+                                        <th mat-sort-header="confirmar" *ngIf="isPermission('edit_appointment')">Confirmar</th>
                                         <th mat-sort-header="created">Creación</th>
                                          <th ></th> <!--acciones -->
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let data of patientList">
+                                    <tr *ngFor="let data of appointmentList">
                                         
+                                        <td>{{data.doctor.full_name}}</td>
                                         <td>
-                                          <a [routerLink]="['/patients/profile/', data.id]">
-                                            {{data.name + ' ' + (data.surname ? data.surname: '')}}
+                                          <a class="dropdown-item" [routerLink]="['/patients/profile/', data.patient.id]">
+                                            {{data.patient.full_name}}
                                           </a>
                                         </td>
-                                        <td>{{data.email}}</td>
-                                        <td>{{data.education}}</td>
-                                        <td>{{data.phone}}</td>
-                                        <td>{{data.n_doc}}</td>
+                                        <td>{{data.date_appointment_format}}</td>
+                                        <td>{{data.segment_hour.format_segment.format_hour_start + ' - ' + data.segment_hour.format_segment.format_hour_end}}</td>
+                                        <!-- <td>{{data.speciality.name}}</td> -->
+                                        <td><button [ngClass]="{'status-green' : data.status === 2, 'status-pink' : data.status === 1}" class="custom-badge">{{data.status == 1 ? 'Pendiente' : 'Atendido'}}</button></td>
+                                        
+                                        <td><button [ngClass]="{'status-green' : data.confimation === 2, 'status-pink' : data.confimation === 1}" class="custom-badge">{{data.confimation == 1 ? 'Pendiente' : 'Confirmado'}}</button></td>
+                                        <td *ngIf="isPermission('edit_appointment')">
+                                          <!--begin::Input-->
+                                          <select
+                                          class="form-control form-select-solid fw-bolder"
+                                          name="state" [(ngModel)]="data.confimation" (change)="cambiarStatus(data)"
+                                          placeholder="state">
+                                          <option [value]="1">Pendiente</option>    
+                                          <option [value]="2">Confirmado</option>
+                                            </select>
+                                        </td>
                                         <td>{{data.created_at | date }}</td>
                                         
                                         <td class="text-end">
                                             <div class="dropdown dropdown-action" >
                                                 <a href="javascript:void(0);" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-end">
-                                                  <a class="dropdown-item" [routerLink]="['/patients/list/edit/', data.id]" *ngIf="isPermission('edit_patient')"><i class="fa-solid fa-pen-to-square m-r-5"></i> Edit</a>
-                                                  <a class="dropdown-item" [routerLink]="['/patients/profile/', data.id]"><i class="fa-solid fa-eye m-r-5"></i> View</a>
-                                                  
+                                                    <a class="dropdown-item" [routerLink]="['/appointments/list/edit/', data.id]" *ngIf="isPermission('edit_appointment')"><i class="fa-solid fa-pen-to-square m-r-5"></i> Edit</a>
+                                                    <a class="dropdown-item" [routerLink]="['/appointments/cita-medica/', data.id]" *ngIf="isPermission('edit_appointment')"><i class="fa-solid fa-eye m-r-5"></i> View</a>
                                                     <a class="dropdown-item" href="javascript:void(0);" (click)="selectUser(data)" 
-                                                    data-bs-toggle="modal" *ngIf="isPermission('delete_patient')"
-                                                    [attr.data-bs-target]="'#delete_staff-'+data.id"
-                                                    >
+                                                    data-bs-toggle="modal" *ngIf="isPermission('delete_appointment')"
+                                                    [attr.data-bs-target]="'#delete_staff-'+data.id">
                                                     <i class="fa fa-trash-alt m-r-5"></i> Delete</a>
                                                 </div>
                                             </div>
@@ -101,7 +135,7 @@
                                               <div class="modal-content">
                                                   <div class="modal-body text-center">
                                                       <img src="assets/img/sent.png" alt="" width="50" height="46">
-                                                      <h3 *ngIf="patient_selected">Are you sure want to delete this patient {{patient_selected.email}}?</h3>
+                                                      <h3 *ngIf="appointment_selected">Are you sure want to delete this appointment {{appointment_selected.id}}?</h3>
                                                       <!-- validacion si esta en uso -->
                                                       <div class="form-group row" *ngIf="text_validation">
                                                         <div class="col-md-12">
@@ -218,7 +252,7 @@
                                           disabled:
                                             currentPage ===
                                               pageNumberArray[pageNumberArray.length - 1] ||
-                                              patientList.length === 0
+                                              appointmentList.length === 0
                                         }"
                                       >
                                         <a
@@ -238,7 +272,6 @@
                 </div>							
             </div>					
         </div>
-        
     </div>
 </div>
 

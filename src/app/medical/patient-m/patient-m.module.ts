@@ -11,6 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ProfilePatientMComponent } from './profile-patient-m/profile-patient-m.component';
+import { PatientDoctorListComponent } from './patient-doctor-list/patient-doctor-list.component';
 
 
 @NgModule({
@@ -19,14 +20,16 @@ import { ProfilePatientMComponent } from './profile-patient-m/profile-patient-m.
     AddPatientMComponent,
     ListPatientMComponent,
     EditPatientMComponent,
-    ProfilePatientMComponent
+    ProfilePatientMComponent,
+    PatientDoctorListComponent
   ],
   exports: [
     PatientMComponent,
     AddPatientMComponent,
     ListPatientMComponent,
     EditPatientMComponent,
-    ProfilePatientMComponent
+    ProfilePatientMComponent,
+    PatientDoctorListComponent
   ],
   imports: [
     CommonModule,

@@ -52,6 +52,22 @@ export class AppointmentService {
     let URL = url_servicios+'/appointment?page='+page+LINK;
     return this.http.get(URL, {headers:headers});
   }
+  listAppointmentDocts(doctor_id:any, page:number=1, search:string='', date:string= ''){
+    let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    let LINK = "";
+    if(search){
+      LINK+="&search="+search;
+    }
+    
+    if(date){
+      LINK+="&date="+date;
+    }
+    
+    let URL = url_servicios+'/appointment/byDoctor/'+doctor_id+'/?page='+page+LINK;
+    return this.http.get(URL, {headers:headers});
+  }
+
+  
 
   storeAppointment(data:any){
     let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});

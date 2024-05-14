@@ -47,6 +47,8 @@ export class HeaderComponent {
   }
 
   ngOnInit(): void {
+    let USER = localStorage.getItem("user");
+    this.user = JSON.parse(USER ? USER: '');
     window.scrollTo(0, 0);
     this.activatedRoute.params.subscribe((resp:any)=>{
       // console.log(resp);

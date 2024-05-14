@@ -11,6 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { AtencionMedicaComponent } from './atencion-medica/atencion-medica.component';
+import { ListDocComponent } from './list-doc/list-doc.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { AtencionMedicaComponent } from './atencion-medica/atencion-medica.compo
     AddAppointmentsComponent,
     EditAppointmentsComponent,
     ListAppointmentsComponent,
-    AtencionMedicaComponent
+    AtencionMedicaComponent,
+    ListDocComponent
   ],
   exports: [
     AppointmentComponent,

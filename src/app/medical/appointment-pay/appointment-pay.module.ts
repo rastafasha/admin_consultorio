@@ -10,6 +10,7 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ListAppoimentCobrosComponent } from './list-appoiment-cobros/list-appoiment-cobros.component';
 import { ListAppoimentCobrarComponent } from './list-appoiment-cobrar/list-appoiment-cobrar.component';
+import { ListDoctorComponent } from './list-doctor/list-doctor.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { ListAppoimentCobrarComponent } from './list-appoiment-cobrar/list-appoi
     AppointmentPayComponent,
     ListAppoimentPayComponent,
     ListAppoimentCobrosComponent,
-    ListAppoimentCobrarComponent
+    ListAppoimentCobrarComponent,
+    ListDoctorComponent
   ],
   exports: [
     AppointmentPayComponent,

@@ -52,6 +52,8 @@ export class AddPatientMComponent {
   public fr:number = 0;
   public peso:number = 0;
   public current_desease:string = '';
+  public doctor_id:any;
+  public user:any;
 
   
   constructor(
@@ -65,6 +67,10 @@ export class AddPatientMComponent {
   ngOnInit(): void {
     window.scrollTo(0, 0);
     this.doctorService.closeMenuSidebar();
+    let USER = localStorage.getItem("user");
+    this.user = JSON.parse(USER ? USER: '');
+    this.doctor_id = this.user.id;
+    console.log(this.doctor_id);
   }
 
   
@@ -108,6 +114,7 @@ export class AddPatientMComponent {
     formData.append('fr', this.fr+'');
     formData.append('peso', this.peso+'');
     formData.append('temperature', this.temperature+'');
+    formData.append('doctor_id', this.doctor_id);
     
     if(this.selectedValue ){
       formData.append('role_id', this.selectedValue);
@@ -211,7 +218,7 @@ export class AddPatientMComponent {
         // this.current_desease = '';
         // this.FILE_AVATAR = '';
         // this.valid_form_success = true;
-        this.router.navigate(['/patients/list']);
+        this.router.navigate(['/patient/list/doctor/', this.doctor_id]);
       }
     })
 
