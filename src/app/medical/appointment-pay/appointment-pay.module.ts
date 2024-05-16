@@ -11,6 +11,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { ListAppoimentCobrosComponent } from './list-appoiment-cobros/list-appoiment-cobros.component';
 import { ListAppoimentCobrarComponent } from './list-appoiment-cobrar/list-appoiment-cobrar.component';
 import { ListDoctorComponent } from './list-doctor/list-doctor.component';
+import { ListCobrosDoctorComponent } from './list-cobros-doctor/list-cobros-doctor.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { ListDoctorComponent } from './list-doctor/list-doctor.component';
     ListAppoimentPayComponent,
     ListAppoimentCobrosComponent,
     ListAppoimentCobrarComponent,
-    ListDoctorComponent
+    ListDoctorComponent,
+    ListCobrosDoctorComponent
   ],
   exports: [
     AppointmentPayComponent,

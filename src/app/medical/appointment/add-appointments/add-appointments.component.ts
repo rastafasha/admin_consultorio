@@ -75,8 +75,17 @@ export class AddAppointmentsComponent {
       this.specialities = resp.specialities;
     })
 
-    this.getTiposdePago();
+    // this.getTiposdePago();
+    this.getTiposdePagoByDoctor();
   }
+
+  getTiposdePagoByDoctor(){
+    this.settigService.getActivoPagoByDoctor(this.doctor_id).subscribe((resp:any)=>{
+      console.log(resp);
+      this.tiposdepagos = resp.tiposdepagos;
+      // console.log(this.tiposdepagos);
+    })
+}
   
   filtro(){
     let data = {
@@ -177,6 +186,8 @@ export class AddAppointmentsComponent {
       // console.log(this.tiposdepagos);
     })
 }
+
+
 
 
 }

@@ -6,6 +6,7 @@ import { routes } from 'src/app/shared/routes/routes';
 import { DoctorService } from '../../doctors/service/doctor.service';
 import { PatientMService } from '../../patient-m/service/patient-m.service';
 import { PaymentService } from '../service/payment.service';
+import { ActivatedRoute } from '@angular/router';
 
 declare var $:any;  
 @Component({
@@ -39,10 +40,13 @@ export class ListAppoimentCobrosComponent {
   public payment_generals:any = [];
   public patient_id:any;
   public patient_selected:any;
+  public user:any;
+  public doctor_id:any;
 
   constructor(
     public paymentService: PaymentService,
     public doctorService: DoctorService,
+    public ativatedRoute: ActivatedRoute,
     private fileSaver: FileSaverService
     ){
 
@@ -51,6 +55,16 @@ export class ListAppoimentCobrosComponent {
     window.scrollTo(0, 0);
     this.doctorService.closeMenuSidebar();
     this.getTableData();
+
+    let USER = localStorage.getItem("user");
+    this.user = JSON.parse(USER ? USER: '');
+    // this.doctor_id = this.user.id;
+    // this.user = this.roleService.authService.user;
+
+    this.ativatedRoute.params.subscribe((resp:any)=>{
+      this.doctor_id = resp.doctor_id;
+      console.log(this.doctor_id);
+    });
   }
 
   private getTableData(page=1): void {

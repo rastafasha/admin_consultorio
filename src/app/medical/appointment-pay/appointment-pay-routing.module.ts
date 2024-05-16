@@ -5,6 +5,7 @@ import { ListAppoimentPayComponent } from './list-appoiment-pay/list-appoiment-p
 import { ListAppoimentCobrarComponent } from './list-appoiment-cobrar/list-appoiment-cobrar.component';
 import { ListAppoimentCobrosComponent } from './list-appoiment-cobros/list-appoiment-cobros.component';
 import { ListDoctorComponent } from './list-doctor/list-doctor.component';
+import { ListCobrosDoctorComponent } from './list-cobros-doctor/list-cobros-doctor.component';
 
 const routes: Routes = [
   {path:'', component:AppointmentPayComponent,
@@ -17,6 +18,9 @@ const routes: Routes = [
     },
     {
       path:'list-pagos', component:ListAppoimentCobrosComponent
+    },
+    {
+      path:'list-pagos/doctor/:doctor_id', component:ListCobrosDoctorComponent
     },
     
     {

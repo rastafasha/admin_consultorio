@@ -20,6 +20,13 @@ const routes: Routes = [
         ),
     },
     {
+      path: 'payment-settings/doctor/:doctor_id',
+      loadChildren: () =>
+        import('./payment-settings/payment-settings.module').then(
+          (m) => m.PaymentSettingsModule
+        ),
+    },
+    {
       path: 'email-settings',
       loadChildren: () =>
         import('./email-settings/email-settings.module').then(

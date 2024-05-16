@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a [routerLink]="routes.adminDashboard">Dashboard </a></li>
+                        <li class="breadcrumb-item"><a routerLink="/">Dashboard </a></li>
                         <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
                         <li class="breadcrumb-item active">Configuración</li>
                     </ul>
@@ -18,11 +18,14 @@
 
         <div class="settings-menu-links">
             <ul class="nav nav-tabs menu-tabs">
-                <li class="nav-item ">
+                <li class="nav-item " *ngIf="roles === 'SUPERADMIN'">
                     <a class="nav-link" [routerLink]="routes.settings">Configuración General</a>
                 </li>
-                <li class="nav-item active">
+                <li class="nav-item active" *ngIf="roles === 'SUPERADMIN'">
                     <a class="nav-link" [routerLink]="routes.paymentSettings">Configuración Pagos</a>
+                </li>
+                <li class="nav-item active" *ngIf="roles === 'DOCTOR' ">
+                    <a class="nav-link" >Configuración Pagos</a>
                 </li>
             </ul>
         </div>

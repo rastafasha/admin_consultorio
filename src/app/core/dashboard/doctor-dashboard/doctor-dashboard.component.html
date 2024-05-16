@@ -175,7 +175,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let data of appointments| slice:0:15">
+                                    <tr *ngFor="let data of appointments| slice:0:10">
                                         
                                         <td >{{data.date_appointment_format}}</td>
                                         <td >{{data.patient.full_name}}</td>
@@ -203,6 +203,95 @@
                     </div>
                 </div>
             </div>
+            
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-12 col-lg-12 col-xl-6 ">
+                <div class="card flex-fill comman-shadow">
+                    <div class="card-header">
+                        <h4 class="card-title d-inline-block">Transferencias Recientes</h4> <a [routerLink]="['/appointment-pay/list-pagos/doctor/', doctor_id]"  class="patient-views float-end">Todo</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive scrooldiv2">
+                            <table matSort  class="table mb-0 border-0 datatable custom-table patient-profile-table">
+                                <thead>
+                                    <tr>
+                                        
+                                        <th mat-sort-header="date">Fecha</th>
+                                        <th mat-sort-header="status">status</th>
+                                        <th mat-sort-header="doctor">Paciente</th>
+                                        <th mat-sort-header="metodo">metodo</th>
+                                        <th mat-sort-header="monto">monto</th>
+                                        <th mat-sort-header="referencia">referencia</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let data of paymentsbydoc| slice:0:12">
+                                        
+                                        <td >{{data.created_at|date}}</td>
+                                        <td >{{data.status}}
+                                            <!-- <button [ngClass]="{'status-green' : data.status === 2, 'status-pink' : data.status === 1}" class="custom-badge">{{data.status == 1 ? 'Pendiente' : 'Atendido'}}</button> -->
+                                        </td>
+                                        <td >{{data.nombre}}</td>
+                                        <td >{{data.metodo}}</td>
+                                        <td >{{data.monto|currency}}</td>
+                                        <td >{{data.referencia}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-12 col-lg-12 col-xl-6 ">
+                <div class="card flex-fill comman-shadow">
+                    <div class="card-header">
+                        <h4 class="card-title d-inline-block">Pagos Recientes</h4> <a [routerLink]="['/appointment-pay/list/doctor/', doctor_id]" class="patient-views float-end">Todo</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive scrooldiv2">
+                            <table matSort  class="table mb-0 border-0 datatable custom-table patient-profile-table">
+                                <thead>
+                                    <tr>
+                                        
+                                        <th mat-sort-header="date">Fecha</th>
+                                        <th mat-sort-header="doctor">Paciente</th>
+                                        <th mat-sort-header="status">Status</th>
+                                        <th mat-sort-header="statuspayment">Status Pago</th>
+                                        <th mat-sort-header="charges">Monto ($)</th>
+                                        <!-- <th></th> -->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let data of appointmentpaysbydoc| slice:0:15">
+                                        
+                                        <td >{{data.date_appointment_format}}</td>
+                                        <td >{{data.patient.full_name}}</td>
+                                        <td>
+                                            <button [ngClass]="{'status-green' : data.status === 2, 'status-pink' : data.status === 1}" class="custom-badge">{{data.status == 1 ? 'Pendiente' : 'Atendido'}}</button>
+                                        </td>
+                                        <td>
+                                            <button [ngClass]="{'status-green' : data.status_pay === 1, 'status-pink' : data.status_pay === 2}" class="custom-badge">{{data.status_pay == 1 ? 'Pagado' : 'Deuda'}}</button>
+                                        </td>
+                                        <td>{{data.amount }}</td>
+                                        <!-- <td class="text-end">
+                                            <div class="dropdown dropdown-action">
+                                                <a href="javascript:void(0);" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                <div class="dropdown-menu dropdown-menu-end">
+                                                    <a class="dropdown-item" [routerLink]="['/appointments/cita-medica/', data.id]"><i class="fa-solid fa-pen-to-square m-r-5"></i> Anteder</a>
+                                                    <a class="dropdown-item" [routerLink]="['/appointments/list/edit/', data.id]"><i class="fa-solid fa-pen-to-square m-r-5"></i> Edit</a>
+                                                    <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete_appointment"><i class="fa fa-trash-alt m-r-5"></i> Delete</a>
+                                                </div>
+                                            </div>
+                                        </td> -->
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
         </div>
         <div class="row" *ngIf="doctor_id ">
             <div class="col-12 col-md-12 col-lg-12 col-xl-7">

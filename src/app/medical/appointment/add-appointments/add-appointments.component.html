@@ -50,7 +50,7 @@
                                         <label >Especialidad <span class="login-danger">*</span></label>
                                         <mat-select [(ngModel)]="speciality_id" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Seleccione Especialidad">
                                             <mat-option *ngFor="let data of specialities" [value]="data.id">
-                                            {{data.name}} | ${{data.price}}
+                                            {{data.name}} 
                                             </mat-option>
                                         </mat-select>
                                     </div>
@@ -200,7 +200,7 @@
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-4">  
                                     <div class="form-group local-forms">
-                                        <label >Monto del Pago <span class="login-danger">*</span></label>
+                                        <label >Precio Cita <span class="login-danger">*</span></label>
                                         <input class="form-control" name="amount" [(ngModel)]="amount" type="number"  >
                                     </div>
                                 </div>

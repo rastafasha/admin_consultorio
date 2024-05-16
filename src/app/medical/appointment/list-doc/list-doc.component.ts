@@ -23,6 +23,7 @@ export class ListDocComponent {
 
   public showFilter = false;
   public searchDataValue = '';
+  public searchDataPatient = '';
   public lastIndex = 0;
   public pageSize = 10;
   public totalDataPatient = 0;
@@ -93,7 +94,8 @@ export class ListDocComponent {
     this.appointmentList = [];
     this.serialNumberArray = [];
 
-    this.appointmentService.listAppointmentDocts(this.doctor_id, page, this.searchDataValue,  this.date).subscribe((resp:any)=>{
+    this.appointmentService.listAppointmentDocts(this.doctor_id, page, 
+      this.searchDataValue, this.searchDataPatient,  this.date).subscribe((resp:any)=>{
       // console.log(resp);
 
       this.totalDataPatient = resp.total;
@@ -208,10 +210,10 @@ export class ListDocComponent {
     this.limit = this.pageSize;
     this.skip = 0;
     this.currentPage = 1;
-    this.getTableData();
     this.searchDataValue = '';
-    this.speciality_id = 0;
+    this.searchDataPatient = '';
     this.date= null;
+    this.getTableData();
   }
 
   private calculateTotalPages(totalDataPatient: number, pageSize: number): void {
@@ -229,13 +231,12 @@ export class ListDocComponent {
     }
   }
 
+
   excelExport(){
     const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8';
     const EXCLE_EXTENSION = '.xlsx';
 
     this.getTableDataGeneral();
-
-
     //custom code
     const worksheet = XLSX.utils.json_to_sheet(this.appointmentList);
 
@@ -250,7 +251,7 @@ export class ListDocComponent {
 
     const blobData = new Blob([excelBuffer],{type: EXCEL_TYPE});
 
-    this.fileSaver.save(blobData, "citas_db_appcitasmedicas",)
+    this.fileSaver.save(blobData, "pacientes_db_health_connectme_consult",)
 
   }
   csvExport(){
@@ -273,7 +274,7 @@ export class ListDocComponent {
 
     const blobData = new Blob([excelBuffer],{type: CSV_TYPE});
 
-    this.fileSaver.save(blobData, "citas_db_appcitasmedicas", CSV_EXTENSION)
+    this.fileSaver.save(blobData, "pacientes_db_health_connectme_consult_csv", CSV_EXTENSION)
 
   }
 
@@ -298,27 +299,7 @@ export class ListDocComponent {
 
     const blobData = new Blob([excelBuffer],{type: TXT_TYPE});
 
-    this.fileSaver.save(blobData, "citas_db_appcitasmedicas", TXT_EXTENSION)
-
-  }
-
-  pdfExport(){
-    // var doc = new jspdf(); 
-    
-    // const worksheet = XLSX.utils.json_to_sheet(this.staff_generals);
-
-    // const workbook = {
-    //   Sheets:{
-    //     'testingSheet': worksheet
-    //   },
-    //   SheetNames:['testingSheet']
-    // }
-
-    // doc.html(document.body, {
-    //   callback: function (doc) {
-    //     doc.save('staffs_db_appcitasmedicas.pdf');
-    //   }
-    // });
+    this.fileSaver.save(blobData, "pacientes_db_health_connectme_consult", TXT_EXTENSION)
 
   }
 

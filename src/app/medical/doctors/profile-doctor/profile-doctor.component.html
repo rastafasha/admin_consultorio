@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/doctors/list">Doctores </a></li>
+                        <li class="breadcrumb-item"><a href="/">Dashboard </a></li>
                         <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
                         <li class="breadcrumb-item active">Perfil del Doctor</li>
                     </ul>
@@ -126,6 +126,10 @@
                                             <li>
                                                 <h4>Dias de Trabajo</h4>
                                                 <span>{{doctor_selected.days_name}}</span>
+                                            </li>
+                                            <li>
+                                                <h4>Precio Cita</h4>
+                                                <span>{{doctor_selected.precio_cita|currency}}</span>
                                             </li>
                                         </ul>
                                     </div>
@@ -274,7 +278,7 @@
                             </div>
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title ">Citas Pendientes</h4>
+                                    <h4 class="card-title ">Citas Pendientes</h4> <a [routerLink]="['/appointments/list/doctor/', doctor_id]" class="patient-views float-end">Todo</a>
                                 </div>
                                 <div class="card-body p-0 table-dash">
                                     <div class="table-responsive scrooldiv2">

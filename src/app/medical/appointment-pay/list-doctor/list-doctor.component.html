@@ -52,19 +52,19 @@
                         <div class="staff-search-table">
                             <form>
                                 <div class="row">
-                                    <div class="col-12 col-md-6 col-xl-4">  
+                                    <!-- <div class="col-12 col-md-6 col-xl-4">  
                                         <div class="form-group local-forms">
                                             <label >Doctor Name </label>
                                             <input [(ngModel)]="searchDataDoctor" name="searchDataDoctor" class="form-control" type="text"  >
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="col-12 col-md-6 col-xl-4">  
                                         <div class="form-group local-forms">
                                             <label >Patient Name </label>
                                             <input [(ngModel)]="searchDataValue" name="searchDataValue" class="form-control" type="text"  >
                                         </div>
                                     </div>
-                                    <div class="col-12 col-md-6 col-xl-4">
+                                    <!-- <div class="col-12 col-md-6 col-xl-4">
                                         <div class="form-group local-forms">
                                             <label >Specialities </label>
                                             <mat-select [(ngModel)]="speciality_id" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Select Speciality">
@@ -73,7 +73,7 @@
                                               </mat-option>
                                           </mat-select>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="col-12 col-md-6 col-xl-4">
                                         <div class="form-group local-forms">
                                             <label >From </label>
@@ -90,9 +90,13 @@
                                     </div>
                                     <div class="col-12 col-md-6 col-xl-4">
                                         <div class="doctor-submit">
-                                            <button type="button" class="btn btn-primary submit-list-form me-2" (click)="searchData()">Search</button>
+                                            <button type="button" class="btn btn-primary submit-list-form me-2" (click)="searchData()">Buscar</button>
                                         </div>
                                     </div>
+                                    <div class="add-group col-12 col-md-6 col-xl-4">
+                                      
+                                      <a href="javascript:;" (click)="PageSize()" class="btn btn-primary doctor-refresh ms-2"><img src="assets/img/icons/re-fresh.svg" alt=""></a>
+                                  </div>
                                 </div>
                             </form>
                         </div>
@@ -102,11 +106,11 @@
                             <thead>
                                 <tr>
                                     
-                                    <th mat-sort-header="name">Doctor</th>
+                                    <!-- <th mat-sort-header="name">Doctor</th> -->
                                     <th mat-sort-header="email">Paciente</th>
                                     <th mat-sort-header="especializacion">Fecha</th>
                                     <th mat-sort-header="telefono">Hora</th>
-                                    <th mat-sort-header="n_doc">Especialidad</th>
+                                    <!-- <th mat-sort-header="n_doc">Especialidad</th> -->
                                     <th mat-sort-header="state">Status Pay</th>
                                     <th mat-sort-header="created">C. de la Cita</th>
                                      <!-- <th ></th>  -->
@@ -116,11 +120,11 @@
                               <ng-container *ngFor="let data of appointmentList">
                                 <tr >
                                     
-                                    <td>{{data.doctor.full_name}}</td>
+                                    <!-- <td>{{data.doctor.full_name}}</td> -->
                                     <td>{{data.patient.full_name}}</td>
                                     <td>{{data.date_appointment_format}}</td>
                                     <td>{{data.segment_hour.format_segment.format_hour_start + ' - ' + data.segment_hour.format_segment.format_hour_end}}</td>
-                                    <td>{{data.speciality.name}}</td>
+                                    <!-- <td>{{data.speciality.name}}</td> -->
                                     <td><button [ngClass]="{'status-green' : data.status_pay === 1, 'status-pink' : data.status_pay === 2}" class="custom-badge">{{data.status_pay == 1 ? 'Pagado' : 'Deuda'}}</button></td>
                                     <td>{{data.amount | currency}}</td>
                                     
@@ -177,7 +181,7 @@
                                                 <div class="col-12 col-md-6">
                                                     <div class="form-group local-forms">
                                                         <label >Metodo de Pago <span class="login-danger">*</span></label>
-                                                        <mat-select [(ngModel)]="method_payment" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Select Payment Method">
+                                                        <!-- <mat-select [(ngModel)]="method_payment" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Select Payment Method">
                                                             <mat-option value="Efectivo">Efectivo</mat-option>
                                                             <mat-option value="Transferencia">Transferencia</mat-option>
                                                             <mat-option value="Zelle">Zelle</mat-option>
@@ -185,7 +189,12 @@
                                                             <mat-option value="Pago Movil">Pago Movil</mat-option>
                                                             <mat-option value="T.Debito">T.Debito</mat-option>
                                                             <mat-option value="T.Credito">T.Credito</mat-option>
-                                                        </mat-select>
+                                                        </mat-select> -->
+                                                        <mat-select [(ngModel)]="method_payment" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Seleccione Metodo de pago">
+                                                          <mat-option *ngFor="let tipop of tiposdepagos" [value]="tipop.tipo">
+                                                          {{tipop.bankName}} 
+                                                          </mat-option>
+                                                      </mat-select>
                                                     </div>
                                                 </div>
                                                 <div class="col-12 col-md-6">  

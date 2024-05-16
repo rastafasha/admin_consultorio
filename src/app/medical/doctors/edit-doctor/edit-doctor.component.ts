@@ -105,6 +105,7 @@ export class EditDoctorComponent {
         this.surname = this.doctor_selected.surname;
         this.mobile = this.doctor_selected.mobile;
         this.email = this.doctor_selected.email;
+        this.precio_cita = this.doctor_selected.precio_cita;
         this.birth_date = new Date(this.doctor_selected.birth_date).toISOString();
         this.education = this.doctor_selected.education;
         this.designation = this.doctor_selected.designation;

@@ -48,10 +48,39 @@ export class AppoitmentPayService {
     return this.http.get(URL, {headers:headers});
   }
 
+  listAppointmentPaysByDoctor(
+    doctor_id:any='', 
+    page:number=1, 
+    search_patient:string='', 
+    date_start:string= '',
+    date_end:string= '',
+    ){
+    let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    let LINK = "";
+    
+    if(search_patient){
+    LINK+="&search_patient="+search_patient;
+    }
+    if(date_start){
+    LINK+="&date_start="+date_start;
+    }
+    if(date_end){
+    LINK+="&date_end="+date_end;
+    }
+    let URL = url_servicios+'/appointmentpay/byDoctor/'+doctor_id+'/?page='+page+LINK;
+    return this.http.get(URL, {headers:headers});
+  }
+
   storeAppointmentPay(data:any){
     let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
     let URL = url_servicios+"/appointmentpay/store";
     return this.http.post(URL,data, {headers:headers});
+  }
+
+  getAppointmentPaybyDoctor(doctor_id:number) {
+    let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    let URL = url_servicios+"/appointmentpay/byDoctor/"+doctor_id;
+    return this.http.put(URL,{headers:headers});
   }
 
   editAppointmentPay(data:any, appointmentpay_id:any){

@@ -6,6 +6,8 @@ import { FileSaverService } from 'ngx-filesaver';
 import * as XLSX from 'xlsx';
 import jspdf from 'jspdf';
 import { DoctorService } from '../../doctors/service/doctor.service';
+import { ActivatedRoute } from '@angular/router';
+import { SettignService } from 'src/app/core/settings/settigs.service';
 
 declare var $:any;
 @Component({
@@ -57,9 +59,15 @@ export class ListDoctorComponent {
   public text_success:string = '';
   public text_validation:string = '';
 
+  public user:any;
+  public doctor_id:any;
+  public tiposdepagos:any;
+
   constructor(
     public appointmentpayService : AppoitmentPayService,
     public doctorService : DoctorService,
+    public ativatedRoute : ActivatedRoute,
+    public settigService : SettignService,
     private fileSaver: FileSaverService
     ){
 
@@ -67,8 +75,21 @@ export class ListDoctorComponent {
   ngOnInit() {
     window.scrollTo(0, 0);
     this.doctorService.closeMenuSidebar();
+    
+
+    let USER = localStorage.getItem("user");
+    this.user = JSON.parse(USER ? USER: '');
+    // this.doctor_id = this.user.id;
+    // this.user = this.roleService.authService.user;
+
+    this.ativatedRoute.params.subscribe((resp:any)=>{
+      this.doctor_id = resp.doctor_id;
+      console.log(this.doctor_id);
+    });
+
     this.getTableData();
     this.getSpecialities();
+    this.getTiposdePagoByDoctor()
   }
 
   getSpecialities(){
@@ -76,13 +97,21 @@ export class ListDoctorComponent {
       this.specialities = resp.specialities;
     })
   }
+
+  getTiposdePagoByDoctor(){
+    this.settigService.getActivoPagoByDoctor(this.doctor_id).subscribe((resp:any)=>{
+      console.log(resp);
+      this.tiposdepagos = resp.tiposdepagos;
+      // console.log(this.tiposdepagos);
+    })
+}
   
   private getTableData(page=1): void {
     this.appointmentList = [];
     this.serialNumberArray = [];
 
-    this.appointmentpayService.listAppointmentPays(page, this.searchDataDoctor, this.searchDataValue, 
-      this.speciality_id, this.date_start,this.date_end).subscribe((resp:any)=>{
+    this.appointmentpayService.listAppointmentPaysByDoctor(this.doctor_id, page, this.searchDataValue, 
+     this.date_start,this.date_end).subscribe((resp:any)=>{
       // console.log(resp);
 
       this.totalDataPatient = resp.total;

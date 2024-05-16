@@ -1,31 +1,33 @@
 import { Component } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { routes } from 'src/app/shared/routes/routes';
-import { PatientMService } from '../service/patient-m.service';
-import { FileSaverService } from 'ngx-filesaver';
-import { DoctorService } from '../../doctors/service/doctor.service';
 import * as XLSX from 'xlsx';
-import jspdf from 'jspdf';
-import { RolesService } from '../../roles/service/roles.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { FileSaverService } from 'ngx-filesaver';
+import { routes } from 'src/app/shared/routes/routes';
+import { DoctorService } from '../../doctors/service/doctor.service';
+import { PatientMService } from '../../patient-m/service/patient-m.service';
+import { PaymentService } from '../service/payment.service';
 import { ActivatedRoute } from '@angular/router';
 
 declare var $:any;  
 @Component({
-  selector: 'app-patient-doctor-list',
-  templateUrl: './patient-doctor-list.component.html',
-  styleUrls: ['./patient-doctor-list.component.scss']
+  selector: 'app-list-cobros-doctor',
+  templateUrl: './list-cobros-doctor.component.html',
+  styleUrls: ['./list-cobros-doctor.component.scss']
 })
-export class PatientDoctorListComponent {
+export class ListCobrosDoctorComponent {
+
   public routes = routes;
 
-  public patientList: any = [];
+  public paymentList: any = [];
+  public payments: any ;
   dataSource!: MatTableDataSource<any>;
 
   public showFilter = false;
   public searchDataValue = '';
+  public searchReferencia = '';
   public lastIndex = 0;
   public pageSize = 10;
-  public totalDataPatient = 0;
+  public totalDataPayment = 0;
   public skip = 0;
   public limit: number = this.pageSize;
   public pageIndex = 0;
@@ -35,19 +37,18 @@ export class PatientDoctorListComponent {
   public pageSelection: Array<any> = [];
   public totalPages = 0;
 
-  public patient_generals:any = [];
-  public doctorPatientList:any = [];
+  public payment_generals:any = [];
   public patient_id:any;
   public patient_selected:any;
-  public text_validation:any;
   public user:any;
   public doctor_id:any;
-  public roles:any;
+
+  public date_start:any;
+  public date_end:any;
 
   constructor(
-    public patientService: PatientMService,
+    public paymentService: PaymentService,
     public doctorService: DoctorService,
-    public roleService: RolesService,
     public ativatedRoute: ActivatedRoute,
     private fileSaver: FileSaverService
     ){
@@ -56,114 +57,62 @@ export class PatientDoctorListComponent {
   ngOnInit() {
     window.scrollTo(0, 0);
     this.doctorService.closeMenuSidebar();
+    
+
     let USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER: '');
     // this.doctor_id = this.user.id;
-    this.user = this.roleService.authService.user;
-    this.roles = this.user.roles[0];
-    
-    // this.getPatiensByDoctor();
-    
+    // this.user = this.roleService.authService.user;
+
     this.ativatedRoute.params.subscribe((resp:any)=>{
       this.doctor_id = resp.doctor_id;
+      console.log(this.doctor_id);
     });
+
     this.getTableData();
   }
 
-  isPermission(permission:string){
-    if(this.user.roles.includes('SUPERADMIN')){
-      return true;
-    }
-    if(this.user.permissions.includes(permission)){
-      return true;
-    }
-    return false;
-  }
-
   private getTableData(page=1): void {
-    this.patientList = [];
+    this.paymentList = [];
     this.serialNumberArray = [];
 
-    this.patientService.listPatientDocts(this.doctor_id, page,this.searchDataValue).subscribe((resp:any)=>{
-      console.log(resp);
+    this.paymentService.getAllByDoctor(this.doctor_id, page, this.searchReferencia,
+      this.searchDataValue,
+      this.date_start,this.date_end
+    ).subscribe((resp:any)=>{
+      // console.log(resp.payments.data);
+      this.paymentList = resp.payments.data;
 
-      this.totalDataPatient = resp.total;
-      this.patientList = resp.patients.data;
-      this.patient_id = resp.patients.id;
-      // this.getTableDataGeneral();
-      this.dataSource = new MatTableDataSource<any>(this.patientList);
-      this.calculateTotalPages(this.totalDataPatient, this.pageSize);
-    })
-  }
-
-  getPatiensByDoctor(page=1){
-    // this.patientService.getPatientsByDoctor(this.user.id).subscribe((resp:any)=>{
-    //   console.log(resp);
-    //   this.doctorPatientList = resp.patients.data;
-    // })
-
-    this.doctorPatientList = [];
-    this.serialNumberArray = [];
-
-    this.patientService.listPatientDocts(this.user.id, page,this.searchDataValue).subscribe((resp:any)=>{
-      // console.log(resp);
-
-      this.totalDataPatient = resp.total;
-      this.patientList = resp.patients.data;
-      this.patient_id = resp.patients.id;
-      // this.getTableDataGeneral();
-      this.dataSource = new MatTableDataSource<any>(this.patientList);
-      this.calculateTotalPages(this.totalDataPatient, this.pageSize);
+      this.totalDataPayment = resp.total;
+      this.payment_generals = resp.payments.data;
+      // this.patient_id = resp.patients.id;
+      this.getTableDataGeneral();
+      this.dataSource = new MatTableDataSource<any>(this.paymentList);
+      this.calculateTotalPages(this.totalDataPayment, this.pageSize);
     })
   }
 
   getTableDataGeneral(){
-    this.patientList = [];
+    this.paymentList = [];
     this.serialNumberArray = [];
     
-    this.patient_generals.map((res: any, index: number) => {
+    this.payment_generals.map((res: any, index: number) => {
       const serialNumber = index + 1;
       if (index >= this.skip && serialNumber <= this.limit) {
        
-        this.patientList.push(res);
+        this.paymentList.push(res);
         this.serialNumberArray.push(serialNumber);
       }
     });
-    this.dataSource = new MatTableDataSource<any>(this.patientList);
-    this.calculateTotalPages(this.totalDataPatient, this.pageSize);
+    this.dataSource = new MatTableDataSource<any>(this.paymentList);
+    this.calculateTotalPages(this.totalDataPayment, this.pageSize);
   }
-  selectUser(staff:any){
-    this.patient_selected = staff;
-  }
-
-  deletePatient(){
-    this.patientService.deletePatient(this.patient_selected.id).subscribe((resp:any)=>{
-      // console.log(resp);
-
-      if(resp.message == 403){
-        this.text_validation = resp.message_text;
-      }else{
-
-        let INDEX = this.patientList.findIndex((item:any)=> item.id == this.patient_selected.id);
-      if(INDEX !=-1){
-        this.patientList.splice(INDEX,1);
-
-        $('#delete_patient').hide();
-        $("#delete_patient").removeClass("show");
-        $(".modal-backdrop").remove();
-        $("body").removeClass();
-        $("body").removeAttr("style");
-        this.patient_selected = null;
-        this.getTableData();
-      }
-      }
-    })
-  }
+  
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public searchData() {
     // this.dataSource.filter = value.trim().toLowerCase();
-    // this.patientList = this.dataSource.filteredData;
+    // this.paymentList = this.dataSource.filteredData;
     this.pageSelection = [];
     this.limit = this.pageSize;
     this.skip = 0;
@@ -172,12 +121,12 @@ export class PatientDoctorListComponent {
   }
 
   public sortData(sort: any) {
-    const data = this.patientList.slice();
+    const data = this.paymentList.slice();
 
     if (!sort.active || sort.direction === '') {
-      this.patientList = data;
+      this.paymentList = data;
     } else {
-      this.patientList = data.sort((a, b) => {
+      this.paymentList = data.sort((a, b) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const aValue = (a as any)[sort.active];
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -224,9 +173,9 @@ export class PatientDoctorListComponent {
     this.searchDataValue = '';
   }
 
-  private calculateTotalPages(totalDataPatient: number, pageSize: number): void {
+  private calculateTotalPages(totalDataPayment: number, pageSize: number): void {
     this.pageNumberArray = [];
-    this.totalPages = totalDataPatient / pageSize;
+    this.totalPages = totalDataPayment / pageSize;
     if (this.totalPages % 1 != 0) {
       this.totalPages = Math.trunc(this.totalPages + 1);
     }
@@ -245,8 +194,10 @@ export class PatientDoctorListComponent {
     const EXCLE_EXTENSION = '.xlsx';
 
     this.getTableDataGeneral();
+
+
     //custom code
-    const worksheet = XLSX.utils.json_to_sheet(this.patient_generals);
+    const worksheet = XLSX.utils.json_to_sheet(this.paymentList);
 
     const workbook = {
       Sheets:{
@@ -259,7 +210,7 @@ export class PatientDoctorListComponent {
 
     const blobData = new Blob([excelBuffer],{type: EXCEL_TYPE});
 
-    this.fileSaver.save(blobData, "pacientes_db_health_connectme_consult",)
+    this.fileSaver.save(blobData, "transferencias_db_appcitasmedicas",)
 
   }
   csvExport(){
@@ -269,7 +220,7 @@ export class PatientDoctorListComponent {
     this.getTableDataGeneral();
 
     //custom code
-    const worksheet = XLSX.utils.json_to_sheet(this.patient_generals);
+    const worksheet = XLSX.utils.json_to_sheet(this.paymentList);
 
     const workbook = {
       Sheets:{
@@ -282,7 +233,7 @@ export class PatientDoctorListComponent {
 
     const blobData = new Blob([excelBuffer],{type: CSV_TYPE});
 
-    this.fileSaver.save(blobData, "pacientes_db_health_connectme_consult_csv", CSV_EXTENSION)
+    this.fileSaver.save(blobData, "transferencias_db_appcitasmedicas", CSV_EXTENSION)
 
   }
 
@@ -294,7 +245,7 @@ export class PatientDoctorListComponent {
 
 
     //custom code
-    const worksheet = XLSX.utils.json_to_sheet(this.patient_generals);
+    const worksheet = XLSX.utils.json_to_sheet(this.paymentList);
 
     const workbook = {
       Sheets:{
@@ -307,7 +258,7 @@ export class PatientDoctorListComponent {
 
     const blobData = new Blob([excelBuffer],{type: TXT_TYPE});
 
-    this.fileSaver.save(blobData, "pacientes_db_health_connectme_consult", TXT_EXTENSION)
+    this.fileSaver.save(blobData, "transferencias_db_appcitasmedicas", TXT_EXTENSION)
 
   }
 
@@ -331,4 +282,21 @@ export class PatientDoctorListComponent {
 
   }
 
+  cambiarStatus(data:any){
+    let VALUE = data.status;
+    console.log(VALUE);
+    
+    this.paymentService.updateStatus(data, data.id).subscribe(
+      resp =>{
+        console.log(resp);
+        // Swal.fire('Actualizado', `actualizado correctamente`, 'success');
+        // this.toaster.open({
+        //   text:'Producto Actualizado!',
+        //   caption:'Mensaje de Validación',
+        //   type:'success',
+        // })
+        this.getTableData();
+      }
+    )
+  }
 }

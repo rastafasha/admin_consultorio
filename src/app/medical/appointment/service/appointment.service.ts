@@ -52,12 +52,21 @@ export class AppointmentService {
     let URL = url_servicios+'/appointment?page='+page+LINK;
     return this.http.get(URL, {headers:headers});
   }
-  listAppointmentDocts(doctor_id:any, page:number=1, search:string='', date:string= ''){
+  listAppointmentDocts(
+    doctor_id:any, 
+    page:number=1, 
+    search:string='', 
+    search_patient:string='',
+    date:string= '',
+  ){
     let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
     let LINK = "";
     if(search){
       LINK+="&search="+search;
     }
+    if(search_patient){
+      LINK+="&search_patient="+search_patient;
+      }
     
     if(date){
       LINK+="&date="+date;

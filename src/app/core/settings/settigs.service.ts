@@ -74,6 +74,18 @@ deleteSetting(setting_id): Observable<any> {
     return this.http.get(URL, {headers:headers});
     
   }
+  getPagoByDoctor(doctor_id:number){
+    let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+    let URL = url_servicios+'/paymentmethods/bydoctor/'+doctor_id;
+    return this.http.get(URL, {headers:headers});
+    
+  }
+  getActivoPagoByDoctor(doctor_id:number){
+    let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+    let URL = `${baseUrl}/paymentmethods/bydoctor-activo/`+doctor_id;
+    return this.http.get(URL, {headers:headers});
+    
+  }
 
   getActivas() {
     let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})

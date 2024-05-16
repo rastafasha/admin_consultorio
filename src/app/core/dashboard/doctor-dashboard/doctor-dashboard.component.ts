@@ -98,6 +98,8 @@ export class DoctorDashboardComponent {
 
   public appointment_pendings: any =[];
   public doctorPatientList: any =[];
+  public paymentsbydoc: any =[];
+  public appointmentpaysbydoc: any =[];
 
   constructor(
     public dashboardService:DashboardService,
@@ -326,6 +328,8 @@ export class DoctorDashboardComponent {
       this.num_appointments_total_pending_before= resp.num_appointments_total_pending_before;
       this.porcentaje_dtpn= resp.porcentaje_dtpn;
       this.doctorPatientList= resp.patientsbydoc.data;
+      this.paymentsbydoc= resp.paymentsbydoc.data;
+      this.appointmentpaysbydoc= resp.appointmentpaysbydoc.data;
     });
   }
   dashboardDoctorProfileYear(){
