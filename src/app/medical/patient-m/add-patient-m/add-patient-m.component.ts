@@ -4,6 +4,7 @@ import { StaffService } from '../../staff/service/staff.service';
 import { Router } from '@angular/router';
 import { PatientMService } from '../service/patient-m.service';
 import { DoctorService } from '../../doctors/service/doctor.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-add-patient-m',
@@ -31,6 +32,7 @@ export class AddPatientMComponent {
   valid_form:boolean = false;
   valid_form_success:boolean = false;
   text_validation:any = null;
+  public text_success:string = '';
 
   public antecedent_personal:string = '';
   public antecedent_family:string = '';
@@ -190,7 +192,9 @@ export class AddPatientMComponent {
       if(resp.message == 403){
         this.text_validation = resp.message_text;
       }else{
-
+        // this.valid_form_success = true;
+        // this.text_success = "El Paciente se ha Creado";
+        Swal.fire('Exito!', `El Paciente se ha Creado`, 'success');
         // this.name = '';
         // this.surname = '';
         // this.phone = '';
@@ -217,8 +221,8 @@ export class AddPatientMComponent {
         // this.peso = 0;
         // this.current_desease = '';
         // this.FILE_AVATAR = '';
-        // this.valid_form_success = true;
-        this.router.navigate(['/patient/list/doctor/', this.doctor_id]);
+        
+        // this.router.navigate(['/patient/list/doctor/', this.doctor_id]);
       }
     })
 

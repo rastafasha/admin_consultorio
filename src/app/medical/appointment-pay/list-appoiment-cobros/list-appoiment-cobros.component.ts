@@ -163,6 +163,7 @@ export class ListAppoimentCobrosComponent {
     this.currentPage = 1;
     this.getTableData();
     this.searchDataValue = '';
+    this.searchReferencia = '';
   }
 
   private calculateTotalPages(totalDataPayment: number, pageSize: number): void {

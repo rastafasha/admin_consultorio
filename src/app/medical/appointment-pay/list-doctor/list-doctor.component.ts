@@ -319,6 +319,7 @@ export class ListDoctorComponent {
     this.getTableData();
     this.searchDataValue = '';
     this.searchDataDoctor = '';
+    this.searchDataDoctor = '';
     this.speciality_id = 0;
     this.picker1= null;
     this.picker2= null;

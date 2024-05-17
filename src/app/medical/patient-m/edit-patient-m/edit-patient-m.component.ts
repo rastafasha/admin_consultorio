@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { routes } from 'src/app/shared/routes/routes';
 import { PatientMService } from '../service/patient-m.service';
 import { RolesService } from '../../roles/service/roles.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-edit-patient-m',
@@ -229,7 +230,8 @@ showUser(){
       if(resp.message == 403){
         this.text_validation = resp.message_text;
       }else{
-        this.text_success = "El Paciente se ha actualizado";
+        Swal.fire('Exito!', `El Paciente se ha Actualizado`, 'success');
+        // this.text_success = "El Paciente se ha actualizado";
       }
     })
 

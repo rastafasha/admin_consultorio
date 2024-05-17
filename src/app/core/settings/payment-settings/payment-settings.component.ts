@@ -107,7 +107,7 @@ export class PaymentSettingsComponent {
           //   caption:'Mensaje de Validación',
           //   type:'success',
           // })
-          this.getTiposdePago();
+          this.getTiposdePagoByDoctor();
         }
       )
     }
@@ -128,7 +128,7 @@ export class PaymentSettingsComponent {
       }
       this.settigService.create(data).subscribe((resp:any)=>{
         // console.log(resp);
-        this.getTiposdePago();
+        this.getTiposdePagoByDoctor();
       })
     }
   
@@ -136,7 +136,7 @@ export class PaymentSettingsComponent {
 
       this.settigService.delete(tiposdepago.id).subscribe(
         (resp:any) =>{
-          this.getTiposdePago();
+          this.getTiposdePagoByDoctor();
         });
       
     }
