@@ -136,10 +136,10 @@ showUser(){
       this.text_validation = 'Los campos con * son obligatorios';
       return;
     }
-    if(!this.ta || !this.fc || !this.fr || !this.peso || !this.temperature){
-      this.text_validation = 'Los signos vitales son obligatorios';
-      return;
-    }
+    // if(!this.ta || !this.fc || !this.fr || !this.peso || !this.temperature){
+    //   this.text_validation = 'Los signos vitales son obligatorios';
+    //   return;
+    // }
 
 
     // this.valid_form = false;
@@ -151,14 +151,29 @@ showUser(){
     formData.append('gender', this.gender+'');
     formData.append('address', this.address);
     formData.append('n_doc', this.n_doc);
-    formData.append('ta', this.ta+'');
-    formData.append('fc', this.fc+'');
-    formData.append('fr', this.fr+'');
-    formData.append('peso', this.peso+'');
-    formData.append('temperature', this.temperature+'');
+    // formData.append('ta', this.ta+'');
+    // formData.append('fc', this.fc+'');
+    // formData.append('fr', this.fr+'');
+    // formData.append('peso', this.peso+'');
+    // formData.append('temperature', this.temperature+'');
     formData.append('doctor_id', this.doctor_id);
 
    
+    if(this.ta+'' ){
+      formData.append('ta', this.ta+'');
+    }
+    if(this.fc+'' ){
+      formData.append('fc', this.fc+'');
+    }
+    if(this.fr+'' ){
+      formData.append('fr', this.fr+'');
+    }
+    if(this.peso+'' ){
+      formData.append('peso', this.peso+'');
+    }
+    if(this.temperature+'' ){
+      formData.append('temperature', this.temperature+'');
+    }
     
     if(this.antecedent_personal){
 
