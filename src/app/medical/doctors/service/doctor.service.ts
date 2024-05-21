@@ -73,4 +73,10 @@ export class DoctorService {
     $('.sidebar').addClass("cerrar");
     $('.menu-opened').remove("menu-opened");
   }
+
+  updateStatus(data:any, doctor_id:any){
+    let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    let URL = url_servicios+"/doctors/update/status/"+doctor_id;
+    return this.http.put(URL,data,{headers:headers});
+  }
 }

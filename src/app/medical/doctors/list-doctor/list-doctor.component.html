@@ -61,6 +61,8 @@
                                         <th mat-sort-header="especializacion">Especialización</th>
                                         <th mat-sort-header="telefono">Teléfono</th>
                                         <th mat-sort-header="role">Role</th>
+                                        <th mat-sort-header="status">Status</th>
+                                        <th mat-sort-header="op">Options</th>
                                         <th mat-sort-header="created">Creación</th>
                                          <th ></th> <!--acciones -->
                                     </tr>
@@ -77,6 +79,29 @@
                                         <td>{{data.education}}</td>
                                         <td>{{data.mobile}}</td>
                                         <td>{{data.roles.name}}</td>
+                                        <td>
+                                          <span class="badge bg-danger"
+                                              *ngIf="data.status === 'inactive'">Inactive</span>
+                                          <span class="badge bg-success"
+                                              *ngIf="data.status === 'active'">Active</span>
+                                          <span class="badge bg-primary"
+                                              *ngIf="data.status === 'incoming'">Incoming</span>
+                                          <span class="badge bg-dark"
+                                              *ngIf="data.status === 'black list'">Black list</span>
+
+                                      </td>
+                                      <td>
+                                        <select
+                                        class="form-control form-select-solid fw-bolder"
+                                        name="state" [(ngModel)]="data.status" (change)="cambiarStatus(data)"
+                                        placeholder="state">
+                                        <option>-- Select --</option>
+                                        <option value="inactive">Inactive</option>
+                                          <option value="active">Active</option>
+                                          <option value="incoming">Incoming</option>
+                                          <option value="black list">Black list</option>
+                                          </select>
+                                      </td>
                                         <!-- <td>{{data.permision_pluck.length > 0 ? data.permision_pluck: 'TODOS LOS PERMISOS' }}</td> -->
                                         <td>{{data.created_at | date }}</td>
                                         

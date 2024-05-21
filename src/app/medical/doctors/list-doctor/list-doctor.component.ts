@@ -292,4 +292,16 @@ export class ListDoctorComponent {
 
   }
 
+  cambiarStatus(data:any){
+    let VALUE = data.status;
+    console.log(VALUE);
+    
+    this.doctorService.updateStatus(data, data.id).subscribe(
+      resp =>{
+        // console.log(resp);
+        this.getTableData();
+      }
+    )
+  }
+
 }
