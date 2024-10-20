@@ -18,6 +18,8 @@ export class ProfilePatientMComponent {
 public patientProfile: any[];
 option_selected:number = 1;
 public patient_id: any;
+public roles: any;
+public user: any;
 
 public num_appointment: number = 0;
 public money_of_appointments: number = 0;
@@ -44,6 +46,9 @@ ngOnInit(): void {
     // console.log(resp);
     this.patient_id = resp.id;
   });
+  const USER = localStorage.getItem('user');
+  this.user = JSON.parse(USER ? USER : '');
+  this.roles = this.user.roles[0];
   this.getDoctor();
 }
 

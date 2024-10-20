@@ -53,10 +53,10 @@
                                                     <h5>Citas Médicas</h5>
                                                     <h4>{{num_appointment}}</h4>
                                                 </div>
-                                                <div class="doctor-follows">
+                                                <!-- <div class="doctor-follows">
                                                     <h5>Inversion</h5>
                                                     <h4>{{money_of_appointments|currency}}</h4>
-                                                </div>
+                                                </div> -->
                                                 <div class="doctor-follows">
                                                     <h5>Citas Pendientes</h5>
                                                     <h4>{{num_appointment_pendings}}</h4>
@@ -234,7 +234,7 @@
                                                 <a href="#" onclick="return false;" [ngClass]="{'active': option_selected == 1}" (click)="optionSelected(1)"><span class="set-about-icon me-2"><img src="assets/img/icons/menu-icon-02.svg" alt=""></span>Sobre Mi</a>
                                             </li>
                                             <li>
-                                                <a href="#" onclick="return false;" [ngClass]="{'active': option_selected == 2}" (click)="optionSelected(2)"><span class="set-about-icon me-2"><img src="assets/img/icons/menu-icon-16.svg" alt=""></span>Citas Atendidas</a>
+                                                <a href="#" onclick="return false;" [ngClass]="{'active': option_selected == 2}" (click)="optionSelected(2)"><span class="set-about-icon me-2"><img src="assets/img/icons/menu-icon-16.svg" alt=""></span>Citas totales({{num_appointment}})</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -272,6 +272,20 @@
                                             <p><b>Antecedente Personal:</b> {{patient_selected.antecedent_personal}}</p>
                                             <p><b>Antecedente Alergico:</b> {{patient_selected.antecedent_alerg}}</p>
                                         </div>
+                                        <hr>
+                                        <h3>Atendido inicialmente por:</h3>
+                                        <div class="col-xl-3 col-md-6">
+                                            <div class="detail-personal">
+                                                <h2>Dr(a).</h2>
+                                                <h3>{{patient_selected.doctor.name}} {{patient_selected.doctor.surnname}}</h3>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-3 col-md-6">
+                                            <div class="detail-personal">
+                                                <h2>Teléfono.</h2>
+                                                <h3>{{patient_selected.doctor.mobile}} </h3>
+                                            </div>
+                                        </div>
                                     </ng-container>
                                     <ng-container *ngIf="option_selected == 2">
                                         <div class="activity scrooldiv">
@@ -290,8 +304,9 @@
                                                                     <span class="time">{{appointment.format_hour_start+' - '+appointment.format_hour_end}}</span>
                                                                 </div>
                                                                 <div class="comman-activitys flex-grow-1">
-                                                                    <h3>{{appointment.doctor.full_name}} <span> <br>
-                                                                        Monto de la Cita: {{appointment.amount | currency}}  </span></h3>
+                                                                    <h3>Dr(a).{{appointment.doctor.full_name}} </h3>
+                                                                    <!-- <span> <br>
+                                                                        Monto de la Cita: {{appointment.amount | currency}}  </span> -->
                                                                     <p *ngIf="appointment.appointment_attention">Diagnostico: {{appointment.appointment_attention.description}}</p>
                                                                     <ng-container *ngIf="!appointment.appointment_attention">
                                                                         <button class="custom-badge status-pink">Diagnostico: Pendiente</button>
@@ -312,7 +327,7 @@
                             </div>
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title ">Citas Pendientes</h4>
+                                    <h4 class="card-title ">Citas Pendientes({{num_appointment_pendings}})</h4>
                                 </div>
                                 <div class="card-body p-0 table-dash">
                                     <div class="table-responsive scrooldiv2">
@@ -324,8 +339,8 @@
                                                     <th mat-sort-header="doctor">Doctor</th>
                                                     <th mat-sort-header="status">Status</th>
                                                     <th mat-sort-header="statuspayment">Status Pago</th>
-                                                    <th mat-sort-header="charges">Monto ($)</th>
-                                                    <th></th>
+                                                    <th *ngIf="roles ==='SUPERADMIN'" mat-sort-header="charges">Monto ($)</th>
+                                                    <th *ngIf="roles ==='SUPERADMIN'"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -339,13 +354,12 @@
                                                     <td>
                                                         <button [ngClass]="{'status-green' : data.status_pay === 1, 'status-pink' : data.status_pay === 2}" class="custom-badge">{{data.status_pay == 1 ? 'Pagado' : 'Deuda'}}</button>
                                                     </td>
-                                                    <td>{{data.amount }}</td>
-                                                    <td class="text-end">
+                                                    <td *ngIf="roles ==='SUPERADMIN'">{{data.amount }}</td>
+                                                    <td class="text-end" *ngIf="roles ==='SUPERADMIN'">
                                                         <div class="dropdown dropdown-action">
                                                             <a href="javascript:void(0);" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                                             <div class="dropdown-menu dropdown-menu-end">
-                                                                <a class="dropdown-item" [routerLink]="['/appointments/list/edit/', data.id]"><i class="fa-solid fa-pen-to-square m-r-5"></i> Edit</a>
-                                                                <!-- <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete_appointment"><i class="fa fa-trash-alt m-r-5"></i> Delete</a> -->
+                                                                <a class="dropdown-item" [routerLink]="['/appointments/list/edit/', data.id]" *ngIf="isPermission('edit_appointment')"><i class="fa-solid fa-pen-to-square m-r-5"></i> Edit</a>
                                                             </div>
                                                         </div>
                                                     </td>
