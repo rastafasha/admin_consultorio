@@ -123,9 +123,9 @@
                                         <td>{{data.date_appointment_format}}</td>
                                         <td>{{data.segment_hour.format_segment.format_hour_start + ' - ' + data.segment_hour.format_segment.format_hour_end}}</td>
                                         <!-- <td>{{data.speciality.name}}</td> -->
-                                        <td><button [ngClass]="{'status-green' : data.status === 2, 'status-pink' : data.status === 1}" class="custom-badge">{{data.status == 1 ? 'Pendiente' : 'Atendido'}}</button></td>
+                                        <td><button [ngClass]="{'status-green' : data.status === 2, 'status-pink' : data.status === 1}" class="custom-badge">{{data.status === 1 ? 'Pendiente' : 'Atendido'}}</button></td>
                                         
-                                        <td><button [ngClass]="{'status-green' : data.confimation === 2, 'status-pink' : data.confimation === 1}" class="custom-badge">{{data.confimation == 1 ? 'Pendiente' : 'Confirmado'}}</button></td>
+                                        <td><button [ngClass]="{'status-green' : data.confimation === 2, 'status-pink' : data.confimation === 1}" class="custom-badge">{{data.confimation === 1 ? 'Pendiente' : 'Confirmado'}}</button></td>
                                         <td *ngIf="isPermission('edit_appointment')">
                                           <!--begin::Input-->
                                           <select
