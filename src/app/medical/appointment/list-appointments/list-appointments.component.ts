@@ -39,7 +39,7 @@ export class ListAppointmentsComponent {
   public appointment:any;
   public appointment_selected:any;
   public text_validation:any;
-  public speciality_id:number= 0;
+  public speciality_id= 0;
   public date = null;
   specialities:any = [];
   hours:any;
@@ -123,7 +123,7 @@ export class ListAppointmentsComponent {
         this.text_validation = resp.message_text;
       }else{
 
-        let INDEX = this.appointmentList.findIndex((item:any)=> item.id == this.appointment_selected.id);
+        const INDEX = this.appointmentList.findIndex((item:any)=> item.id == this.appointment_selected.id);
       if(INDEX !=-1){
         this.appointmentList.splice(INDEX,1);
 
@@ -314,7 +314,7 @@ export class ListAppointmentsComponent {
   }
 
   cambiarStatus(data:any){
-    let VALUE = data.confimation;
+    const VALUE = data.confimation;
     console.log(VALUE);
     
     this.appointmentService.updateConfirmation(data, data.id).subscribe(

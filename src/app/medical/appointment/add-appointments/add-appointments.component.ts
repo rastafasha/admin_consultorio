@@ -5,6 +5,7 @@ import { AppointmentService } from '../service/appointment.service';
 import { DoctorService } from '../../doctors/service/doctor.service';
 import { SettignService } from 'src/app/core/settings/settigs.service';
 import { RolesService } from '../../roles/service/roles.service';
+import { SpecialitieService } from '../../specialitie/service/specialitie.service';
 
 @Component({
   selector: 'app-add-appointments',
@@ -15,9 +16,9 @@ export class AddAppointmentsComponent {
   public routes = routes;
   public selectedValue!: string;
 
-  valid_form_success: boolean = false;
-  public text_validation:string = '';
-  public text_success:string = '';
+  valid_form_success = false;
+  public text_validation = '';
+  public text_success = '';
 
   hours:any;
   hour:any;
@@ -25,17 +26,17 @@ export class AddAppointmentsComponent {
   speciality_id:any;
   date_appointment:any;
   
-  id:number = 0;
-  name:string = '';
-  surname:string = '';
-  n_doc:number = 0;
-  phone:string = '';
-  name_companion:string = '';
-  surname_companion:string = '';
+  id = 0;
+  name = '';
+  surname = '';
+  n_doc = 0;
+  phone = '';
+  name_companion = '';
+  surname_companion = '';
   
-  amount:number = 0;
-  amount_add:number = 0;
-  method_payment:string = '';
+  amount = 0;
+  amount_add = 0;
+  method_payment = '';
 
   patient:any = [];
   DOCTORS:any = [];
@@ -52,18 +53,20 @@ export class AddAppointmentsComponent {
 
   constructor(
     public appointmentService:AppointmentService,
-    public doctorService:DoctorService,
     public settigService: SettignService,
+    public doctorService:DoctorService,
+    public specialitiService: SpecialitieService,
     public roleService: RolesService,
     public router: Router
   ){
 
   }
 
+  // eslint-disable-next-line no-debugger
   ngOnInit(): void {
     this.doctorService.closeMenuSidebar();
     window.scrollTo(0, 0);
-    let USER = localStorage.getItem("user");
+    const USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER: '');
     this.doctor_id = this.user.id;
     this.user = this.roleService.authService.user;
@@ -77,6 +80,18 @@ export class AddAppointmentsComponent {
 
     // this.getTiposdePago();
     this.getTiposdePagoByDoctor();
+    if(this.roles === 'DOCTOR'){
+      this.doctorService.showDoctor(this.doctor_id).subscribe((resp:any)=>{
+        this.DOCTOR_SELECTED = resp.user;
+        console.log(this.DOCTOR_SELECTED);
+
+        this.speciality_id = this.DOCTOR_SELECTED.speciality_id;
+        this.specialitiService.showSpeciality(this.speciality_id ).subscribe((resp:any)=>{
+          console.log(resp);
+        })
+
+      })
+    }
   }
 
   getTiposdePagoByDoctor(){
@@ -88,15 +103,25 @@ export class AddAppointmentsComponent {
 }
   
   filtro(){
-    let data = {
+    const data = {
       date_appointment:this.date_appointment,
       hour:this.hour,
       speciality_id:this.speciality_id
     }
-    this.appointmentService.lisFiter(data).subscribe((resp:any)=>{
-      // console.log(resp);
-      this.DOCTORS = resp.doctors;
-    })
+    if(this.roles === 'SUPERADMIN'){
+      this.appointmentService.lisFiter(data).subscribe((resp:any)=>{
+        // console.log(resp);
+        this.DOCTORS = resp.doctors;
+      })
+    }
+    if(this.roles === 'DOCTOR'){
+      this.appointmentService.lisFiterByDoctor(this.DOCTOR_SELECTED.id).subscribe((resp:any)=>{
+        console.log(resp);
+        // this.DOCTORS = resp.doctors;
+      })
+    }
+    
+    
   }
 
   countDisponibilidad(DOCTOR:any){
@@ -138,7 +163,7 @@ export class AddAppointmentsComponent {
         this.n_doc= 0;
   }
 
-  save(){debugger
+  save(){
     this.text_validation = '';
 
     if(this.amount < this.amount_add){
@@ -153,7 +178,7 @@ export class AddAppointmentsComponent {
       return;
     }
 
-    let data ={
+    const data ={
       "doctor_id": this.DOCTOR_SELECTED.doctor.id,
         // "patient_id": ,
         user_id:this.patient.id,

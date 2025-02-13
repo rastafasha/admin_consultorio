@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { routes } from 'src/app/shared/routes/routes';
 import { AppointmentService } from '../service/appointment.service';
 import { RolesService } from '../../roles/service/roles.service';
+import { DoctorService } from '../../doctors/service/doctor.service';
+import { SpecialitieService } from '../../specialitie/service/specialitie.service';
 
 @Component({
   selector: 'app-edit-appointments',
@@ -13,9 +15,9 @@ export class EditAppointmentsComponent {
   public routes = routes;
   public selectedValue!: string;
 
-  valid_form_success: boolean = false;
-  public text_validation:string = '';
-  public text_success:string = '';
+  valid_form_success = false;
+  public text_validation = '';
+  public text_success = '';
 
   hours:any;
   hour:any;
@@ -23,16 +25,16 @@ export class EditAppointmentsComponent {
   speciality_id:any;
   date_appointment:any;
   
-  name:string = '';
-  surname:string = '';
-  n_doc:number = 0;
-  phone:string = '';
-  name_companion:string = '';
-  surname_companion:string = '';
+  name = '';
+  surname = '';
+  n_doc = 0;
+  phone = '';
+  name_companion = '';
+  surname_companion = '';
   
-  amount:number = 0;
-  amount_add:number = 0;
-  method_payment:string = '';
+  amount = 0;
+  amount_add = 0;
+  method_payment = '';
 
   DOCTORS:any = [];
   DOCTOR:any = [];
@@ -50,13 +52,15 @@ export class EditAppointmentsComponent {
     public appointmentService:AppointmentService,
     public router: Router,
     public roleService: RolesService,
+    public doctorService:DoctorService,
+    public specialitiService: SpecialitieService,
     public ativatedRoute: ActivatedRoute
   ){
 
   }
 
   ngOnInit(): void {
-    let USER = localStorage.getItem("user");
+    const USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER: '');
     this.doctor_id = this.user.id;
     this.user = this.roleService.authService.user;
@@ -68,6 +72,18 @@ export class EditAppointmentsComponent {
       console.log(this.appointment_id);
      })
      this.getAppointment();
+     if(this.roles === 'DOCTOR'){
+      this.doctorService.showDoctor(this.doctor_id).subscribe((resp:any)=>{
+        this.DOCTOR_SELECTED = resp.user;
+        console.log(this.DOCTOR_SELECTED);
+
+        this.speciality_id = this.DOCTOR_SELECTED.speciality_id;
+        this.specialitiService.showSpeciality(this.speciality_id ).subscribe((resp:any)=>{
+          console.log(resp);
+        })
+
+      })
+    }
   }
 
   getDatos(){
@@ -99,7 +115,7 @@ export class EditAppointmentsComponent {
   }
   
   filtro(){
-    let data = {
+    const data = {
       date_appointment:this.date_appointment,
       hour:this.hour,
       speciality_id:this.speciality_id
@@ -110,7 +126,7 @@ export class EditAppointmentsComponent {
 
       this.DOCTORS.forEach((doctor:any) => {
         if(doctor.doctor.id == this.appointment_selected.doctor_id){
-          let INDEX = doctor.segments.findIndex((item:any)=> item.id == this.appointment_selected.doctor_schedule_join_hour_id);
+          const INDEX = doctor.segments.findIndex((item:any)=> item.id == this.appointment_selected.doctor_schedule_join_hour_id);
           if(INDEX != -1){
             this.showSegment(doctor);
           }
@@ -195,7 +211,7 @@ export class EditAppointmentsComponent {
 
     // || !this.selected_segment_hour 
 
-    let data ={
+    const data ={
       "doctor_id": this.DOCTOR_SELECTED.doctor.id,
         "date_appointment": this.date_appointment,
         "speciality_id": this.speciality_id,

@@ -49,7 +49,7 @@
                                     <div class="form-group local-forms">
                                         <label >Especialidad <span class="login-danger">*</span></label>
                                         <mat-select [(ngModel)]="speciality_id" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Seleccione Especialidad">
-                                            <mat-option *ngFor="let data of specialities" [value]="data.id">
+                                            <mat-option *ngFor="let data of specialities"  [value]="data.id">
                                             {{data.name}} 
                                             </mat-option>
                                         </mat-select>
@@ -75,7 +75,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <ng-container *ngFor="let DOCTOR of DOCTORS">
+                                                <ng-container *ngFor="let DOCTOR of DOCTORS; let i = index;">
                                                     <tr>
                                                         <td>{{DOCTOR.doctor.full_name}}</td>
                                                         <td>{{countDisponibilidad(DOCTOR)}}</td>

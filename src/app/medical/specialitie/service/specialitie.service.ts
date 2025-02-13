@@ -14,32 +14,37 @@ export class SpecialitieService {
   ) { }
 
   listSpecialities(){
-    let headers = new HttpHeaders({'Authorization': 'Bearer '+this.authService.token});
-    let URL = url_servicios+"/specialities";
+    const headers = new HttpHeaders({'Authorization': 'Bearer '+this.authService.token});
+    const URL = url_servicios+"/specialities";
     return this.http.get(URL,{headers: headers});
   }
 
   showSpecialities(role_id:string){
-    let headers = new HttpHeaders({'Authorization': 'Bearer '+this.authService.token});
-    let URL = url_servicios+"/specialities/show/"+role_id;
+    const headers = new HttpHeaders({'Authorization': 'Bearer '+this.authService.token});
+    const URL = url_servicios+"/specialities/show/"+role_id;
+    return this.http.get(URL,{headers: headers});
+  }
+  showSpeciality(id:number){
+    const headers = new HttpHeaders({'Authorization': 'Bearer '+this.authService.token});
+    const URL = url_servicios+"/specialities/show/"+id;
     return this.http.get(URL,{headers: headers});
   }
 
   storeSpecialities(data:any){
-    let headers = new HttpHeaders({'Authorization': 'Bearer '+this.authService.token});
-    let URL = url_servicios+"/specialities/store";
+    const headers = new HttpHeaders({'Authorization': 'Bearer '+this.authService.token});
+    const URL = url_servicios+"/specialities/store";
     return this.http.post(URL,data,{headers: headers});
   }
 
   editSpecialities(data:any,id_specialitie:any){
-    let headers = new HttpHeaders({'Authorization': 'Bearer '+this.authService.token});
-    let URL = url_servicios+"/specialities/update/"+id_specialitie;
+    const headers = new HttpHeaders({'Authorization': 'Bearer '+this.authService.token});
+    const URL = url_servicios+"/specialities/update/"+id_specialitie;
     return this.http.put(URL,data,{headers: headers});
   }
 
   deleteSpecialities(id_specialitie:any){
-    let headers = new HttpHeaders({'Authorization': 'Bearer '+this.authService.token});
-    let URL = url_servicios+"/specialities/destroy/"+id_specialitie;
+    const headers = new HttpHeaders({'Authorization': 'Bearer '+this.authService.token});
+    const URL = url_servicios+"/specialities/destroy/"+id_specialitie;
     return this.http.delete(URL,{headers: headers});
   }
   

@@ -444,6 +444,13 @@ export class DataService {
               permision: 'delete_appointment',
               show_nav: false,
             },
+            {
+              menuValue: 'View Appointment',
+              route: '',
+              base: '',
+              permision: 'view_appointment',
+              show_nav: false,
+            },
           ],
         },
         {
