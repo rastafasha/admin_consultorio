@@ -142,7 +142,7 @@
                                             <div class="dropdown dropdown-action">
                                                 <a href="javascript:void(0);" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-end">
-                                                    <a class="dropdown-item"[routerLink]="['/appointments/atender/', data.id ]" ><i class="fa fa-pen-to-square m-r-5"></i> Hacer cita</a>
+                                                    <a class="dropdown-item"[routerLink]="['/appointments/atender/', data.id ]" *ngIf="isPermission('local_appointment')" ><i class="fa fa-pen-to-square m-r-5"></i> Hacer cita</a>
                                                     <a class="dropdown-item" [routerLink]="['/patients/profile/', data.id]"><i class="fa-solid fa-pen-to-square m-r-5"></i> Ver</a>
                                                     <a class="dropdown-item" [routerLink]="['/patients/list/edit/', data.id]"><i class="fa-solid fa-pen-to-square m-r-5"></i> Edit</a>
                                                     <!-- <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete_appointment"><i class="fa fa-trash-alt m-r-5"></i> Delete</a> -->
@@ -191,7 +191,7 @@
                                             <div class="dropdown dropdown-action">
                                                 <a href="javascript:void(0);" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-end">
-                                                    <a class="dropdown-item" [routerLink]="['/appointments/atender/', data.id]" *ngIf="isPermission('view_appointment')"><i class="fa-solid fa-pen-to-square m-r-5"></i> Anteder</a>
+                                                    <a class="dropdown-item" [routerLink]="['/appointments/atender/', data.id]" *ngIf="isPermission('local_appointment')"><i class="fa-solid fa-pen-to-square m-r-5"></i> Anteder</a>
                                                     <!-- <a class="dropdown-item" [routerLink]="['/appointments/list/edit/', data.id]"><i class="fa-solid fa-pen-to-square m-r-5"></i> Edit</a> -->
                                                     <!-- <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete_appointment"><i class="fa fa-trash-alt m-r-5"></i> Delete</a> -->
                                                 </div>

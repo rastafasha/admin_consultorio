@@ -451,6 +451,13 @@ export class DataService {
               permision: 'view_appointment',
               show_nav: false,
             },
+            {
+              menuValue: 'Local Appointment',
+              route: '',
+              base: '',
+              permision: 'local_appointment',
+              show_nav: false,
+            },
           ],
         },
         {
