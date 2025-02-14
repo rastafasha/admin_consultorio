@@ -57,7 +57,7 @@ export class ListPatientMComponent {
     window.scrollTo(0, 0);
     this.doctorService.closeMenuSidebar();
     this.getTableData();
-    let USER = localStorage.getItem("user");
+    const USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER: '');
     this.doctor_id = this.user.id;
     this.user = this.roleService.authService.user;
@@ -123,7 +123,7 @@ export class ListPatientMComponent {
         this.text_validation = resp.message_text;
       }else{
 
-        let INDEX = this.patientList.findIndex((item:any)=> item.id == this.patient_selected.id);
+        const INDEX = this.patientList.findIndex((item:any)=> item.id == this.patient_selected.id);
       if(INDEX !=-1){
         this.patientList.splice(INDEX,1);
 

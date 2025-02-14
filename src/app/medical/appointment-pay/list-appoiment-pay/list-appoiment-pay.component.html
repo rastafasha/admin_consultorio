@@ -11,6 +11,7 @@
                         <li class="breadcrumb-item active">Pagos</li>
                     </ul>
                 </div>
+                <app-back-bottn></app-back-bottn>
             </div>
         </div>
         <!-- /Page Header -->
@@ -119,9 +120,18 @@
                                     <td>{{data.doctor.full_name}}</td>
                                     <td>{{data.patient.full_name}}</td>
                                     <td>{{data.date_appointment_format}}</td>
-                                    <td>{{data.segment_hour.format_segment.format_hour_start + ' - ' + data.segment_hour.format_segment.format_hour_end}}</td>
+                                    <td>
+                                      <!-- {{data.segment_hour.format_segment.format_hour_start + ' - ' + data.segment_hour.format_segment.format_hour_end}} -->
+                                      <span *ngIf="data.segment_hour">
+                                        {{data.segment_hour.format_segment.format_hour_start + ' - ' + data.segment_hour.format_segment.format_hour_end}}
+
+                                      </span>
+                                      <span *ngIf="!data.segment_hour">
+                                        Creada en vivo
+                                      </span>
+                                    </td>
                                     <td>{{data.speciality.name}}</td>
-                                    <td><button [ngClass]="{'status-green' : data.status_pay === 1, 'status-pink' : data.status_pay === 2}" class="custom-badge">{{data.status_pay == 1 ? 'Pagado' : 'Deuda'}}</button></td>
+                                    <td><button [ngClass]="{'status-green' : data.status_pay === 1, 'status-pink' : data.status_pay === 2}" class="custom-badge">{{data.status_pay === 1 ? 'Pagado' : 'Deuda'}}</button></td>
                                     <td>{{data.amount | currency}}</td>
                                     
                                     
@@ -130,7 +140,7 @@
                                     <td></td>
                                     <td>
                                       <button class="btn btn-success" data-bs-toggle="modal" 
-                                      [attr.data-bs-target]="'#add_payment-'+data.id" *ngIf="i == 0" (click)="clearData()">Nuevo Pago</button>
+                                      [attr.data-bs-target]="'#add_payment-'+data.id" *ngIf="i === 0" (click)="clearData()">Nuevo Pago</button>
                                     </td>
                                     <td></td>
                                     <td>#{{payment.id}}</td>

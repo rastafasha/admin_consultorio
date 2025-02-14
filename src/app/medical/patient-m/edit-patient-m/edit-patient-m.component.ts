@@ -14,14 +14,14 @@ export class EditPatientMComponent {
   public routes = routes;
   public selectedValue!: string;
 
-  public name: string = '';
-  public surname: string = '';
-  public phone: string = '';
-  public email: string = '';
-  public birth_date: string = '';
-  public gender: number = 1;
-  public education: string = '';
-  public address: string = '';
+  public name = '';
+  public surname = '';
+  public phone = '';
+  public email = '';
+  public birth_date = '';
+  public gender = 1;
+  public education = '';
+  public address = '';
   public n_doc: any;
   public doctor_id: any;
   public user:any;
@@ -29,30 +29,30 @@ export class EditPatientMComponent {
   public FILE_AVATAR:any;
   public IMAGE_PREVISUALIZA:any = 'assets/img/user-06.jpg';
 
-  valid_form_success: boolean = false;
-  public text_validation:string = '';
-  public text_success:string = '';
+  valid_form_success = false;
+  public text_validation = '';
+  public text_success = '';
 
-  public antecedent_personal:string = '';
-  public antecedent_family:string = '';
-  public antecedent_alerg:string = '';
+  public antecedent_personal = '';
+  public antecedent_family = '';
+  public antecedent_alerg = '';
 
-  public name_companion:string = '';
-  public surname_companion:string = '';
-  public mobile_companion:string = '';
-  public relationship_companion:string = '';
+  public name_companion = '';
+  public surname_companion = '';
+  public mobile_companion = '';
+  public relationship_companion = '';
 
-  public name_responsable:string = '';
-  public surname_responsable:string = '';
-  public mobile_responsable:string = '';
-  public relationship_responsable:string = '';
+  public name_responsable = '';
+  public surname_responsable = '';
+  public mobile_responsable = '';
+  public relationship_responsable = '';
 
-  public ta:number = 0;
-  public temperature:number = 0;
-  public fc:number = 0;
-  public fr:number = 0;
-  public peso:number = 0;
-  public current_desease:string = '';
+  public ta = 0;
+  public temperature = 0;
+  public fc = 0;
+  public fr = 0;
+  public peso = 0;
+  public current_desease = '';
   public patient_selected:any;
   public patient_id:any;
 
@@ -68,7 +68,7 @@ export class EditPatientMComponent {
   }
 
   ngOnInit(): void {
-    let USER = localStorage.getItem("user");
+    const USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER: '');
     this.doctor_id = this.user.id;
     this.user = this.roleService.authService.user;
@@ -125,7 +125,7 @@ showUser(){
     }
     this.text_validation = '';
     this.FILE_AVATAR = $event.target.files[0];
-    let reader = new FileReader();
+    const reader = new FileReader();
     reader.readAsDataURL(this.FILE_AVATAR);
     reader.onloadend = ()=> this.IMAGE_PREVISUALIZA = reader.result;
   }
@@ -143,7 +143,7 @@ showUser(){
 
 
     // this.valid_form = false;
-    let formData = new FormData();
+    const formData = new FormData();
 
     formData.append('name', this.name);
     formData.append('surname', this.surname);

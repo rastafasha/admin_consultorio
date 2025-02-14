@@ -16,21 +16,21 @@ export class ProfilePatientMComponent {
   public routes = routes;
   imagenSerUrl = environment.url_media;
 public patientProfile: any[];
-option_selected:number = 1;
+option_selected = 1;
 public patient_id: any;
 public roles: any;
 public user: any;
 
-public num_appointment: number = 0;
-public money_of_appointments: number = 0;
-public num_appointment_pendings: number = 0;
+public num_appointment = 0;
+public money_of_appointments = 0;
+public num_appointment_pendings = 0;
 public patient_selected: any;
 public appointment_pendings: any =[];
 public appointments: any =[];
 
 
-public text_success:string = '';
-public text_validation:string = '';
+public text_success = '';
+public text_validation = '';
 
 constructor(
   public patientService : PatientMService,
@@ -55,12 +55,12 @@ ngOnInit(): void {
 getDoctor(){
   this.patientService.showPatientProfile(this.patient_id).subscribe((resp:any)=>{
     console.log(resp);
-    this.appointments= resp.appointments;
-    this.num_appointment= resp.num_appointment;
-    this.money_of_appointments= resp.money_of_appointments;
-    this.num_appointment_pendings= resp.num_appointment_pendings;
-    this.patient_selected= resp.patient;
-    this.appointment_pendings= resp.appointment_pendings.data;
+    // this.appointments= resp.appointments;
+    // this.num_appointment= resp.num_appointment;
+    // this.money_of_appointments= resp.money_of_appointments;
+    // this.num_appointment_pendings= resp.num_appointment_pendings;
+    // this.patient_selected= resp.patient;
+    // this.appointment_pendings= resp.appointment_pendings.data;
 
 
   })

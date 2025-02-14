@@ -41,7 +41,7 @@ export class ListDocComponent {
   public appointment:any;
   public appointment_selected:any;
   public text_validation:any;
-  public speciality_id:number= 0;
+  public speciality_id= 0;
   public date = null;
   specialities:any = [];
   hours:any;
@@ -64,7 +64,7 @@ export class ListDocComponent {
     this.doctorService.closeMenuSidebar();
     
     // this.getSpecialities();
-    let USER = localStorage.getItem("user");
+    const USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER: '');
     // this.doctor_id = this.user.id;
     this.user = this.roleService.authService.user;
@@ -101,6 +101,7 @@ export class ListDocComponent {
       this.totalDataPatient = resp.total;
       this.appointmentList = resp.appointments.data;
       this.appointment_id = resp.appointments.id;
+      console.log(this.appointmentList);
       // this.getTableDataGeneral();
       this.dataSource = new MatTableDataSource<any>(this.appointmentList);
       this.calculateTotalPages(this.totalDataPatient, this.pageSize);
@@ -134,7 +135,7 @@ export class ListDocComponent {
         this.text_validation = resp.message_text;
       }else{
 
-        let INDEX = this.appointmentList.findIndex((item:any)=> item.id == this.appointment_selected.id);
+        const INDEX = this.appointmentList.findIndex((item:any)=> item.id == this.appointment_selected.id);
       if(INDEX !=-1){
         this.appointmentList.splice(INDEX,1);
 
@@ -304,7 +305,7 @@ export class ListDocComponent {
   }
 
   cambiarStatus(data:any){
-    let VALUE = data.confimation;
+    const VALUE = data.confimation;
     console.log(VALUE);
     
     this.appointmentService.updateConfirmation(data, data.id).subscribe(

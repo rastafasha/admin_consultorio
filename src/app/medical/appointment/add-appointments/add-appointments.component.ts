@@ -77,52 +77,40 @@ export class AddAppointmentsComponent {
       this.hours = resp.hours;
       this.specialities = resp.specialities;
     })
-
-    // this.getTiposdePago();
     this.getTiposdePagoByDoctor();
-    if(this.roles === 'DOCTOR'){
-      this.doctorService.showDoctor(this.doctor_id).subscribe((resp:any)=>{
-        this.DOCTOR_SELECTED = resp.user;
-        console.log(this.DOCTOR_SELECTED);
+    // if(this.roles === 'DOCTOR'){
+    //   this.doctorService.showDoctor(this.doctor_id).subscribe((resp:any)=>{
+    //     this.DOCTOR_SELECTED = resp.user;
+    //     console.log(this.DOCTOR_SELECTED);
 
-        this.speciality_id = this.DOCTOR_SELECTED.speciality_id;
-        this.specialitiService.showSpeciality(this.speciality_id ).subscribe((resp:any)=>{
-          console.log(resp);
-        })
+    //     this.speciality_id = this.DOCTOR_SELECTED.speciality_id;
+    //     this.specialitiService.showSpeciality(this.speciality_id ).subscribe((resp:any)=>{
+    //       console.log(resp);
+    //     })
 
-      })
-    }
+    //   })
+    // }
   }
 
   getTiposdePagoByDoctor(){
     this.settigService.getActivoPagoByDoctor(this.doctor_id).subscribe((resp:any)=>{
-      console.log(resp);
+      // console.log(resp);
       this.tiposdepagos = resp.tiposdepagos;
       // console.log(this.tiposdepagos);
     })
 }
   
-  filtro(){
-    const data = {
-      date_appointment:this.date_appointment,
-      hour:this.hour,
-      speciality_id:this.speciality_id
-    }
-    if(this.roles === 'SUPERADMIN'){
-      this.appointmentService.lisFiter(data).subscribe((resp:any)=>{
-        // console.log(resp);
-        this.DOCTORS = resp.doctors;
-      })
-    }
-    if(this.roles === 'DOCTOR'){
-      this.appointmentService.lisFiterByDoctor(this.DOCTOR_SELECTED.id).subscribe((resp:any)=>{
-        console.log(resp);
-        // this.DOCTORS = resp.doctors;
-      })
-    }
-    
-    
+filtro(){
+  const data = {
+    date_appointment:this.date_appointment,
+    hour:this.hour,
+    speciality_id:this.speciality_id
   }
+  this.appointmentService.lisFiter(data).subscribe((resp:any)=>{
+    // console.log(resp);
+    this.DOCTORS = resp.doctors;
+  })
+}
 
   countDisponibilidad(DOCTOR:any){
     let SEGMENTS = [];
@@ -204,13 +192,6 @@ export class AddAppointmentsComponent {
   }
 
 
-  getTiposdePago(){
-    this.settigService.getActivas().subscribe((resp:any)=>{
-      console.log(resp);
-      this.tiposdepagos = resp.tiposdepagos;
-      // console.log(this.tiposdepagos);
-    })
-}
 
 
 

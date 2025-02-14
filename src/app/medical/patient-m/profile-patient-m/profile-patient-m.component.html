@@ -11,6 +11,7 @@
                         <li class="breadcrumb-item active">Perfil de Paciente</li>
                     </ul>
                 </div>
+                <app-back-bottn></app-back-bottn>
             </div>
         </div>
         <!-- /Page Header -->
@@ -66,6 +67,7 @@
                                         <div class="col-lg-4 col-md-4 d-flex align-items-center">
                                             <div class="follow-btn-group">
                                                 <a [routerLink]="['/patients/list/edit/', patient_id]" class="btn btn-info follow-btns">Edit</a>
+                                                <a [routerLink]="['/appointments/cita-medica/', patient_id ]" class="btn btn-info follow-btns">Crear Cita</a>
                                                 <!-- <button type="submit" class="btn btn-info message-btns">Message</button> -->
                                             </div>
                                         </div>
@@ -273,19 +275,19 @@
                                             <p><b>Antecedente Alergico:</b> {{patient_selected.antecedent_alerg}}</p>
                                         </div>
                                         <hr>
-                                        <h3>Atendido inicialmente por:</h3>
+                                        <!-- <h3>Atendido inicialmente por:</h3>
                                         <div class="col-xl-3 col-md-6">
                                             <div class="detail-personal">
                                                 <h2>Dr(a).</h2>
                                                 <h3>{{patient_selected.doctor.name}} {{patient_selected.doctor.surnname}}</h3>
                                             </div>
-                                        </div>
-                                        <div class="col-xl-3 col-md-6">
+                                        </div> -->
+                                        <!-- <div class="col-xl-3 col-md-6">
                                             <div class="detail-personal">
                                                 <h2>Teléfono.</h2>
                                                 <h3>{{patient_selected.doctor.mobile}} </h3>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </ng-container>
                                     <ng-container *ngIf="option_selected === 2">
                                         <div class="activity scrooldiv">
@@ -300,8 +302,9 @@
                                                             </div>
                                                             <div class="activity-content timeline-group-blk">
                                                                 <div class="timeline-group flex-shrink-0">
-                                                                    <h4>{{appointment.date_appointment_format}}</h4>
-                                                                    <span class="time">{{appointment.format_hour_start+' - '+appointment.format_hour_end}}</span>
+                                                                    <h4 *ngIf="appointment.date_appointment_format">{{appointment.date_appointment_format}}</h4>
+                                                                    <span class="time" *ngIf="appointment.format_hour_start">{{appointment.format_hour_start+' - '+appointment.format_hour_end}}</span>
+                                                                    <span class="time" *ngIf="!appointment.format_hour_start">Creada en vivo</span>
                                                                 </div>
                                                                 <div class="comman-activitys flex-grow-1">
                                                                     <h3>Dr(a).{{appointment.doctor.full_name}} </h3>

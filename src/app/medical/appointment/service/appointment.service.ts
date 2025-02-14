@@ -115,6 +115,12 @@ export class AppointmentService {
     const URL = url_servicios+"/appointment-atention/store";
     return this.http.post(URL,data, {headers:headers});
   }
+  registerAttentionLocal(data:any){
+    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const URL = url_servicios+"/appointment-atention/store-local";
+    return this.http.post(URL,data, {headers:headers});
+  }
+
   showCitamedica(appointment_id:any){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
     const URL = url_servicios+"/appointment-atention/show/"+appointment_id;

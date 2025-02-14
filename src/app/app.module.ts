@@ -10,10 +10,11 @@ import { FileSaverModule } from 'ngx-filesaver';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { PermisionInterceptorInterceptor } from './http-interceptors/permision-interceptor.interceptor';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { PipesModule } from './pipes/pipes.module';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
@@ -22,6 +23,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     SharedModule,
     CoreModule,
     FileSaverModule,
+    PipesModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
       // Register the ServiceWorker as soon as the application is stable

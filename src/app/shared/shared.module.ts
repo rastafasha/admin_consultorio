@@ -16,11 +16,13 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from '../common-component/header/header.component';
 import { SidebarComponent } from '../common-component/sidebar/sidebar.component';
+import { BackButtnComponent } from './backButtn/backButtn.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     SidebarComponent,
+    BackButtnComponent
   ],
   imports: [
     CommonModule,
@@ -71,6 +73,7 @@ import { SidebarComponent } from '../common-component/sidebar/sidebar.component'
     RouterModule,
     HeaderComponent,
     SidebarComponent,
+    BackButtnComponent
   ],
   providers: [
     DataService,

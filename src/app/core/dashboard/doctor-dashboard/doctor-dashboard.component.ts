@@ -69,25 +69,25 @@ export class DoctorDashboardComponent {
   public chartOptionsOne: Partial<ChartOptions>;
   public chartOptionsTwo: Partial<ChartOptions>;
   public chartOptionsThree: Partial<ChartOptions>;
-  public selectedValue: string = "2024"  ;
+  public selectedValue = "2024"  ;
 
   public doctors:any = [];
   public doctor_id:any;
 
 
   public appointments:any = []
-  public num_appointments_current:number = 0;
-  public num_appointments_before:number = 0;
-  public porcentaje_d:number = 0;
-  public num_appointments_attention_current:number = 0;
-  public num_appointments_attention_before:number = 0;
-  public porcentaje_da:number = 0;
-  public num_appointments_total_pay_current:number = 0;
-  public num_appointments_total_pay_before:number = 0;
-  public porcentaje_dtp:number = 0;
-  public num_appointments_total_pending_current:number = 0;
-  public num_appointments_total_pending_before:number = 0;
-  public porcentaje_dtpn:number = 0;
+  public num_appointments_current = 0;
+  public num_appointments_before = 0;
+  public porcentaje_d = 0;
+  public num_appointments_attention_current = 0;
+  public num_appointments_attention_before = 0;
+  public porcentaje_da = 0;
+  public num_appointments_total_pay_current = 0;
+  public num_appointments_total_pay_before = 0;
+  public porcentaje_dtp = 0;
+  public num_appointments_total_pending_current = 0;
+  public num_appointments_total_pending_before = 0;
+  public porcentaje_dtpn = 0;
 
   public query_income_year:any = [];
   public query_patient_by_genders:any = [];
@@ -261,7 +261,7 @@ export class DoctorDashboardComponent {
     window.scrollTo(0, 0);
     this.getDoctors();
 
-    let USER = localStorage.getItem("user");
+    const USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER: '');
     this.doctor_id = this.user.id;
     console.log(this.doctor_id);
@@ -290,7 +290,15 @@ export class DoctorDashboardComponent {
   }
 
   
-
+  isPermission(permission:string){
+    if(this.user.roles.includes('SUPERADMIN')){
+      return true;
+    }
+    if(this.user.permissions.includes(permission)){
+      return true;
+    }
+    return false;
+  }
 
   
 
@@ -303,7 +311,7 @@ export class DoctorDashboardComponent {
 
   dashboardDoctorProfile(){
     this.doctor_id = this.user.id;
-    let data ={
+    const data ={
       doctor_id:this.doctor_id
     }
     
@@ -334,7 +342,7 @@ export class DoctorDashboardComponent {
   }
   dashboardDoctorProfileYear(){
     this.doctor_id = this.user.id;
-    let data ={
+    const data ={
       year: this.selectedValue,
       doctor_id:this.doctor_id
     }
@@ -346,7 +354,7 @@ export class DoctorDashboardComponent {
 
       //start
       this.query_income_year = resp.query_income_year;
-      let data_income:any = [];
+      const data_income:any = [];
       this.query_income_year.forEach((element:any) => {
         data_income.push(element.income);
       });
@@ -402,7 +410,7 @@ export class DoctorDashboardComponent {
       
       //start
       this.query_patient_by_genders = resp.query_patients_by_gender;
-      let data_by_gender:any = [];
+      const data_by_gender:any = [];
 
       this.query_patient_by_genders.forEach((item:any) => {
         data_by_gender.push(parseInt(item.hombre));
@@ -415,11 +423,11 @@ export class DoctorDashboardComponent {
       this.query_n_appointment_year= resp.query_n_appointment_year;
       this.query_n_appointment_year_before= resp.query_n_appointment_year_before;
       
-      let n_appointment_year:any =[]
+      const n_appointment_year:any =[]
       this.query_n_appointment_year.forEach((item:any)=>{
         n_appointment_year.push(item.count_appointments);
       })
-      let n_appointment_year_before:any =[];
+      const n_appointment_year_before:any =[];
       this.query_n_appointment_year_before.forEach((item:any)=>{
         n_appointment_year_before.push(item.count_appointments);
       })
@@ -495,7 +503,7 @@ export class DoctorDashboardComponent {
 
   dashboardDoctor(){
     
-    let data ={
+    const data ={
       doctor_id:this.doctor_id
     }
     this.dashboardService.dashboardDoctor(data).subscribe((resp:any)=>{
@@ -521,7 +529,7 @@ export class DoctorDashboardComponent {
     })
   }
   dashboardDoctorYear(){
-    let data ={
+    const data ={
       year: this.selectedValue,
       doctor_id:this.doctor_id
     }
@@ -533,7 +541,7 @@ export class DoctorDashboardComponent {
 
       //start
       this.query_income_year = resp.query_income_year;
-      let data_income:any = [];
+      const data_income:any = [];
       this.query_income_year.forEach((element:any) => {
         data_income.push(element.income);
       });
@@ -589,7 +597,7 @@ export class DoctorDashboardComponent {
       
       //start
       this.query_patient_by_genders = resp.query_patients_by_gender;
-      let data_by_gender:any = [];
+      const data_by_gender:any = [];
 
       this.query_patient_by_genders.forEach((item:any) => {
         data_by_gender.push(parseInt(item.hombre));
@@ -602,11 +610,11 @@ export class DoctorDashboardComponent {
       this.query_n_appointment_year= resp.query_n_appointment_year;
       this.query_n_appointment_year_before= resp.query_n_appointment_year_before;
       
-      let n_appointment_year:any =[]
+      const n_appointment_year:any =[]
       this.query_n_appointment_year.forEach((item:any)=>{
         n_appointment_year.push(item.count_appointments);
       })
-      let n_appointment_year_before:any =[];
+      const n_appointment_year_before:any =[];
       this.query_n_appointment_year_before.forEach((item:any)=>{
         n_appointment_year_before.push(item.count_appointments);
       })

@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { routes } from 'src/app/shared/routes/routes';
 import { AppointmentService } from '../service/appointment.service';
 import { RolesService } from '../../roles/service/roles.service';
+import { PatientMService } from '../../patient-m/service/patient-m.service';
 
 @Component({
   selector: 'app-atencion-medica',
@@ -12,20 +13,20 @@ import { RolesService } from '../../roles/service/roles.service';
 export class AtencionMedicaComponent {
   public routes = routes;
 
-  valid_form_success: boolean = false;
-  public text_validation:string = '';
-  public text_success:string = '';
+  valid_form_success = false;
+  public text_validation = '';
+  public text_success = '';
 
   
-  name:string = '';
-  surname:string = '';
-  n_doc:number = 0;
-  phone:string = '';
-  name_companion:string = '';
-  surname_companion:string = '';
+  name = '';
+  surname = '';
+  n_doc = 0;
+  phone = '';
+  name_companion = '';
+  surname_companion = '';
 
-  laboratory:boolean = false;
-  laboratory_number:number = 1;
+  laboratory = false;
+  laboratory_number = 1;
 
   public medical:any = [];
   public roles:any = [];
@@ -39,31 +40,40 @@ export class AtencionMedicaComponent {
   antecedent_alerg:any;
   user:any;
   doctor_id:any;
+  patient_selected:any;
+  patient_id:any;
 
 
   constructor(
     public appointmentService:AppointmentService,
     public router: Router,
     public roleService: RolesService,
+    public patientService: PatientMService,
     public ativatedRoute: ActivatedRoute
   ){
 
   }
 
   ngOnInit(): void {
-    let USER = localStorage.getItem("user");
+    const USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER: '');
     this.doctor_id = this.user.id;
     this.user = this.roleService.authService.user;
     this.roles = this.user.roles[0];
 
     window.scrollTo(0, 0);
+
+    
     this.ativatedRoute.params.subscribe((resp:any)=>{
       this.appointment_id = resp.id;
       console.log(this.appointment_id);
+      this.getAppointment();
      })
-     this.getAppointment();
+
+    
   }
+
+ 
 
   getAppointment(){
     this.appointmentService.showAppointment(this.appointment_id).subscribe((resp:any)=>{
@@ -127,7 +137,8 @@ export class AtencionMedicaComponent {
       this.laboratory_number = 1
     }
 
-    let data ={
+   
+    const data ={
       appointment_id: this.appointment_id,
       description: this.description,
       medical: this.medical,
@@ -135,10 +146,12 @@ export class AtencionMedicaComponent {
       patient_id: this.appointment_selected.patient_id,
     }
 
+    
     this.appointmentService.registerAttention(data).subscribe((resp:any)=>{
       // console.log(resp);
       this.text_success = 'Se guardó la informacion de la cita médica'
     })
+
 
   }
 } 
