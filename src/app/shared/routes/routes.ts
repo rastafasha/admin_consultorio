@@ -442,10 +442,21 @@ export class routes {
   public static get registerLocation(): string {
     return this.baseUrl + '/location/register';
   }
+  
   public static get laboratoryList(): string {
     return this.baseUrl + '/laboratory/list';
   }
   public static get laboratoryEdit(): string {
     return this.baseUrl + '/laboratory/edit';
+  }
+
+  public static get presupuestoRegister(): string {
+    return this.baseUrl + '/presupuesto/register';
+  }
+  public static get presupuestoEdit(): string {
+    return this.baseUrl + '/presupuesto/edit';
+  }
+  public static get presupuestoList(): string {
+    return this.baseUrl + '/presupuesto/list';
   }
 }

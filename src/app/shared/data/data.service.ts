@@ -548,41 +548,6 @@ export class DataService {
           show_nav: true,
           subMenus: [],
         },
-        // {
-        //   menuValue: 'Activities',
-        //   route: routes.activities,
-        //   hasSubRoute: false,
-        //   showSubRoute: false,
-        //   img: 'assets/img/icons/menu-icon-14.svg',
-        //   base: 'activities',
-        //   permision: 'activitie',
-        //   show_nav: true,
-        //   subMenus: [],
-        // },
-        
-        // {
-        //   menuValue: 'Reports',
-        //   hasSubRoute: true,
-        //   showSubRoute: false,
-        //   base: 'reports',
-        //   img: 'assets/img/icons/menu-icon-02.svg',
-        //   subMenus: [
-        //     {
-        //       menuValue: 'Expense Report',
-        //       route: routes.expenseReports,
-        //       base: routes.expenseReports,
-        //       permision: 'expense_report',
-        //       show_nav: true,
-        //     },
-        //     {
-        //       menuValue: 'Invoice Report',
-        //       route: routes.invoiceReports,
-        //       base: routes.invoiceReports,
-        //       permision: 'invoice_report',
-        //       show_nav: true,
-        //     },
-        //   ],
-        // },
         {
           menuValue: 'Publicidad',
           route: routes.publicidad,
@@ -667,9 +632,108 @@ export class DataService {
           base: 'settings',
           permision: 'settings',
           show_nav: true,
-          subMenus: [],
+          subMenus: [
+               // notificaciones
+         {
+          menuValue: 'Lista pacientes por doctor',
+          route: '',
+          base: '',
+          permision: 'list_patient_doctor',
+          show_nav: false,
         },
+     {
+          menuValue: 'Cancelar Cita',
+          route: '',
+          base: '',
+          permision: 'cancel_appointment',
+          show_nav: false,
+        },
+     {
+          menuValue: 'Ver Notificaciones',
+          route: '',
+          base: '',
+          permision: 'view_notification',
+          show_nav: false,
+        },
+     {
+          menuValue: 'Ver notificaciones Citas',
+          route: '',
+          base: '',
+          permision: 'view_notification_appointment',
+          show_nav: false,
+        },
+     {
+          menuValue: 'Ver notificaciones Pagos',
+          route: '',
+          base: '',
+          permision: 'view_notification_pagos',
+          show_nav: false,
+        },
+          ],
+        },
+        {
+          menuValue: 'Presupuestos',
+          route: routes.presupuestoList,
+          base: routes.presupuestoList,
+          hasSubRoute: false,
+          showSubRoute: false,
+          img: 'assets/img/icons/menu-icon-16.svg',
+          permision: 'list_presupuesto',
+          show_nav: true,
+          subMenus: [
+            {
+              menuValue: 'register Presupuesto',
+              route: '',
+              base: '',
+              permision: 'register_presupuesto',
+              show_nav: false,
+            },{
+              menuValue: 'Lista Presupuesto',
+              route: '',
+              base: '',
+              permision: 'list_presupuesto',
+              show_nav: false,
+            },],
+        },
+
+
+        // {
+        //   menuValue: 'Activities',
+        //   route: routes.activities,
+        //   hasSubRoute: false,
+        //   showSubRoute: false,
+        //   img: 'assets/img/icons/menu-icon-14.svg',
+        //   base: 'activities',
+        //   permision: 'activitie',
+        //   show_nav: true,
+        //   subMenus: [],
+        // },
+        
+        // {
+        //   menuValue: 'Reports',
+        //   hasSubRoute: true,
+        //   showSubRoute: false,
+        //   base: 'reports',
+        //   img: 'assets/img/icons/menu-icon-02.svg',
+        //   subMenus: [
+        //     {
+        //       menuValue: 'Expense Report',
+        //       route: routes.expenseReports,
+        //       base: routes.expenseReports,
+        //       permision: 'expense_report',
+        //       show_nav: true,
+        //     },
+        //     {
+        //       menuValue: 'Invoice Report',
+        //       route: routes.invoiceReports,
+        //       base: routes.invoiceReports,
+        //       permision: 'invoice_report',
+        //       show_nav: true,
+        //     },
+        //   ],
+        // },
       ],
+      
     },
   ];
   // public sideBarList = [
