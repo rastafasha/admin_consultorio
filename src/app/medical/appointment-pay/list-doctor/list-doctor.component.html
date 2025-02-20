@@ -2,8 +2,9 @@
     <div class="content">
     
         <!-- Page Header -->
-        <app-breadcum-doctor-dashboard *ngIf="isPermission('admin_dashboard')" [titlePage]="titlePage" [routes]="routes.adminDashboard"></app-breadcum-doctor-dashboard>
-        <app-breadcum-doctor-dashboard *ngIf="isPermission('doctor_dashboard')" [titlePage]="titlePage" [routes]="routes.doctorDashboard"></app-breadcum-doctor-dashboard>
+        <app-breadcum-doctor-dashboard *ngIf="isPermission('admin_dashboard')  && user.roles[0] === 'SUPERADMIN' " [titlePage]="titlePage" [routes]="routes.adminDashboard"></app-breadcum-doctor-dashboard>
+        <app-breadcum-doctor-dashboard *ngIf="isPermission('admin_dashboard')  && user.roles[0] === 'ADMIN' " [titlePage]="titlePage" [routes]="routes.adminDashboard"></app-breadcum-doctor-dashboard>
+        <app-breadcum-doctor-dashboard *ngIf="isPermission('doctor_dashboard') && user.roles[0] !== 'SUPERADMIN'  " [titlePage]="titlePage" [routes]="routes.doctorDashboard"></app-breadcum-doctor-dashboard>
         <!-- /Page Header -->
         
         <div class="row">
