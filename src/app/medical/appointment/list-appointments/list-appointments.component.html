@@ -80,10 +80,10 @@
                                         <td>
                                           <!-- {{data.patient.full_name}} -->
                                           <a [routerLink]="[routes.patientProfile, data.patient.id]" *ngIf="isPermission('profile_patient')">
-                                            {{data.name + ' ' + (data.surname ? data.surname: '')}}
+                                            {{data.patient.name + ' ' + (data.patient.surname ? data.patient.surname: '')}}
                                           </a>
                                           <span *ngIf="!isPermission('profile_patient')">
-                                            {{data.name + ' ' + (data.surname ? data.surname: '')}}
+                                            {{data.patient.name + ' ' + (data.patient.surname ? data.patient.surname: '')}}
                                           </span>
                                         </td>
                                         <td>{{data.date_appointment_format}}</td>

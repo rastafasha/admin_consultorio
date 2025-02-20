@@ -20,12 +20,12 @@
                                         <p class="noti-details"><span class="noti-title">
                                             <a [routerLink]="[routes.trasfereciasListDoctor, user.id]">Verificación Transferencia</a>
                                         </span> Nueva transferencia por confirmar </p>
-                                        <p class="noti-time"><span class="notification-time">Tiene {{payments?.length}} pendientes</span></p>
+                                        <p class="noti-time"><span class="notification-time">Tiene {{totalT}} pendientes</span></p>
                                     </div>
                                 </div>
                             </a>
                         </li>
-                        <li class="notification-message" *ngIf="appointments.length > 0 && isPermission('view_notification_appointment')">
+                        <li class="notification-message" *ngIf="appointments_doctors.length > 0 && isPermission('view_notification_appointment')">
                             <a [routerLink]="[routes.appointmentListDoct, user.id]">
                                 <div class="media">
                                     <span class="avatar">V</span>
@@ -56,7 +56,7 @@
                                         <p class="noti-details"><span class="noti-title">
                                             <a [routerLink]="[routes.transferenciaList]">Verificación Transferencia</a>
                                         </span> Nueva transferencia por confirmar </p>
-                                        <p class="noti-time"><span class="notification-time">Tiene {{payments?.length}} pendientes</span></p>
+                                        <p class="noti-time"><span class="notification-time">Tiene {{totalTTr}} pendientes</span></p>
                                     </div>
                                 </div>
                             </a>
@@ -72,7 +72,7 @@
                                                 Verificación Cita
                                             </a>
                                         </span> verifique las nuevas citas por atender </p>
-                                        <p class="noti-time"><span class="notification-time">Tiene {{total}} pendientes </span></p>
+                                        <p class="noti-time"><span class="notification-time">Tiene {{totalTApp}} pendientes </span></p>
                                     </div>
                                 </div>
                             </a>

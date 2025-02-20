@@ -98,7 +98,17 @@
                                         <input class="form-control" name="designation" [(ngModel)]="designation" type="text"  >
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6 col-xl-4">
+                                <div class="col-12 col-md-6 col-xl-4" *ngIf="user.roles[0] === 'SUPERADMIN'">
+                                    <div class="form-group local-forms">
+                                        <label >Roles <span class="login-danger">*</span></label>
+                                        <mat-select [(ngModel)]="selectedValue" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Select Role">
+                                            <mat-option *ngFor="let data of roles " [value]="data.id">
+                                            {{data.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4" *ngIf="user.roles[0] === 'ADMIN'">
                                     <div class="form-group local-forms">
                                         <label >Roles <span class="login-danger">*</span></label>
                                         <mat-select [(ngModel)]="selectedValue" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Select Role">
