@@ -17,7 +17,7 @@ declare var $:any;
 })
 export class PatientDoctorListComponent {
   public routes = routes;
-
+  titlePage = 'Mis Pacientes';
   public patientList: any = [];
   dataSource!: MatTableDataSource<any>;
 
@@ -56,8 +56,8 @@ export class PatientDoctorListComponent {
   ngOnInit() {
     window.scrollTo(0, 0);
     this.doctorService.closeMenuSidebar();
-    let USER = localStorage.getItem("user");
-    this.user = JSON.parse(USER ? USER: '');
+    // const USER = localStorage.getItem("user");
+    // this.user = JSON.parse(USER ? USER: '');
     // this.doctor_id = this.user.id;
     this.user = this.roleService.authService.user;
     this.roles = this.user.roles[0];
@@ -144,7 +144,7 @@ export class PatientDoctorListComponent {
         this.text_validation = resp.message_text;
       }else{
 
-        let INDEX = this.patientList.findIndex((item:any)=> item.id == this.patient_selected.id);
+        const INDEX = this.patientList.findIndex((item:any)=> item.id == this.patient_selected.id);
       if(INDEX !=-1){
         this.patientList.splice(INDEX,1);
 

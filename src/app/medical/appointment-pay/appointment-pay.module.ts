@@ -9,9 +9,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ListAppoimentCobrosComponent } from './list-appoiment-cobros/list-appoiment-cobros.component';
-import { ListAppoimentCobrarComponent } from './list-appoiment-cobrar/list-appoiment-cobrar.component';
 import { ListDoctorComponent } from './list-doctor/list-doctor.component';
 import { ListCobrosDoctorComponent } from './list-cobros-doctor/list-cobros-doctor.component';
+import { ReusablesModule } from 'src/app/reusables/reusables.module';
 
 
 @NgModule({
@@ -19,7 +19,6 @@ import { ListCobrosDoctorComponent } from './list-cobros-doctor/list-cobros-doct
     AppointmentPayComponent,
     ListAppoimentPayComponent,
     ListAppoimentCobrosComponent,
-    ListAppoimentCobrarComponent,
     ListDoctorComponent,
     ListCobrosDoctorComponent
   ],
@@ -27,7 +26,6 @@ import { ListCobrosDoctorComponent } from './list-cobros-doctor/list-cobros-doct
     AppointmentPayComponent,
     ListAppoimentPayComponent,
     ListAppoimentCobrosComponent,
-    ListAppoimentCobrarComponent
   ],
   imports: [
     CommonModule,
@@ -36,7 +34,8 @@ import { ListCobrosDoctorComponent } from './list-cobros-doctor/list-cobros-doct
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule,
-    SharedModule
+    SharedModule,
+    ReusablesModule
   ]
 })
 export class AppointmentPayModule { }

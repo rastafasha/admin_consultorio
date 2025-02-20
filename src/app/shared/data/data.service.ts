@@ -199,6 +199,7 @@ export class DataService {
       showAsTab: false,
       separateRoute: false,
       menu: [
+        // Dashboard
         {
           menuValue: 'Dashboard',
           hasSubRoute: true,
@@ -230,6 +231,7 @@ export class DataService {
             },
           ],
         },
+        // Roles y Permisos
         {
           menuValue: 'Roles y Permisos',
           hasSubRoute: true,
@@ -269,6 +271,7 @@ export class DataService {
             },
           ],
         },
+        // Personal
         {
           menuValue: 'Personal',
           hasSubRoute: true,
@@ -312,6 +315,7 @@ export class DataService {
             // },
           ],
         },
+        // Doctores
         {
           menuValue: 'Doctores',
           hasSubRoute: true,
@@ -356,6 +360,7 @@ export class DataService {
             },
           ],
         },
+        // Pacientes
         {
           menuValue: 'Pacientes',
           hasSubRoute: true,
@@ -377,13 +382,13 @@ export class DataService {
               permision: 'list_patient',
               show_nav: true,
             },
-            // {
-            //   menuValue: 'Listado',
-            //   route: routes.patientsListDoctor,
-            //   base: routes.patientsListDoctor,
-            //   permision: 'list_patient_doctor',
-            //   show_nav: true,
-            // },
+            {
+              menuValue: 'Lista pacientes por doctor',
+              route: routes.patientsListDoctor,
+              base: routes.patientsListDoctor,
+              permision: 'list_patient_doctor',
+              show_nav: false,
+            },
             {
               menuValue: 'Edit Paciente',
               route: routes.editPatient,
@@ -391,16 +396,16 @@ export class DataService {
               permision: 'edit_patient',
               show_nav: false,
             },
-            // {
-            //   menuValue: 'Patients Profile',
-            //   route: routes.patientProfile,
-            //   base: routes.patientProfile,
-            //   permision: 'profile_patient',
-            //   show_nav: false,
-            // },
+            {
+              menuValue: 'Patients Profile',
+              route: routes.patientProfile,
+              base: routes.patientProfile,
+              permision: 'profile_patient',
+              show_nav: false,
+            },
           ],
         },
-       
+        // Citas
         {
           menuValue: 'Citas',
           hasSubRoute: true,
@@ -422,13 +427,13 @@ export class DataService {
               permision: 'list_appointment',
               show_nav: true,
             },
-            // {
-            //   menuValue: 'Listado',
-            //   route: routes.appointmentListDoct,
-            //   base: routes.appointmentListDoct,
-            //   permision: 'list_appointment_doctor',
-            //   show_nav: true,
-            // },
+            {
+              menuValue: 'Listado',
+              route: routes.appointmentListDoct,
+              base: routes.appointmentListDoct,
+              permision: 'list_appointment_doctor',
+              show_nav: false,
+            },
            
             {
               menuValue: 'Edit Appointment',
@@ -458,8 +463,16 @@ export class DataService {
               permision: 'local_appointment',
               show_nav: false,
             },
+            {
+              menuValue: 'Agregar cita por doctor',
+              route: '',
+              base: '',
+              permision: 'add_cita_doctor',
+              show_nav: false,
+            },
           ],
         },
+        // Pagos
         {
           menuValue: 'Pagos',
           hasSubRoute: true,
@@ -490,6 +503,7 @@ export class DataService {
             },
           ],
         },
+        // Especialidades
         {
           menuValue: 'Especialidades',
           hasSubRoute: true,
@@ -535,7 +549,7 @@ export class DataService {
             },
           ],
         },
-        
+        // Calendario
         {
           menuValue: 'Calendario',
           route: routes.calendar,
@@ -548,6 +562,190 @@ export class DataService {
           show_nav: true,
           subMenus: [],
         },
+        // Publicidad
+        {
+          menuValue: 'Publicidad',
+          route: routes.publicidad,
+          hasSubRoute: false,
+          showSubRoute: false,
+          img: 'assets/img/icons/call-icon-01.svg',
+          base: routes.publicidad,
+          permision: 'list_publicidad',
+          show_nav: true,
+          subMenus: [],
+        },
+        // Laboratorio
+        {
+          menuValue: 'Laboratorio',
+          hasSubRoute: true,
+          showSubRoute: false,
+          base: 'laboratory',
+          img: 'assets/img/icons/menu-icon-03.svg',
+          subMenus: [
+            {
+              menuValue: 'Laboratory List',
+              route: routes.laboratoryList,
+              base: routes.laboratoryList,
+              permision: 'list_laboratory',
+              show_nav: true,
+            },
+            {
+              menuValue: 'Edit Laboratory',
+              route: '',
+              base: '',
+              permision: 'edit_laboratory',
+              show_nav: false,
+            },
+            // {
+            //   menuValue: '',
+            //   route: '',
+            //   base: '',
+            //   // route: routes.registerLocation,
+            //   // base: routes.registerLocation,
+            //   permision: 'edit_location',
+            //   show_nav: false,
+            // }
+          ],
+        },
+        // Location
+        {
+          menuValue: 'Location',
+          hasSubRoute: true,
+          showSubRoute: false,
+          base: 'location',
+          img: 'assets/img/icons/menu-icon-03.svg',
+          subMenus: [
+            {
+              menuValue: 'Location List',
+              route: routes.LocationList,
+              base: routes.LocationList,
+              permision: 'list_location',
+              show_nav: true,
+            },
+            {
+              menuValue: 'Add Location',
+              route: routes.registerLocation,
+              base: routes.registerLocation,
+              permision: 'register_location',
+              show_nav: false,
+            },
+            // {
+            //   menuValue: '',
+            //   route: '',
+            //   base: '',
+            //   // route: routes.registerLocation,
+            //   // base: routes.registerLocation,
+            //   permision: 'edit_location',
+            //   show_nav: false,
+            // }
+          ],
+        },
+        // Configuración
+        {
+          menuValue: 'Configuración',
+          route: routes.settings,
+          hasSubRoute: false,
+          showSubRoute: false,
+          img: 'assets/img/icons/menu-icon-16.svg',
+          base: 'settings',
+          permision: 'settings',
+          show_nav: true,
+          subMenus: [
+               // notificaciones
+         
+               {
+                menuValue: 'Cancelar Cita',
+                route: '',
+                base: '',
+                permision: 'cancel_appointment',
+                show_nav: false,
+              },
+              {
+                    menuValue: 'Ver Notificaciones',
+                    route: '',
+                    base: '',
+                    permision: 'view_notification',
+                    show_nav: false,
+                  },
+              {
+                    menuValue: 'Ver notificaciones Citas',
+                    route: '',
+                    base: '',
+                    permision: 'view_notification_appointment',
+                    show_nav: false,
+                  },
+              {
+                    menuValue: 'Ver notificaciones Pagos',
+                    route: '',
+                    base: '',
+                    permision: 'view_notification_pagos',
+                    show_nav: false,
+                  },
+              {
+                    menuValue: 'Exportar documento Pdf',
+                    route: '',
+                    base: '',
+                    permision: 'export_pdf',
+                    show_nav: false,
+                  },
+              {
+                    menuValue: 'Exportar documento Text',
+                    route: '',
+                    base: '',
+                    permision: 'export_text',
+                    show_nav: false,
+                  },
+              {
+                    menuValue: 'Exportar documento CSV',
+                    route: '',
+                    base: '',
+                    permision: 'export_csv',
+                    show_nav: false,
+                  },
+              {
+                    menuValue: 'Exportar documento Excel',
+                    route: '',
+                    base: '',
+                    permision: 'export_xsl',
+                    show_nav: false,
+                  },
+          ],
+        },
+        // Presupuestos
+        {
+          menuValue: 'Presupuestos',
+          route: routes.presupuestoList,
+          base: routes.presupuestoList,
+          hasSubRoute: false,
+          showSubRoute: false,
+          img: 'assets/img/icons/menu-icon-16.svg',
+          permision: 'list_presupuesto',
+          show_nav: true,
+          subMenus: [
+            {
+              menuValue: 'register Presupuesto',
+              route: '',
+              base: '',
+              permision: 'register_presupuesto',
+              show_nav: false,
+            },
+            {
+              menuValue: 'Edit Presupuesto',
+              route: '',
+              base: '',
+              permision: 'edit_presupuesto',
+              show_nav: false,
+            },
+            {
+              menuValue: 'Lista Presupuesto',
+              route: '',
+              base: '',
+              permision: 'list_presupuesto',
+              show_nav: false,
+            },],
+        },
+
+
         // {
         //   menuValue: 'Activities',
         //   route: routes.activities,
@@ -583,93 +781,8 @@ export class DataService {
         //     },
         //   ],
         // },
-        {
-          menuValue: 'Publicidad',
-          route: routes.publicidad,
-          hasSubRoute: false,
-          showSubRoute: false,
-          img: 'assets/img/icons/call-icon-01.svg',
-          base: routes.publicidad,
-          permision: 'list_publicidad',
-          show_nav: true,
-          subMenus: [],
-        },
-        {
-          menuValue: 'Laboratorio',
-          hasSubRoute: true,
-          showSubRoute: false,
-          base: 'laboratory',
-          img: 'assets/img/icons/menu-icon-03.svg',
-          subMenus: [
-            {
-              menuValue: 'Laboratory List',
-              route: routes.laboratoryList,
-              base: routes.laboratoryList,
-              permision: 'list_laboratory',
-              show_nav: true,
-            },
-            {
-              menuValue: 'Edit Laboratory',
-              route: '',
-              base: '',
-              permision: 'edit_laboratory',
-              show_nav: false,
-            },
-            // {
-            //   menuValue: '',
-            //   route: '',
-            //   base: '',
-            //   // route: routes.registerLocation,
-            //   // base: routes.registerLocation,
-            //   permision: 'edit_location',
-            //   show_nav: false,
-            // }
-          ],
-        },
-        {
-          menuValue: 'Location',
-          hasSubRoute: true,
-          showSubRoute: false,
-          base: 'location',
-          img: 'assets/img/icons/menu-icon-03.svg',
-          subMenus: [
-            {
-              menuValue: 'Location List',
-              route: routes.LocationList,
-              base: routes.LocationList,
-              permision: 'list_location',
-              show_nav: true,
-            },
-            {
-              menuValue: 'Add Location',
-              route: routes.registerLocation,
-              base: routes.registerLocation,
-              permision: 'register_location',
-              show_nav: false,
-            },
-            // {
-            //   menuValue: '',
-            //   route: '',
-            //   base: '',
-            //   // route: routes.registerLocation,
-            //   // base: routes.registerLocation,
-            //   permision: 'edit_location',
-            //   show_nav: false,
-            // }
-          ],
-        },
-        {
-          menuValue: 'Configuración',
-          route: routes.settings,
-          hasSubRoute: false,
-          showSubRoute: false,
-          img: 'assets/img/icons/menu-icon-16.svg',
-          base: 'settings',
-          permision: 'settings',
-          show_nav: true,
-          subMenus: [],
-        },
       ],
+      
     },
   ];
   // public sideBarList = [

@@ -17,7 +17,7 @@ declare var $:any;
 export class ListLaboratoryComponent {
 
   public routes = routes;
-
+  titlePage = 'Listado de Citas con laboratorio'
   public appointmentList: any = [];
   dataSource!: MatTableDataSource<any>;
 
@@ -40,7 +40,7 @@ export class ListLaboratoryComponent {
   public appointment:any;
   public appointment_selected:any;
   public text_validation:any;
-  public speciality_id:number= 0;
+  public speciality_id= 0;
   public date = null;
   specialities:any = [];
   hours:any;
@@ -124,7 +124,7 @@ export class ListLaboratoryComponent {
         this.text_validation = resp.message_text;
       }else{
 
-        let INDEX = this.appointmentList.findIndex((item:any)=> item.id == this.appointment_selected.id);
+        const INDEX = this.appointmentList.findIndex((item:any)=> item.id == this.appointment_selected.id);
       if(INDEX !=-1){
         this.appointmentList.splice(INDEX,1);
 
@@ -315,7 +315,7 @@ export class ListLaboratoryComponent {
   }
 
   cambiarStatus(data:any){
-    let VALUE = data.confimation;
+    const VALUE = data.confimation;
     console.log(VALUE);
     
     this.appointmentService.updateConfirmation(data, data.id).subscribe(

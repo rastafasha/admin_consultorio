@@ -16,13 +16,12 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from '../common-component/header/header.component';
 import { SidebarComponent } from '../common-component/sidebar/sidebar.component';
-import { BackButtnComponent } from './backButtn/backButtn.component';
-
+import { NotificacionesupdateComponent } from '../common-component/notificacionesupdate/notificacionesupdate.component';
 @NgModule({
   declarations: [
     HeaderComponent,
     SidebarComponent,
-    BackButtnComponent
+    NotificacionesupdateComponent,
   ],
   imports: [
     CommonModule,
@@ -53,7 +52,7 @@ import { BackButtnComponent } from './backButtn/backButtn.component';
     FormsModule,
     ReactiveFormsModule,
     NgxMaterialTimepickerModule,
-    RouterModule
+    RouterModule,
   ],
   exports: [
     CommonModule,
@@ -73,7 +72,7 @@ import { BackButtnComponent } from './backButtn/backButtn.component';
     RouterModule,
     HeaderComponent,
     SidebarComponent,
-    BackButtnComponent
+    NotificacionesupdateComponent,
   ],
   providers: [
     DataService,

@@ -1,0 +1,33 @@
+
+<div *ngIf="modalPwaPlatform === 'SAFARI'">
+    
+  <div class="doctor-submit " *ngIf="this.pwa.status">
+      <button class="btn btn-primary btn-sm" (click)="this.pwa.installPwa()"  >
+        Instalar en Apple OS desde Chrome
+      </button>
+    </div>
+</div>
+
+
+<div *ngIf="modalPwaPlatform !== 'SAFARI'">
+    
+    <!-- <div class="doctor-submit ">
+        <button class="btn btn-primary btn-sm" (click)="addToHomeScreenCrome()"  >
+          Instalar en Apple OS desde Chrome
+        </button>
+      </div> -->
+      <div class="doctor-submit " >
+        <button class="btn btn-primary btn-sm" (click)="this.pwa.installPwa()"  >
+          Instalar en Apple OS desde Chrome
+        </button>
+      </div>
+  </div>
+<div *ngIf="modalVersion === true">
+    
+    <div class="doctor-submit ">
+        <button class="btn btn-primary btn-sm" (click)="updateVersion();"  >
+          Actualizar Versión
+        </button>
+      </div>
+  </div>
+  

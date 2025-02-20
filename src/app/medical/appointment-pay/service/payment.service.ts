@@ -23,14 +23,14 @@ export class PaymentService {
   // }
 
 
-  getAll(page:number=1, 
-    search_referencia:string='', 
+  getAll(page=1, 
+    search_referencia='', 
     // search_patient:string='', 
     // speciality_id:number=0, 
     // date_start:string= '',
     // date_end:string= '',
     ){
-    let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
     let LINK = "";
     if(search_referencia){
     LINK+="&search_referencia="+search_referencia;
@@ -47,19 +47,19 @@ export class PaymentService {
     // if(date_end){
     // LINK+="&date_end="+date_end;
     // }
-    let URL = url_servicios+'/payment?page='+page+LINK;
+    const URL = url_servicios+'/payment?page='+page+LINK;
     return this.http.get(URL, {headers:headers});
 }
 
 getAllByDoctor(
   doctor_id:any='', 
-  page:number=1, 
-  search_referencia:string='', 
-  date_start:string='', 
-  date_end:string='', 
-  search_patient:string='', 
+  page=1, 
+  search_referencia='', 
+  date_start='', 
+  date_end='', 
+  search_patient='', 
   ){
-  let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+  const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
   let LINK = "";
   if(search_referencia){
   LINK+="&search_referencia="+search_referencia;
@@ -73,32 +73,44 @@ getAllByDoctor(
     if(date_end){
     LINK+="&date_end="+date_end;
     }
-  let URL = url_servicios+'/payment/byDoctor/'+doctor_id+'/?page='+page+LINK;
+  const URL = url_servicios+'/payment/byDoctor/'+doctor_id+'/?page='+page+LINK;
   return this.http.get(URL, {headers:headers});
 }
 
    update(data:any, id:any){
-    let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
-    let URL = url_servicios+"/payment/update/"+id;
+    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const URL = url_servicios+"/payment/update/"+id;
     return this.http.put(URL,data,{headers:headers});
   }
 
    getPagosbyUser(id:number) {
-    let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
-    let URL = url_servicios+"/payment/pagosbyUser/"+id;
+    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const URL = url_servicios+"/payment/pagosbyUser/"+id;
     return this.http.put(URL,{headers:headers});
   }
 
    getRecientes() {
-    let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
-    let URL = url_servicios+'/payment/recientes';
+    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+    const URL = url_servicios+'/payment/recientes';
     
   }
 
   updateStatus(data:any, payment_id:any){
-    let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
-    let URL = url_servicios+"/payment/update/status/"+payment_id;
+    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const URL = url_servicios+"/payment/update/status/"+payment_id;
     return this.http.put(URL,data,{headers:headers});
+  }
+
+  pendings(){
+    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const URL = url_servicios+"/payment/pendientes";
+    return this.http.get(URL, {headers:headers});
+  }
+
+  pendingsbyDoctor(doctor_id:number){
+    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const URL = url_servicios+"/payment/pendientesbydoctor/"+doctor_id;
+    return this.http.get(URL, {headers:headers});
   }
  
 }

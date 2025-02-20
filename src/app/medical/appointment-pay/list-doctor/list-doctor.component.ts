@@ -19,6 +19,7 @@ export class ListDoctorComponent {
 
   @ViewChild('closebutton') closebutton:any;
 
+  titlePage = 'Mis Pagos de Citas';
   public routes = routes;
   public selectedValue !: string  ;
   public searchDataValue = '';
@@ -46,18 +47,18 @@ export class ListDoctorComponent {
 
   public payment_selected:any;
 
-  public speciality_id:number= 0;
+  public speciality_id= 0;
   public specialities:any = [];
   
   public picker1:any;
   public picker2:any;
   public date_start:any;
   public date_end:any;
-  public method_payment:string = '';
-  public amount_add:number = 0;
+  public method_payment = '';
+  public amount_add = 0;
 
-  public text_success:string = '';
-  public text_validation:string = '';
+  public text_success = '';
+  public text_validation = '';
 
   public user:any;
   public doctor_id:any;
@@ -77,7 +78,7 @@ export class ListDoctorComponent {
     this.doctorService.closeMenuSidebar();
     
 
-    let USER = localStorage.getItem("user");
+    const USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER: '');
     // this.doctor_id = this.user.id;
     // this.user = this.roleService.authService.user;
@@ -90,6 +91,16 @@ export class ListDoctorComponent {
     this.getTableData();
     this.getSpecialities();
     this.getTiposdePagoByDoctor()
+  }
+
+  isPermission(permission:string){
+    if(this.user.roles.includes('SUPERADMIN')){
+      return true;
+    }
+    if(this.user.permissions.includes(permission)){
+      return true;
+    }
+    return false;
   }
 
   getSpecialities(){
@@ -130,7 +141,7 @@ export class ListDoctorComponent {
       this.text_validation = "Se Requiere todos los campos"
       return;
     }
-    let dataD ={
+    const dataD ={
       appointment_id: data.id,
       appointment_total: data.amount,
       amount: this.amount_add,
@@ -143,7 +154,7 @@ export class ListDoctorComponent {
         this.text_success = "El Pago se registró correctamente";
         data.payment.push(resp.appoimentpay);
 
-        let INDEX = this.appointmentList.findIndex((appo:any)=>appo.id == data.id);
+        const INDEX = this.appointmentList.findIndex((appo:any)=>appo.id == data.id);
         if(INDEX != -1){
           this.appointmentList[INDEX].status_pay = !resp.appoimentpay.is_total_payment ? 2: 1;
         }
@@ -187,7 +198,7 @@ export class ListDoctorComponent {
       this.text_validation = "Se Requiere todos los campos"
       return;
     }
-    let dataD ={
+    const dataD ={
       appointment_id: data.id,
       appointment_total: data.amount,
       amount: this.amount_add,
@@ -198,11 +209,11 @@ export class ListDoctorComponent {
         this.text_validation = resp.message_text;
       }else{
         this.text_success = "El Pago se Actualizó correctamente";
-        let index = data.payments.findIndex((pay:any)=>pay.id == resp.appoimentpay.id);
+        const index = data.payments.findIndex((pay:any)=>pay.id == resp.appoimentpay.id);
         if(index != -1){
           data.payment[index] = resp.appoimentpay;
         }
-        let INDEX = this.appointmentList.findIndex((appo:any)=>appo.id == data.id);
+        const INDEX = this.appointmentList.findIndex((appo:any)=>appo.id == data.id);
         if(INDEX != -1){
           this.appointmentList[INDEX].status_pay = !resp.appoimentpay.is_total_payment ? 2: 1;
         }
@@ -231,9 +242,9 @@ export class ListDoctorComponent {
         this.text_validation = resp.message_text;
       }else{
 
-        let INDEX = data.payments.findIndex((item:any)=> item.id == this.payment_selected.id);
+        const INDEX = data.payments.findIndex((item:any)=> item.id == this.payment_selected.id);
 
-        let INDEX2 = this.appointmentList.findIndex((appo:any)=>appo.id == data.id);
+        const INDEX2 = this.appointmentList.findIndex((appo:any)=>appo.id == data.id);
         if(INDEX2 != -1){
           this.appointmentList[INDEX2].status_pay = 2;
         }

@@ -15,19 +15,19 @@ export class AppoitmentPayService {
   ) { }
 
   listConfig(){
-    let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
-    let URL = url_servicios+'/appointment/config';
+    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+    const URL = url_servicios+'/appointment/config';
     return this.http.get(URL, {headers:headers});
   }
 
-  listAppointmentPays(page:number=1, 
-                      search_doctor:string='', 
-                      search_patient:string='', 
-                      speciality_id:number=0, 
-                      date_start:string= '',
-                      date_end:string= '',
+  listAppointmentPays(page=1, 
+                      search_doctor='', 
+                      search_patient='', 
+                      speciality_id=0, 
+                      date_start= '',
+                      date_end= '',
                       ){
-    let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
     let LINK = "";
     if(search_doctor){
       LINK+="&search_doctor="+search_doctor;
@@ -44,18 +44,18 @@ export class AppoitmentPayService {
     if(date_end){
       LINK+="&date_end="+date_end;
     }
-    let URL = url_servicios+'/appointmentpay?page='+page+LINK;
+    const URL = url_servicios+'/appointmentpay?page='+page+LINK;
     return this.http.get(URL, {headers:headers});
   }
 
   listAppointmentPaysByDoctor(
     doctor_id:any='', 
-    page:number=1, 
-    search_patient:string='', 
-    date_start:string= '',
-    date_end:string= '',
+    page=1, 
+    search_patient='', 
+    date_start= '',
+    date_end= '',
     ){
-    let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
     let LINK = "";
     
     if(search_patient){
@@ -67,31 +67,31 @@ export class AppoitmentPayService {
     if(date_end){
     LINK+="&date_end="+date_end;
     }
-    let URL = url_servicios+'/appointmentpay/byDoctor/'+doctor_id+'/?page='+page+LINK;
+    const URL = url_servicios+'/appointmentpay/byDoctor/'+doctor_id+'/?page='+page+LINK;
     return this.http.get(URL, {headers:headers});
   }
 
   storeAppointmentPay(data:any){
-    let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
-    let URL = url_servicios+"/appointmentpay/store";
+    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const URL = url_servicios+"/appointmentpay/store";
     return this.http.post(URL,data, {headers:headers});
   }
 
   getAppointmentPaybyDoctor(doctor_id:number) {
-    let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
-    let URL = url_servicios+"/appointmentpay/byDoctor/"+doctor_id;
+    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const URL = url_servicios+"/appointmentpay/byDoctor/"+doctor_id;
     return this.http.put(URL,{headers:headers});
   }
 
   editAppointmentPay(data:any, appointmentpay_id:any){
-    let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
-    let URL = url_servicios+"/appointmentpay/update/"+appointmentpay_id;
+    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const URL = url_servicios+"/appointmentpay/update/"+appointmentpay_id;
     return this.http.put(URL,data,{headers:headers});
   }
   
   deleteAppointmentPay(appointmentpay_id:any){
-    let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
-    let URL = url_servicios+"/appointmentpay/destroy/"+appointmentpay_id;
+    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const URL = url_servicios+"/appointmentpay/destroy/"+appointmentpay_id;
     return this.http.delete(URL, {headers:headers});
   }
 

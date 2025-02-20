@@ -14,6 +14,7 @@ import { AtencionMedicaComponent } from './atencion-medica/atencion-medica.compo
 import { ListDocComponent } from './list-doc/list-doc.component';
 import { AtenderComponent } from './atender/atender.component';
 import { PipesModule } from 'src/app/pipes/pipes.module';
+import { ReusablesModule } from 'src/app/reusables/reusables.module';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { PipesModule } from 'src/app/pipes/pipes.module';
     HttpClientModule,
     RouterModule,
     SharedModule,
-    PipesModule
+    PipesModule,
+    ReusablesModule
   ]
 })
 export class AppointmentModule { }

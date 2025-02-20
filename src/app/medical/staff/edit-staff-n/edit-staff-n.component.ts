@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { routes } from 'src/app/shared/routes/routes';
 import { StaffService } from '../service/staff.service';
+import { RolesService } from '../../roles/service/roles.service';
 
 @Component({
   selector: 'app-edit-staff-n',
@@ -12,39 +13,42 @@ export class EditStaffNComponent {
   public routes = routes;
   public selectedValue !: string  ;
 
-  public name: string = '';
-  public surname: string = '';
+  public name = '';
+  public surname = '';
   public mobile: any;ß
-  public email: string = '';
-  public password: string = '';
-  public password_confirmation: string = '';
-  public birth_date: string = '';
-  public gender: number = 1;
-  public education: string = '';
-  public designation: string = '';
-  public address: string = '';
+  public email = '';
+  public password = '';
+  public password_confirmation = '';
+  public birth_date = '';
+  public gender = 1;
+  public education = '';
+  public designation = '';
+  public address = '';
 
   public roles:any = [];
   public FILE_AVATAR:any;
   public IMAGE_PREVISUALIZA:any = 'assets/img/user-06.jpg';
 
-  valid_form:boolean = false;
-  public text_success:string = '';
-  public text_validation:string = '';
+  valid_form = false;
+  public text_success = '';
+  public text_validation = '';
   
   user_id:any;
   staff_selected:any;
+  user:any;
 
   constructor(
     public staffService:StaffService,
     public router: Router,
     public ativatedRoute: ActivatedRoute,
+    public roleService: RolesService,
   ){
 
   }
 
   ngOnInit(): void {
     window.scrollTo(0, 0);
+    this.user = this.roleService.authService.user;
     this.getRoles();
     this.ativatedRoute.params.subscribe((resp:any)=>{
       this.user_id = resp.id;
@@ -84,7 +88,7 @@ export class EditStaffNComponent {
     }
     this.text_validation = '';
     this.FILE_AVATAR = $event.target.files[0];
-    let reader = new FileReader();
+    const reader = new FileReader();
     reader.readAsDataURL(this.FILE_AVATAR);
     reader.onloadend = ()=> this.IMAGE_PREVISUALIZA = reader.result;
   }
@@ -105,7 +109,7 @@ export class EditStaffNComponent {
 
     this.valid_form = false;
     console.log(this.selectedValue);
-    let formData = new FormData();
+    const formData = new FormData();
 
     formData.append('name', this.name);
     formData.append('surname', this.surname);

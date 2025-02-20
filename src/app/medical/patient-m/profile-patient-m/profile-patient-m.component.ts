@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
-import { Sort } from '@angular/material/sort';
 import { ActivatedRoute } from '@angular/router';
-import { DataService } from 'src/app/shared/data/data.service';
-import { patientProfile } from 'src/app/shared/models/models';
 import { routes } from 'src/app/shared/routes/routes';
 import { PatientMService } from '../service/patient-m.service';
 import { DoctorService } from '../../doctors/service/doctor.service';
@@ -49,18 +46,27 @@ ngOnInit(): void {
   const USER = localStorage.getItem('user');
   this.user = JSON.parse(USER ? USER : '');
   this.roles = this.user.roles[0];
-  this.getDoctor();
+  this.getPatient();
+}
+isPermission(permission:string){
+  if(this.user.roles.includes('SUPERADMIN')){
+    return true;
+  }
+  if(this.user.permissions.includes(permission)){
+    return true;
+  }
+  return false;
 }
 
-getDoctor(){
+getPatient(){
   this.patientService.showPatientProfile(this.patient_id).subscribe((resp:any)=>{
     console.log(resp);
-    // this.appointments= resp.appointments;
-    // this.num_appointment= resp.num_appointment;
-    // this.money_of_appointments= resp.money_of_appointments;
-    // this.num_appointment_pendings= resp.num_appointment_pendings;
-    // this.patient_selected= resp.patient;
-    // this.appointment_pendings= resp.appointment_pendings.data;
+    this.appointments= resp.appointments;
+    this.num_appointment= resp.num_appointment;
+    this.money_of_appointments= resp.money_of_appointments;
+    this.num_appointment_pendings= resp.num_appointment_pendings;
+    this.patient_selected= resp.patient;
+    this.appointment_pendings= resp.appointment_pendings.data;
 
 
   })

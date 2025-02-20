@@ -95,7 +95,7 @@ export class ListRoleUserComponent {
         this.text_validation = resp.message_text;
       }else{
 
-        let INDEX = this.rolesList.findIndex((item:any)=> item.id == this.role_selected.id);
+        const INDEX = this.rolesList.findIndex((item:any)=> item.id == this.role_selected.id);
       if(INDEX !=-1){
         this.rolesList.splice(INDEX,1);
 
