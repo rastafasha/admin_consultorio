@@ -69,7 +69,7 @@ export class DoctorDashboardComponent {
   public chartOptionsOne: Partial<ChartOptions>;
   public chartOptionsTwo: Partial<ChartOptions>;
   public chartOptionsThree: Partial<ChartOptions>;
-  public selectedValue = "2024"  ;
+  public selectedValue = "2025"  ;
 
   public doctors:any = [];
   public doctor_id:any;
