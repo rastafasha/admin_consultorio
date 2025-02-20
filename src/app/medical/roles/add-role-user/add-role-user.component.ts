@@ -13,10 +13,10 @@ export class AddRoleUserComponent  {
   public routes = routes;
 
   sideBar:any = [];
-  name:string = '';
+  name = '';
   permissions:any = [];
-  valid_form:boolean = false;
-  valid_form_success:boolean = false;
+  valid_form = false;
+  valid_form_success = false;
   text_validation:any = null;
 
   constructor(
@@ -36,7 +36,7 @@ export class AddRoleUserComponent  {
 
   addPermission(subMenu:any){
     if(subMenu.permision){
-      let INDEX = this.permissions.findIndex((item:any)=>item == subMenu.permision);
+      const INDEX = this.permissions.findIndex((item:any)=>item == subMenu.permision);
       if(INDEX != -1){
         this.permissions.splice(INDEX,1);
       }else{
@@ -55,7 +55,7 @@ export class AddRoleUserComponent  {
       this.valid_form = true;
       return;
     }
-    let data = {
+    const data = {
       name:this.name,
       permissions: this.permissions,
     }
@@ -72,7 +72,7 @@ export class AddRoleUserComponent  {
         this.permissions = [];
         this.valid_form_success = true;
         //limpia los checks
-        let SIDE_BAR = this.sideBar;
+        const SIDE_BAR = this.sideBar;
         this.sideBar = [];
         setTimeout(() => {
           this.sideBar = SIDE_BAR;

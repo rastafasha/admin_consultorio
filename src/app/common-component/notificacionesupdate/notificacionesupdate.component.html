@@ -46,15 +46,15 @@
                 </div>
                 <div class="drop-scroll" *ngIf="user.roles[0] === 'SUPERADMIN'">
                     <ul class="notification-list">
-                        <li class="notification-message" *ngIf="payments?.length > 0 && isPermission('view_notification_pagos')">
-                            <a [routerLink]="routes.transferenciaList">
+                        <li class="notification-message" *ngIf="payments?.length > 0 || payments?.length > 0 && isPermission('view_notification_pagos')">
+                            <a [routerLink]="[routes.transferenciaList]">
                                 <div class="media">
                                     <span class="avatar">
                                         <img alt="John Doe" src="assets/img/user.jpg" class="img-fluid">
                                     </span>
                                     <div class="media-body">
                                         <p class="noti-details"><span class="noti-title">
-                                            <a [routerLink]="routes.transferenciaList">Verificación Transferencia</a>
+                                            <a [routerLink]="[routes.transferenciaList]">Verificación Transferencia</a>
                                         </span> Nueva transferencia por confirmar </p>
                                         <p class="noti-time"><span class="notification-time">Tiene {{payments?.length}} pendientes</span></p>
                                     </div>

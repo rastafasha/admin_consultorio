@@ -4,11 +4,12 @@
         <!-- Page Header -->
         <div class="page-header">
             <div class="row">
-                <div class="col-sm-12">
+                <app-back-bottn style="width: 50px;"></app-back-bottn>
+                <div class="col-sm-10">
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a routerLink="/dashboard/doctor-dashboard">Dashboard</a></li>
+                        <!-- <li class="breadcrumb-item"><a routerLink="/dashboard/doctor-dashboard">Dashboard</a></li> -->
                         
-                        <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
+                        <!-- <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li> -->
                         <li class="breadcrumb-item active">Perfil del Doctor</li>
                     </ul>
                 </div>
@@ -87,8 +88,8 @@
                                         <ul class="list-space">
                                             <li>
                                                 <h4>Género</h4>
-                                                <span *ngIf="doctor_selected.gender == 2">Femenino</span>
-                                                <span *ngIf="doctor_selected.gender == 1">Masculino</span>
+                                                <span *ngIf="doctor_selected.gender === 2">Femenino</span>
+                                                <span *ngIf="doctor_selected.gender === 1">Masculino</span>
                                             </li>
                                             <li>
                                                 <h4>Educación</h4>
@@ -145,14 +146,14 @@
                                     <div class="tab-content-set">
                                         <ul class="nav">
                                             <li>
-                                                <a href="#" onclick="return false;" [ngClass]="{'active': option_selected == 1}" (click)="optionSelected(1)"><span class="set-about-icon me-2"><img src="assets/img/icons/menu-icon-02.svg" alt=""></span>Citas Realizadas </a>
+                                                <a href="#" onclick="return false;" [ngClass]="{'active': option_selected === 1}" (click)="optionSelected(1)"><span class="set-about-icon me-2"><img src="assets/img/icons/menu-icon-02.svg" alt=""></span>Citas Realizadas </a>
                                             </li>
                                             <li>
-                                                <a href="#" onclick="return false;" [ngClass]="{'active': option_selected == 2}" (click)="optionSelected(2)"><span class="set-about-icon me-2"><img src="assets/img/icons/menu-icon-16.svg" alt=""></span>Configuración</a>
+                                                <a href="#" onclick="return false;" [ngClass]="{'active': option_selected === 2}" (click)="optionSelected(2)"><span class="set-about-icon me-2"><img src="assets/img/icons/menu-icon-16.svg" alt=""></span>Configuración</a>
                                             </li>
                                         </ul>
                                     </div>
-                                    <ng-container *ngIf="option_selected == 1">
+                                    <ng-container *ngIf="option_selected === 1">
                                         <div class="activity scrooldiv">
                                             <div class="activity-box">
                                                 <ul class="activity-list">
@@ -185,7 +186,7 @@
                                             </div>
                                         </div>
                                     </ng-container>
-                                    <ng-container *ngIf="option_selected == 2">
+                                    <ng-container *ngIf="option_selected === 2">
                                         <div class="setting-form-blk">
                                             <form>
                                                 <div class="row">
@@ -301,10 +302,10 @@
                                                     <td >{{data.date_appointment_format}}</td>
                                                     <td >{{data.patient.full_name}}</td>
                                                     <td>
-                                                        <button [ngClass]="{'status-green' : data.status === 2, 'status-pink' : data.status === 1}" class="custom-badge">{{data.status == 1 ? 'Pendiente' : 'Atendido'}}</button>
+                                                        <button [ngClass]="{'status-green' : data.status === 2, 'status-pink' : data.status === 1}" class="custom-badge">{{data.status === 1 ? 'Pendiente' : 'Atendido'}}</button>
                                                     </td>
                                                     <td>
-                                                        <button [ngClass]="{'status-green' : data.status_pay === 1, 'status-pink' : data.status_pay === 2}" class="custom-badge">{{data.status_pay == 1 ? 'Pagado' : 'Deuda'}}</button>
+                                                        <button [ngClass]="{'status-green' : data.status_pay === 1, 'status-pink' : data.status_pay === 2}" class="custom-badge">{{data.status_pay === 1 ? 'Pagado' : 'Deuda'}}</button>
                                                     </td>
                                                     <td>{{data.amount }}</td>
                                                     <td class="text-end">

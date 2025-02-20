@@ -26,7 +26,7 @@ export class AppointmentService {
     const URL = url_servicios+"/appointment/filter";
     return this.http.post(URL,data, {headers:headers});
   }
-  lisFiterByDoctor( doctor_id){
+  lisFiterByDoctor( doctor_id:number){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
     const URL = url_servicios+"/appointment/filterbydoctor/"+doctor_id;
     return this.http.post(URL, {headers:headers});
@@ -34,6 +34,11 @@ export class AppointmentService {
   pendings(){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
     const URL = url_servicios+"/appointment/pendientes";
+    return this.http.get(URL, {headers:headers});
+  }
+  pendingsbyDoctor(doctor_id:number){
+    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const URL = url_servicios+"/appointment/pendientesbydoctor/"+doctor_id;
     return this.http.get(URL, {headers:headers});
   }
 

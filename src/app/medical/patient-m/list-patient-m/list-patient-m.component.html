@@ -56,9 +56,12 @@
                                     <tr *ngFor="let data of patientList">
                                         
                                         <td>
-                                          <a [routerLink]="['/patients/profile/', data.id]">
+                                          <a [routerLink]="[routes.patientProfile, data.id]" *ngIf="isPermission('profile_patient')">
                                             {{data.name + ' ' + (data.surname ? data.surname: '')}}
                                           </a>
+                                          <span *ngIf="!isPermission('profile_patient')">
+                                            {{data.name + ' ' + (data.surname ? data.surname: '')}}
+                                          </span>
                                         </td>
                                         <td>{{data.email}}</td>
                                         <td>{{data.education}}</td>

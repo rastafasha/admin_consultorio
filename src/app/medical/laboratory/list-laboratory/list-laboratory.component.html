@@ -74,7 +74,15 @@
                                     <tr *ngFor="let data of appointmentList">
                                         
                                         <td>{{data.doctor.full_name}}</td>
-                                        <td>{{data.patient.full_name}}</td>
+                                        <td>
+                                          <a class="dropdown-item" [routerLink]="[routes.patientProfile, data.patient.id]" 
+                                          *ngIf="isPermission('profile_patient')">
+                                            {{data.patient.full_name}}
+                                          </a>
+                                          <span *ngIf="isPermission('profile_patient')">
+                                            {{data.patient.full_name}}
+                                          </span>
+                                        </td>
                                         <td>{{data.date_appointment_format}}</td>
                                         <!-- <td>{{data.segment_hour.format_segment.format_hour_start + ' - ' + data.segment_hour.format_segment.format_hour_end}}</td> -->
                                         <td>{{data.speciality.name}}</td>

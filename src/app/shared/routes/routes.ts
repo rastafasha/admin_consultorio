@@ -174,8 +174,11 @@ export class routes {
     return this.baseUrl + '/doctors/add';
   }
   public static get doctorProfile(): string {
-    return this.baseUrl + '/doctor/doctor-profile';
+    return this.baseUrl + '/doctors/profile/';
   }
+  // public static get doctorProfile(): string {
+  //   return this.baseUrl + '/doctor/doctor-profile/';
+  // }
   public static get doctorSetting(): string {
     return this.baseUrl + '/doctor/doctor-setting';
   }
@@ -279,10 +282,10 @@ export class routes {
     return this.baseUrl + '/patients/add';
   }
   public static get editPatient(): string {
-    return this.baseUrl + '/patient/edit-patient';
+    return this.baseUrl + '/patients/edit-patient';
   }
   public static get patientProfile(): string {
-    return this.baseUrl + '/patient/patient-profile';
+    return this.baseUrl + '/patients/profile/';
   }
   public static get patientSetting(): string {
     return this.baseUrl + '/patient/patient-setting';
@@ -425,6 +428,9 @@ export class routes {
   }
   public static get salaryCobrar(): string {
     return this.baseUrl + '/appointment-pay/punto-de-venta';
+  }
+  public static get transferenciaList(): string {
+    return this.baseUrl + '/appointment-pay/list-pagos/';
   }
   public static get trasfereciasListDoctor(): string {
     return this.baseUrl + '/appointment-pay/list-pagos/doctor/';
