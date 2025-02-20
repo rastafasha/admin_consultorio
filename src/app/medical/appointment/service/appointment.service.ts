@@ -33,7 +33,7 @@ export class AppointmentService {
   }
   pendings(){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
-    const URL = url_servicios+"/appointment/pending";
+    const URL = url_servicios+"/appointment/pendientes";
     return this.http.get(URL, {headers:headers});
   }
 
@@ -125,5 +125,10 @@ export class AppointmentService {
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
     const URL = url_servicios+"/appointment-atention/show/"+appointment_id;
     return this.http.get(URL,{headers:headers});
+  }
+  cancelAppointment(appointment_id:any){
+    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const URL = url_servicios+"/appointment/cancel/"+appointment_id;
+    return this.http.delete(URL, {headers:headers});
   }
 }

@@ -426,6 +426,12 @@ export class routes {
   public static get salaryCobrar(): string {
     return this.baseUrl + '/appointment-pay/punto-de-venta';
   }
+  public static get trasfereciasListDoctor(): string {
+    return this.baseUrl + '/appointment-pay/list-pagos/doctor/';
+  }
+  public static get pagosListDoctor(): string {
+    return this.baseUrl + '/appointment-pay/list/doctor/';
+  }
 
   public static get publicidad(): string {
     return this.baseUrl + '/publicidad/list';

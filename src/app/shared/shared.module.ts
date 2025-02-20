@@ -16,11 +16,12 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from '../common-component/header/header.component';
 import { SidebarComponent } from '../common-component/sidebar/sidebar.component';
-import { ReusablesModule } from '../reusables/reusables.module';
+import { NotificacionesupdateComponent } from '../common-component/notificacionesupdate/notificacionesupdate.component';
 @NgModule({
   declarations: [
     HeaderComponent,
     SidebarComponent,
+    NotificacionesupdateComponent,
   ],
   imports: [
     CommonModule,
@@ -71,6 +72,7 @@ import { ReusablesModule } from '../reusables/reusables.module';
     RouterModule,
     HeaderComponent,
     SidebarComponent,
+    NotificacionesupdateComponent,
   ],
   providers: [
     DataService,

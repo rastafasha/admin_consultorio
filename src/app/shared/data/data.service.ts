@@ -389,13 +389,6 @@ export class DataService {
               permision: 'list_patient_doctor',
               show_nav: false,
             },
-            // {
-            //   menuValue: 'Listado',
-            //   route: routes.patientsListDoctor,
-            //   base: routes.patientsListDoctor,
-            //   permision: 'list_patient_doctor',
-            //   show_nav: true,
-            // },
             {
               menuValue: 'Edit Paciente',
               route: routes.editPatient,
@@ -403,13 +396,13 @@ export class DataService {
               permision: 'edit_patient',
               show_nav: false,
             },
-            // {
-            //   menuValue: 'Patients Profile',
-            //   route: routes.patientProfile,
-            //   base: routes.patientProfile,
-            //   permision: 'profile_patient',
-            //   show_nav: false,
-            // },
+            {
+              menuValue: 'Patients Profile',
+              route: routes.patientProfile,
+              base: routes.patientProfile,
+              permision: 'profile_patient',
+              show_nav: false,
+            },
           ],
         },
         // Citas
@@ -468,6 +461,13 @@ export class DataService {
               route: '',
               base: '',
               permision: 'local_appointment',
+              show_nav: false,
+            },
+            {
+              menuValue: 'Agregar cita por doctor',
+              route: '',
+              base: '',
+              permision: 'add_cita_doctor',
               show_nav: false,
             },
           ],
@@ -728,7 +728,15 @@ export class DataService {
               base: '',
               permision: 'register_presupuesto',
               show_nav: false,
-            },{
+            },
+            {
+              menuValue: 'Edit Presupuesto',
+              route: '',
+              base: '',
+              permision: 'edit_presupuesto',
+              show_nav: false,
+            },
+            {
               menuValue: 'Lista Presupuesto',
               route: '',
               base: '',
