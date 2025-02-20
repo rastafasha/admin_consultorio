@@ -5,6 +5,7 @@ import { routes } from 'src/app/shared/routes/routes';
 import * as XLSX from 'xlsx';
 import { DoctorService } from '../../doctors/service/doctor.service';
 import { LocationService } from '../services/location.service';
+import { RolesService } from '../../roles/service/roles.service';
 
 declare var $:any; 
 @Component({
@@ -14,6 +15,7 @@ declare var $:any;
 })
 export class LocationListComponent {
   public routes = routes;
+  titlePage = 'Listado de Locaciones';
 
   public locationList: any = [];
   dataSource!: MatTableDataSource<any>;
@@ -36,10 +38,13 @@ export class LocationListComponent {
   public location_id:any;
   public location_selected:any;
   public text_validation:any;
+  user:any;
+  roles:any;
 
   constructor(
     public locationService: LocationService,
     public doctorService: DoctorService,
+    public roleService: RolesService,
     private fileSaver: FileSaverService
     ){
 
@@ -48,6 +53,18 @@ export class LocationListComponent {
     window.scrollTo(0, 0);
     this.doctorService.closeMenuSidebar();
     this.getTableData();
+    this.user = this.roleService.authService.user;
+    this.roles = this.user.roles[0];
+  }
+
+  isPermission(permission:string){
+    if(this.user.roles.includes('SUPERADMIN')){
+      return true;
+    }
+    if(this.user.permissions.includes(permission)){
+      return true;
+    }
+    return false;
   }
 
   private getTableData(page=1): void {
@@ -93,7 +110,7 @@ export class LocationListComponent {
         this.text_validation = resp.message_text;
       }else{
 
-        let INDEX = this.locationList.findIndex((item:any)=> item.id == this.location_selected.id);
+        const INDEX = this.locationList.findIndex((item:any)=> item.id == this.location_selected.id);
       if(INDEX !=-1){
         this.locationList.splice(INDEX,1);
 

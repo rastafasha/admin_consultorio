@@ -7,5 +7,6 @@ import { Component, Input } from '@angular/core';
 })
 export class BreadcumsComponent {
     @Input() titlePage
+    @Input() routes
     // constructor () {}
 }

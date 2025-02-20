@@ -17,6 +17,7 @@ declare var $:any;
 })
 export class ListDocComponent {
   public routes = routes;
+  titlePage = 'Mis Citas';
 
   public appointmentList: any = [];
   dataSource!: MatTableDataSource<any>;

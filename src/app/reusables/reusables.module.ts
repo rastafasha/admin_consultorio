@@ -5,6 +5,8 @@ import { SkeletonLoaderComponent } from './skeleton-loader/skeleton-loader.compo
 import { BreadcumsComponent } from './breadcums/breadcums.component';
 import { LoaderAnimComponent } from './loader-anim/loader-anim.component';
 import { ExportListsComponent } from './export-lists/export-lists.component';
+import { BreadcumDoctorDashboardComponent } from './breadcum-doctor-dashboard/breadcum-doctor-dashboard.component';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -13,17 +15,20 @@ import { ExportListsComponent } from './export-lists/export-lists.component';
     SkeletonLoaderComponent,
     BreadcumsComponent,
     LoaderAnimComponent,
-    ExportListsComponent
+    ExportListsComponent,
+    BreadcumDoctorDashboardComponent
   ],
   exports: [
     BackButtnComponent,
     SkeletonLoaderComponent,
     BreadcumsComponent,
     LoaderAnimComponent,
-    ExportListsComponent
+    ExportListsComponent,
+    BreadcumDoctorDashboardComponent
   ],
   imports: [
     CommonModule,
+    RouterModule
   ]
 })
 export class ReusablesModule { }

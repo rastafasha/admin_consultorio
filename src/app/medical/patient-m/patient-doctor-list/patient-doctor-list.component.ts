@@ -56,8 +56,8 @@ export class PatientDoctorListComponent {
   ngOnInit() {
     window.scrollTo(0, 0);
     this.doctorService.closeMenuSidebar();
-    const USER = localStorage.getItem("user");
-    this.user = JSON.parse(USER ? USER: '');
+    // const USER = localStorage.getItem("user");
+    // this.user = JSON.parse(USER ? USER: '');
     // this.doctor_id = this.user.id;
     this.user = this.roleService.authService.user;
     this.roles = this.user.roles[0];

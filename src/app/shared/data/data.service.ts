@@ -432,7 +432,7 @@ export class DataService {
               route: routes.appointmentListDoct,
               base: routes.appointmentListDoct,
               permision: 'list_appointment_doctor',
-              show_nav: true,
+              show_nav: false,
             },
            
             {

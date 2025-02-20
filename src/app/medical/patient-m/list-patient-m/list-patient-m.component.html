@@ -1,10 +1,10 @@
 <div class="page-wrapper">
     <div class="content">
     
-        <!-- Page Header -->
-         <!-- dashboar con ruta / -->
-         <app-breadcums [titlePage]="titlePage"></app-breadcums>
-        <!-- /Page Header -->
+         <!-- Page Header -->
+         <app-breadcum-doctor-dashboard *ngIf="isPermission('admin_dashboard') " [titlePage]="titlePage" [routes]="routes.adminDashboard"></app-breadcum-doctor-dashboard>
+         <app-breadcum-doctor-dashboard *ngIf="isPermission('doctor_dashboard')" [titlePage]="titlePage" [routes]="routes.doctorDashboard"></app-breadcum-doctor-dashboard>
+         <!-- /Page Header -->
         <app-skeleton-loader *ngIf="isLoading" [rows]="5" [columns]="4"></app-skeleton-loader>
         
         

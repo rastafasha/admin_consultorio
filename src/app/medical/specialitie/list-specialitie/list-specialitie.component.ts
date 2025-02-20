@@ -17,6 +17,7 @@ export class ListSpecialitieComponent {
   public routes = routes;
   public specialitiesList:any = [];
   dataSource!: MatTableDataSource<any>;
+  titlePage = 'Listado de Especialidades';
 
   public showFilter = false;
   public searchDataValue = '';

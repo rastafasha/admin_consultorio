@@ -1,19 +1,10 @@
 <div class="page-wrapper">
     <div class="content">
     
-        <!-- Page Header -->
-        <div class="page-header">
-            <div class="row">
-                <div class="col-sm-12">
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a routerLink="/">Dashboard</a></li>
-                        <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
-                        <li class="breadcrumb-item active"> Especilidad Lista</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <!-- /Page Header -->
+         <!-- Page Header -->
+         <app-breadcum-doctor-dashboard *ngIf="isPermission('admin_dashboard') " [titlePage]="titlePage" [routes]="routes.adminDashboard"></app-breadcum-doctor-dashboard>
+         <app-breadcum-doctor-dashboard *ngIf="isPermission('doctor_dashboard')" [titlePage]="titlePage" [routes]="routes.doctorDashboard"></app-breadcum-doctor-dashboard>
+         <!-- /Page Header -->
         
         <div class="row">
             <div class="col-sm-12">
@@ -26,7 +17,7 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     <div class="doctor-table-blk">
-                                        <h3>Especialidad Lista</h3>
+                                        <h3>{{titlePage}}</h3>
                                         <div class="doctor-search-blk">
                                             <div class="top-nav-search table-search-blk" >
                                                     <input  class="form-control" placeholder="Search here" [(ngModel)]="searchDataValue"
