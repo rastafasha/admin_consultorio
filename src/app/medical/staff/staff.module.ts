@@ -12,6 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CoreModule } from 'src/app/core/core.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { FileSaverModule } from 'ngx-filesaver';
+import { ReusablesModule } from 'src/app/reusables/reusables.module';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import { FileSaverModule } from 'ngx-filesaver';
     HttpClientModule,
     RouterModule,
     SharedModule,
-    FileSaverModule
+    FileSaverModule,
+    ReusablesModule
   ]
 })
 export class StaffModule { }

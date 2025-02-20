@@ -108,7 +108,7 @@ export class ListDoctorComponent {
         this.text_validation = resp.message_text;
       }else{
 
-        let INDEX = this.doctorList.findIndex((item:any)=> item.id == this.doctor_selected.id);
+        const INDEX = this.doctorList.findIndex((item:any)=> item.id == this.doctor_selected.id);
       if(INDEX !=-1){
         this.doctorList.splice(INDEX,1);
 
@@ -293,7 +293,7 @@ export class ListDoctorComponent {
   }
 
   cambiarStatus(data:any){
-    let VALUE = data.status;
+    const VALUE = data.status;
     console.log(VALUE);
     
     this.doctorService.updateStatus(data, data.id).subscribe(

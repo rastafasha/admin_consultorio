@@ -199,6 +199,7 @@ export class DataService {
       showAsTab: false,
       separateRoute: false,
       menu: [
+        // Dashboard
         {
           menuValue: 'Dashboard',
           hasSubRoute: true,
@@ -230,6 +231,7 @@ export class DataService {
             },
           ],
         },
+        // Roles y Permisos
         {
           menuValue: 'Roles y Permisos',
           hasSubRoute: true,
@@ -269,6 +271,7 @@ export class DataService {
             },
           ],
         },
+        // Personal
         {
           menuValue: 'Personal',
           hasSubRoute: true,
@@ -312,6 +315,7 @@ export class DataService {
             // },
           ],
         },
+        // Doctores
         {
           menuValue: 'Doctores',
           hasSubRoute: true,
@@ -356,6 +360,7 @@ export class DataService {
             },
           ],
         },
+        // Pacientes
         {
           menuValue: 'Pacientes',
           hasSubRoute: true,
@@ -376,6 +381,13 @@ export class DataService {
               base: routes.patientsList,
               permision: 'list_patient',
               show_nav: true,
+            },
+            {
+              menuValue: 'Lista pacientes por doctor',
+              route: routes.patientsListDoctor,
+              base: routes.patientsListDoctor,
+              permision: 'list_patient_doctor',
+              show_nav: false,
             },
             // {
             //   menuValue: 'Listado',
@@ -400,7 +412,7 @@ export class DataService {
             // },
           ],
         },
-       
+        // Citas
         {
           menuValue: 'Citas',
           hasSubRoute: true,
@@ -422,13 +434,13 @@ export class DataService {
               permision: 'list_appointment',
               show_nav: true,
             },
-            // {
-            //   menuValue: 'Listado',
-            //   route: routes.appointmentListDoct,
-            //   base: routes.appointmentListDoct,
-            //   permision: 'list_appointment_doctor',
-            //   show_nav: true,
-            // },
+            {
+              menuValue: 'Listado',
+              route: routes.appointmentListDoct,
+              base: routes.appointmentListDoct,
+              permision: 'list_appointment_doctor',
+              show_nav: true,
+            },
            
             {
               menuValue: 'Edit Appointment',
@@ -460,6 +472,7 @@ export class DataService {
             },
           ],
         },
+        // Pagos
         {
           menuValue: 'Pagos',
           hasSubRoute: true,
@@ -490,6 +503,7 @@ export class DataService {
             },
           ],
         },
+        // Especialidades
         {
           menuValue: 'Especialidades',
           hasSubRoute: true,
@@ -535,7 +549,7 @@ export class DataService {
             },
           ],
         },
-        
+        // Calendario
         {
           menuValue: 'Calendario',
           route: routes.calendar,
@@ -548,6 +562,7 @@ export class DataService {
           show_nav: true,
           subMenus: [],
         },
+        // Publicidad
         {
           menuValue: 'Publicidad',
           route: routes.publicidad,
@@ -559,6 +574,7 @@ export class DataService {
           show_nav: true,
           subMenus: [],
         },
+        // Laboratorio
         {
           menuValue: 'Laboratorio',
           hasSubRoute: true,
@@ -591,6 +607,7 @@ export class DataService {
             // }
           ],
         },
+        // Location
         {
           menuValue: 'Location',
           hasSubRoute: true,
@@ -623,6 +640,7 @@ export class DataService {
             // }
           ],
         },
+        // Configuración
         {
           menuValue: 'Configuración',
           route: routes.settings,
@@ -634,43 +652,66 @@ export class DataService {
           show_nav: true,
           subMenus: [
                // notificaciones
-         {
-          menuValue: 'Lista pacientes por doctor',
-          route: '',
-          base: '',
-          permision: 'list_patient_doctor',
-          show_nav: false,
-        },
-     {
-          menuValue: 'Cancelar Cita',
-          route: '',
-          base: '',
-          permision: 'cancel_appointment',
-          show_nav: false,
-        },
-     {
-          menuValue: 'Ver Notificaciones',
-          route: '',
-          base: '',
-          permision: 'view_notification',
-          show_nav: false,
-        },
-     {
-          menuValue: 'Ver notificaciones Citas',
-          route: '',
-          base: '',
-          permision: 'view_notification_appointment',
-          show_nav: false,
-        },
-     {
-          menuValue: 'Ver notificaciones Pagos',
-          route: '',
-          base: '',
-          permision: 'view_notification_pagos',
-          show_nav: false,
-        },
+         
+               {
+                menuValue: 'Cancelar Cita',
+                route: '',
+                base: '',
+                permision: 'cancel_appointment',
+                show_nav: false,
+              },
+              {
+                    menuValue: 'Ver Notificaciones',
+                    route: '',
+                    base: '',
+                    permision: 'view_notification',
+                    show_nav: false,
+                  },
+              {
+                    menuValue: 'Ver notificaciones Citas',
+                    route: '',
+                    base: '',
+                    permision: 'view_notification_appointment',
+                    show_nav: false,
+                  },
+              {
+                    menuValue: 'Ver notificaciones Pagos',
+                    route: '',
+                    base: '',
+                    permision: 'view_notification_pagos',
+                    show_nav: false,
+                  },
+              {
+                    menuValue: 'Exportar documento Pdf',
+                    route: '',
+                    base: '',
+                    permision: 'export_pdf',
+                    show_nav: false,
+                  },
+              {
+                    menuValue: 'Exportar documento Text',
+                    route: '',
+                    base: '',
+                    permision: 'export_text',
+                    show_nav: false,
+                  },
+              {
+                    menuValue: 'Exportar documento CSV',
+                    route: '',
+                    base: '',
+                    permision: 'export_csv',
+                    show_nav: false,
+                  },
+              {
+                    menuValue: 'Exportar documento Excel',
+                    route: '',
+                    base: '',
+                    permision: 'export_xsl',
+                    show_nav: false,
+                  },
           ],
         },
+        // Presupuestos
         {
           menuValue: 'Presupuestos',
           route: routes.presupuestoList,

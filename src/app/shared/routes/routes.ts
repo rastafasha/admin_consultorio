@@ -85,12 +85,10 @@ export class routes {
     return this.baseUrl + '/appointments/list';
   }
 
-  // public static get appointmentListDoct(): string {
-  //   return this.baseUrl + '/appointments/list/doctor/'+doctor2_id;
-  // }
-  // public static get editAppointment(): string {
-  //   return this.baseUrl + '/appointments/edit-appointment';
-  // }
+  public static get appointmentListDoct(): string {
+    return this.baseUrl + '/appointments/list/doctor/';
+  }
+  
   public static get editAppointment(): string {
     return this.baseUrl + '/appointments/edit';
   }
@@ -295,9 +293,9 @@ export class routes {
   public static get patientsList(): string {
     return this.baseUrl + '/patients/list';
   }
-  // public static get patientsListDoctor(): string {
-  //   return this.baseUrl + '/patients/list/doctor/'+doctor_id;
-  // }
+  public static get patientsListDoctor(): string {
+    return this.baseUrl + '/patients/list/doctor/';
+  }
   
   public static get addSalary(): string {
     return this.baseUrl + '/payroll/add-salary';

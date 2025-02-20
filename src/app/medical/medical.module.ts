@@ -15,7 +15,7 @@ import { CoreModule } from '../core/core.module';
     CommonModule,
     MedicalRoutingModule,
     SharedModule,
-    CoreModule
+    CoreModule,
   ]
 })
 export class MedicalModule { }

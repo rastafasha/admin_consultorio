@@ -28,25 +28,20 @@
                                     <div class="doctor-table-blk">
                                         <h3>Especialidad Lista</h3>
                                         <div class="doctor-search-blk">
-                                            <div class="top-nav-search table-search-blk">
+                                            <div class="top-nav-search table-search-blk" >
                                                     <input  class="form-control" placeholder="Search here" [(ngModel)]="searchDataValue"
                                                     (ngModelChange)="searchData(searchDataValue)">
                                                     <a class="btn"><img src="assets/img/icons/search-normal.svg" alt=""></a>
                                             </div>
                                             <div class="add-group">
-                                                <a routerLink="/specialities/register" class="btn btn-primary add-pluss ms-2"><img src="assets/img/icons/plus.svg" alt=""></a>
+                                                <a routerLink="/specialities/register" *ngIf="isPermission('register_specialty')"
+                                                 class="btn btn-primary add-pluss ms-2"><img src="assets/img/icons/plus.svg" alt=""></a>
                                                 <a href="javascript:;" (click)="PageSize()" class="btn btn-primary doctor-refresh ms-2"><img src="assets/img/icons/re-fresh.svg" alt=""></a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-auto text-end float-end ms-auto download-grp">
-                                     <!-- <a type="button" (click)="pdfExport()" class=" me-2"><img src="assets/img/icons/pdf-icon-01.svg"   alt="Export to Pdf"  title="Export to Pdf"></a> -->
-                                     <a type="button" (click)="txtExport()" class=" me-2"><img src="assets/img/icons/pdf-icon-02.svg"   alt="Export to TXT" title="Export to TXT"></a>
-                                     <a type="button" (click)="csvExport()" class=" me-2"><img src="assets/img/icons/pdf-icon-03.svg"    alt="Export to CSV" title="Export to CSV"></a>
-                                     <a type="button" (click)="excelExport()" ><img src="assets/img/icons/pdf-icon-04.svg"   alt="Export to XLS" title="Export to XLS"></a>
-                                    
-                                </div>
+                                <app-export-lists></app-export-lists>
                             </div>
                         </div>
                         <!-- /Table Header -->
@@ -69,7 +64,7 @@
                                         <td>{{data.price}}</td>
                                         <td>
                                           <button [ngClass]="{'status-green' : data.state === 1, 'status-pink' : data.state === 2}" class="custom-badge">
-                                            {{data.state == 1 ? 'Activo' : 'Inactivo' }}
+                                            {{data.state === 1 ? 'Activo' : 'Inactivo' }}
                                           </button>
                                         </td>
                                         <td>{{data.created_at}}</td>
