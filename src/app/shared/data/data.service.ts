@@ -495,6 +495,20 @@ export class DataService {
               show_nav: true,
             },
             {
+              menuValue: 'Pagos Doctor',
+              route: '',
+              base: '',
+              show_nav: false,
+              permision: 'pago_doctor',
+            },
+            {
+              menuValue: 'Transferencias Doctor',
+              route: '',
+              base: '',
+              show_nav: false,
+              permision: 'transferencia_doctor',
+            },
+            {
               menuValue: 'Delete Pagos',
               route: '',
               base: '',

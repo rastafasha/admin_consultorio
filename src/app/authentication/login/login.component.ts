@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { RolesService } from 'src/app/medical/roles/service/roles.service';
 import { AuthService } from 'src/app/shared/auth/auth.service';
 import { routes } from 'src/app/shared/routes/routes';
 
@@ -46,6 +47,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     public auth: AuthService,
+
     public router:Router,
     private fb: FormBuilder,
     ) {
@@ -69,6 +71,7 @@ export class LoginComponent implements OnInit {
   
     // });
     this.getLocalStorage();
+    
   }
 
   getLocalStorage(){
@@ -76,11 +79,19 @@ export class LoginComponent implements OnInit {
       const USER = localStorage.getItem('user');
       this.user = JSON.parse(USER ? USER: '');
       console.log(this.user);
+      // this.getRemoto();
       this.getuserRol();
       // this.getuserPermisos();
     }else{
       this.user = null;
     }
+ }
+
+ getRemoto(){
+  this.auth.getUserRomoto(this.user).subscribe((resp:any) => {
+    console.log(resp);
+  }
+  );
  }
 
 
@@ -111,6 +122,14 @@ export class LoginComponent implements OnInit {
 
     getuserRol(){
       
+      // if(this.user.roles == 'DOCTOR' && this.user.status === null
+      //   || this.user.status === undefined
+      //   || this.user.status === 1 || this.user.status === 5
+      //  ){
+      //   this.router.navigate([routes.doctorProfile, this.user.id]);
+      // }else{
+        
+      // }
       if(this.user.roles == 'DOCTOR' ){
         this.router.navigate([routes.doctorDashboard]);
       }
@@ -143,6 +162,7 @@ export class LoginComponent implements OnInit {
       if(this.user.roles == 'GUEST' ){
         this.router.navigate([routes.doctorProfile, this.user.id]);
       }
+      
    }
  
     getuserPermisos(){

@@ -81,7 +81,7 @@
                                 <div class="col-12 col-md-6 col-xl-3">
                                     <div class="form-group local-forms">
                                         <label >Especialidad <span class="login-danger">*</span></label>
-                                        <mat-select [(ngModel)]="speciality_id" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Seleccione Especialidad">
+                                        <mat-select [(ngModel)]="speciality_id" disabled="disabled" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Seleccione Especialidad">
                                             <mat-option *ngFor="let data of specialities | especialidadFilter "  [value]="data.id">
                                             {{data.name}} 
                                             </mat-option>

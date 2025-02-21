@@ -90,29 +90,23 @@ export class AtenderComponent implements OnInit{
     this.doctor_id = this.user.id;
     // console.log(this.doctor_id);
 
+    this.config();
+    
+    
+    // this.getTiposdePago();
+    
+    this.validarFormulario();
+    this.getDoctor();
+    this.getTiposdePagoByDoctor();
+  }
+
+  config(){
     this.appointmentService.listConfig().subscribe((resp:any)=>{
       this.hours = resp.hours;
       this.specialities = resp.specialities;
     })
-
-    // this.getTiposdePago();
-    if(this.roles === 'DOCTOR'){
-      this.doctorService.showDoctor(this.doctor_id).subscribe((resp:any)=>{
-        this.DOCTOR_SELECTED = resp.user;
-        console.log(this.DOCTOR_SELECTED);
-
-        this.speciality_id = this.DOCTOR_SELECTED.speciality_id;
-        this.specialitiService.showSpeciality(this.speciality_id ).subscribe((resp:any)=>{
-          console.log(resp);
-        })
-
-      })
-    }
-    this.validarFormulario();
-    this.getTiposdePagoByDoctor();
-    this.getDoctor()
   }
-
+  
 
 
   cargarPatient(id){
@@ -153,11 +147,19 @@ export class AtenderComponent implements OnInit{
     })
 }
 
+
 getDoctor(){
+  
+
   this.doctorService.showDoctor(this.doctor_id).subscribe((resp:any)=>{
-    console.log(resp);
     this.DOCTOR_SELECTED = resp.user;
+    console.log(this.DOCTOR_SELECTED);
     this.schedule_selecteds= resp.user.schedule_selecteds;
+    this.speciality_id = this.DOCTOR_SELECTED.speciality_id;
+    this.specialitiService.showSpeciality(this.speciality_id ).subscribe((resp:any)=>{
+      console.log(resp);
+    })
+
   })
 }
 

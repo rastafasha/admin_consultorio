@@ -119,6 +119,7 @@
             <div class="dropdown-menu">
                 <a *ngIf="isPermission('profile_doctor')" class="dropdown-item" [routerLink]="['/doctors/profile/', user.id]">Mi Perfil</a>
                 <a *ngIf="isPermission('edit_doctor')" class="dropdown-item" [routerLink]="['/doctors/list/edit/', user.id]">Editar Perfil</a>
+                <a *ngIf="isPermission('edit_staff')" class="dropdown-item" [routerLink]="['/staffs/list/edit/', user.id]">Editar Perfil</a>
                 <!-- <a class="dropdown-item" [routerLink]="routes.settings">Configuracion</a> -->
                 <a class="dropdown-item" style="cursor: pointer;"(click)="onLogout()">Salir</a>
                 <!-- [routerLink]="routes.login" -->
