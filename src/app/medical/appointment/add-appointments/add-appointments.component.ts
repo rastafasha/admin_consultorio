@@ -86,7 +86,7 @@ export class AddAppointmentsComponent {
   getDoctor(){
     this.doctorService.showDoctor(this.doctor_id).subscribe((resp:any)=>{
       this.DOCTOR_SELECTED = resp.user;
-      console.log(this.DOCTOR_SELECTED);
+      // console.log(this.DOCTOR_SELECTED);
 
       this.speciality_id = this.DOCTOR_SELECTED.speciality_id;
       this.specialitiService.showSpeciality(this.speciality_id ).subscribe((resp:any)=>{

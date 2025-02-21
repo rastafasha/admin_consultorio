@@ -668,6 +668,13 @@ export class DataService {
                // notificaciones
          
                {
+                menuValue: 'Configuracion Pagos',
+                route: '',
+                base: '',
+                permision: 'payment_settings',
+                show_nav: false,
+              },
+               {
                 menuValue: 'Cancelar Cita',
                 route: '',
                 base: '',

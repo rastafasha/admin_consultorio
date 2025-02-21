@@ -35,23 +35,29 @@
                                         <mat-datepicker #picker></mat-datepicker>
                                         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                                     </div>
-                                    <!-- <div class="col-12 col-md-6 col-xl-3">
-                                        <div class="form-group local-forms">
-                                            <button type="button" class="btn btn-primary submit-form me-2" (click)="filtro()" >Filtro</button>
-                                        </div>
-                                    </div> -->
+                                    
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-3">
                                     <div class="form-group local-forms">
                                         <label >Hora <span class="login-danger">*</span></label>
                                         <mat-select [(ngModel)]="hour" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Seleccione Hora">
-                                            <!-- <mat-option *ngFor="let data of schedule_selecteds" [value]="data.id"> -->
+                                            <mat-option *ngFor="let data of hours" [value]="data.id">
+                                            {{data.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </div>
+                                    
+                                    
+                                    <!-- <div class="form-group local-forms">
+                                        <label >Hora <span class="login-danger">*</span></label>
+                                        <mat-select [(ngModel)]="hour" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Seleccione Hora">
+                                            
                                             <mat-option *ngFor="let data of schedule_selecteds" [value]="data.item.id">
                                             desde {{data.item.format_hour_start}} hasta {{data.item.format_hour_end
                                             }}
                                             </mat-option>
                                         </mat-select>
-                                    </div>
+                                    </div> -->
 
                                     <!-- <table class="table mb-0">
                                         <thead>
@@ -88,13 +94,43 @@
                                         </mat-select>
                                     </div>
                                 </div>
-                                <!-- <div class="col-12 col-md-6 col-xl-3">
+                                <div class="col-12 col-md-6 col-xl-3">
                                     <div class="form-group local-forms">
-                                        <button type="button" class="btn btn-primary submit-form me-2" (click)="filtro()" >Filtro</button>
+                                        <button type="button" class="btn btn-primary submit-form me-2" (click)="filtroDoctor()" >Filtro</button>
                                     </div>
-                                </div> -->
+                                </div>
                             </div>
                             <!-- consulta -->
+
+                            <!-- disponibilidad -->
+                            <div class="col-4" *ngIf="DOCTOR_SELECTED">
+                                <div class="table-responsive">
+                                    <table class="table mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Hora</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <ng-container *ngFor="let SEGMENT of DOCTOR.segments">
+                                                        <div class="radio">
+                                                            <label>
+                                                                <input type="radio" *ngIf="!SEGMENT.is_appointment" name="radio" (click)="selecSegment(SEGMENT)"> 
+                                                                {{SEGMENT.format_segment.format_hour_start}} a {{SEGMENT.format_segment.format_hour_end}}
+                                                            </label>
+                                                        </div>
+                                                        <br>
+                                                    </ng-container>
+                                                    
+                                                </td>
+                                            </tr>
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                              <!-- pago -->
                             
                             <div class="row align-items-center py-4" >
@@ -132,59 +168,48 @@
                             <div class="row align-items-center py-4" >
                                 <div class="col-12 py-4">
                                     <h4>Datos del Paciente</h4>
+                                    <button type="button" class="btn btn-dark btn-sm" (click)="resetPatient()">Reset</button>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-4">
                                     <div class="form-group local-forms">
-                                        <label >N.Documento </label>
-                                        <input class="form-control" [disabled]="true" formControlName="n_doc" type="text"  >
+                                        <label >N.Documento <span class="login-danger">*</span></label>
+                                        <!-- <input class="form-control" name="n_doc" formControlName="n_doc" type="text"  > -->
+                                        <input class="form-control" (keyup)="filterPatient()" [ngModelOptions]="{standalone: true}"  name="n_doc" [(ngModel)]="n_doc" type="text"  >
+                                        <button type="button" class="btn btn-dark btn-sm" (click)="filterPatient()">Filtrar</button>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-4">  
                                     <div class="form-group local-forms">
-                                        <label >First Name </label>
-                                        <input class="form-control"  [disabled]="true" formControlName="name" type="text"  >
+                                        <label >Nombre <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="name"  [ngModelOptions]="{standalone: true}" [(ngModel)]="name" type="text"  >
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-4">
                                     <div class="form-group local-forms">
-                                        <label >Last Name </label>
-                                        <input class="form-control"   [disabled]="true" formControlName="surname" type="text"  >
+                                        <label >Apellido<span class="login-danger">*</span></label>
+                                        <input class="form-control" name="surname"  [ngModelOptions]="{standalone: true}" [(ngModel)]="surname" type="text"  >
                                     </div>
                                 </div>
                                
-                                <div class="col-12 col-md-3">
+                                <div class="col-12 col-md-6 col-xl-4">
                                     <div class="form-group local-forms">
-                                        <label >Teléfono móvil </label>
-                                        <input class="form-control"   [disabled]="true" formControlName="phone" type="text"  >
+                                        <label >Teléfono móvil <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="phone"  [ngModelOptions]="{standalone: true}" [(ngModel)]="phone" type="text"  >
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-3">  
+                                <div class="col-12 col-md-6 col-xl-3">  
                                     <div class="form-group local-forms">
-                                        <label >Nombre Acompañante </label>
-                                        <input class="form-control"  [disabled]="true" formControlName="name_companion" type="text"  >
+                                        <label >Nombre Acompañante <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="name_companion"  [ngModelOptions]="{standalone: true}" [(ngModel)]="name_companion" type="text"  >
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-3">  
+                                <div class="col-12 col-md-6 col-xl-3">  
                                     <div class="form-group local-forms">
-                                        <label >Apellido Acompañante </label>
-                                        <input class="form-control"  [disabled]="true" formControlName="surname_companion" type="text"  >
+                                        <label >Apellido Acompañante <span class="login-danger">*</span></label>
+                                        <input class="form-control" name="surname_companion"  [ngModelOptions]="{standalone: true}" [(ngModel)]="surname_companion" type="text"  >
                                     </div>
                                 </div>
                                 
-                                <!-- <div class="col-12 col-md-3">  
-                                    <div class="form-group local-forms">
-                                        <label >Laboratorio? <span class="login-danger">*</span></label>
-                                        
-                                        
-                                        <select class="form-control form-select-solid fw-bolder"
-                                                        name="laboratory" formControlName="laboratory"
-                                                        [ngModelOptions]="{standalone: true}">
-                                                        <option>-- Select --</option>
-                                                        <option value="1">No</option>
-                                                        <option value="2">Si</option>
-                                                    </select>
-                                    </div>
-                                </div> -->
                                 
                                 <div class="row align-items-center" >
                                     <div class="col-12">

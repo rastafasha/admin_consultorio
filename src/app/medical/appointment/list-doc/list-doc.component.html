@@ -75,7 +75,7 @@
                                       </div>
                                   </div>
                                   <div class="add-group col-12 col-md-6 col-xl-4">
-                                    <a [routerLink]="[routes.addAppointmentDoctor, doctor_id]" *ngIf="isPermission('add_cita_doctor')" class="btn btn-primary add-pluss ms-2"><img src="assets/img/icons/plus.svg" alt=""></a>
+                                    <a [routerLink]="[routes.addAppointmentDoctorLocal]" *ngIf="isPermission('add_cita_doctor')" class="btn btn-primary add-pluss ms-2"><img src="assets/img/icons/plus.svg" alt=""></a>
                                     <!-- <a routerLink="/appointments/add" *ngIf="isPermission('add_cita_doctor')" class="btn btn-primary add-pluss ms-2"><img src="assets/img/icons/plus.svg" alt=""></a> -->
                                     <a href="javascript:;" (click)="PageSize()" class="btn btn-primary doctor-refresh ms-2"><img src="assets/img/icons/re-fresh.svg" alt=""></a>
                                 </div>
