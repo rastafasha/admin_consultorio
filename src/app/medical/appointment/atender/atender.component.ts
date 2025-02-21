@@ -91,13 +91,16 @@ export class AtenderComponent implements OnInit{
     // console.log(this.doctor_id);
 
     this.config();
+    if(this.roles === 'DOCTOR'){
+    this.getDoctor();
     
-    
+  }
+
     // this.getTiposdePago();
     
     this.validarFormulario();
-    this.getDoctor();
     this.getTiposdePagoByDoctor();
+    // this.getDoctor()
   }
 
   config(){
