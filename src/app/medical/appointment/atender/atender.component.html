@@ -168,14 +168,15 @@
                             <div class="row align-items-center py-4" >
                                 <div class="col-12 py-4">
                                     <h4>Datos del Paciente</h4>
-                                    <button type="button" class="btn btn-dark btn-sm" (click)="resetPatient()">Reset</button>
+                                    <button type="button" class="btn btn-light btn-sm" (click)="resetPatient()">Reset</button>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-4">
                                     <div class="form-group local-forms">
                                         <label >N.Documento <span class="login-danger">*</span></label>
                                         <!-- <input class="form-control" name="n_doc" formControlName="n_doc" type="text"  > -->
-                                        <input class="form-control" (keyup)="filterPatient()" [ngModelOptions]="{standalone: true}"  name="n_doc" [(ngModel)]="n_doc" type="text"  >
-                                        <button type="button" class="btn btn-dark btn-sm" (click)="filterPatient()">Filtrar</button>
+                                        <input class="form-control"  [ngModelOptions]="{standalone: true}"  name="n_doc" [(ngModel)]="n_doc" type="text"  >
+                                        <!-- <input class="form-control" (keyup)="filterPatient()" [ngModelOptions]="{standalone: true}"  name="n_doc" [(ngModel)]="n_doc" type="text"  > -->
+                                        <button type="button" class="btn btn-primary btn-sm" (click)="filterPatient()">Filtrar</button>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-4">  

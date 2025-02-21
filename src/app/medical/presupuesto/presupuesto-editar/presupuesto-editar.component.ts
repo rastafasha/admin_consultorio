@@ -7,6 +7,10 @@ import { LaboratoryService } from '../../laboratory/service/laboratory.service';
 import { PresupuestoService } from '../service/presupuesto.service';
 import { Doctor, Patient, Speciality } from '../presupuesto-model';
 import { AuthService } from 'src/app/shared/auth/auth.service';
+import { DoctorService } from '../../doctors/service/doctor.service';
+import { SpecialitieService } from '../../specialitie/service/specialitie.service';
+import { RolesService } from '../../roles/service/roles.service';
+import { AppointmentService } from '../../appointment/service/appointment.service';
 declare let $:any;  
 
 @Component({
@@ -22,7 +26,9 @@ export class PresupuestoEditarComponent {
     public text_validation = '';
     public text_success = '';
   
-    
+    isediting=false;
+    isdisabled=false;
+    isdoctor=false;
     name = '';
     surname = '';
     n_doc = 0;
@@ -55,32 +61,55 @@ export class PresupuestoEditarComponent {
     doctor_id:Doctor;
     speciality:Speciality [];
     specialities:Speciality [];
+    DOCTOR_SELECTED:any;
+
+    id = 0;
   
     constructor(
       public presupuestoService:PresupuestoService,
       public laboratoryService:LaboratoryService,
       public authService:AuthService,
       public router: Router,
-      public ativatedRoute: ActivatedRoute
+      public ativatedRoute: ActivatedRoute,
+      public doctorService:DoctorService,
+      public specialitiService: SpecialitieService,
+      public roleService: RolesService,
+      public appointmentService: AppointmentService,
     ){
       this.user = this.authService.user;
     }
   
     ngOnInit(): void {
-      
+      this.isediting = false;
+      this.isdisabled = false;
+      this.isdoctor = false;
       window.scrollTo(0, 0);
+      const USER = localStorage.getItem("user");
+    this.user = JSON.parse(USER ? USER: '');
+    this.user = this.roleService.authService.user;
+    this.doctor_id = this.user.id;
+
+    if(this.user.roles[0] === 'DOCTOR'){
+      this.isdoctor = true;
+      this.isdisabled = false;
+    }
+
       this.ativatedRoute.params.subscribe((resp:any)=>{
         this.presupuesto_id = resp.id;
-        console.log(this.presupuesto_id);
         if(this.presupuesto_id ){
           this.getAppointment();
           this.titlePage = 'Editando Presupuesto';
+          this.isediting = true;
+          if(this.isediting === true){
+              this.isdisabled = true;
+          }
         }else{
+          this.isediting = false;
           this.titlePage = 'Crear Presupuesto';
         }
-       })
-       this.getSpecialities();
-
+      })
+      this.getDoctor();
+      this.getSpecialities();
       
       
     }
@@ -112,28 +141,58 @@ export class PresupuestoEditarComponent {
         this.specialities = resp.specialities;
       })
     }
+
+    getDoctor(){
+  
+
+      this.doctorService.showDoctor(this.doctor_id).subscribe((resp:any)=>{
+        this.DOCTOR_SELECTED = resp.user;
+        // console.log(this.DOCTOR_SELECTED);
+        this.speciality_id = this.DOCTOR_SELECTED.speciality_id;
+        this.specialitiService.showSpeciality(this.speciality_id ).subscribe((resp:any)=>{
+          console.log(resp);
+        })
+    
+      })
+    }
+
+    filterPatient(){
+      this.appointmentService.getPatient(this.n_doc+"").subscribe((resp:any)=>{
+        console.log(resp);
+        this.patient = resp;
+        if(resp.menssage === 403){
+          this.name= '';
+          this.surname= '';
+          this.phone= '';
+          this.email= '';
+          this.n_doc= 0;
+        }else{
+          this.name= resp.name;
+          this.surname= resp.surname;
+          this.email= resp.email;
+          this.phone= resp.phone+'';
+          this.n_doc= resp.n_doc;
+        }
+      })
+    }
+
+    resetPatient(){
+      this.name= '';
+          this.surname= '';
+          this.email= '';
+          this.phone= '';
+          this.n_doc= 0;
+    }
   
     
-    save(){
+    // eslint-disable-next-line no-debugger
+    save(){debugger
       this.text_validation = '';
       // if(!this.name_laboratory){
       //   this.text_validation = 'Es requerido ingresar un nombre';
       //   return;
       // }
-  
-  
-      // if(this.FILES.length === 0){
-      //   this.text_validation = 'Necesitas subir un recurso'
-      //   // this.toaster.open({
-      //   //   text:'Necesitas subir un recurso de la clase',
-      //   //   caption:'VALIDACIÓN',
-      //   //   type:'danger'
-      //   // });
-      //   return;
-  
-      // }
-  
-      
+
   
       const formData = new FormData();
       if(this.presupuesto_id){
@@ -141,19 +200,41 @@ export class PresupuestoEditarComponent {
         formData.append('presupuesto_id', this.presupuesto_selected.id+'');
       }
   
-      formData.append('speciality_id', this.speciality_id+'');
-      formData.append('description', this.description+'');
-      formData.append('patient_id', this.patient_id+'');
-      formData.append('patient', this.patient+'');
-      formData.append('n_doc', this.n_doc+'');
-      formData.append('name', this.name+'');
-      formData.append('surname', this.surname+'');
-      formData.append('email', this.email+'');
-      formData.append('phone', this.phone+'');
-      formData.append('amount', this.amount+'');
+      
+      if(this.phone){
+        formData.append('phone', this.phone);
+      }
+      if(this.email){
+        formData.append('email', this.email);
+      }
+      if(this.surname){
+        formData.append('surname', this.surname);
+      }
+      if(this.name){
+        formData.append('name', this.name);
+      }
+      if(this.n_doc){
+        formData.append('n_doc', this.n_doc+'');
+      }
+      if(this.patient_id){
+        formData.append('patient_id', this.patient_id+'');
+      }
+      if(this.doctor_id){
       formData.append('doctor_id', this.user.id+'');
-      // formData.append('doctor_id', this.doctor+'');
-      formData.append('user_id', this.user.id+'');
+      }
+      
+      if(this.speciality_id){
+        formData.append('speciality_id', this.speciality_id+'');
+      }
+      if(this.description){
+        formData.append('description', this.description);
+
+      }
+      if(this.amount !== null && this.amount !== undefined){
+        formData.append('amount', this.amount+'');
+      }
+      
+      
   
       if(this.presupuesto_id){
         //editamos
@@ -177,7 +258,7 @@ export class PresupuestoEditarComponent {
                     showConfirmButton: false,
                     timer: 1500
                   });
-                  this.getAppointment();
+                  this.router.navigate(['/presupuesto/list']);
               }
         })
       }else {
@@ -201,7 +282,7 @@ export class PresupuestoEditarComponent {
                     showConfirmButton: false,
                     timer: 1500
                   });
-                  this.getAppointment();
+                  this.router.navigate(['/presupuesto/list']);
               }
         })
       }

@@ -134,6 +134,7 @@ export class AtenderComponent implements OnInit{
 
           });
           this.patientSeleccionado = resp.patient;
+          this.n_doc = this.patientSeleccionado.n_doc;
           console.log(this.patientSeleccionado);
           this.filterPatientDirecto();
         }
@@ -227,10 +228,7 @@ selecSegment(SEGMENT:any){
 }
 
 
-
-
-// eslint-disable-next-line no-debugger
-filterPatientDirecto(){debugger
+filterPatientDirecto(){
   this.appointmentService.getPatient(this.patientSeleccionado.n_doc+"").subscribe((resp:any)=>{
     // console.log(resp);
     this.patient = resp;
