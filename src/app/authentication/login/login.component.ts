@@ -73,7 +73,7 @@ export class LoginComponent implements OnInit {
 
   getLocalStorage(){
     if(localStorage.getItem('token') && localStorage.getItem('user')){
-      let USER = localStorage.getItem('user');
+      const USER = localStorage.getItem('user');
       this.user = JSON.parse(USER ? USER: '');
       console.log(this.user);
       this.getuserRol();
@@ -139,6 +139,9 @@ export class LoginComponent implements OnInit {
       }
       if(this.user.roles == 'RECEPCIÓN' ){
         this.router.navigate([routes.adminDashboard]);
+      }
+      if(this.user.roles == 'GUEST' ){
+        this.router.navigate([routes.doctorProfile, this.user.id]);
       }
    }
  

@@ -31,7 +31,7 @@ export class SidebarComponent {
     public authService:AuthService
   ) {
     // this.user = this.authService.user;
-    let USER = localStorage.getItem("user");
+    const USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER: '');
     //inicio
     if(this.user.roles.includes("SUPERADMIN")){
@@ -39,13 +39,13 @@ export class SidebarComponent {
 
     }else{
       //vamos a filtrar y validar que opciones puede ver el rol
-      let permissions = this.user.permissions;
-      let SIDE_BAR_G:any = [];
+      const permissions = this.user.permissions;
+      const SIDE_BAR_G:any = [];
 
       this.data.sideBar.forEach((side:any)=>{
-        let SIDE_B:any = [];
+        const SIDE_B:any = [];
         side.menu.forEach((menu_s:any)=>{
-          let SUB_MENUS = menu_s.subMenus.filter((submenu:any)=> permissions.includes(submenu.permision) && submenu.show_nav);
+          const SUB_MENUS = menu_s.subMenus.filter((submenu:any)=> permissions.includes(submenu.permision) && submenu.show_nav);
             if(SUB_MENUS.length > 0){
               menu_s.subMenus = SUB_MENUS;
               SIDE_B.push(menu_s);

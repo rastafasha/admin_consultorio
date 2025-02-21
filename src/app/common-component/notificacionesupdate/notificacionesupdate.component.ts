@@ -3,6 +3,7 @@ import { AppoitmentPayService } from "src/app/medical/appointment-pay/service/ap
 import { PaymentService } from "src/app/medical/appointment-pay/service/payment.service";
 import { AppointmentService } from "src/app/medical/appointment/service/appointment.service";
 import { RolesService } from "src/app/medical/roles/service/roles.service";
+import { AuthService } from "src/app/shared/auth/auth.service";
 
 @Component({
   selector: "app-notificacionesupdate",
@@ -30,22 +31,22 @@ export class NotificacionesupdateComponent implements OnInit {
     private appointmentService: AppointmentService,
     public paymentService: PaymentService,
     public roleService: RolesService,
+    public authService: AuthService,
   ) {}
   ngOnInit(): void {
     this.user = this.roleService.authService.user;
     this.roles = this.user.roles[0];
-   setTimeout(() => {
-    this.getAppointmentRecientes();
-    this.getAppointmentRecientesbyDoctor();
-    this.getTrastransferenciasRecientesByDoctor();
-    this.getTrastransferenciasRecientes();
-   }
-   , 3000);
+    setTimeout(() => {
+      this.getAppointmentRecientes();
+      this.getAppointmentRecientesbyDoctor();
+      this.getTrastransferenciasRecientesByDoctor();
+      this.getTrastransferenciasRecientes();
+    }, 3000);
   }
   //obtiene las citas pendientes por atender
   getAppointmentRecientesbyDoctor() {
     this.appointmentService.pendingsbyDoctor(this.user.id).subscribe(
-      (response:any) => {
+      (response: any) => {
         // console.log(response);
         //filtramos los mas recientes
         this.appointments_doctors = response.appointments.data;
@@ -59,7 +60,7 @@ export class NotificacionesupdateComponent implements OnInit {
   }
   getAppointmentRecientes() {
     this.appointmentService.pendings().subscribe(
-      (response:any) => {
+      (response: any) => {
         // console.log(response);
         //filtramos los mas recientes
         this.appointments = response.appointments.data;
@@ -73,41 +74,43 @@ export class NotificacionesupdateComponent implements OnInit {
     );
   }
 
- 
-  
-//obtiene las transferencias pendientes por atender
+  //obtiene las transferencias pendientes por atender
   getTrastransferenciasRecientesByDoctor() {
     this.paymentService.pendingsbyDoctor(this.user.id).subscribe(
-        (response:any) => {
-          this.payments_doctors = response.payments.data;
-          this.totalT = response.total;
-          console.log(this.payments_doctors);
-            },
-            (error) => {
-                console.log(error);
-            }
-        );  
-        }
+      (response: any) => {
+        this.payments_doctors = response.payments.data;
+        this.totalT = response.total;
+        console.log(this.payments_doctors);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
   getTrastransferenciasRecientes() {
     this.paymentService.pendings().subscribe(
-        (response:any) => {
-          this.payments = response.payments.data;
-          this.totalTTr = response.total;
-          console.log(this.payments);
-            },
-            (error) => {
-                console.log(error);
-            }
-        );  
-        }
+      (response: any) => {
+        this.payments = response.payments.data;
+        this.totalTTr = response.total;
+        console.log(this.payments);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
 
-        isPermission(permission:string){
-          if(this.user.roles.includes('SUPERADMIN')){
-            return true;
-          }
-          if(this.user.permissions.includes(permission)){
-            return true;
-          }
-          return false;
-        }
+  onLogout() {
+    this.authService.logout();
+  }
+
+  isPermission(permission: string) {
+    if (this.user.roles.includes("SUPERADMIN")) {
+      return true;
+    }
+    if (this.user.permissions.includes(permission)) {
+      return true;
+    }
+    return false;
+  }
 }

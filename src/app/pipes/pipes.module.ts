@@ -5,6 +5,7 @@ import { RolesFilterPipe } from './roles-filter.pipe';
 import { ArrayFindPipe } from './array-find.pipe';
 import { ArrayFilterPipe } from './array-filter.pipe';
 import { AdminFilterPipe } from './admin-filter.pipe';
+import { SuperAdminFilterPipe } from './superadmin-filter.pipe';
 
 
 
@@ -15,6 +16,7 @@ import { AdminFilterPipe } from './admin-filter.pipe';
     ArrayFindPipe,
     ArrayFilterPipe,
     AdminFilterPipe,
+    SuperAdminFilterPipe
 
   ],
   exports: [
@@ -23,6 +25,7 @@ import { AdminFilterPipe } from './admin-filter.pipe';
     ArrayFindPipe,
     ArrayFilterPipe,
     AdminFilterPipe,
+    SuperAdminFilterPipe
 
   ],
   imports: [

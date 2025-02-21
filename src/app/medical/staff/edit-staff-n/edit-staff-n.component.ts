@@ -75,7 +75,11 @@ export class EditStaffNComponent {
   }
 
   getRoles(){
-    this.staffService.listConfig().subscribe((resp:any)=>{
+    // this.staffService.listConfig().subscribe((resp:any)=>{
+    //   // console.log(resp);
+    //   this.roles = resp.roles;
+    // })
+    this.roleService.listRoles().subscribe((resp:any)=>{
       // console.log(resp);
       this.roles = resp.roles;
     })

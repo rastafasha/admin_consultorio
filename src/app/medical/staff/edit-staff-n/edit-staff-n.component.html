@@ -102,7 +102,7 @@
                                     <div class="form-group local-forms">
                                         <label >Roles <span class="login-danger">*</span></label>
                                         <mat-select [(ngModel)]="selectedValue" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Select Role">
-                                            <mat-option *ngFor="let data of roles " [value]="data.id">
+                                            <mat-option *ngFor="let data of roles | superAdminFilter " [value]="data.id">
                                             {{data.name}}
                                             </mat-option>
                                         </mat-select>
