@@ -84,7 +84,7 @@ export class AtenderComponent implements OnInit{
     
     this.doctorService.closeMenuSidebar();
     window.scrollTo(0, 0);
-    // this.ativatedRoute.params.subscribe( ({id}) => this.cargarPatient(id));
+    this.ativatedRoute.params.subscribe( ({id}) => this.cargarPatient(id));
 
     const USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER: '');
@@ -135,6 +135,7 @@ export class AtenderComponent implements OnInit{
           });
           this.patientSeleccionado = resp.patient;
           console.log(this.patientSeleccionado);
+          this.filterPatientDirecto();
         }
       );
     } else {
@@ -228,6 +229,24 @@ selecSegment(SEGMENT:any){
 
 
 
+// eslint-disable-next-line no-debugger
+filterPatientDirecto(){debugger
+  this.appointmentService.getPatient(this.patientSeleccionado.n_doc+"").subscribe((resp:any)=>{
+    // console.log(resp);
+    this.patient = resp;
+    if(resp.menssage === 403){
+      this.name= '';
+      this.surname= '';
+      this.phone= '';
+      this.n_doc= 0;
+    }else{
+      this.name= this.patient.name;
+      this.surname= this.patient.surname;
+      this.phone= this.patient.phone+'';
+      this.n_doc= this.patient.n_doc;
+    }
+  })
+}
 filterPatient(){
   this.appointmentService.getPatient(this.n_doc+"").subscribe((resp:any)=>{
     // console.log(resp);
@@ -268,8 +287,7 @@ resetPatient(){
     }
     
 
-    // eslint-disable-next-line no-debugger
-    onSave(){debugger
+    onSave(){
     //   this.text_validation = '';
     // if(!this.description || this.medical.length == 0){
     //   this.text_validation = 'Es requerido ingresar el diagnostico y una receta medica';
