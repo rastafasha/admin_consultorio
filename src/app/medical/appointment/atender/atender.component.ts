@@ -238,10 +238,10 @@ filterPatient(){
       this.phone= '';
       this.n_doc= 0;
     }else{
-      this.name= resp.patient.name;
-      this.surname= resp.patient.surname;
-      this.phone= resp.patient.phone;
-      this.n_doc= resp.patient.n_doc;
+      this.name= this.patient.name;
+      this.surname= this.patient.surname;
+      this.phone= this.patient.phone+'';
+      this.n_doc= this.patient.n_doc;
     }
   })
 }
@@ -277,7 +277,7 @@ resetPatient(){
     // }
    
     const data ={
-      ...this.atentionForm.value,
+      
       medical: this.medical,
       method_payment: this.method_payment,
       date_appointment: this.date_appointment,
@@ -288,11 +288,15 @@ resetPatient(){
       // hour:this.hour,
       segment_hour:this.hour,
       speciality_id:this.speciality_id,
-      
+      name: this.patient.name,
+      surname: this.patient.surname,
+      phone: this.patient.phone,
+      n_doc: this.patient.n_doc,
       appointment_id:0,
-      patient_id: this.patientSeleccionado.id,
       user_id: this.doctor_id,
       doctor_id: this.doctor_id,
+      patient_id: this.patient.id,
+      ...this.atentionForm.value,
       
     }
 

@@ -95,7 +95,7 @@
                                         <!-- <th mat-sort-header="n_doc">Especialidad</th> -->
                                         <th mat-sort-header="status">Status</th>
                                         <th mat-sort-header="cofirmado">Confirmado?</th>
-                                        <th mat-sort-header="confirmar" *ngIf="isPermission('edit_appointment')">Confirmar</th>
+                                        <th mat-sort-header="confirmar" *ngIf="isPermission('add_cita_doctor')">Confirmar</th>
                                         <th mat-sort-header="created">Creación</th>
                                          <th ></th> <!--acciones -->
                                     </tr>
@@ -128,7 +128,7 @@
                                         <td><button [ngClass]="{'status-green' : data.status === 2, 'status-pink' : data.status === 1}" class="custom-badge">{{data.status === 1 ? 'Pendiente' : 'Atendido'}}</button></td>
                                         
                                         <td><button [ngClass]="{'status-green' : data.confimation === 2, 'status-pink' : data.confimation === 1}" class="custom-badge">{{data.confimation === 1 ? 'Pendiente' : 'Confirmado'}}</button></td>
-                                        <td *ngIf="isPermission('edit_appointment')">
+                                        <td *ngIf="isPermission('add_cita_doctor')">
                                           <!--begin::Input-->
                                           <select
                                           class="form-control form-select-solid fw-bolder"
