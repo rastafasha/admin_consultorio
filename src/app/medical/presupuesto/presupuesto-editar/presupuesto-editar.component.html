@@ -151,11 +151,11 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr *ngFor="let medicina of medical; let i = index">
+                                                <tr *ngFor="let key of medical ; let i=index">
                                                     <td>
-                                                        Medicamento: {{medicina.name_medical}}
+                                                        Medicamento: {{key.name_medical}}
                                                         <br>
-                                                        precio: {{medicina.precio}}
+                                                        precio: {{key.precio}}
                                                     </td>
                                                     <td>
                                                         <button class="btn btn-danger btn-sm" (click)="deleteMedical(i)">x</button>
@@ -191,8 +191,3 @@
                 </div>	
                 	
             </div>
-            <!-- fin paciente -->						
-        </div>
-    </div>
-</div>
- 

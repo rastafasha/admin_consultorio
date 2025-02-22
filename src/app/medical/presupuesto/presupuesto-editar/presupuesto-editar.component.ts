@@ -39,7 +39,7 @@ export class PresupuestoEditarComponent {
     laboratory = false;
     laboratory_number = 1;
   
-    public medical:any = [];
+    public medical: any = []; // Ensure medical is initialized as an array
     description:any;
     name_medical:any;
     precio= 0;
@@ -116,8 +116,9 @@ export class PresupuestoEditarComponent {
     }
   
     getAppointment(){
-      this.presupuestoService.getPresupuesto(this.presupuesto_id).subscribe((resp:Presupuesto)=>{
+      this.presupuestoService.getPresupuesto(this.presupuesto_id).subscribe((resp:any)=>{
         this.presupuesto_selected = resp;
+        // console.log(this.presupuesto_selected);
         this.patient = this.presupuesto_selected.patient;
         this.patient_id = this.presupuesto_selected.patient.id;
         this.n_doc = this.presupuesto_selected.patient.n_doc;
@@ -131,14 +132,14 @@ export class PresupuestoEditarComponent {
         this.doctor = this.presupuesto_selected.doctor.full_name;
         this.speciality_id = this.presupuesto_selected.speciality_id;
         this.amount = this.presupuesto_selected.amount;
-        this.medical = this.presupuesto_selected.medical;
-  
+        // this.medical = this.presupuesto_selected.medical; // Ensure medical is an array
+        this.medical = this.presupuesto_selected.medical; // Directly assign medical from presupuesto_selected
+        // Assuming medical is a JSON object, you may need to handle it accordingly in the template
+
+          console.log(this.medical);
       });
-      
-  
     }
   
-    
     getSpecialities(){
       this.presupuestoService.listConfig().subscribe((resp:any)=>{
         this.specialities = resp.specialities;
@@ -146,16 +147,12 @@ export class PresupuestoEditarComponent {
     }
 
     getDoctor(){
-  
-
       this.doctorService.showDoctor(this.doctor_id).subscribe((resp:any)=>{
         this.DOCTOR_SELECTED = resp.user;
-        // console.log(this.DOCTOR_SELECTED);
         this.speciality_id = this.DOCTOR_SELECTED.speciality_id;
         this.specialitiService.showSpeciality(this.speciality_id ).subscribe((resp:any)=>{
           console.log(resp);
         })
-    
       })
     }
 
@@ -197,47 +194,31 @@ export class PresupuestoEditarComponent {
         this.precio = 0;
         
       }
-      //
-      // vamos mostrando, estrallendo el valor de precio y se suma en el input amount
       this.amount = 0;
       for (let i = 0; i < this.medical.length; i++) {
         this.amount += parseFloat(this.medical[i].precio);
       }
-      }
+    }
 
     deleteMedical(i:any){
       this.medical.splice(i,1);
       this.name_medical = '';
       this.precio = 0;
-      // si se elimina un item actualizamos el valor de amount
       this.amount = 0;
       for (let i = 0; i < this.medical.length; i++) {
         this.amount += parseFloat(this.medical[i].precio);
       }
-      //si se borra todo el array de medical, el amount se pone en 0
       if(this.medical.length === 0){
         this.amount = 0;
       }
-
     }
   
-    
-    // eslint-disable-next-line no-debugger
-    save(){debugger
+    save(){
       this.text_validation = '';
-      // if(!this.name_laboratory){
-      //   this.text_validation = 'Es requerido ingresar un nombre';
-      //   return;
-      // }
-
-  
       const formData = new FormData();
       if(this.presupuesto_id){
-
         formData.append('presupuesto_id', this.presupuesto_selected.id+'');
       }
-  
-      
       if(this.phone){
         formData.append('phone', this.phone);
       }
@@ -257,33 +238,25 @@ export class PresupuestoEditarComponent {
         formData.append('patient_id', this.patient_id+'');
       }
       if(this.doctor_id){
-      formData.append('doctor_id', this.user.id+'');
+        formData.append('doctor_id', this.user.id+'');
       }
-      
       if(this.speciality_id){
         formData.append('speciality_id', this.speciality_id+'');
       }
       if(this.description){
         formData.append('description', this.description);
-
       }
       if(this.diagnostico){
         formData.append('diagnostico', this.diagnostico);
-
       }
       if (this.medical.length > 0) {
         formData.append('medical', JSON.stringify(this.medical));
-
       }
       if(this.amount !== null && this.amount !== undefined){
         formData.append('amount', this.amount+'');
       }
-      
-      
   
       if(this.presupuesto_id){
-        //editamos
-
         this.presupuestoService.editPresupuesto(formData, this.presupuesto_id).subscribe((resp:any)=>{
           if(resp.message == 403){
             this.text_validation = resp.message_text;
@@ -307,7 +280,6 @@ export class PresupuestoEditarComponent {
               }
         })
       }else {
-        //creamos
         this.presupuestoService.createPresupuesto(formData).subscribe((resp:any)=>{
           if(resp.message == 403){
             this.text_validation = resp.message_text;
@@ -331,7 +303,5 @@ export class PresupuestoEditarComponent {
               }
         })
       }
-  
     }
-
 }
