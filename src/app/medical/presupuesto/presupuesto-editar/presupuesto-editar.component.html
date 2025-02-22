@@ -21,11 +21,11 @@
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                        <form enctype="multipart/form-data" #form>
+                        <form enctype="multipart/form-data" #form >
                             
                             <!-- paciente -->
                             <div class="row align-items-center py-4" >
-                                <div class="col-12 py-4">
+                                <div class="col-12 py-4" >
                                     <h4>Datos del Paciente</h4>
                                     <button type="button" class="btn btn-light btn-sm" *ngIf="!isediting" (click)="resetPatient()">Reset</button>
                                 </div>
@@ -34,7 +34,7 @@
                                         <label >N.Documento <span class="login-danger">*</span></label>
                                         <input class="form-control"  [ngModelOptions]="{standalone: true}"  name="n_doc" [(ngModel)]="n_doc" type="text"   >
                                         <!-- <input class="form-control" (keyup)="filterPatient()" [ngModelOptions]="{standalone: true}"  name="n_doc" [(ngModel)]="n_doc" type="text"  > -->
-                                        <button type="button" class="btn btn-primary btn-sm" *ngIf="!isediting" (click)="filterPatient()">Filtrar</button>
+                                        <button type="button" class="btn btn-primary btn-sm" *ngIf="!isediting"  (click)="filterPatient()">Filtrar</button>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-4">  
@@ -103,14 +103,76 @@
                                 <div class="col-xs-12">
                                     <div class="form-group local-forms">
                                         <label>Descripción <span class="login-danger">*</span></label>
-                                        <textarea class="form-control" name="description"  [(ngModel)]="description" rows="4" cols="30"></textarea>
+                                        <textarea class="form-control" name="description" [ngModelOptions]="{standalone: true}"  [(ngModel)]="description" rows="4" cols="30"></textarea>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 d-flex justify-content-end">  
+
+                            <div class="col-12 py-4">
+                                <h4>Diagnostico</h4>
+                            </div>
+                            <div class="row align-items-center" >
+                                <div class="col-12">
+                                    <div class="form-group local-forms">
+                                        <label>Diagnostico/Revisión <span class="login-danger">*</span></label>
+                                        <textarea class="form-control" name="diagnostico" [ngModelOptions]="{standalone: true}" [(ngModel)]="diagnostico" rows="4" cols="30"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row align-items-center" >
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="row">
+                                        
+                                        <div class="col-12 ">  
+                                            <div class="form-group local-forms">
+                                                <label >Item<span class="login-danger">*</span></label>
+                                                <input class="form-control" name="name_medical" [ngModelOptions]="{standalone: true}"  [(ngModel)]="name_medical" type="text"  >
+                                            </div>
+                                        </div>
+                                        <div class="col-12 ">
+                                            <div class="form-group local-forms">
+                                                <label >Precio<span class="login-danger">*</span></label>
+                                                <input class="form-control" name="precio" [ngModelOptions]="{standalone: true}" [(ngModel)]="precio" type="number"  >
+                                            </div>
+                                        </div>
+                                        <div class="col-12 mb-3">
+                                            <button class="btn btn-primary btn-sm" (click)="addMedicamento()">+ Agregar</button>
+                                            <!-- <button class="btn btn-danger btn-sm">x</button> -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="table-responsive">
+                                        <table class="table mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Descripción</th>
+                                                    <th>Acción</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let key of medical ; let i=index">
+                                                    <td>
+                                                        Item: {{key.name_medical}}
+                                                        <br>
+                                                        Precio: {{key.precio | number:'1.2-2' | currency }}
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-danger btn-sm" (click)="deleteMedical(i)">x</button>
+                                                    </td>
+                                                </tr>
+                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="col-12 d-flex justify-content-end text-right">  
                                 <div class="form-group local-forms col-12 col-md-3">
-                                    <label >Monto <span class="login-danger">*</span></label>
-                                    <input class="form-control" name="amount"   [(ngModel)]="amount" type="number"  >
+                                    <p class="text-right m-0 p-0">Total</p>
+                                    <h2 class="p-3 text-right">{{amount | number:'1.2-2' | currency}}</h2>
+                                    <!-- <input class="form-control" name="amount" disabled="disabled"    [(ngModel)]="amount" type="number"  > -->
                                 </div>
                             </div>
                             
@@ -130,8 +192,3 @@
                 </div>	
                 	
             </div>
-            <!-- fin paciente -->						
-        </div>
-    </div>
-</div>
- 

@@ -21,30 +21,30 @@ export class SpecialitieService {
 
   showSpecialities(role_id:string){
     const headers = new HttpHeaders({'Authorization': 'Bearer '+this.authService.token});
-    const URL = url_servicios+"/specialities/show/"+role_id;
+    const URL = url_servicios+"/specialitie/show/"+role_id;
     return this.http.get(URL,{headers: headers});
   }
   showSpeciality(id:number){
     const headers = new HttpHeaders({'Authorization': 'Bearer '+this.authService.token});
-    const URL = url_servicios+"/specialities/show/"+id;
+    const URL = url_servicios+"/specialitie/show/"+id;
     return this.http.get(URL,{headers: headers});
   }
 
   storeSpecialities(data:any){
     const headers = new HttpHeaders({'Authorization': 'Bearer '+this.authService.token});
-    const URL = url_servicios+"/specialities/store";
+    const URL = url_servicios+"/specialitie/store";
     return this.http.post(URL,data,{headers: headers});
   }
 
   editSpecialities(data:any,id_specialitie:any){
     const headers = new HttpHeaders({'Authorization': 'Bearer '+this.authService.token});
-    const URL = url_servicios+"/specialities/update/"+id_specialitie;
+    const URL = url_servicios+"/specialitie/update/"+id_specialitie;
     return this.http.put(URL,data,{headers: headers});
   }
 
   deleteSpecialities(id_specialitie:any){
     const headers = new HttpHeaders({'Authorization': 'Bearer '+this.authService.token});
-    const URL = url_servicios+"/specialities/destroy/"+id_specialitie;
+    const URL = url_servicios+"/specialitie/destroy/"+id_specialitie;
     return this.http.delete(URL,{headers: headers});
   }
   

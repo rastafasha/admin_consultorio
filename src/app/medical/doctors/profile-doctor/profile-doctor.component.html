@@ -145,7 +145,7 @@
                     <div class="col-lg-8">
                         <div class="doctor-personals-grp">
                             <div class="card">
-                                <div class="card-body">
+                                <div class="card-body ">
                                     <div class="tab-content-set">
                                         <ul class="nav">
                                             <li *ngIf="user.roles[0]==='GUEST'">
@@ -160,12 +160,19 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    <ng-container *ngIf="user.roles[0]==='GUEST' && option_selected === 1 ">
+                                    <ng-container  *ngIf="user.roles[0]==='GUEST' && option_selected === 1 ">
                                         <div class="bienvenido">
-                                            <h1>Bienvenido!</h1>
-                                            <p *ngIf="doctor.gender === 0 ">Favor, finalice su registo de perfil</p>
-                                            <p *ngIf="doctor.gender === 1 && doctor.status === 1">Favor, Espere el correo electrónico de Activación de Cuenta</p>
-                                            <button type="button" class="btn btn-warning" (click)="onLogout()">
+                                            <h1 *ngIf="doctor.gender === null" >Bienvenido!</h1>
+                                            <h1 *ngIf="doctor.gender !== null" >Gracias!</h1>
+                                            <p *ngIf="doctor.gender === null ">Favor, finalice su registo de perfil</p>
+                                            <p *ngIf="doctor.gender !== null && doctor.status === 1" class="text-center">
+                                                Favor, Espere el correo electrónico de Activación de Cuenta.
+                                                 Nos pondremos en contacto para verificar sus datos</p>
+                                            <button *ngIf="doctor.gender === null " [routerLink]="['/staffs/list/edit',user.id]"
+                                             type="button" class="btn btn-outline-success mb-3">
+                                                Continuar con el registro
+                                            </button>
+                                            <button type="button" class="btn btn-warning mb-3" (click)="onLogout()">
                                                 Salir
                                             </button>
                                         </div>
