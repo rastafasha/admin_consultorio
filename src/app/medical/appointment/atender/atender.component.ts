@@ -25,6 +25,7 @@ export class AtenderComponent implements OnInit{
   pageTitle:string;
   public routes = routes;
   
+  isfiltered = false;
     valid_form_success = false;
     public text_validation = '';
     public text_success = '';
@@ -32,7 +33,7 @@ export class AtenderComponent implements OnInit{
   public atentionForm: FormGroup;
   public patientSeleccionado: Patient;
 
-  public medical:any = [];
+  public medical: any[] = []; // Change from any to any[] for better type safety
   description:any;
   name_medical:any;
   uso:any;
@@ -46,14 +47,24 @@ export class AtenderComponent implements OnInit{
   date_appointment:any;
   roles:any = [];
   DOCTOR_SELECTED:any;
+  DOCTOR:any = [];
 
   tiposdepagos:any;
-  amount = 0;
-  amount_add = 0;
+  amount : number;
+  amount_add: number;
   method_payment = '';
   selected_segment_hour:any;
   schedule_selecteds:any;
   errors:any = null;
+
+  id = 0;
+  name = '';
+  surname = '';
+  n_doc :number;
+  precio:number;
+  phone = '';
+  name_companion = '';
+  surname_companion = '';
 
   constructor(
     public patientService: PatientMService,
@@ -72,12 +83,7 @@ export class AtenderComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    // this.ativatedRoute.params.subscribe((resp:any)=>{
-    //   this.patient_id = resp.id;
-    //   console.log(this.patient_id);
-    //   this.getPatient();
-    //  })
-
+    
     this.doctorService.closeMenuSidebar();
     window.scrollTo(0, 0);
     this.ativatedRoute.params.subscribe( ({id}) => this.cargarPatient(id));
@@ -90,29 +96,23 @@ export class AtenderComponent implements OnInit{
     this.doctor_id = this.user.id;
     // console.log(this.doctor_id);
 
+    this.config();
+    if(this.roles === 'DOCTOR'){
+    this.getDoctor();
+    
+  }
+
+    this.validarFormulario();
+    this.getTiposdePagoByDoctor();
+  }
+
+  config(){
     this.appointmentService.listConfig().subscribe((resp:any)=>{
       this.hours = resp.hours;
       this.specialities = resp.specialities;
     })
-
-    // this.getTiposdePago();
-    if(this.roles === 'DOCTOR'){
-      this.doctorService.showDoctor(this.doctor_id).subscribe((resp:any)=>{
-        this.DOCTOR_SELECTED = resp.user;
-        console.log(this.DOCTOR_SELECTED);
-
-        this.speciality_id = this.DOCTOR_SELECTED.speciality_id;
-        this.specialitiService.showSpeciality(this.speciality_id ).subscribe((resp:any)=>{
-          console.log(resp);
-        })
-
-      })
-    }
-    this.validarFormulario();
-    this.getTiposdePagoByDoctor();
-    this.getDoctor()
   }
-
+  
 
 
   cargarPatient(id){
@@ -136,7 +136,9 @@ export class AtenderComponent implements OnInit{
 
           });
           this.patientSeleccionado = resp.patient;
+          this.n_doc = this.patientSeleccionado.n_doc;
           console.log(this.patientSeleccionado);
+          this.filterPatientDirecto();
         }
       );
     } else {
@@ -144,32 +146,90 @@ export class AtenderComponent implements OnInit{
     }
 
   }
+  validarFormulario(){
+    this.atentionForm = this.fb.group({
+      name: [''],
+      surname: [''],
+      n_doc: [''],
+      phone: [''],
+      name_companion: [''],
+      surname_companion:[''],
+      antecedent_alerg:[''],
+      name_medical:[''],
+      description:[''],
+      uso: [''],
+      date_appointment:[''],
+      // hour:[''],
+      speciality_id:[''],
+    })
+  }
 
   getTiposdePagoByDoctor(){
     this.settigService.getActivoPagoByDoctor(this.doctor_id).subscribe((resp:any)=>{
-      console.log(resp);
+      // console.log(resp);
       this.tiposdepagos = resp.tiposdepagos;
       // console.log(this.tiposdepagos);
     })
 }
 
+
 getDoctor(){
+  
+
   this.doctorService.showDoctor(this.doctor_id).subscribe((resp:any)=>{
-    console.log(resp);
     this.DOCTOR_SELECTED = resp.user;
+    // console.log(this.DOCTOR_SELECTED);
     this.schedule_selecteds= resp.user.schedule_selecteds;
+
+    this.speciality_id = this.DOCTOR_SELECTED.speciality_id;
+    this.specialitiService.showSpeciality(this.speciality_id ).subscribe((resp:any)=>{
+      console.log(resp);
+    })
+
   })
 }
 
+filtroDoctor(){
+    this.isfiltered = false;
+    const data = {
+
+    date_appointment:this.date_appointment,
+    hour:this.hour,
+    speciality_id:this.speciality_id
+  }
+  this.appointmentService.lisFiterByDoctor(data, this.DOCTOR_SELECTED.id).subscribe((resp: any) => {
+    if (resp && resp.doctor && Array.isArray(resp.doctor)) {
+    console.log('doctor filtrado',resp);
+    this.isfiltered = false;
+    if (resp.message === 403 || resp.doctor.length === 0) {
+              // Swal.fire('Actualizado', this.text_validation, 'success');
+              this.text_validation = resp.message_text;
+              Swal.fire({
+                position: "top-end",
+                icon: "warning",
+                title: this.text_validation,
+                showConfirmButton: false,
+                timer: 1500
+              });
+            }else{
+              
+              this.DOCTOR = resp.doctor;
+              this.isfiltered = true;
+            }
+            }
 
 
-
+  });
+}
 
 countDisponibilidad(DOCTOR:any){
   let SEGMENTS = [];
-  this.DOCTOR_SELECTED = DOCTOR;
   SEGMENTS = DOCTOR.segments.filter((item:any)=> !item.is_appointment);
   return SEGMENTS.length;
+}
+
+showSegment(DOCTOR:any){
+  this.DOCTOR_SELECTED = DOCTOR;
 }
 
 selecSegment(SEGMENT:any){
@@ -177,23 +237,48 @@ selecSegment(SEGMENT:any){
 }
 
 
-    validarFormulario(){
-      this.atentionForm = this.fb.group({
-        name: [''],
-        surname: [''],
-        n_doc: [''],
-        phone: [''],
-        name_companion: [''],
-        surname_companion:[''],
-        antecedent_alerg:[''],
-        name_medical:[''],
-        description:[''],
-        uso: [''],
-        date_appointment:[''],
-        // hour:[''],
-        speciality_id:[''],
-      })
+filterPatientDirecto(){
+  this.appointmentService.getPatient(this.patientSeleccionado.n_doc+"").subscribe((resp:any)=>{
+    // console.log(resp);
+    this.patient = resp;
+    if(resp.menssage === 403){
+      this.name= '';
+      this.surname= '';
+      this.phone= '';
+      this.n_doc= 0;
+    }else{
+      this.name= this.patient.name;
+      this.surname= this.patient.surname;
+      this.phone= this.patient.phone+'';
+      this.n_doc= this.patient.n_doc;
     }
+  })
+}
+filterPatient(){
+  this.appointmentService.getPatient(this.n_doc+"").subscribe((resp:any)=>{
+    // console.log(resp);
+    this.patient = resp;
+    if(resp.menssage === 403){
+      this.name= '';
+      this.surname= '';
+      this.phone= '';
+      this.n_doc= 0;
+    }else{
+      this.name= this.patient.name;
+      this.surname= this.patient.surname;
+      this.phone= this.patient.phone+'';
+      this.n_doc= this.patient.n_doc;
+    }
+  })
+}
+
+resetPatient(){
+  this.name= '';
+      this.surname= '';
+      this.phone= '';
+      this.n_doc= 0;
+}
+
 
     addMedicamento(){
       this.medical.push({
@@ -209,7 +294,6 @@ selecSegment(SEGMENT:any){
     }
     
 
-    // eslint-disable-next-line no-debugger
     onSave(){
     //   this.text_validation = '';
     // if(!this.description || this.medical.length == 0){
@@ -218,22 +302,25 @@ selecSegment(SEGMENT:any){
     // }
    
     const data ={
-      ...this.atentionForm.value,
+      
       medical: this.medical,
       method_payment: this.method_payment,
       date_appointment: this.date_appointment,
-      amount:this.amount,
-      amount_add :this.amount_add,
-      "doctor_schedule_join_hour_id":this.hour,
-      // doctor_schedule_join_hour_id:this.schedule_selecteds.item.id,
-      // hour:this.hour,
-      segment_hour:this.hour,
-      speciality_id:this.speciality_id,
-      
-      appointment_id:0,
-      patient_id: this.patientSeleccionado.id,
+      amount: this.amount,
+      amount_add: this.amount_add,
+      "doctor_schedule_join_hour_id": this.hour,
+      segment_hour: this.hour,
+      speciality_id: this.speciality_id,
+      name: this.patient.name,
+      surname: this.patient.surname,
+      phone: this.patient.phone,
+      n_doc: this.patient.n_doc,
+      appointment_id: 0,
       user_id: this.doctor_id,
       doctor_id: this.doctor_id,
+      patient_id: this.patient.id,
+      ...this.atentionForm.value,
+
       
     }
 
@@ -252,3 +339,4 @@ selecSegment(SEGMENT:any){
     });
     }
 }
+

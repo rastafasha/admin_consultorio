@@ -100,6 +100,7 @@ export class DoctorDashboardComponent {
   public doctorPatientList: any =[];
   public paymentsbydoc: any =[];
   public appointmentpaysbydoc: any =[];
+  public doctor: any =[];
 
   constructor(
     public dashboardService:DashboardService,
@@ -281,7 +282,8 @@ export class DoctorDashboardComponent {
   getDoctor(){
     this.doctor_id = this.user.id
     this.doctorService.showDoctorProfile(this.doctor_id).subscribe((resp:any)=>{
-      // console.log(resp);
+      console.log(resp);
+      this.doctor = resp.doctor;
       this.appointment_pendings= resp.appointment_pendings.data;
       this.appointments= resp.appointments;
 

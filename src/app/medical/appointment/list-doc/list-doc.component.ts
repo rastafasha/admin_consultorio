@@ -8,6 +8,7 @@ import jspdf from 'jspdf';
 import { DoctorService } from '../../doctors/service/doctor.service';
 import { RolesService } from '../../roles/service/roles.service';
 import { ActivatedRoute } from '@angular/router';
+import Swal from 'sweetalert2';
 
 declare var $:any;
 @Component({
@@ -64,7 +65,7 @@ export class ListDocComponent {
     window.scrollTo(0, 0);
     this.doctorService.closeMenuSidebar();
     
-    // this.getSpecialities();
+    this.getSpecialities();
     const USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER: '');
     // this.doctor_id = this.user.id;
@@ -86,6 +87,12 @@ export class ListDocComponent {
       return true;
     }
     return false;
+  }
+
+  getSpecialities(){
+    this.appointmentService.listConfig().subscribe((resp:any)=>{
+      this.specialities = resp.specialities;
+    })
   }
 
 
@@ -279,7 +286,6 @@ export class ListDocComponent {
     this.fileSaver.save(blobData, "pacientes_db_health_connectme_consult_csv", CSV_EXTENSION)
 
   }
-
   txtExport(){
     const TXT_TYPE = 'text/txt';
     const TXT_EXTENSION = '.txt';
@@ -305,14 +311,15 @@ export class ListDocComponent {
 
   }
 
-  cambiarStatus(data:any){
+  // eslint-disable-next-line no-debugger
+  cambiarStatus(data:any){debugger
     const VALUE = data.confimation;
     console.log(VALUE);
     
     this.appointmentService.updateConfirmation(data, data.id).subscribe(
       resp =>{
         console.log(resp);
-        // Swal.fire('Actualizado', `actualizado correctamente`, 'success');
+        Swal.fire('Actualizado', `actualizado correctamente`, 'success');
         // this.toaster.open({
         //   text:'Producto Actualizado!',
         //   caption:'Mensaje de Validación',

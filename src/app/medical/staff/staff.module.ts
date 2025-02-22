@@ -40,7 +40,7 @@ import { PipesModule } from 'src/app/pipes/pipes.module';
     SharedModule,
     FileSaverModule,
     ReusablesModule,
-    PipesModule,
+    PipesModule
   ]
 })
 export class StaffModule { }

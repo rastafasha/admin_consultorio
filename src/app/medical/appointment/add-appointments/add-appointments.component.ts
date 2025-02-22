@@ -6,6 +6,7 @@ import { DoctorService } from '../../doctors/service/doctor.service';
 import { SettignService } from 'src/app/core/settings/settigs.service';
 import { RolesService } from '../../roles/service/roles.service';
 import { SpecialitieService } from '../../specialitie/service/specialitie.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-add-appointments',
@@ -72,24 +73,27 @@ export class AddAppointmentsComponent {
     this.user = this.roleService.authService.user;
     this.roles = this.user.roles[0];
     // console.log(this.doctor_id);
+    this.getDoctor();
 
     this.appointmentService.listConfig().subscribe((resp:any)=>{
       this.hours = resp.hours;
       this.specialities = resp.specialities;
     })
     this.getTiposdePagoByDoctor();
-    // if(this.roles === 'DOCTOR'){
-    //   this.doctorService.showDoctor(this.doctor_id).subscribe((resp:any)=>{
-    //     this.DOCTOR_SELECTED = resp.user;
-    //     console.log(this.DOCTOR_SELECTED);
+   
+  }
 
-    //     this.speciality_id = this.DOCTOR_SELECTED.speciality_id;
-    //     this.specialitiService.showSpeciality(this.speciality_id ).subscribe((resp:any)=>{
-    //       console.log(resp);
-    //     })
+  getDoctor(){
+    this.doctorService.showDoctor(this.doctor_id).subscribe((resp:any)=>{
+      this.DOCTOR_SELECTED = resp.user;
+      // console.log(this.DOCTOR_SELECTED);
 
-    //   })
-    // }
+      this.speciality_id = this.DOCTOR_SELECTED.speciality_id;
+      this.specialitiService.showSpeciality(this.speciality_id ).subscribe((resp:any)=>{
+        console.log(resp);
+      })
+
+    })
   }
 
   getTiposdePagoByDoctor(){
@@ -107,8 +111,22 @@ filtro(){
     speciality_id:this.speciality_id
   }
   this.appointmentService.lisFiter(data).subscribe((resp:any)=>{
-    // console.log(resp);
-    this.DOCTORS = resp.doctors;
+    console.log(resp);
+    
+    if(resp.message === 403 || resp.doctors.length === 0){
+              // Swal.fire('Actualizado', this.text_validation, 'success');
+              this.text_validation = resp.message_text;
+              Swal.fire({
+                position: "top-end",
+                icon: "warning",
+                title: this.text_validation,
+                showConfirmButton: false,
+                timer: 1500
+              });
+            }else{
+              
+              this.DOCTORS = resp.doctors;
+            }
   })
 }
 
