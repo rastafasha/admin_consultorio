@@ -5,7 +5,7 @@ import { routes } from 'src/app/shared/routes/routes';
 import Swal from 'sweetalert2';
 import { LaboratoryService } from '../../laboratory/service/laboratory.service';
 import { PresupuestoService } from '../service/presupuesto.service';
-import { Doctor, Patient, Speciality } from '../presupuesto-model';
+import { Doctor, Patient, Presupuesto, Speciality } from '../presupuesto-model';
 import { AuthService } from 'src/app/shared/auth/auth.service';
 import { DoctorService } from '../../doctors/service/doctor.service';
 import { SpecialitieService } from '../../specialitie/service/specialitie.service';
@@ -31,7 +31,7 @@ export class PresupuestoEditarComponent {
     isdoctor=false;
     name = '';
     surname = '';
-    n_doc = 0;
+    n_doc :number;
     phone = '';
     email = '';
     amount = 0;
@@ -48,6 +48,7 @@ export class PresupuestoEditarComponent {
     speciality_id:number;
     presupuesto_selected:any;
     appointment_atention_selected:string;
+    diagnostico:string;
   
     antecedent_alerg:any;
   
@@ -115,8 +116,8 @@ export class PresupuestoEditarComponent {
     }
   
     getAppointment(){
-      this.presupuestoService.getPresupuesto(this.presupuesto_id).subscribe((resp:any)=>{
-        this.presupuesto_selected = resp.presupuesto;
+      this.presupuestoService.getPresupuesto(this.presupuesto_id).subscribe((resp:Presupuesto)=>{
+        this.presupuesto_selected = resp;
         this.patient = this.presupuesto_selected.patient;
         this.patient_id = this.presupuesto_selected.patient.id;
         this.n_doc = this.presupuesto_selected.patient.n_doc;
@@ -126,6 +127,7 @@ export class PresupuestoEditarComponent {
         this.patient = this.presupuesto_selected.patient.patient;
         this.phone = this.presupuesto_selected.patient.phone;
         this.description = this.presupuesto_selected.description;
+        this.diagnostico = this.presupuesto_selected.diagnostico;
         this.doctor = this.presupuesto_selected.doctor.full_name;
         this.speciality_id = this.presupuesto_selected.speciality_id;
         this.amount = this.presupuesto_selected.amount;
@@ -268,6 +270,10 @@ export class PresupuestoEditarComponent {
       }
       if(this.description){
         formData.append('description', this.description);
+
+      }
+      if(this.diagnostico){
+        formData.append('diagnostico', this.diagnostico);
 
       }
       if (this.medical.length > 0) {

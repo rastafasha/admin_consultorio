@@ -11,6 +11,7 @@ export class Presupuesto {
         status:number;
         confimation:string;
         description:string;
+        diagnostico:string;
         date_presupuesto:string;
         date_presupuesto_format:string;
         medical:object;
