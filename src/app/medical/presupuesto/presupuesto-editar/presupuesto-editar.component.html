@@ -125,7 +125,7 @@
                                         
                                         <div class="col-12 ">  
                                             <div class="form-group local-forms">
-                                                <label >Nombre de Medicamento<span class="login-danger">*</span></label>
+                                                <label >Item<span class="login-danger">*</span></label>
                                                 <input class="form-control" name="name_medical" [ngModelOptions]="{standalone: true}"  [(ngModel)]="name_medical" type="text"  >
                                             </div>
                                         </div>
@@ -153,9 +153,9 @@
                                             <tbody>
                                                 <tr *ngFor="let key of medical ; let i=index">
                                                     <td>
-                                                        Medicamento: {{key.name_medical}}
+                                                        Item: {{key.name_medical}}
                                                         <br>
-                                                        precio: {{key.precio | number:'1.2-2' | currency }}
+                                                        Precio: {{key.precio | number:'1.2-2' | currency }}
                                                     </td>
                                                     <td>
                                                         <button class="btn btn-danger btn-sm" (click)="deleteMedical(i)">x</button>
