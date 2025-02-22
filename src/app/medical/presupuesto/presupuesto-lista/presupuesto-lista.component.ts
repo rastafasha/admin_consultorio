@@ -7,6 +7,7 @@ import { LaboratoryService } from '../../laboratory/service/laboratory.service';
 import { RolesService } from '../../roles/service/roles.service';
 import { PresupuestoService } from '../service/presupuesto.service';
 import { SpecialitieService } from '../../specialitie/service/specialitie.service';
+import Swal from 'sweetalert2';
 declare var $:any;
 @Component({
   selector: 'app-presupuesto-lista',
@@ -18,6 +19,7 @@ export class PresupuestoListaComponent {
   public routes = routes;
     titlePage = 'Presupuestos';
   
+    public text_success = '';
    
     dataSource!: MatTableDataSource<any>;
   
@@ -65,7 +67,6 @@ export class PresupuestoListaComponent {
       ngOnInit() {
         window.scrollTo(0, 0);
         this.doctorService.closeMenuSidebar();
-        this.getTableData();
         this.getSpecialities();
         this.user = this.roleService.authService.user;
         this.roles = this.user.roles[0];
@@ -74,6 +75,7 @@ export class PresupuestoListaComponent {
           this.getDoctor();
           
         }
+        this.getTableData();
       }
 
       getDoctor(){
@@ -81,7 +83,7 @@ export class PresupuestoListaComponent {
 
         this.doctorService.showDoctor(this.doctor_id).subscribe((resp:any)=>{
           this.DOCTOR_SELECTED = resp.user;
-          // console.log(this.DOCTOR_SELECTED);
+          console.log(this.DOCTOR_SELECTED);
 
           this.speciality_id = this.DOCTOR_SELECTED.speciality_id;
           this.specialitiService.showSpeciality(this.speciality_id ).subscribe((resp:any)=>{
@@ -107,16 +109,38 @@ export class PresupuestoListaComponent {
         return false;
       }
     
-      private getTableData(page=1): void {
+      // eslint-disable-next-line no-debugger
+      private getTableData(page=1): void {debugger
         this.presupuestoList = [];
         this.serialNumberArray = [];
         this.isLoading = true;
+        if(this.roles === 'DOCTOR'){
+          // this.doctor_id = this.user.id;
+          this.getTableDataDoctor();
+          
+        }
         this.presupuestoService.listPresupuestos(page, this.searchDataValue, this.speciality_id, this.date).subscribe((resp:any)=>{
           // console.log(resp);
           this.isLoading = false;
           this.totalDataPatient = resp.total;
           this.presupuestoList = resp.presupuestos.data;
           this.presupuesto_id = resp.presupuestos.id;
+          // this.getTableDataGeneral();
+          this.dataSource = new MatTableDataSource<any>(this.presupuestoList);
+          this.calculateTotalPages(this.totalDataPatient, this.pageSize);
+        })
+      }
+
+      private getTableDataDoctor(page=1): void {
+    
+        this.presupuestoService.listAppointmentDocts(this.doctor_id, page, 
+          this.searchDataValue,  this.date).subscribe((resp:any)=>{
+          // console.log(resp);
+    
+          this.totalDataPatient = resp.total;
+          this.presupuestoList = resp.presupuestos.data;
+          this.presupuestoList = resp.presupuestos.id;
+          console.log(this.presupuestoList);
           // this.getTableDataGeneral();
           this.dataSource = new MatTableDataSource<any>(this.presupuestoList);
           this.calculateTotalPages(this.totalDataPatient, this.pageSize);
@@ -245,6 +269,25 @@ export class PresupuestoListaComponent {
           this.pageNumberArray.push(i);
           this.pageSelection.push({ skip: skip, limit: limit });
         }
+      }
+
+      cambiarStatus(data:any){
+        const VALUE = data.status;
+        console.log(VALUE);
+        
+        this.presupuestoService.updateStatus(data, data.id).subscribe(
+          resp =>{
+            //  this.text_success = 'Se guardó la informacion del Laboratorio con la cita'
+            //                   Swal.fire({
+            //                     position: "top-end",
+            //                     icon: "success",
+            //                     title: this.text_success,
+            //                     showConfirmButton: false,
+            //                     timer: 1500
+            //                   });
+            this.getTableData();
+          }
+        )
       }
 
 }
