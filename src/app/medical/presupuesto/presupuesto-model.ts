@@ -11,8 +11,17 @@ export class Presupuesto {
         status:number;
         confimation:string;
         description:string;
+        diagnostico:string;
         date_presupuesto:string;
         date_presupuesto_format:string;
+        medical:object;
+
+    
+}
+export class Medical {
+    id:number;
+    name_medical:string;
+    precio:number;
 
     
 }

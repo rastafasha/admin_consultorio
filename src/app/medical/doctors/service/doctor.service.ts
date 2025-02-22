@@ -25,28 +25,28 @@ export class DoctorService {
   }
   listConfig(){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
-    const URL = url_servicios+'/doctors/config';
+    const URL = url_servicios+'/doctor/config';
     return this.http.get(URL, {headers:headers});
   }
   storeDoctor(data:any){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
-    const URL = url_servicios+"/doctors/store";
+    const URL = url_servicios+"/doctor/store";
     return this.http.post(URL,data, {headers:headers});
   }
   showDoctor(doctor_id:any){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
-    const URL = url_servicios+"/doctors/show/"+doctor_id;
+    const URL = url_servicios+"/doctor/show/"+doctor_id;
     return this.http.get(URL,{headers:headers});
   }
   editDoctor(data:any, doctor_id:any){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
-    const URL = url_servicios+"/doctors/update/"+doctor_id;
+    const URL = url_servicios+"/doctor/update/"+doctor_id;
     return this.http.post(URL,data,{headers:headers});
   }
   
   showDoctorProfile(doctor_id:any){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
-    const URL = url_servicios+"/doctors/profile/"+doctor_id;
+    const URL = url_servicios+"/doctor/profile/"+doctor_id;
     return this.http.get(URL,{headers:headers});
   }
   editDoctorProfile(data:any, doctor_id:any){
@@ -66,7 +66,7 @@ export class DoctorService {
   
   deleteDoctor(doctor_id:any){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
-    const URL = url_servicios+"/doctors/destroy/"+doctor_id;
+    const URL = url_servicios+"/doctor/destroy/"+doctor_id;
     return this.http.delete(URL, {headers:headers});
   }
 
@@ -77,7 +77,7 @@ export class DoctorService {
 
   updateStatus(data:any, doctor_id:any){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
-    const URL = url_servicios+"/doctors/update/status/"+doctor_id;
+    const URL = url_servicios+"/doctor/update/status/"+doctor_id;
     return this.http.put(URL,data,{headers:headers});
   }
 
