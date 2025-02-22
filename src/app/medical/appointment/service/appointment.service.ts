@@ -26,10 +26,10 @@ export class AppointmentService {
     const URL = url_servicios+"/appointment/filter";
     return this.http.post(URL,data, {headers:headers});
   }
-  lisFiterByDoctor( doctor_id:number){
+  lisFiterByDoctor(data:any, doctor_id:number){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
     const URL = url_servicios+"/appointment/filterbydoctor/"+doctor_id;
-    return this.http.post(URL, {headers:headers});
+    return this.http.post(URL,data, {headers:headers});
   }
   pendings(){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});

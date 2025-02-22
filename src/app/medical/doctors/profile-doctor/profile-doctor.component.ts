@@ -5,6 +5,7 @@ import { routes } from 'src/app/shared/routes/routes';
 import { DoctorService } from '../service/doctor.service';
 import { ActivatedRoute } from '@angular/router';
 import { RolesService } from '../../roles/service/roles.service';
+import { AuthService } from 'src/app/shared/auth/auth.service';
 
 @Component({
   selector: 'app-profile-doctor',
@@ -14,32 +15,33 @@ import { RolesService } from '../../roles/service/roles.service';
 export class ProfileDoctorComponent {
   public routes = routes;
 public doctorProfile: any[];
-option_selected:number = 1;
+option_selected = 1;
 public doctor_id: any;
 
-public num_appointment: number = 0;
-public money_of_appointments: number = 0;
-public num_appointment_pendings: number = 0;
+public num_appointment = 0;
+public money_of_appointments = 0;
+public num_appointment_pendings = 0;
 public doctor_selected: any;
 public user: any;
 public appointment_pendings: any =[];
 public appointments: any =[];
-name:string='';
-surname:string='';
-mobile:string='';
-email:string='';
-address:string='';
-password:string='';
-password_repeat:string='';
+name='';
+surname='';
+mobile='';
+email='';
+address='';
+password='';
+password_repeat='';
 
-public text_success:string = '';
-public text_validation:string = '';
+public text_success = '';
+public text_validation = '';
 
-
+doctor:any;
 constructor(
   public doctorService: DoctorService,
   public activatedRoute: ActivatedRoute,
   public roleService: RolesService,
+  public authService: AuthService,
   )
 {
 }
@@ -50,6 +52,7 @@ ngOnInit(): void {
   this.activatedRoute.params.subscribe((resp:any)=>{
     // console.log(resp);
     this.doctor_id = resp.id;
+    
   });
   this.getDoctor();
   this.user = this.roleService.authService.user;
@@ -64,10 +67,14 @@ isPermission(permission:string){
   }
   return false;
 }
+onLogout() {
+  this.authService.logout();
+}
 
 getDoctor(){
   this.doctorService.showDoctorProfile(this.doctor_id).subscribe((resp:any)=>{
-    // console.log(resp);
+    console.log(resp);
+    this.doctor = resp.doctor;
     this.num_appointment= resp.num_appointment;
     this.money_of_appointments= resp.money_of_appointments;
     this.num_appointment_pendings= resp.num_appointment_pendings;
@@ -103,7 +110,7 @@ getDoctor(){
       }
     }
 
-    let data:any ={
+    const data:any ={
       name: this.name,
       surname: this.surname,
       mobile: this.mobile,

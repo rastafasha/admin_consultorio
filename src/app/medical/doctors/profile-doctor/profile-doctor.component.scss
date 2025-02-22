@@ -14,3 +14,11 @@
 .about-info {
     margin-bottom: 35px !important;
 }
+
+.bienvenido{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content:center;
+    align-items: center;
+}

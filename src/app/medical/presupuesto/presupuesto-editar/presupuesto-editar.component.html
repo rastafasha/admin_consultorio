@@ -27,23 +27,26 @@
                             <div class="row align-items-center py-4" >
                                 <div class="col-12 py-4">
                                     <h4>Datos del Paciente</h4>
+                                    <button type="button" class="btn btn-light btn-sm" *ngIf="!isediting" (click)="resetPatient()">Reset</button>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-4">
                                     <div class="form-group local-forms">
                                         <label >N.Documento <span class="login-danger">*</span></label>
-                                        <input class="form-control"  name="n_doc"   [(ngModel)]="n_doc" type="text"  >
+                                        <input class="form-control"  [ngModelOptions]="{standalone: true}"  name="n_doc" [(ngModel)]="n_doc" type="text"   >
+                                        <!-- <input class="form-control" (keyup)="filterPatient()" [ngModelOptions]="{standalone: true}"  name="n_doc" [(ngModel)]="n_doc" type="text"  > -->
+                                        <button type="button" class="btn btn-primary btn-sm" *ngIf="!isediting" (click)="filterPatient()">Filtrar</button>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-4">  
                                     <div class="form-group local-forms">
                                         <label >Nombre Paciente <span class="login-danger">*</span></label>
-                                        <input class="form-control" name="name"   [(ngModel)]="name" type="text"  >
+                                        <input class="form-control" name="name"   [(ngModel)]="name" [ngModelOptions]="{standalone: true}" type="text"  >
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-4">  
                                     <div class="form-group local-forms">
                                         <label >Apellido Paciente <span class="login-danger">*</span></label>
-                                        <input class="form-control" name="surname"   [(ngModel)]="surname" type="text"  >
+                                        <input class="form-control" name="surname"   [(ngModel)]="surname" [ngModelOptions]="{standalone: true}" type="text"  >
                                     </div>
                                 </div>
                                 
@@ -51,27 +54,31 @@
                                 <div class="col-12 col-md-3">
                                     <div class="form-group local-forms">
                                         <label >Mobile <span class="login-danger">*</span></label>
-                                        <input class="form-control" name="phone"   [(ngModel)]="phone" type="text"  >
+                                        <input class="form-control" name="phone"   [(ngModel)]="phone" [ngModelOptions]="{standalone: true}" type="text"  >
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-3">  
                                     <div class="form-group local-forms">
                                         <label >Email Paciente <span class="login-danger">*</span></label>
-                                        <input class="form-control" name="email"   [(ngModel)]="email" type="text"  >
+                                        <input class="form-control" name="email"   [(ngModel)]="email" [ngModelOptions]="{standalone: true}" type="text"  >
                                     </div>
                                 </div>
                                 
-                                <div class="col-12 col-md-6 col-xl-4">
-                                    <div class="form-group local-forms">
-                                        <label >Doctor<span class="login-danger">*</span></label>
-                                        <input class="form-control" name="doctor"   [(ngModel)]="doctor" type="text"  >
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-6 col-xl-4">
+                                <div class="col-12 col-md-6 col-xl-4"  *ngIf="!isdoctor">
                                     <div class="form-group local-forms">
                                         <label >Especialidad<span class="login-danger">*</span></label>
-                                        <mat-select [(ngModel)]="speciality_id" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Select Speciality">
+                                        <mat-select [(ngModel)]="speciality_id"  [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Select Speciality">
                                             <mat-option *ngFor="let data of specialities" [value]="data.id">
+                                            {{data.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4"   *ngIf="isdoctor">
+                                    <div class="form-group local-forms">
+                                        <label >Especialidad<span class="login-danger">*</span></label>
+                                        <mat-select [(ngModel)]="speciality_id" [disabled]="[isdisabled]"  [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Select Speciality">
+                                            <mat-option *ngFor="let data of specialities | especialidadFilter" [value]="data.id">
                                             {{data.name}}
                                             </mat-option>
                                         </mat-select>
@@ -100,10 +107,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-md-6 col-xl-4">  
-                                <div class="form-group local-forms">
+                            <div class="col-12 d-flex justify-content-end">  
+                                <div class="form-group local-forms col-12 col-md-3">
                                     <label >Monto <span class="login-danger">*</span></label>
-                                    <input class="form-control" name="amount"   [(ngModel)]="amount" type="text"  >
+                                    <input class="form-control" name="amount"   [(ngModel)]="amount" type="number"  >
                                 </div>
                             </div>
                             

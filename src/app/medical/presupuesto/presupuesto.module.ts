@@ -9,6 +9,7 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { PresupuestoRoutingModule } from './presupuesto-routing.module';
 import { ReusablesModule } from 'src/app/reusables/reusables.module';
+import { PipesModule } from 'src/app/pipes/pipes.module';
 
 
 
@@ -26,7 +27,8 @@ import { ReusablesModule } from 'src/app/reusables/reusables.module';
         HttpClientModule,
         RouterModule,
         SharedModule,
-        ReusablesModule
+        ReusablesModule,
+        PipesModule
   ]
 })
 export class PresupuestoModule { }

@@ -52,7 +52,7 @@ export class AuthService {
   
     getLocalStorage(){
       if(localStorage.getItem('token') && localStorage.getItem('user')){
-        let USER = localStorage.getItem('user');
+        const USER = localStorage.getItem('user');
         this.user = JSON.parse(USER ? USER: '');
       }else{
         this.user = null;
@@ -75,7 +75,7 @@ export class AuthService {
   login(email:string,password:string) {
     // localStorage.setItem('authenticated', 'true');
     // this.router.navigate([routes.adminDashboard]);
-    let URL = url_servicios+"/login";
+    const URL = url_servicios+"/login";
     return this.http.post(URL,{email: email,password: password}).pipe(
       map((auth:any) => {
         console.log(auth);
@@ -111,8 +111,8 @@ export class AuthService {
 
   
  getUserRomoto(data){
-  let headers = new HttpHeaders({'Authorization': 'Bearer'+this.token})
-  let URL = url_servicios+'/me';
+  const headers = new HttpHeaders({'Authorization': 'Bearer'+this.token})
+  const URL = url_servicios+'/me';
   return this.http.post(URL,data, {headers:headers});
  }
   

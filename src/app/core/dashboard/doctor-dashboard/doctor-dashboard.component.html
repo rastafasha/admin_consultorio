@@ -47,10 +47,20 @@
                 </div>
             </div>
         </div>
+        <div class="container" *ngIf="doctor.status === 1">
+            <div class="card">
+                <div class="card-body">
+                    <div class="chart-title patient-visit" style="display: flex; align-items: center; justify-content: center;">
+                        <h4>Favor Espere La Activación de su perfil para comenzar a usar la applicación</h4>
+                        
+                    </div>	
+                </div>
+            </div>
+        </div>
 
-        <div class="doctor-list-blk" *ngIf="doctor_id ">
+        <div class="doctor-list-blk" *ngIf="doctor_id && doctor.status === 2">
             <div class="row">
-                <div class="col-xl-3 col-md-6">
+                <div class="col-xl-3 col-md-6 col-xs-12 col-sm-6">
                     <div class="doctor-widget border-right-bg">
                         <div class="doctor-box-icon flex-shrink-0">
                             <img src="assets/img/icons/doctor-dash-01.svg" alt="">
@@ -69,7 +79,7 @@
                 </div>
                 
                 
-                <div class="col-xl-3 col-md-6">
+                <div class="col-xl-3 col-md-6 col-xs-12 col-sm-6">
                     <div class="doctor-widget border-right-bg">
                         <div class="doctor-box-icon flex-shrink-0">
                             <img src="assets/img/icons/doctor-dash-03.svg" alt="">
@@ -84,7 +94,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 col-md-6">
+                <div class="col-xl-3 col-md-6 col-xs-12 col-sm-6">
                     <div class="doctor-widget">
                         <div class="doctor-box-icon flex-shrink-0">
                             <img src="assets/img/icons/doctor-dash-04.svg" alt="">
@@ -99,7 +109,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 col-md-6">
+                <div class="col-xl-3 col-md-6 col-xs-12 col-sm-6">
                     <div class="doctor-widget">
                         <div class="doctor-box-icon flex-shrink-0">
                             <img src="assets/img/icons/doctor-dash-04.svg" alt="">
@@ -118,7 +128,7 @@
         </div>
         
         <!-- pacientes recientes -->
-        <div class="row">
+        <div class="row" *ngIf="doctor.status === 2">
             <div class="col-12 col-md-12 col-lg-12 col-xl-6 ">
                 <div class="card flex-fill comman-shadow">
                     <div class="card-header">
@@ -144,7 +154,7 @@
                                             <div class="dropdown dropdown-action">
                                                 <a href="javascript:void(0);" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-end">
-                                                    <a class="dropdown-item"[routerLink]="['/appointments/atender/', data.id ]" *ngIf="isPermission('add_cita_doctor')" ><i class="fa fa-pen-to-square m-r-5"></i> Hacer cita</a>
+                                                    <a class="dropdown-item"[routerLink]="[routes.addAppointmentDoctor, data.id ]" *ngIf="isPermission('add_cita_doctor')" ><i class="fa fa-pen-to-square m-r-5"></i> Hacer cita</a>
                                                     <a class="dropdown-item" [routerLink]="[routes.patientProfile, data.id]" *ngIf="isPermission('profile_patient')"><i class="fa-solid fa-pen-to-square m-r-5"></i> Ver Paciente</a>
                                                     <a class="dropdown-item" [routerLink]="['/patients/list/edit/', data.id]" *ngIf="isPermission('edit_patient')"><i class="fa-solid fa-pen-to-square m-r-5"></i> Editar Paciente</a>
                                                     <!-- <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete_appointment"><i class="fa fa-trash-alt m-r-5"></i> Delete</a> -->
@@ -210,7 +220,7 @@
             
         </div>
 
-        <div class="row">
+        <div class="row" *ngIf="doctor.status === 2">
             <!-- Transferencias Recientes -->
             <div class="col-12 col-md-12 col-lg-12 col-xl-6 ">
                 <div class="card flex-fill comman-shadow">
@@ -250,7 +260,7 @@
                 </div>
             </div>
             <!-- Pagos Recientes -->
-            <div class="col-12 col-md-12 col-lg-12 col-xl-6 ">
+            <div class="col-12 col-md-12 col-lg-12 col-xl-6 " *ngIf="doctor.status === 2">
                 <div class="card flex-fill comman-shadow">
                     <div class="card-header">
                         <h4 class="card-title d-inline-block">Pagos Recientes</h4> <a [routerLink]="[routes.pagosListDoctor, doctor_id]" class="patient-views float-end">Todo</a>
@@ -301,8 +311,8 @@
             
         </div>
         <!-- Entradas -->
-        <div class="row" *ngIf="doctor_id ">
-            <div class="col-12 col-md-12 col-lg-12 col-xl-7">
+        <div class="row" *ngIf="doctor_id " >
+            <div class="col-12 col-md-12 col-lg-12 col-xl-7" *ngIf="doctor.status === 2">
                 <div class="card">
                     <div class="card-body">
                         <div class="chart-title patient-visit mb-0">
@@ -335,7 +345,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-12 col-lg-6 col-xl-5 d-flex">
+            <div class="col-12 col-md-12 col-lg-6 col-xl-5 d-flex" *ngIf="doctor.status === 2">
                 <div class="card">
                     <div class="card-body">
                             <apx-chart class="donut-chart-radial"
@@ -368,7 +378,7 @@
         </div>
         <!-- Mis Citas -->
         <div class="row" *ngIf="doctor_id ">
-            <div class="col-12 col-md-12  col-xl-7">
+            <div class="col-12 col-md-12  col-xl-7" *ngIf="doctor.status === 2">
                 <div class="card">
                     <div class="card-body">
                         <div class="chart-title patient-visit">
