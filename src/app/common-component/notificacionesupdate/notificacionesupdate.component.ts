@@ -42,6 +42,10 @@ export class NotificacionesupdateComponent implements OnInit {
       this.getTrastransferenciasRecientesByDoctor();
       this.getTrastransferenciasRecientes();
     }, 3000);
+    
+    
+
+
   }
   //obtiene las citas pendientes por atender
   getAppointmentRecientesbyDoctor() {

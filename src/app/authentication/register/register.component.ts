@@ -31,6 +31,7 @@ export class RegisterComponent {
     password: new FormControl('', [Validators.required]),
     confirmPassword: new FormControl('', [Validators.required]),
     acepta: new FormControl('', [Validators.required]),
+    role_id: new FormControl('9'),
   });
 
   get f() {
