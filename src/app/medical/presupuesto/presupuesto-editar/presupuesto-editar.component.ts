@@ -42,7 +42,7 @@ export class PresupuestoEditarComponent {
     public medical:any = [];
     description:any;
     name_medical:any;
-    uso:any;
+    precio= 0;
     
     presupuesto_id:number;
     speciality_id:number;
@@ -129,6 +129,7 @@ export class PresupuestoEditarComponent {
         this.doctor = this.presupuesto_selected.doctor.full_name;
         this.speciality_id = this.presupuesto_selected.speciality_id;
         this.amount = this.presupuesto_selected.amount;
+        this.medical = this.presupuesto_selected.medical;
   
       });
       
@@ -183,6 +184,40 @@ export class PresupuestoEditarComponent {
           this.phone= '';
           this.n_doc= 0;
     }
+
+    addMedicamento() {
+      if (this.name_medical && this.precio > 0) {
+        this.medical.push({
+          name_medical: this.name_medical,
+          precio: this.precio+''
+        });
+        this.name_medical = '';
+        this.precio = 0;
+        
+      }
+      //
+      // vamos mostrando y sumando  de precios en el input amount
+      // los esta colocando al lado del otro, se deben sumar
+
+      this.amount = 0;
+      this.medical.forEach((element:any) => {
+        this.amount += element.precio;
+      });
+
+     
+
+
+      }
+
+    deleteMedical(i:any){
+      this.medical.splice(i,1);
+      this.name_medical = '';
+      this.precio = 0;
+      if(this.medical.length === 0){
+        this.amount = 0;
+      }
+
+    }
   
     
     // eslint-disable-next-line no-debugger
@@ -228,6 +263,10 @@ export class PresupuestoEditarComponent {
       }
       if(this.description){
         formData.append('description', this.description);
+
+      }
+      if (this.medical.length > 0) {
+        formData.append('medical', JSON.stringify(this.medical));
 
       }
       if(this.amount !== null && this.amount !== undefined){
