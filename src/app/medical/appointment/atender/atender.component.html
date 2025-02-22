@@ -31,7 +31,9 @@
                                 <div class="col-12 col-md-6 col-xl-3">  
                                     <div class="form-group local-forms">
                                         <label >Fecha de la Cita  <span class="login-danger">*</span></label>
-                                        <input class="form-control datetimepicker" name="date_appointment"  [(ngModel)]="date_appointment" [ngModelOptions]="{standalone: true}" type="text" matInput [matDatepicker]="picker"  >
+                                        <input class="form-control datetimepicker" name="date_appointment"  
+                                        [(ngModel)]="date_appointment" [ngModelOptions]="{standalone: true}" 
+                                        type="text" matInput [matDatepicker]="picker"  >
                                         <mat-datepicker #picker></mat-datepicker>
                                         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                                     </div>
@@ -47,42 +49,6 @@
                                         </mat-select>
                                     </div>
                                     
-                                    
-                                    <!-- <div class="form-group local-forms">
-                                        <label >Hora <span class="login-danger">*</span></label>
-                                        <mat-select [(ngModel)]="hour" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Seleccione Hora">
-                                            
-                                            <mat-option *ngFor="let data of schedule_selecteds" [value]="data.item.id">
-                                            desde {{data.item.format_hour_start}} hasta {{data.item.format_hour_end
-                                            }}
-                                            </mat-option>
-                                        </mat-select>
-                                    </div> -->
-
-                                    <!-- <table class="table mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th>Hora</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <ng-container *ngFor="let SEGMENT of schedule_selecteds">
-                                                        <div class="radio">
-                                                            <label>
-                                                                <input type="radio"  name="radio" (click)="selecSegment(SEGMENT)"> 
-                                                                {{SEGMENT.item.format_hour_start}} a {{SEGMENT.item.format_hour_end}} | {{SEGMENT.day_name}}
-                                                            </label>
-                                                        </div>
-                                                        <br>
-                                                    </ng-container>
-                                                    
-                                                </td>
-                                            </tr>
-                                            
-                                        </tbody>
-                                    </table> -->
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-3">
                                     <div class="form-group local-forms">
@@ -133,7 +99,7 @@
                             </div>
                              <!-- pago -->
                             
-                            <div class="row align-items-center py-4" >
+                            <div class="row align-items-center py-4" *ngIf="isfiltered" >
                                 <div class="col-12 py-4">
                                     <h4>Datos de Pago</h4>
                                 </div>
@@ -165,7 +131,7 @@
                             </div>
                             <!-- pago -->
                             <!-- paciente -->
-                            <div class="row align-items-center py-4" >
+                            <div class="row align-items-center py-4" *ngIf="isfiltered" >
                                 <div class="col-12 py-4">
                                     <h4>Datos del Paciente</h4>
                                     <button type="button" class="btn btn-light btn-sm" (click)="resetPatient()">Reset</button>
@@ -224,7 +190,7 @@
                             <!-- fin paciente -->
                             
                             
-                            <div class="row align-items-center" >
+                            <div class="row align-items-center" *ngIf="isfiltered" >
                                 <!-- validaciones -->
                                 <!-- <div class="form-group row" *ngIf="text_success">
                                     <div class="col-12">

@@ -7,6 +7,7 @@ import { LoaderAnimComponent } from './loader-anim/loader-anim.component';
 import { ExportListsComponent } from './export-lists/export-lists.component';
 import { BreadcumDoctorDashboardComponent } from './breadcum-doctor-dashboard/breadcum-doctor-dashboard.component';
 import { RouterModule } from '@angular/router';
+import { PwaNotifInstallerComponent } from './pwa-notif-installer/pwa-notif-installer.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { RouterModule } from '@angular/router';
     BreadcumsComponent,
     LoaderAnimComponent,
     ExportListsComponent,
-    BreadcumDoctorDashboardComponent
+    BreadcumDoctorDashboardComponent,
+    PwaNotifInstallerComponent
   ],
   exports: [
     BackButtnComponent,
@@ -24,7 +26,8 @@ import { RouterModule } from '@angular/router';
     BreadcumsComponent,
     LoaderAnimComponent,
     ExportListsComponent,
-    BreadcumDoctorDashboardComponent
+    BreadcumDoctorDashboardComponent,
+    PwaNotifInstallerComponent
   ],
   imports: [
     CommonModule,
