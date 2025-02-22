@@ -20,27 +20,27 @@ export class StaffService {
   }
   listConfig(){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
-    const URL = url_servicios+'/staff/config';
+    const URL = url_servicios+'/staffs/config';
     return this.http.get(URL, {headers:headers});
   }
   getUser(user_id:any){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
-    const URL = url_servicios+'/staff/show/'+user_id;
+    const URL = url_servicios+'/staffs/show/'+user_id;
     return this.http.get(URL, {headers:headers});
   }
   createUser(data){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
-    const URL = url_servicios+'/staff/store';
+    const URL = url_servicios+'/staffs/store';
     return this.http.post(URL,data, {headers:headers});
   }
   editUser( data:any, user_id:any,){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
-    const URL = url_servicios+'/staff/update/'+user_id;
+    const URL = url_servicios+'/staffs/update/'+user_id;
     return this.http.post(URL,data,{headers:headers});
   }
   deleteUser(user_id:any){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
-    const URL = url_servicios+'/staff/destroy/'+user_id;
+    const URL = url_servicios+'/staffs/destroy/'+user_id;
     return this.http.delete(URL, {headers:headers});
   }
 }

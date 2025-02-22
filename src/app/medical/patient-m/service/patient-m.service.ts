@@ -20,7 +20,7 @@ export class PatientMService {
   }
   listPatientDocts(doctor_id:any, page=1,  search=''){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
-    const URL = url_servicios+'/patient/byDoctor/'+doctor_id+'/?page='+page+"&search="+search;
+    const URL = url_servicios+'/patients/byDoctor/'+doctor_id+'/?page='+page+"&search="+search;
     return this.http.get(URL, {headers:headers});
   }
 
@@ -28,34 +28,34 @@ export class PatientMService {
   
   getPatient(user_id:any){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
-    const URL = url_servicios+'/patient/show/'+user_id;
+    const URL = url_servicios+'/patients/show/'+user_id;
     return this.http.get(URL, {headers:headers});
   }
   createPatient(data){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
-    const URL = url_servicios+'/patient/store';
+    const URL = url_servicios+'/patients/store';
     return this.http.post(URL,data, {headers:headers});
   }
   editPatient( data:any, user_id:any,){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
-    const URL = url_servicios+'/patient/update/'+user_id;
+    const URL = url_servicios+'/patients/update/'+user_id;
     return this.http.post(URL,data,{headers:headers});
   }
   deletePatient(user_id:any){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
-    const URL = url_servicios+'/patient/destroy/'+user_id;
+    const URL = url_servicios+'/patients/destroy/'+user_id;
     return this.http.delete(URL, {headers:headers});
   }
 
   showPatientProfile(user_id:any){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
-    const URL = url_servicios+"/patient/profile/"+user_id;
+    const URL = url_servicios+"/patients/profile/"+user_id;
     return this.http.get(URL,{headers:headers});
   }
 
   listConfig(){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
-    const URL = url_servicios+'/patient/config';
+    const URL = url_servicios+'/patients/config';
     return this.http.get(URL, {headers:headers});
   }
   
