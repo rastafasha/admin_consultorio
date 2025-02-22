@@ -45,9 +45,7 @@ export class RegisterComponent {
   ) { }
 
   
-  
-  // eslint-disable-next-line no-debugger
-  submit() {debugger
+  submit() {
     if (this.form.value.password === this.form.value.confirmPassword) {
       this.isValidConfirmPassword = true;
       this.acepta = true;
