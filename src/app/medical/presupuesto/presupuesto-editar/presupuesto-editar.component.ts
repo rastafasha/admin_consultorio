@@ -203,11 +203,6 @@ export class PresupuestoEditarComponent {
       for (let i = 0; i < this.medical.length; i++) {
         this.amount += parseFloat(this.medical[i].precio);
       }
-
-
-     
-
-
       }
 
     deleteMedical(i:any){
