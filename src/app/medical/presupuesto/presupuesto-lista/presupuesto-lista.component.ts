@@ -6,6 +6,7 @@ import { DoctorService } from '../../doctors/service/doctor.service';
 import { LaboratoryService } from '../../laboratory/service/laboratory.service';
 import { RolesService } from '../../roles/service/roles.service';
 import { PresupuestoService } from '../service/presupuesto.service';
+import { SpecialitieService } from '../../specialitie/service/specialitie.service';
 declare var $:any;
 @Component({
   selector: 'app-presupuesto-lista',
@@ -46,6 +47,10 @@ export class PresupuestoListaComponent {
 
     specialities:any = [];
     public user:any;
+    public doctor_id:number;
+    roles:any = [];
+
+  DOCTOR_SELECTED:any;
 
 
       constructor(
@@ -53,6 +58,7 @@ export class PresupuestoListaComponent {
         public doctorService: DoctorService,
         public laboratoryService: LaboratoryService,
         public roleService: RolesService,
+        public specialitiService: SpecialitieService,
         ){
     
       }
@@ -62,6 +68,27 @@ export class PresupuestoListaComponent {
         this.getTableData();
         this.getSpecialities();
         this.user = this.roleService.authService.user;
+        this.roles = this.user.roles[0];
+        if(this.roles === 'DOCTOR'){
+          this.doctor_id = this.user.id;
+          this.getDoctor();
+          
+        }
+      }
+
+      getDoctor(){
+  
+
+        this.doctorService.showDoctor(this.doctor_id).subscribe((resp:any)=>{
+          this.DOCTOR_SELECTED = resp.user;
+          // console.log(this.DOCTOR_SELECTED);
+
+          this.speciality_id = this.DOCTOR_SELECTED.speciality_id;
+          this.specialitiService.showSpeciality(this.speciality_id ).subscribe((resp:any)=>{
+            console.log(resp);
+          })
+      
+        })
       }
     
       getSpecialities(){

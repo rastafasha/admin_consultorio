@@ -1,7 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { map } from 'rxjs';
 import { url_servicios } from 'src/app/config/config';
 import { AuthService } from 'src/app/shared/auth/auth.service';
+import { Presupuesto } from '../presupuesto-model';
 
 @Injectable({
   providedIn: 'root'
@@ -41,10 +43,15 @@ export class PresupuestoService {
     const URL = url_servicios+'/presupuesto/config';
     return this.http.get(URL, {headers:headers});
   }
-  getPresupuesto(presupuesto_id:any){
+  getPresupuesto(presupuesto_id:number){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
     const URL = url_servicios+'/presupuesto/show/'+presupuesto_id;
-    return this.http.get(URL, {headers:headers});
+    return this.http.get(URL, {headers:headers})
+    .pipe(
+      map((resp:any)=>{
+        return resp.presupuesto;
+      })
+    );
   }
   createPresupuesto(data){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
