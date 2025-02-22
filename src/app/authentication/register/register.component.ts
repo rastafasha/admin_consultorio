@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { DoctorService } from 'src/app/medical/doctors/service/doctor.service';
 import { StaffService } from 'src/app/medical/staff/service/staff.service';
 import { AuthService } from 'src/app/shared/auth/auth.service';
 import { routes } from 'src/app/shared/routes/routes';
@@ -18,6 +17,7 @@ export class RegisterComponent {
   public passwordClass  = false;
   public confirmPasswordClass  = false
   public isValidConfirmPassword = false;
+  public acepta = false;
   public text_validation = '';
   public text_success = '';
   public text_error = '';
@@ -30,6 +30,8 @@ export class RegisterComponent {
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required]),
     confirmPassword: new FormControl('', [Validators.required]),
+    acepta: new FormControl('', [Validators.required]),
+    role_id: new FormControl('9'),
   });
 
   get f() {
@@ -43,11 +45,10 @@ export class RegisterComponent {
   ) { }
 
   
-  
-  // eslint-disable-next-line no-debugger
   submit() {
     if (this.form.value.password === this.form.value.confirmPassword) {
       this.isValidConfirmPassword = true;
+      this.acepta = true;
 
       const formData = new FormData();
       formData.append('name', this.form.value.name);
@@ -56,6 +57,7 @@ export class RegisterComponent {
       formData.append('email', this.form.value.email);
       formData.append('password', this.form.value.password);
       formData.append('n_doc', this.form.value.n_doc);
+      formData.append('acepta', this.form.value.acepta);
       formData.append('role_id', '9');
       // formData.append('speciality_id', this.speciality_id);
 
@@ -91,6 +93,7 @@ export class RegisterComponent {
       
     } else {
       this.isValidConfirmPassword = false;
+      // this.acepta = false;
     }
   }
 

@@ -149,7 +149,8 @@
                       </div>
                     </div>
                     <div class="form-group ">
-                      <label>Email <span class="login-danger">*</span></label>
+                      <!-- <label>Email <span class="login-danger">*</span></label> -->
+                      <label>Correo Electrónico <span class="login-danger">*</span></label>
                       <input
                         class="form-control"
                         type="text"
@@ -167,10 +168,11 @@
                             f['email'].errors && f['email'].errors['required']
                           "
                         >
-                          Email is required.
+                          Email es requerido.
                         </div>
                         <div *ngIf="f['email'].errors && f['email'].errors['email']">
-                          Please, enter valid email address.
+                          <!-- Please, enter valid email address. -->
+                          Favor, ingrese un correo válido
                         </div>
                       </div>
                       <div *ngIf="CustomControler !== 0" class="invalid-feedback">
@@ -179,7 +181,7 @@
                     </div>
                     
                     <div class="form-group">
-                      <label>Password <span class="login-danger">*</span></label>
+                      <label>Contraseña <span class="login-danger">*</span></label>
                       <input
                         class="form-control pass-input"
                         [type]="passwordClass ? 'text' : 'password'"
@@ -199,7 +201,8 @@
                             f['password'].errors['required']
                           "
                         >
-                          Password is required.
+                          <!-- Password is required. -->
+                           Contraseña es requerido.
                         </div>
                       </div>
                       <span (click)="passwordFunc()" [ngClass] = "passwordClass ? 'feather icon-eye' : 'feather icon-eye-off'"
@@ -208,7 +211,9 @@
                     </div>
                     <div class="form-group">
                       <label
-                        >Confirm Password
+                        >
+                        Confirme Contraseña
+                        <!-- Confirm Password -->
                         <span class="login-danger">*</span></label
                       >
                       <input
@@ -234,21 +239,39 @@
                             f['confirmPassword'].errors['required']
                           "
                         >
-                          Confirm Password is required.
+                          <!-- Confirm Password is required. -->
+                          Confirme Contraseña es requerido
                         </div>
                       </div>
                       <div
                         *ngIf="isValidConfirmPassword"
                         class="invalid-feedback"
                       >
-                        Password not matching
+                        <!-- Password not matching -->
+                        Contraseña no coincide
                       </div>
                       <span (click)="confirmPasswordFunc()" [ngClass] = "confirmPasswordClass ? 'feather icon-eye' : 'feather icon-eye-off'"
-                        class="profile-views confirm-password"
+                        class="profile-views confirm-password"ß
                       ></span>
                     </div>
                   </div>
                   <div class="forgotpass">
+                    <div class="remember-me">
+                      <label
+                        class="custom_check mr-2 mb-0  remember-me"
+                      >
+                        Acepto 
+                        <a href="javascript:;">&nbsp; los términos y condiciones</a
+                        >&nbsp; y 
+                        <br>
+                        <br>
+                        <a href="javascript:;">&nbsp; las políticas de privacidad. </a>
+                        <input type="checkbox" name="acepta" formControlName="acepta" [value]="true" />
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                  <!-- <div class="forgotpass">
                     <div class="remember-me">
                       <label
                         class="custom_check mr-2 mb-0 d-inline-flex remember-me"
@@ -261,7 +284,7 @@
                         <span class="checkmark"></span>
                       </label>
                     </div>
-                  </div>
+                  </div> -->
                   <div class="form-group login-btn">
                     <button
                       [disabled]="form.invalid"
@@ -276,8 +299,10 @@
 
                 <div class="next-sign">
                   <p class="account-subtitle">
-                    Already have account?
-                    <a [routerLink]="routes.login">Login</a>
+                    <!-- Already have account? -->
+                    Ya posee una cuenta con nosotros?
+                    <!-- <a [routerLink]="routes.login">Login</a> -->
+                    <a [routerLink]="routes.login">Ingresar</a>
                   </p>
 
                   <!-- Social Login -->

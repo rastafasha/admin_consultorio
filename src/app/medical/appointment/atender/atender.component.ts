@@ -25,6 +25,7 @@ export class AtenderComponent implements OnInit{
   pageTitle:string;
   public routes = routes;
   
+  isfiltered = false;
     valid_form_success = false;
     public text_validation = '';
     public text_success = '';
@@ -32,7 +33,7 @@ export class AtenderComponent implements OnInit{
   public atentionForm: FormGroup;
   public patientSeleccionado: Patient;
 
-  public medical:any = [];
+  public medical: any[] = []; // Change from any to any[] for better type safety
   description:any;
   name_medical:any;
   uso:any;
@@ -49,8 +50,8 @@ export class AtenderComponent implements OnInit{
   DOCTOR:any = [];
 
   tiposdepagos:any;
-  amount = 0;
-  amount_add = 0;
+  amount : number;
+  amount_add: number;
   method_payment = '';
   selected_segment_hour:any;
   schedule_selecteds:any;
@@ -59,7 +60,8 @@ export class AtenderComponent implements OnInit{
   id = 0;
   name = '';
   surname = '';
-  n_doc = 0;
+  n_doc :number;
+  precio:number;
   phone = '';
   name_companion = '';
   surname_companion = '';
@@ -187,30 +189,39 @@ getDoctor(){
   })
 }
 
+// eslint-disable-next-line no-debugger
 filtroDoctor(){
-  const data = {
+    this.isfiltered = false;
+    const data = {
+
     date_appointment:this.date_appointment,
     hour:this.hour,
     speciality_id:this.speciality_id
   }
-  this.appointmentService.lisFiterByDoctor(data, this.DOCTOR_SELECTED.id).subscribe((resp:any)=>{
+  this.appointmentService.lisFiterByDoctor(data, this.DOCTOR_SELECTED.id).subscribe((resp: any) => {
+    // if (resp && resp.doctor && Array.isArray(resp.doctor)) {
     console.log('doctor filtrado',resp);
+    this.isfiltered = false;
+   
+    if (resp.message === 403 || resp.doctor.length === 0) {
+      // Swal.fire('Actualizado', this.text_validation, 'success');
+      this.text_validation = resp.message_text;
+      Swal.fire({
+        position: "top-end",
+        icon: "warning",
+        title: this.text_validation,
+        showConfirmButton: false,
+        timer: 1500
+      });
+    }else{
+      
+      this.DOCTOR = resp.doctor;
+      console.log(resp.doctor);
+      this.isfiltered = true;
+    }
     
-    if(resp.message === 403 || resp.doctor.length === 0){
-              // Swal.fire('Actualizado', this.text_validation, 'success');
-              this.text_validation = resp.message_text;
-              Swal.fire({
-                position: "top-end",
-                icon: "warning",
-                title: this.text_validation,
-                showConfirmButton: false,
-                timer: 1500
-              });
-            }else{
-              
-              this.DOCTOR = resp.doctor;
-            }
-  })
+
+  });
 }
 
 countDisponibilidad(DOCTOR:any){
@@ -297,22 +308,21 @@ resetPatient(){
       medical: this.medical,
       method_payment: this.method_payment,
       date_appointment: this.date_appointment,
-      amount:this.amount,
-      amount_add :this.amount_add,
-      "doctor_schedule_join_hour_id":this.hour,
-      // doctor_schedule_join_hour_id:this.schedule_selecteds.item.id,
-      // hour:this.hour,
-      segment_hour:this.hour,
-      speciality_id:this.speciality_id,
+      amount: this.amount,
+      amount_add: this.amount_add,
+      "doctor_schedule_join_hour_id": this.hour,
+      segment_hour: this.hour,
+      speciality_id: this.speciality_id,
       name: this.patient.name,
       surname: this.patient.surname,
       phone: this.patient.phone,
       n_doc: this.patient.n_doc,
-      appointment_id:0,
+      appointment_id: 0,
       user_id: this.doctor_id,
       doctor_id: this.doctor_id,
       patient_id: this.patient.id,
       ...this.atentionForm.value,
+
       
     }
 
@@ -331,3 +341,4 @@ resetPatient(){
     });
     }
 }
+
