@@ -196,13 +196,12 @@ export class PresupuestoEditarComponent {
         
       }
       //
-      // vamos mostrando y sumando  de precios en el input amount
-      // los esta colocando al lado del otro, se deben sumar
-
+      // vamos mostrando, estrallendo el valor de precio y se suma en el input amount
       this.amount = 0;
-      this.medical.forEach((element:any) => {
-        this.amount += element.precio;
-      });
+      for (let i = 0; i < this.medical.length; i++) {
+        this.amount += parseFloat(this.medical[i].precio);
+      }
+
 
      
 
@@ -213,6 +212,12 @@ export class PresupuestoEditarComponent {
       this.medical.splice(i,1);
       this.name_medical = '';
       this.precio = 0;
+      // si se elimina un item actualizamos el valor de amount
+      this.amount = 0;
+      for (let i = 0; i < this.medical.length; i++) {
+        this.amount += parseFloat(this.medical[i].precio);
+      }
+      //si se borra todo el array de medical, el amount se pone en 0
       if(this.medical.length === 0){
         this.amount = 0;
       }
