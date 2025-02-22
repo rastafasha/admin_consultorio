@@ -7,8 +7,8 @@
                 <app-back-bottn style="width: 50px;"></app-back-bottn>
                 <div class="col-sm-10">
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a routerLink="/staffs/list">Staffs </a></li>
-                        <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
+                        <li class="breadcrumb-item" *ngIf="user.roles[0]!=='GUEST'"><a routerLink="/staffs/list">Staffs </a></li>
+                        <li class="breadcrumb-item" *ngIf="user.roles[0]!=='GUEST'"><i class="feather icon-chevron-right"></i></li>
                         <li class="breadcrumb-item active">Personal Edit </li>
                     </ul>
                 </div>
