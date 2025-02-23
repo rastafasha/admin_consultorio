@@ -17,34 +17,34 @@ export class AppointmentService {
 
   listConfig(){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
-    const URL = url_servicios+'/appointment/config';
+    const URL = url_servicios+'/appointments/config';
     return this.http.get(URL, {headers:headers});
   }
 
   lisFiter(data:any){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
-    const URL = url_servicios+"/appointment/filter";
+    const URL = url_servicios+"/appointments/filter";
     return this.http.post(URL,data, {headers:headers});
   }
   lisFiterByDoctor(data:any, doctor_id:number){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
-    const URL = url_servicios+"/appointment/filterbydoctor/"+doctor_id;
+    const URL = url_servicios+"/appointments/filterbydoctor/"+doctor_id;
     return this.http.post(URL,data, {headers:headers});
   }
   pendings(){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
-    const URL = url_servicios+"/appointment/pendientes";
+    const URL = url_servicios+"/appointments/pendientes";
     return this.http.get(URL, {headers:headers});
   }
   pendingsbyDoctor(doctor_id:number){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
-    const URL = url_servicios+"/appointment/pendientesbydoctor/"+doctor_id;
+    const URL = url_servicios+"/appointments/pendientesbydoctor/"+doctor_id;
     return this.http.get(URL, {headers:headers});
   }
 
   getPatient(n_doc =''){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
-    const URL = url_servicios+"/appointment/patient?n_doc="+n_doc;
+    const URL = url_servicios+"/appointments/patient?n_doc="+n_doc;
     return this.http.get(URL, {headers:headers});
   }
   listAppointments(page=1, search='', speciality_id=0,date= ''){
@@ -82,7 +82,7 @@ export class AppointmentService {
       LINK+="&date="+date;
     }
     
-    const URL = url_servicios+'/appointment/byDoctor/'+doctor_id+'/?page='+page+LINK;
+    const URL = url_servicios+'/appointments/byDoctor/'+doctor_id+'/?page='+page+LINK;
     return this.http.get(URL, {headers:headers});
   }
 
@@ -95,22 +95,22 @@ export class AppointmentService {
   }
   showAppointment(appointment_id:any){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
-    const URL = url_servicios+"/appointment/show/"+appointment_id;
+    const URL = url_servicios+"/appointments/show/"+appointment_id;
     return this.http.get(URL,{headers:headers});
   }
   editAppointment(data:any, appointment_id:any){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
-    const URL = url_servicios+"/appointment/update/"+appointment_id;
+    const URL = url_servicios+"/appointments/update/"+appointment_id;
     return this.http.put(URL,data,{headers:headers});
   }
   deleteAppointment(appointment_id:any){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
-    const URL = url_servicios+"/appointment/destroy/"+appointment_id;
+    const URL = url_servicios+"/appointments/destroy/"+appointment_id;
     return this.http.delete(URL, {headers:headers});
   }
   updateConfirmation(data:any, appointment_id:any){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
-    const URL = url_servicios+"/appointment/update/cofirmation/"+appointment_id;
+    const URL = url_servicios+"/appointments/update/cofirmation/"+appointment_id;
     return this.http.put(URL,data,{headers:headers});
   }
 
@@ -133,7 +133,7 @@ export class AppointmentService {
   }
   cancelAppointment(appointment_id:any){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
-    const URL = url_servicios+"/appointment/cancel/"+appointment_id;
+    const URL = url_servicios+"/appointments/cancel/"+appointment_id;
     return this.http.delete(URL, {headers:headers});
   }
 }
