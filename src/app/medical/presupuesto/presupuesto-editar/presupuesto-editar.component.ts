@@ -11,6 +11,7 @@ import { DoctorService } from '../../doctors/service/doctor.service';
 import { SpecialitieService } from '../../specialitie/service/specialitie.service';
 import { RolesService } from '../../roles/service/roles.service';
 import { AppointmentService } from '../../appointment/service/appointment.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 declare let $:any;  
 
 @Component({
@@ -21,11 +22,13 @@ declare let $:any;
 export class PresupuestoEditarComponent {
 
   public routes = routes;
+  public presupuestoForm: FormGroup;
     titlePage :string;
     valid_form_success = false;
     public text_validation = '';
     public text_success = '';
   
+    pageTitle = 'Presupuesto';
     isediting=false;
     isdisabled=false;
     isdoctor=false;
@@ -34,15 +37,15 @@ export class PresupuestoEditarComponent {
     n_doc :number;
     phone = '';
     email = '';
-    amount = 0;
+    amount : number;
   
     laboratory = false;
     laboratory_number = 1;
   
-    public medical:any = [];
+    public medical: any = []; // Ensure medical is initialized as an array
     description:any;
     name_medical:any;
-    precio= 0;
+    precio:number;
     
     presupuesto_id:number;
     speciality_id:number;
@@ -63,6 +66,7 @@ export class PresupuestoEditarComponent {
     speciality:Speciality [];
     specialities:Speciality [];
     DOCTOR_SELECTED:any;
+    presupuestoSeleccionado:any;
 
     id = 0;
   
@@ -76,6 +80,7 @@ export class PresupuestoEditarComponent {
       public specialitiService: SpecialitieService,
       public roleService: RolesService,
       public appointmentService: AppointmentService,
+      public fb: FormBuilder,
     ){
       this.user = this.authService.user;
     }
@@ -94,11 +99,12 @@ export class PresupuestoEditarComponent {
       this.isdoctor = true;
       this.isdisabled = false;
     }
-
+    // this.ativatedRoute.params.subscribe( ({id}) => this.cargarPresupuesto(id));
       this.ativatedRoute.params.subscribe((resp:any)=>{
         this.presupuesto_id = resp.id;
+        // this.cargarPresupuesto();
         if(this.presupuesto_id ){
-          this.getAppointment();
+          this.getPresupuesto();
           this.titlePage = 'Editando Presupuesto';
           this.isediting = true;
           if(this.isediting === true){
@@ -115,9 +121,46 @@ export class PresupuestoEditarComponent {
       
     }
   
-    getAppointment(){
-      this.presupuestoService.getPresupuesto(this.presupuesto_id).subscribe((resp:Presupuesto)=>{
+    cargarPresupuesto(){
+
+      // this.patient_id = id;
+  
+      if (this.patient_id) {
+        this.pageTitle = 'Edit ';
+        this.presupuestoService.getPresupuesto(this.presupuesto_id).subscribe(
+          (resp:any) => {
+            // this.presupuestoForm.patchValue({
+            //   id: resp.id,
+            //   n_doc: resp.patient.n_doc,
+            //   name: resp.patient.name,
+            //   surname: resp.patient.surname,
+            //   phone: resp.patient.phone,
+            //   name_companion: resp.patient.name_companion,
+            //   surname_companion: resp.patient.surname_companion,
+            //   antecedent_alerg: resp.patient.antecedent_alerg,
+            //   description: resp.description,
+            //   diagnostico: resp.diagnostico,
+            //   speciality_id: resp.speciality_id,
+            //   amount: resp.amount,
+            //   medical: resp.medical,
+            //   // user_id: this.patientSeleccionado.id,
+  
+            // });
+            this.presupuestoSeleccionado = resp;
+            console.log(this.presupuestoSeleccionado);
+          }
+        );
+      } else {
+        this.pageTitle = 'Create Blog';
+      }
+
+      // this.validarFormulario();
+  
+    }
+    getPresupuesto(){
+      this.presupuestoService.getPresupuesto(this.presupuesto_id).subscribe((resp:any)=>{
         this.presupuesto_selected = resp;
+        // console.log(this.presupuesto_selected);
         this.patient = this.presupuesto_selected.patient;
         this.patient_id = this.presupuesto_selected.patient.id;
         this.n_doc = this.presupuesto_selected.patient.n_doc;
@@ -131,14 +174,30 @@ export class PresupuestoEditarComponent {
         this.doctor = this.presupuesto_selected.doctor.full_name;
         this.speciality_id = this.presupuesto_selected.speciality_id;
         this.amount = this.presupuesto_selected.amount;
-        this.medical = this.presupuesto_selected.medical;
-  
+        this.medical = this.presupuesto_selected.medical; 
+        
       });
-      
-  
     }
+
+    validarFormulario(){
+      this.presupuestoForm = this.fb.group({
+        name: [''],
+        surname: [''],
+        n_doc: [''],
+        phone: [''],
+        name_medical:[''],
+        description:[''],
+        diagnostico: [''],
+        amount: [''],
+        // hour:[''],
+        speciality_id:[''],
+        patient_id:[''],
+        doctor_id:[''],
+      })
+    }
+
+
   
-    
     getSpecialities(){
       this.presupuestoService.listConfig().subscribe((resp:any)=>{
         this.specialities = resp.specialities;
@@ -146,22 +205,18 @@ export class PresupuestoEditarComponent {
     }
 
     getDoctor(){
-  
-
       this.doctorService.showDoctor(this.doctor_id).subscribe((resp:any)=>{
         this.DOCTOR_SELECTED = resp.user;
-        // console.log(this.DOCTOR_SELECTED);
         this.speciality_id = this.DOCTOR_SELECTED.speciality_id;
         this.specialitiService.showSpeciality(this.speciality_id ).subscribe((resp:any)=>{
-          console.log(resp);
+          // console.log(resp);
         })
-    
       })
     }
 
     filterPatient(){
       this.appointmentService.getPatient(this.n_doc+"").subscribe((resp:any)=>{
-        console.log(resp);
+        // console.log(resp);
         this.patient = resp;
         if(resp.menssage === 403){
           this.name= '';
@@ -197,99 +252,58 @@ export class PresupuestoEditarComponent {
         this.precio = 0;
         
       }
-      //
-      // vamos mostrando, estrallendo el valor de precio y se suma en el input amount
       this.amount = 0;
       for (let i = 0; i < this.medical.length; i++) {
         this.amount += parseFloat(this.medical[i].precio);
       }
-
-
-     
-
-
-      }
+    }
 
     deleteMedical(i:any){
       this.medical.splice(i,1);
       this.name_medical = '';
       this.precio = 0;
-      // si se elimina un item actualizamos el valor de amount
       this.amount = 0;
       for (let i = 0; i < this.medical.length; i++) {
         this.amount += parseFloat(this.medical[i].precio);
       }
-      //si se borra todo el array de medical, el amount se pone en 0
       if(this.medical.length === 0){
         this.amount = 0;
       }
-
     }
-  
+
     
-    // eslint-disable-next-line no-debugger
-    save(){debugger
-      this.text_validation = '';
-      // if(!this.name_laboratory){
-      //   this.text_validation = 'Es requerido ingresar un nombre';
-      //   return;
-      // }
-
   
-      const formData = new FormData();
-      if(this.presupuesto_id){
+    save(){
+      
+      const data ={
+      
+        medical: this.medical,
+        amount: this.amount,
+        speciality_id: this.speciality_id,
+        description: this.description,
+        diagnostico: this.diagnostico,
+        
+        patient_id: this.patient_id,
+        name: this.name,
+        email: this.email,
+        n_doc: this.n_doc,
+        surname: this.surname,
+        phone: this.phone,
+        
+        presupuesto_id: this.presupuesto_id,
+        user_id: this.doctor_id,
+        doctor_id: this.doctor_id,
 
-        formData.append('presupuesto_id', this.presupuesto_selected.id+'');
-      }
+        // ...this.atentionForm.value,
   
-      
-      if(this.phone){
-        formData.append('phone', this.phone);
+        
       }
-      if(this.email){
-        formData.append('email', this.email);
-      }
-      if(this.surname){
-        formData.append('surname', this.surname);
-      }
-      if(this.name){
-        formData.append('name', this.name);
-      }
-      if(this.n_doc){
-        formData.append('n_doc', this.n_doc+'');
-      }
-      if(this.patient_id){
-        formData.append('patient_id', this.patient_id+'');
-      }
-      if(this.doctor_id){
-      formData.append('doctor_id', this.user.id+'');
-      }
-      
-      if(this.speciality_id){
-        formData.append('speciality_id', this.speciality_id+'');
-      }
-      if(this.description){
-        formData.append('description', this.description);
 
-      }
-      if(this.diagnostico){
-        formData.append('diagnostico', this.diagnostico);
-
-      }
-      if (this.medical.length > 0) {
-        formData.append('medical', JSON.stringify(this.medical));
-
-      }
-      if(this.amount !== null && this.amount !== undefined){
-        formData.append('amount', this.amount+'');
-      }
-      
       
   
       if(this.presupuesto_id){
-        //editamos
-
-        this.presupuestoService.editPresupuesto(formData, this.presupuesto_id).subscribe((resp:any)=>{
+        this.presupuestoService.editPresupuesto(data, this.presupuesto_id).subscribe((resp:any)=>{
+          console.log(data);
           if(resp.message == 403){
             this.text_validation = resp.message_text;
             Swal.fire({
@@ -311,9 +325,9 @@ export class PresupuestoEditarComponent {
                   this.router.navigate(['/presupuesto/list']);
               }
         })
-      }else {
-        //creamos
-        this.presupuestoService.createPresupuesto(formData).subscribe((resp:any)=>{
+      } else {
+      console.log('Creating new presupuesto with data:', data);
+        this.presupuestoService.createPresupuesto(data).subscribe((resp:any)=>{
           if(resp.message == 403){
             this.text_validation = resp.message_text;
             Swal.fire({
@@ -336,7 +350,5 @@ export class PresupuestoEditarComponent {
               }
         })
       }
-  
     }
-
 }

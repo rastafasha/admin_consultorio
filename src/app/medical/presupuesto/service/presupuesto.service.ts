@@ -36,6 +36,31 @@ export class PresupuestoService {
     const URL = url_servicios+'/presupuesto?page='+page+LINK;
     return this.http.get(URL, {headers:headers});
   }
+
+  listAppointmentDocts(
+    doctor_id:any, 
+    page=1, 
+    search='', 
+    search_patient='',
+    date= '',
+  ){
+    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    let LINK = "";
+    if(search){
+      LINK+="&search="+search;
+    }
+    if(search_patient){
+      LINK+="&search_patient="+search_patient;
+      }
+    
+    if(date){
+      LINK+="&date="+date;
+    }
+    
+    const URL = url_servicios+'/presupuesto/byDoctor/'+doctor_id+'/?page='+page+LINK;
+    return this.http.get(URL, {headers:headers});
+  }
+
   
 
   listConfig(){
@@ -77,7 +102,13 @@ export class PresupuestoService {
 
   updateStatus(data:any, presupuesto_id:any){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
-    const URL = url_servicios+"/pub/update/status/"+presupuesto_id;
+    const URL = url_servicios+"/presupuesto/update/status/"+presupuesto_id;
+    return this.http.put(URL,data,{headers:headers});
+  }
+
+  updateConfirmation(data:any, presupuesto_id:any){
+    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const URL = url_servicios+"/presupuesto/update/cofirmation/"+presupuesto_id;
     return this.http.put(URL,data,{headers:headers});
   }
 }
