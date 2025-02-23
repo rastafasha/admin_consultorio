@@ -312,7 +312,7 @@ resetPatient(){
       amount_add: this.amount_add,
       "doctor_schedule_join_hour_id": this.hour,
       segment_hour: this.hour,
-      speciality_id: this.speciality_id,
+      speciality_id: this.DOCTOR_SELECTED.speciality_id,
       name: this.patient.name,
       surname: this.patient.surname,
       phone: this.patient.phone,
