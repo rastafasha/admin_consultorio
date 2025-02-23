@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { DoctorService } from 'src/app/medical/doctors/service/doctor.service';
 import { StaffService } from 'src/app/medical/staff/service/staff.service';
 import { AuthService } from 'src/app/shared/auth/auth.service';
 import { routes } from 'src/app/shared/routes/routes';
@@ -32,6 +31,7 @@ export class RegisterComponent {
     password: new FormControl('', [Validators.required]),
     confirmPassword: new FormControl('', [Validators.required]),
     acepta: new FormControl('', [Validators.required]),
+    role_id: new FormControl('9'),
   });
 
   get f() {
