@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { routes } from 'src/app/shared/routes/routes';
 import { StaffService } from '../service/staff.service';
 import { RolesService } from '../../roles/service/roles.service';
+import { SpecialitieService } from '../../specialitie/service/specialitie.service';
 
 @Component({
   selector: 'app-edit-staff-n',
@@ -26,6 +27,8 @@ export class EditStaffNComponent {
   public address = '';
 
   public roles:any = [];
+  public specialities:any = [];
+  public speciality_id:number;
   public FILE_AVATAR:any;
   public IMAGE_PREVISUALIZA:any = 'assets/img/user-06.jpg';
 
@@ -42,6 +45,7 @@ export class EditStaffNComponent {
     public router: Router,
     public ativatedRoute: ActivatedRoute,
     public roleService: RolesService,
+    public specialidadesService: SpecialitieService,
   ){
 
   }
@@ -54,6 +58,7 @@ export class EditStaffNComponent {
       this.user_id = resp.id;
      })
      this.showUser();
+     this.getConfig();
   }
   showUser(){
     this.staffService.getUser(this.user_id).subscribe((resp:any)=>{
@@ -82,6 +87,12 @@ export class EditStaffNComponent {
     this.roleService.listRoles().subscribe((resp:any)=>{
       // console.log(resp);
       this.roles = resp.roles;
+    })
+  }
+
+  getConfig(){
+    this.specialidadesService.listSpecialities().subscribe((resp:any)=>{
+      this.specialities = resp.specialities;
     })
   }
 
@@ -124,6 +135,9 @@ export class EditStaffNComponent {
     // formData.append('id', this.user_id);
     
     
+    if(this.speciality_id ){
+      formData.append('speciality_id', this.speciality_id+'');
+    }
     if(this.selectedValue ){
       formData.append('role_id', this.selectedValue);
     }
