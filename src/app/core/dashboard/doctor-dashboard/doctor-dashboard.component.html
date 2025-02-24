@@ -57,8 +57,22 @@
                 </div>
             </div>
         </div>
+        <div class="container" *ngIf="doctor.status === 2 && schedule_selecteds === null">
+            <div class="card">
+                <div class="card-body">
+                    <div class="chart-title patient-visit text-center" style="display: flex;  flex-direction: column; gap:10px; align-items: center; justify-content: center; gap:10px">
+                        <h4>Favor complete su registro y horario de atención, <br>
+                             y verifique su información de contacto para poder continuar</h4>
+                        <button  [routerLink]="['/doctors/list/edit/', user.id]"
+                                             type="button" class="btn btn-outline-success mb-3">
+                                                Finalizar registro
+                                            </button>
+                    </div>	
+                </div>
+            </div>
+        </div>
 
-        <div class="doctor-list-blk" *ngIf="doctor_id && doctor.status === 2">
+        <div class="doctor-list-blk" *ngIf="doctor_id && doctor.status === 2 || schedule_selecteds !== null">
             <div class="row">
                 <div class="col-xl-3 col-md-6 col-xs-12 col-sm-6">
                     <div class="doctor-widget border-right-bg">
@@ -128,7 +142,7 @@
         </div>
         
         <!-- pacientes recientes -->
-        <div class="row" *ngIf="doctor.status === 2">
+        <div class="row" *ngIf="doctor.status === 2 && schedule_selecteds !== null">
             <div class="col-12 col-md-12 col-lg-12 col-xl-6 ">
                 <div class="card flex-fill comman-shadow">
                     <div class="card-header">
@@ -220,7 +234,7 @@
             
         </div>
 
-        <div class="row" *ngIf="doctor.status === 2">
+        <div class="row" *ngIf="doctor.status === 2 && schedule_selecteds !== null">
             <!-- Transferencias Recientes -->
             <div class="col-12 col-md-12 col-lg-12 col-xl-6 ">
                 <div class="card flex-fill comman-shadow">
@@ -260,7 +274,7 @@
                 </div>
             </div>
             <!-- Pagos Recientes -->
-            <div class="col-12 col-md-12 col-lg-12 col-xl-6 " *ngIf="doctor.status === 2">
+            <div class="col-12 col-md-12 col-lg-12 col-xl-6 " *ngIf="doctor.status === 2 && schedule_selecteds !== null">
                 <div class="card flex-fill comman-shadow">
                     <div class="card-header">
                         <h4 class="card-title d-inline-block">Pagos Recientes</h4> <a [routerLink]="[routes.pagosListDoctor, doctor_id]" class="patient-views float-end">Todo</a>
@@ -312,7 +326,7 @@
         </div>
         <!-- Entradas -->
         <div class="row" *ngIf="doctor_id " >
-            <div class="col-12 col-md-12 col-lg-12 col-xl-7" *ngIf="doctor.status === 2">
+            <div class="col-12 col-md-12 col-lg-12 col-xl-7" *ngIf="doctor.status === 2 && schedule_selecteds !== null">
                 <div class="card">
                     <div class="card-body">
                         <div class="chart-title patient-visit mb-0">
@@ -345,7 +359,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-12 col-lg-6 col-xl-5 d-flex" *ngIf="doctor.status === 2">
+            <div class="col-12 col-md-12 col-lg-6 col-xl-5 d-flex" *ngIf="doctor.status === 2 && schedule_selecteds !== null">
                 <div class="card">
                     <div class="card-body">
                             <apx-chart class="donut-chart-radial"
@@ -359,26 +373,11 @@
                     </div>
                 </div>
             </div>
-            <!-- <div class="col-12 col-md-12 col-lg-6 col-xl-2 d-flex">
-                <div class="struct-point">
-                    <div class="card patient-structure">
-                        <div class="card-body">
-                            <h5>New Patients</h5>
-                            <h3>56<span class="status-green"><img src="assets/img/icons/sort-icon-01.svg" alt="" class="me-1">60%</span></h3>
-                        </div>
-                    </div>
-                    <div class="card patient-structure">
-                        <div class="card-body">
-                            <h5>Old Patients</h5>
-                            <h3>35<span class="status-pink"><img src="assets/img/icons/sort-icon-02.svg" alt="" class="me-1">-20%</span></h3>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
+            
         </div>
         <!-- Mis Citas -->
         <div class="row" *ngIf="doctor_id ">
-            <div class="col-12 col-md-12  col-xl-7" *ngIf="doctor.status === 2">
+            <div class="col-12 col-md-12  col-xl-7" *ngIf="doctor.status === 2 && schedule_selecteds !== null">
                 <div class="card">
                     <div class="card-body">
                         <div class="chart-title patient-visit">

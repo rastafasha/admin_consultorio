@@ -308,9 +308,8 @@ public routes = routes;
 
   }
 
-  // eslint-disable-next-line no-debugger
-  cambiarStatus(data:any){debugger
-    const VALUE = data.confimation;
+  cambiarStatus(data:any){
+    const VALUE = data.status;
     console.log(VALUE);
     
     this.presupuestoService.updateConfirmation(data, data.id).subscribe(
