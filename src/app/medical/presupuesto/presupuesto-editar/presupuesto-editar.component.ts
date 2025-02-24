@@ -275,47 +275,7 @@ export class PresupuestoEditarComponent {
   
     save(){
       // this.text_validation = '';
-      // const formData = new FormData();
-      // console.log('FormData before sending:', formData.value);
-      // if(this.presupuesto_id){
-      //   formData.append('presupuesto_id', this.presupuesto_selected.id+'');
-      // }
-      // if(this.phone){
-      //   formData.append('phone', this.phone);
-      // }
-      // if(this.email){
-      //   formData.append('email', this.email);
-      // }
-      // if(this.surname){
-      //   formData.append('surname', this.surname);
-      // }
-      // if(this.name){
-      //   formData.append('name', this.name);
-      // }
-      // if(this.n_doc){
-      //   formData.append('n_doc', this.n_doc+'');
-      // }
-      // if(this.patient_id){
-      //   formData.append('patient_id', this.patient_id+'');
-      // }
-      // if(this.doctor_id){
-      //   formData.append('doctor_id', this.user.id+'');
-      // }
-      // if(this.speciality_id){
-      //   formData.append('speciality_id', this.speciality_id+'');
-      // }
-      // if(this.description){
-      //   formData.append('description', this.description);
-      // }
-      // if(this.diagnostico){
-      //   formData.append('diagnostico', this.diagnostico);
-      // }
-      // if (this.medical.length > 0) {
-      //   formData.append('medical', JSON.stringify(this.medical));
-      // }
-      // if(this.amount !== null && this.amount !== undefined){
-      //   formData.append('amount', this.amount+'');
-      // }
+      
 
       const data ={
       
@@ -364,7 +324,12 @@ export class PresupuestoEditarComponent {
                     showConfirmButton: false,
                     timer: 1500
                   });
-                  this.router.navigate(['/presupuesto/list']);
+                  if(this.user.roles[0] === 'DOCTOR'){
+                    this.router.navigate(['/presupuesto/list/doctor']);
+                  }else{
+
+                    this.router.navigate(['/presupuesto/list']);
+                  }
               }
         })
       } else {
@@ -388,7 +353,12 @@ export class PresupuestoEditarComponent {
                     showConfirmButton: false,
                     timer: 1500
                   });
-                  this.router.navigate(['/presupuesto/list']);
+                  if(this.user.roles[0] === 'DOCTOR'){
+                    this.router.navigate(['/presupuesto/list/doctor']);
+                  }else{
+
+                    this.router.navigate(['/presupuesto/list']);
+                  }
               }
         })
       }
