@@ -74,7 +74,7 @@ export class PresupuestoService {
     return this.http.get(URL, {headers:headers})
     .pipe(
       map((resp:any)=>{
-        return resp.presupuesto;
+        return resp;
       })
     );
   }
@@ -110,5 +110,11 @@ export class PresupuestoService {
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
     const URL = url_servicios+"/presupuesto/update/cofirmation/"+presupuesto_id;
     return this.http.put(URL,data,{headers:headers});
+  }
+
+  deletePresupuestoItem(presupuesto_id:any, presupuestoitem_id:number){
+    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+    const URL = url_servicios+'/presupuesto/destroy/item/'+presupuesto_id+'/'+presupuestoitem_id;
+    return this.http.delete(URL, {headers:headers});
   }
 }

@@ -66,7 +66,7 @@ interface data {
 })
 export class AdminDashboardComponent {
   public routes = routes;
-  public selectedValue: string ='2024';
+  public selectedValue ='2024';
   @ViewChild('chart') chart!: ChartComponent;
   public chartOptionsOne: Partial<ChartOptions>;
   public chartOptionsTwo: Partial<ChartOptions>;
@@ -79,21 +79,21 @@ export class AdminDashboardComponent {
   public appointments:any = [];
   public appointment_pendings:any = [];
 
-  public num_appointments_current: number = 0;
-  public num_appointments_before: number = 0;
-  public porcentaje_d: number = 0;
+  public num_appointments_current = 0;
+  public num_appointments_before = 0;
+  public porcentaje_d = 0;
 
-  public num_patients_current:number = 0;
-  public num_patients_before:number = 0;
-  public porcentaje_dp:number = 0;
+  public num_patients_current = 0;
+  public num_patients_before = 0;
+  public porcentaje_dp = 0;
 
-  public num_appointments_attention_current:number = 0;
-  public num_appointments_attention_before:number = 0;
-  public porcentaje_da:number = 0;
+  public num_appointments_attention_current = 0;
+  public num_appointments_attention_before = 0;
+  public porcentaje_da = 0;
 
-  public num_appointments_total_current: number = 0;
-  public num_appointments_total_before: number = 0;
-  public porcentaje_dt: number = 0;
+  public num_appointments_total_current = 0;
+  public num_appointments_total_before = 0;
+  public porcentaje_dt = 0;
 
   public query_patient_by_genders:any = [];
   public query_patients_specialities:any = [];
@@ -269,7 +269,7 @@ export class AdminDashboardComponent {
     this.getDashboardAdmin();
     this.getDashboardAdminYear();
     // this.getAppointmentPending();
-    let USER = localStorage.getItem("user");
+    const USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER: '');
   }
 
@@ -305,7 +305,7 @@ export class AdminDashboardComponent {
   }
 
   getDashboardAdminYear(){
-    let data ={
+    const data ={
       year: this.selectedValue,
     }
     this.query_income_year = null;
@@ -314,14 +314,14 @@ export class AdminDashboardComponent {
       //start
       this.query_patient_by_genders = resp.query_patients_by_gender;
       
-      let data_male:any = [];
-      let data_female:any = [];
+      const data_male:any = [];
+      const data_female:any = [];
       this.query_patient_by_genders.forEach((item:any) => {
         data_male.push(item.hombre);
         data_female.push(item.mujer);
       });
 
-      let Patient_by_Genders =[
+      const Patient_by_Genders =[
         {
           name: 'Male',
           color: '#513081',
@@ -339,8 +339,8 @@ export class AdminDashboardComponent {
       //start
       this.query_patients_specialities = resp.query_patients_speciality;
 
-      let labels_sp:any = [];
-      let series_sp:any = [];
+      const labels_sp:any = [];
+      const series_sp:any = [];
       this.query_patients_specialities.forEach((patients_speciality:any)=>{
         labels_sp.push(patients_speciality.name)
         series_sp.push(patients_speciality.count)
@@ -353,7 +353,7 @@ export class AdminDashboardComponent {
       //end
       //start
       this.query_income_year = resp.query_income_year;
-      let data_income:any = [];
+      const data_income:any = [];
       this.query_income_year.forEach((element:any) => {
         data_income.push(element.income);
       });
@@ -440,8 +440,6 @@ export class AdminDashboardComponent {
     this.getDashboardAdminYear();
   }
   selecedList: data[] = [
-    {value: '2022'},
-    {value: '2023'},
     {value: '2024'},
     {value: '2025'},
     {value: '2026'},
@@ -449,6 +447,17 @@ export class AdminDashboardComponent {
     {value: '2028'},
     {value: '2029'},
     {value: '2030'},
+    {value: '2031'},
+    {value: '2032'},
+    {value: '2033'},
+    {value: '2034'},
+    {value: '2035'},
+    {value: '2036'},
+    {value: '2037'},
+    {value: '2038'},
+    {value: '2039'},
+    {value: '2040'},
+    
   ];
   
 }

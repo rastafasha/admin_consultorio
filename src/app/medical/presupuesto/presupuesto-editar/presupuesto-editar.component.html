@@ -126,8 +126,15 @@
                                         
                                         <div class="col-12 ">  
                                             <div class="form-group local-forms">
-                                                <label >Item<span class="login-danger">*</span></label>
-                                                <input class="form-control" name="name_medical" [ngModelOptions]="{standalone: true}"  [(ngModel)]="name_medical" type="text"  >
+                                            <label >Item<span class="login-danger">*</span></label>
+                                            <input class="form-control" name="name" [ngModelOptions]="{standalone: true}"  [(ngModel)]="name" type="text" required>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-12 ">
+                                            <div class="form-group local-forms">
+                                                <label >Cantidad<span class="login-danger">*</span></label>
+                                                <input class="form-control" name="cantidad" [ngModelOptions]="{standalone: true}" [(ngModel)]="cantidad" type="number"  >
                                             </div>
                                         </div>
                                         <div class="col-12 ">
@@ -152,11 +159,15 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr *ngFor="let key of medical ; let i=index">
+                                                <tr *ngFor="let item of presupuestoitems; let i = index">
                                                     <td>
-                                                        Item: {{key.name_medical}}
+                                                        Item: {{item.name}}
                                                         <br>
-                                                        Precio: {{key.precio | number:'1.2-2' | currency }}
+                                                        cantidad: {{item.cantidad }}
+                                                        <br>
+                                                        Precio: {{item.precio  | currency }}
+                                                        <br>
+                                                        subtotal: {{item.precio * item.cantidad   | currency }}
                                                     </td>
                                                     <td>
                                                         <button class="btn btn-danger btn-sm" (click)="deleteMedical(i)">x</button>
@@ -172,7 +183,7 @@
                             <div class="col-12 d-flex justify-content-end text-right">  
                                 <div class="form-group local-forms col-12 col-md-3">
                                     <p class="text-right m-0 p-0">Total</p>
-                                    <h2 class="p-3 text-right">{{amount | number:'1.2-2' | currency}}</h2>
+                                    <h2 class="p-3 text-right">{{amount  | currency}}</h2>
                                     <!-- <input class="form-control" name="amount" disabled="disabled"    [(ngModel)]="amount" type="number"  > -->
                                 </div>
                             </div>

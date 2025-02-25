@@ -5,7 +5,7 @@ import { routes } from 'src/app/shared/routes/routes';
 import Swal from 'sweetalert2';
 import { LaboratoryService } from '../../laboratory/service/laboratory.service';
 import { PresupuestoService } from '../service/presupuesto.service';
-import { Doctor, Patient, Presupuesto, Speciality } from '../presupuesto-model';
+import { Doctor, Patient, Presupuesto, PresupuestoItems, Speciality } from '../presupuesto-model';
 import { AuthService } from 'src/app/shared/auth/auth.service';
 import { DoctorService } from '../../doctors/service/doctor.service';
 import { SpecialitieService } from '../../specialitie/service/specialitie.service';
@@ -37,15 +37,17 @@ export class PresupuestoEditarComponent {
     n_doc :number;
     phone = '';
     email = '';
-    amount : number;
+    amount = 0;
   
     laboratory = false;
     laboratory_number = 1;
   
-    public medical: any = []; // Ensure medical is initialized as an array
+    public presupuestoitems: any = []; // Ensure medical is initialized as an array
     description:any;
-    name_medical:any;
+    item:any;
     precio:number;
+    cantidad:number;
+    item_id:number;
     
     presupuesto_id:number;
     speciality_id:number;
@@ -121,46 +123,14 @@ export class PresupuestoEditarComponent {
       
     }
   
-    cargarPresupuesto(){
-
-      // this.patient_id = id;
-  
-      if (this.patient_id) {
-        this.pageTitle = 'Edit ';
-        this.presupuestoService.getPresupuesto(this.presupuesto_id).subscribe(
-          (resp:any) => {
-            // this.presupuestoForm.patchValue({
-            //   id: resp.id,
-            //   n_doc: resp.patient.n_doc,
-            //   name: resp.patient.name,
-            //   surname: resp.patient.surname,
-            //   phone: resp.patient.phone,
-            //   name_companion: resp.patient.name_companion,
-            //   surname_companion: resp.patient.surname_companion,
-            //   antecedent_alerg: resp.patient.antecedent_alerg,
-            //   description: resp.description,
-            //   diagnostico: resp.diagnostico,
-            //   speciality_id: resp.speciality_id,
-            //   amount: resp.amount,
-            //   medical: resp.medical,
-            //   // user_id: this.patientSeleccionado.id,
-  
-            // });
-            this.presupuestoSeleccionado = resp;
-            console.log(this.presupuestoSeleccionado);
-          }
-        );
-      } else {
-        this.pageTitle = 'Create Blog';
-      }
-
-      // this.validarFormulario();
-  
-    }
+    
     getPresupuesto(){
       this.presupuestoService.getPresupuesto(this.presupuesto_id).subscribe((resp:any)=>{
-        this.presupuesto_selected = resp;
-        // console.log(this.presupuesto_selected);
+        this.presupuesto_selected = resp.presupuesto;
+        console.log(this.presupuesto_selected);
+        this.presupuestoitems = resp.presupuestoitems ; 
+        console.log(this.presupuestoitems);
+
         this.patient = this.presupuesto_selected.patient;
         this.patient_id = this.presupuesto_selected.patient.id;
         this.n_doc = this.presupuesto_selected.patient.n_doc;
@@ -173,8 +143,7 @@ export class PresupuestoEditarComponent {
         this.diagnostico = this.presupuesto_selected.diagnostico;
         this.doctor = this.presupuesto_selected.doctor.full_name;
         this.speciality_id = this.presupuesto_selected.speciality_id;
-        this.amount = this.presupuesto_selected.amount;
-        this.medical = this.presupuesto_selected.medical; 
+        this.amount = this.presupuesto_selected.amount; 
         
       });
     }
@@ -243,43 +212,69 @@ export class PresupuestoEditarComponent {
     }
 
     addMedicamento() {
-      if (this.name_medical && this.precio > 0) {
-        this.medical.push({
-          name_medical: this.name_medical,
+      if (!this.presupuestoitems) {
+          this.presupuestoitems = [];
+      }
+      if (this.name && this.precio > 0) {
+        this.presupuestoitems.push({
+          // item_id : 1,
+          name: this.name,
+          cantidad: this.cantidad+'',
           precio: this.precio+''
         });
-        this.name_medical = '';
+        this.name = '';
         this.precio = 0;
+        this.cantidad = 0;
+        this.amount = 0;
         
       }
-      this.amount = 0;
-      for (let i = 0; i < this.medical.length; i++) {
-        this.amount += parseFloat(this.medical[i].precio);
-      }
-    }
-
-    deleteMedical(i:any){
-      this.medical.splice(i,1);
-      this.name_medical = '';
-      this.precio = 0;
-      this.amount = 0;
-      for (let i = 0; i < this.medical.length; i++) {
-        this.amount += parseFloat(this.medical[i].precio);
-      }
-      if(this.medical.length === 0){
-        this.amount = 0;
+    
+      for (let i = 0; i < this.presupuestoitems.length; i++) {
+        this.amount += parseFloat(this.presupuestoitems[i].precio) * parseFloat(this.presupuestoitems[i].cantidad);
       }
     }
 
     
-  
-    save(){
-      // this.text_validation = '';
+    deleteMedical(i:any){
+      this.presupuestoitems.splice(i,1);
+      this.item = '';
+      this.cantidad = 0;
+      this.precio = 0;
+      this.amount = 0;
       
+
+      if(this.presupuestoitems.length === 0){
+        this.amount = 0;
+        this.item = '';
+        this.cantidad = 0;
+        this.precio = 0;
+      }
+      this.presupuestoService.deletePresupuestoItem(this.presupuesto_id, i+1).subscribe((resp:any)=>{
+        console.log(resp);
+      })
+    }
+
+    
+  
+    
+    // eslint-disable-next-line no-debugger
+    save() {
+       this.presupuestoitems = {
+        id: this.presupuestoitems.length,
+        presupuesto_id: this.presupuesto_id,
+        name: this.name,
+        precio: this.precio,
+        cantidad: this.cantidad,
+       }
 
       const data ={
       
-        medical: this.medical,
+        //revisamos si hubo actualizacion de la lista de presupuestoitems
+        presupuestoitems: this.presupuestoitems,
+
+
+
+
         amount: this.amount,
         speciality_id: this.speciality_id,
         description: this.description,
@@ -295,10 +290,6 @@ export class PresupuestoEditarComponent {
         presupuesto_id: this.presupuesto_id,
         user_id: this.doctor_id,
         doctor_id: this.doctor_id,
-
-        // ...this.atentionForm.value,
-  
-        
       }
 
       

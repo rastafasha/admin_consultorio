@@ -1,26 +1,28 @@
 export class Presupuesto {
     id:number;
     doctor_id:number;
-        patient_id:number;
-        speciality_id:number;
-        doctor: Doctor;
-        patient: Patient;
-        speciality: Speciality;
-        user_id:number;
-        amount:number;
-        status:number;
-        confimation:string;
-        description:string;
-        diagnostico:string;
-        date_presupuesto:string;
-        date_presupuesto_format:string;
-        medical:object;
+    patient_id:number;
+    speciality_id:number;
+    doctor: Doctor;
+    patient: Patient;
+    speciality: Speciality;
+    user_id:number;
+    amount:number;
+    status:number;
+    confimation:string;
+    description:string;
+    diagnostico:string;
+    date_presupuesto:string;
+    date_presupuesto_format:string;
+    medical:object;
+    presupuestoitems: PresupuestoItems[]; // Added property for presupuesto items
 
     
 }
-export class Medical {
+export class PresupuestoItems {
     id:number;
-    name_medical:string;
+    item:string;
+    cantidad:number;
     precio:number;
 
     

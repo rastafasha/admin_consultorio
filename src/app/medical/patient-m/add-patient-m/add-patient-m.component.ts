@@ -15,45 +15,45 @@ export class AddPatientMComponent {
   public routes = routes;
   public selectedValue!: string;
 
-  public name: string = '';
-  public surname: string = '';
-  public phone: string = '';
-  public email: string = '';
-  public birth_date: string = '';
-  public gender: number = 1;
-  public education: string = '';
-  public address: string = '';
+  public name = '';
+  public surname = '';
+  public phone = '';
+  public email = '';
+  public birth_date = '';
+  public gender = 1;
+  public education = '';
+  public address = '';
   public n_doc: any;
 
  
   public FILE_AVATAR:any;
   public IMAGE_PREVISUALIZA:any = 'assets/img/user-06.jpg';
 
-  valid_form:boolean = false;
-  valid_form_success:boolean = false;
+  valid_form = false;
+  valid_form_success = false;
   text_validation:any = null;
-  public text_success:string = '';
+  public text_success = '';
 
-  public antecedent_personal:string = '';
-  public antecedent_family:string = '';
-  public antecedent_alerg:string = '';
+  public antecedent_personal = '';
+  public antecedent_family = '';
+  public antecedent_alerg = '';
 
-  public name_companion:string = '';
-  public surname_companion:string = '';
-  public mobile_companion:string = '';
-  public relationship_companion:string = '';
+  public name_companion = '';
+  public surname_companion = '';
+  public mobile_companion = '';
+  public relationship_companion = '';
 
-  public name_responsable:string = '';
-  public surname_responsable:string = '';
-  public mobile_responsable:string = '';
-  public relationship_responsable:string = '';
+  public name_responsable = '';
+  public surname_responsable = '';
+  public mobile_responsable = '';
+  public relationship_responsable = '';
 
-  public ta:number = 0;
-  public temperature:number = 0;
-  public fc:number = 0;
-  public fr:number = 0;
-  public peso:number = 0;
-  public current_desease:string = '';
+  public ta = 0;
+  public temperature = 0;
+  public fc = 0;
+  public fr = 0;
+  public peso = 0;
+  public current_desease = '';
   public doctor_id:any;
   public user:any;
 
@@ -69,7 +69,7 @@ export class AddPatientMComponent {
   ngOnInit(): void {
     window.scrollTo(0, 0);
     this.doctorService.closeMenuSidebar();
-    let USER = localStorage.getItem("user");
+    const USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER: '');
     this.doctor_id = this.user.id;
     console.log(this.doctor_id);
@@ -84,7 +84,7 @@ export class AddPatientMComponent {
     }
     this.text_validation = '';
     this.FILE_AVATAR = $event.target.files[0];
-    let reader = new FileReader();
+    const reader = new FileReader();
     reader.readAsDataURL(this.FILE_AVATAR);
     reader.onloadend = ()=> this.IMAGE_PREVISUALIZA = reader.result;
   }
@@ -103,7 +103,7 @@ export class AddPatientMComponent {
 
 
     // this.valid_form = false;
-    let formData = new FormData();
+    const formData = new FormData();
 
     formData.append('name', this.name);
     formData.append('surname', this.surname);
@@ -205,40 +205,30 @@ export class AddPatientMComponent {
     this.patientService.createPatient(formData).subscribe((resp:any)=>{
       // console.log(resp);
       if(resp.message == 403){
-        this.text_validation = resp.message_text;
-      }else{
-        // this.valid_form_success = true;
-        // this.text_success = "El Paciente se ha Creado";
-        Swal.fire('Exito!', `El Paciente se ha Creado`, 'success');
-        // this.name = '';
-        // this.surname = '';
-        // this.phone = '';
-        // this.email = '';
-        // this.birth_date = '';
-        // this.education = '';
-        // this.address = '';
-        // this.n_doc = '';
-        // this.antecedent_personal = '';
-        // this.antecedent_family = '';
-        // this.antecedent_alerg = '';
-        // this.name_companion = '';
-        // this.surname_companion = '';
-        // this.mobile_companion = '';
-        // this.relationship_companion = '';
-        // this.name_responsable = '';
-        // this.surname_responsable = '';
-        // this.mobile_responsable = '';
-        // this.relationship_responsable = '';
-        // this.ta = 0;
-        // this.temperature = 0;
-        // this.fc = 0;
-        // this.fr = 0;
-        // this.peso = 0;
-        // this.current_desease = '';
-        // this.FILE_AVATAR = '';
-        
-        // this.router.navigate(['/patient/list/doctor/', this.doctor_id]);
-      }
+                  this.text_validation = resp.message_text;
+                  Swal.fire({
+                    position: "top-end",
+                          icon: "warning",
+                          title: this.text_validation,
+                          showConfirmButton: false,
+                          timer: 1500
+                        });
+                      }else{
+                          this.text_success = 'Se guardó la informacion del Laboratorio con la cita'
+                        Swal.fire({
+                          position: "top-end",
+                          icon: "success",
+                          title: this.text_success,
+                          showConfirmButton: false,
+                          timer: 1500
+                        });
+                        if(this.user.roles[0] === 'DOCTOR'){
+                          this.router.navigate(['/patient/list/doctor']);
+                        }else{
+      
+                          this.router.navigate(['/patient/list']);
+                        }
+                    }
     })
 
 
