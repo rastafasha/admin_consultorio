@@ -104,4 +104,6 @@ export class RegisterComponent {
   confirmPasswordFunc(){
     this.confirmPasswordClass = !this.confirmPasswordClass
   }
+
+ 
 }
