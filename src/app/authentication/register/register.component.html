@@ -149,7 +149,6 @@
                       </div>
                     </div>
                     <div class="form-group ">
-                      <!-- <label>Email <span class="login-danger">*</span></label> -->
                       <label>Correo Electrónico <span class="login-danger">*</span></label>
                       <input
                         class="form-control"
@@ -171,7 +170,6 @@
                           Email es requerido.
                         </div>
                         <div *ngIf="f['email'].errors && f['email'].errors['email']">
-                          <!-- Please, enter valid email address. -->
                           Favor, ingrese un correo válido
                         </div>
                       </div>
@@ -201,7 +199,6 @@
                             f['password'].errors['required']
                           "
                         >
-                          <!-- Password is required. -->
                            Contraseña es requerido.
                         </div>
                       </div>
@@ -210,12 +207,7 @@
                       ></span>
                     </div>
                     <div class="form-group">
-                      <label
-                        >
-                        Confirme Contraseña
-                        <!-- Confirm Password -->
-                        <span class="login-danger">*</span></label
-                      >
+                      <label>Confirme Contraseña <span class="login-danger">*</span></label>
                       <input
                         class="form-control pass-input-confirm"
                         [type]="passwordClass ? 'text' : 'password'"
@@ -239,7 +231,6 @@
                             f['confirmPassword'].errors['required']
                           "
                         >
-                          <!-- Confirm Password is required. -->
                           Confirme Contraseña es requerido
                         </div>
                       </div>
@@ -247,44 +238,23 @@
                         *ngIf="isValidConfirmPassword"
                         class="invalid-feedback"
                       >
-                        <!-- Password not matching -->
                         Contraseña no coincide
                       </div>
                       <span (click)="confirmPasswordFunc()" [ngClass] = "confirmPasswordClass ? 'feather icon-eye' : 'feather icon-eye-off'"
-                        class="profile-views confirm-password"ß
+                        class="profile-views confirm-password"
                       ></span>
                     </div>
                   </div>
                   <div class="forgotpass">
                     <div class="remember-me">
-                      <label
-                        class="custom_check mr-2 mb-0  remember-me"
-                      >
+                      <label class="custom_check mr-2 mb-0  remember-me">
                         Acepto 
-                        <a href="javascript:;">&nbsp; los términos y condiciones</a
-                        >&nbsp; y 
-                        <br>
-                        <br>
-                        <a href="javascript:;">&nbsp; las políticas de privacidad. </a>
+                        <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#aceptaTerminos">los términos y condiciones</a>
                         <input type="checkbox" name="acepta" formControlName="acepta" [value]="true" />
                         <span class="checkmark"></span>
                       </label>
                     </div>
                   </div>
-                  <!-- <div class="forgotpass">
-                    <div class="remember-me">
-                      <label
-                        class="custom_check mr-2 mb-0 d-inline-flex remember-me"
-                      >
-                        I agree to the
-                        <a href="javascript:;">&nbsp; terms of service </a
-                        >&nbsp; and
-                        <a href="javascript:;">&nbsp; privacy policy </a>
-                        <input type="checkbox" name="radio" />
-                        <span class="checkmark"></span>
-                      </label>
-                    </div>
-                  </div> -->
                   <div class="form-group login-btn">
                     <button
                       [disabled]="form.invalid"
@@ -299,25 +269,9 @@
 
                 <div class="next-sign">
                   <p class="account-subtitle">
-                    <!-- Already have account? -->
                     Ya posee una cuenta con nosotros?
-                    <!-- <a [routerLink]="routes.login">Login</a> -->
                     <a [routerLink]="routes.login">Ingresar</a>
                   </p>
-
-                  <!-- Social Login -->
-                  <!-- <div class="social-login">
-                    <a href="javascript:;"
-                      ><img src="assets/img/icons/login-icon-01.svg" alt=""
-                    /></a>
-                    <a href="javascript:;"
-                      ><img src="assets/img/icons/login-icon-02.svg" alt=""
-                    /></a>
-                    <a href="javascript:;"
-                      ><img src="assets/img/icons/login-icon-03.svg" alt=""
-                    /></a>
-                  </div> -->
-                  <!-- /Social Login -->
                 </div>
               </div>
             </div>
@@ -329,3 +283,29 @@
   </div>
 </div>
 <!-- /Main Wrapper -->
+
+<div class="modal " id="aceptaTerminos" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="aceptaTerminosLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="aceptaTerminosLabel">Términos y Condiciones</h5>
+        <!-- <button type="button btn" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button> -->
+      </div>
+      <div class="modal-body">
+        <p>Los datos recogidos en este sitio (únicamente el email o correo electrónico y el teléfono) serán almacenados en bases de datos solo para usos promocionales de esta App. 
+          Dicha información contará con medidas de seguridad y protección de datos personales para prevenir la divulgación no autorizada.
+          Así como la vinculación de información medica del paciente y/o laboratorios serán estrictamente de uso del doctor y/o con las clínicas 
+          o consultorios que hayan adquirido las licencias de uso de Health Connect me.
+           Los doctores, consultorios y/o clínicas podrán optar a uso de las funcionalidades 
+           luego del periodo de prueba una vez adquiridas las licencias de uso mensual cuyo valor 
+           será calculado desde 5.25% de los pagos por citas mensuales según Condiciones 
+           de Uso de HealthConnect me. </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Acepto</button>
+      </div>
+    </div>
+  </div>
+</div>
