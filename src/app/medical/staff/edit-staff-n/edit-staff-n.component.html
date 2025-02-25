@@ -88,13 +88,17 @@
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-4">
                                     <div class="form-group local-forms">
-                                        <label >Educación <span class="login-danger">*</span></label>
-                                        <input class="form-control" name="education" [(ngModel)]="education" type="text"  >
+                                        <label >Especialidad <span class="login-danger">*</span></label>
+                                        <mat-select [(ngModel)]="speciality_id" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Select Speciality">
+                                            <mat-option *ngFor="let data of specialities" [value]="data.id">
+                                            {{data.name}}
+                                            </mat-option>
+                                        </mat-select>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6 col-xl-4">
+                                <div class="col-12 col-md-8">
                                     <div class="form-group local-forms">
-                                        <label >Designación <span class="login-danger">*</span></label>
+                                        <label >Si no encuentra su espcialidad, favor colocar aqui <span class="login-danger">*</span></label>
                                         <input class="form-control" name="designation" [(ngModel)]="designation" type="text"  >
                                     </div>
                                 </div>

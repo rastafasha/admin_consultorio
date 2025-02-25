@@ -101,6 +101,7 @@ export class DoctorDashboardComponent {
   public paymentsbydoc: any =[];
   public appointmentpaysbydoc: any =[];
   public doctor: any =[];
+  public schedule_selecteds: any =[];
 
   constructor(
     public dashboardService:DashboardService,
@@ -286,6 +287,7 @@ export class DoctorDashboardComponent {
       this.doctor = resp.doctor;
       this.appointment_pendings= resp.appointment_pendings.data;
       this.appointments= resp.appointments;
+      this.schedule_selecteds= resp.schedule_selecteds;
 
   
     })

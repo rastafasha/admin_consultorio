@@ -18,9 +18,6 @@
         <!-- /Page Header -->
         <div class="row">
             <div class="col-sm-12" *ngIf="doctor_selected">
-                <div class="col-sm-12" *ngIf="user.roles[0]!=='GUEST'">
-
-                </div>
                 <div class="card" *ngIf="user.roles[0]!=='GUEST'">
                     <div class="card-body">
                         <div class="row">
@@ -36,17 +33,17 @@
                                         <div class="col-lg-4 col-md-4">
                                             <div class="profile-user-box">
                                                 <div class="profile-user-img">
-                                                    <div *ngIf="!doctor_selected.avatar">
+                                                    <div *ngIf="!doctor_selected?.avatar">
                                                         <img src="./assets/img/no-image.jpg" >
                                                     </div>
-                                                    <div *ngIf="doctor_selected.avatar">
-                                                        <img  [src]="doctor_selected.avatar"  [alt]="doctor_selected.name">
+                                                    <div *ngIf="doctor_selected?.avatar">
+                                                        <img  [src]="doctor_selected?.avatar"  [alt]="doctor_selected?.name">
                                                     </div>
                                                     
                                                 </div>
                                                 <div class="names-profiles">
-                                                    <h4>{{doctor_selected.full_name}}</h4>
-                                                    <h5>{{doctor_selected.speciality.name}}</h5>
+                                                    <h4>{{doctor_selected?.full_name}}</h4>
+                                                    <h5>{{doctor_selected?.speciality?.name}}</h5>
                                                 </div>
                                             </div>
                                         </div>
@@ -68,7 +65,10 @@
                                         </div>
                                         <div class="col-lg-4 col-md-4 d-flex align-items-center">
                                             <div class="follow-btn-group">
-                                                <a [routerLink]="['/doctors/list/edit/', doctor_id]" *ngIf="isPermission('edit_doctor')" class="btn btn-info follow-btns">Edit</a>
+                                                <a [routerLink]="['/doctors/list/edit/', doctor_id]" *ngIf="isPermission('edit_doctor') && user.roles[0] === 'SUPERADMIN' && doctor.roles === 'DOCTOR' && doctor.status === 2"  class="btn btn-info follow-btns">Edit</a>
+                                                <a [routerLink]="['/doctors/list/edit/', doctor_id]" *ngIf="isPermission('edit_staff')  && doctor.roles.name === 'DOCTOR' && doctor.status === 2" class="btn btn-info follow-btns">Edit doctor profile</a>
+                                                <a [routerLink]="['/doctors/list/edit/', doctor_id]" *ngIf="isPermission('edit_staff')  && doctor.roles.name === 'DOCTOR' && doctor.status === 1" class="btn btn-info follow-btns">Edit staffDoctor profile</a>
+                                                <a [routerLink]="['/staffs/list/edit/', doctor_id]" *ngIf="isPermission('edit_staff')  && doctor.roles.name !== 'DOCTOR' && doctor.status === 1" class="btn btn-info follow-btns">Edit staff profile</a>
                                                 <!-- <button type="submit" class="btn btn-info message-btns">Message</button> -->
                                             </div>
                                         </div>
@@ -91,16 +91,16 @@
                                         <ul class="list-space">
                                             <li>
                                                 <h4>Género</h4>
-                                                <span *ngIf="doctor_selected.gender === 2">Femenino</span>
-                                                <span *ngIf="doctor_selected.gender === 1">Masculino</span>
+                                                <span *ngIf="doctor_selected?.gender === 2">Femenino</span>
+                                                <span *ngIf="doctor_selected?.gender === 1">Masculino</span>
                                             </li>
                                             <li>
                                                 <h4>Educación</h4>
-                                                <span>{{doctor_selected.education}}</span>
+                                                <span>{{doctor_selected?.education}}</span>
                                             </li>
                                             <li>
                                                 <h4>Designación</h4>
-                                                <span>{{doctor_selected.designation}}</span>
+                                                <span>{{doctor_selected?.designation}}</span>
                                             </li>
                                         </ul>
                                     </div>
@@ -114,27 +114,27 @@
                                         <ul class="list-space">
                                             <li>
                                                 <h4>Nacimiento</h4>
-                                                <span>{{doctor_selected.birth_date}}</span>
+                                                <span>{{doctor_selected?.birth_date}}</span>
                                             </li>
                                             <li>
                                                 <h4>Email</h4>
-                                                <span>{{doctor_selected.email}}</span>
+                                                <span>{{doctor_selected?.email}}</span>
                                             </li>
                                             <li>
                                                 <h4>Teléfono</h4>
-                                                <span>{{doctor_selected.mobile}}</span>
+                                                <span>{{doctor_selected?.mobile}}</span>
                                             </li>
                                             <li>
                                                 <h4>Role</h4>
-                                                <span>{{doctor_selected.roles.name}}</span>
+                                                <span>{{doctor_selected?.roles.name}}</span>
                                             </li>
                                             <li>
                                                 <h4>Dias de Trabajo</h4>
-                                                <span>{{doctor_selected.days_name}}</span>
+                                                <span>{{doctor_selected?.days_name}}</span>
                                             </li>
                                             <li>
                                                 <h4>Precio Cita</h4>
-                                                <span>{{doctor_selected.precio_cita|currency}}</span>
+                                                <span>{{doctor_selected?.precio_cita|currency}}</span>
                                             </li>
                                         </ul>
                                     </div>

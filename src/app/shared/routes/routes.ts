@@ -475,4 +475,7 @@ export class routes {
   public static get presupuestoList(): string {
     return this.baseUrl + '/presupuesto/list';
   }
+  public static get presupuestoListDoctor(): string {
+    return this.baseUrl + '/presupuesto/list/doctor';
+  }
 }
