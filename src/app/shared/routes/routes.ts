@@ -78,6 +78,12 @@ export class routes {
   public static get addAppointment(): string {
     return this.baseUrl + '/appointments/add';
   }
+  public static get addAppointmentDoctor(): string {
+    return this.baseUrl + '/appointments/atender/';
+  }
+  public static get addAppointmentDoctorLocal(): string {
+    return this.baseUrl + '/appointments/atender/local/';
+  }
   // public static get appointmentList(): string {
   //   return this.baseUrl + '/appointments/appointment-list';
   // }
@@ -85,12 +91,10 @@ export class routes {
     return this.baseUrl + '/appointments/list';
   }
 
-  // public static get appointmentListDoct(): string {
-  //   return this.baseUrl + '/appointments/list/doctor/'+doctor2_id;
-  // }
-  // public static get editAppointment(): string {
-  //   return this.baseUrl + '/appointments/edit-appointment';
-  // }
+  public static get appointmentListDoct(): string {
+    return this.baseUrl + '/appointments/list/doctor/';
+  }
+  
   public static get editAppointment(): string {
     return this.baseUrl + '/appointments/edit';
   }
@@ -176,8 +180,11 @@ export class routes {
     return this.baseUrl + '/doctors/add';
   }
   public static get doctorProfile(): string {
-    return this.baseUrl + '/doctor/doctor-profile';
+    return this.baseUrl + '/doctors/profile/';
   }
+  // public static get doctorProfile(): string {
+  //   return this.baseUrl + '/doctor/doctor-profile/';
+  // }
   public static get doctorSetting(): string {
     return this.baseUrl + '/doctor/doctor-setting';
   }
@@ -281,10 +288,10 @@ export class routes {
     return this.baseUrl + '/patients/add';
   }
   public static get editPatient(): string {
-    return this.baseUrl + '/patient/edit-patient';
+    return this.baseUrl + '/patients/edit-patient';
   }
   public static get patientProfile(): string {
-    return this.baseUrl + '/patient/patient-profile';
+    return this.baseUrl + '/patients/profile/';
   }
   public static get patientSetting(): string {
     return this.baseUrl + '/patient/patient-setting';
@@ -295,9 +302,9 @@ export class routes {
   public static get patientsList(): string {
     return this.baseUrl + '/patients/list';
   }
-  // public static get patientsListDoctor(): string {
-  //   return this.baseUrl + '/patients/list/doctor/'+doctor_id;
-  // }
+  public static get patientsListDoctor(): string {
+    return this.baseUrl + '/patients/list/doctor/';
+  }
   
   public static get addSalary(): string {
     return this.baseUrl + '/payroll/add-salary';
@@ -428,6 +435,15 @@ export class routes {
   public static get salaryCobrar(): string {
     return this.baseUrl + '/appointment-pay/punto-de-venta';
   }
+  public static get transferenciaList(): string {
+    return this.baseUrl + '/appointment-pay/list-pagos/';
+  }
+  public static get trasfereciasListDoctor(): string {
+    return this.baseUrl + '/appointment-pay/list-pagos/doctor/';
+  }
+  public static get pagosListDoctor(): string {
+    return this.baseUrl + '/appointment-pay/list/doctor/';
+  }
 
   public static get publicidad(): string {
     return this.baseUrl + '/publicidad/list';
@@ -442,10 +458,24 @@ export class routes {
   public static get registerLocation(): string {
     return this.baseUrl + '/location/register';
   }
+  
   public static get laboratoryList(): string {
     return this.baseUrl + '/laboratory/list';
   }
   public static get laboratoryEdit(): string {
     return this.baseUrl + '/laboratory/edit';
+  }
+
+  public static get presupuestoRegister(): string {
+    return this.baseUrl + '/presupuesto/register';
+  }
+  public static get presupuestoEdit(): string {
+    return this.baseUrl + '/presupuesto/edit';
+  }
+  public static get presupuestoList(): string {
+    return this.baseUrl + '/presupuesto/list';
+  }
+  public static get presupuestoListDoctor(): string {
+    return this.baseUrl + '/presupuesto/list/doctor';
   }
 }

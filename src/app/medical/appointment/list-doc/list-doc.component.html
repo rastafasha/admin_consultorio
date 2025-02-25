@@ -1,19 +1,12 @@
 <div class="page-wrapper">
     <div class="content">
     
+       
+
         <!-- Page Header -->
-        <div class="page-header">
-            <div class="row">
-                <div class="col-sm-12">
-                    <ul class="breadcrumb">
-                      <li class="breadcrumb-item"><a routerLink="/dashboard/doctor-dashboard">Dashboard</a></li>
-                        <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
-                        <li class="breadcrumb-item active">Citas</li>
-                    </ul>
-                </div>
-                <app-back-bottn></app-back-bottn>
-            </div>
-        </div>
+        <app-breadcum-doctor-dashboard *ngIf="isPermission('admin_dashboard')  && user.roles[0] === 'SUPERADMIN' " [titlePage]="titlePage" [routes]="routes.adminDashboard"></app-breadcum-doctor-dashboard>
+        <app-breadcum-doctor-dashboard *ngIf="isPermission('admin_dashboard')  && user.roles[0] === 'ADMIN' " [titlePage]="titlePage" [routes]="routes.adminDashboard"></app-breadcum-doctor-dashboard>
+        <app-breadcum-doctor-dashboard *ngIf="isPermission('doctor_dashboard') && user.roles[0] !== 'SUPERADMIN'  " [titlePage]="titlePage" [routes]="routes.doctorDashboard"></app-breadcum-doctor-dashboard>
         <!-- /Page Header -->
         
         <div class="row">
@@ -27,7 +20,7 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     <div class="doctor-table-blk">
-                                        <h3>Citas</h3>
+                                        <h3>{{titlePage}}</h3>
                                         <!-- <div class="doctor-search-blk">
                                             <div class="top-nav-search table-search-blk">
                                                     <input  class="form-control" placeholder="Search here" [(ngModel)]="searchDataValue"
@@ -39,13 +32,7 @@
                                     </div>
                                 </div>
                                 
-                                <div class="col-auto text-end float-end ms-auto download-grp" *ngIf="isPermission('edit_appointment')" >
-                                    <!-- <a type="button" (click)="pdfExport()" class=" me-2"><img src="assets/img/icons/pdf-icon-01.svg"   alt="Export to Pdf"  title="Export to Pdf"></a> -->
-                                    <a type="button" (click)="txtExport()" class=" me-2"><img src="assets/img/icons/pdf-icon-02.svg"   alt="Export to TXT" title="Export to TXT"></a>
-                                    <a type="button" (click)="csvExport()" class=" me-2"><img src="assets/img/icons/pdf-icon-03.svg"    alt="Export to CSV" title="Export to CSV"></a>
-                                    <a type="button" (click)="excelExport()" ><img src="assets/img/icons/pdf-icon-04.svg"   alt="Export to XLS" title="Export to XLS"></a>
-                                    
-                                </div>
+                                <app-export-lists></app-export-lists>
                             </div>
                         </div>
                         <!-- /Table Header -->
@@ -88,7 +75,8 @@
                                       </div>
                                   </div>
                                   <div class="add-group col-12 col-md-6 col-xl-4">
-                                    
+                                    <a [routerLink]="[routes.addAppointmentDoctorLocal]" *ngIf="isPermission('add_cita_doctor')" class="btn btn-primary add-pluss ms-2"><img src="assets/img/icons/plus.svg" alt=""></a>
+                                    <!-- <a routerLink="/appointments/add" *ngIf="isPermission('add_cita_doctor')" class="btn btn-primary add-pluss ms-2"><img src="assets/img/icons/plus.svg" alt=""></a> -->
                                     <a href="javascript:;" (click)="PageSize()" class="btn btn-primary doctor-refresh ms-2"><img src="assets/img/icons/re-fresh.svg" alt=""></a>
                                 </div>
                               </div>
@@ -107,7 +95,7 @@
                                         <!-- <th mat-sort-header="n_doc">Especialidad</th> -->
                                         <th mat-sort-header="status">Status</th>
                                         <th mat-sort-header="cofirmado">Confirmado?</th>
-                                        <th mat-sort-header="confirmar" *ngIf="isPermission('edit_appointment')">Confirmar</th>
+                                        <th mat-sort-header="confirmar" *ngIf="isPermission('add_cita_doctor')">Confirmar</th>
                                         <th mat-sort-header="created">Creación</th>
                                          <th ></th> <!--acciones -->
                                     </tr>
@@ -117,9 +105,13 @@
                                         
                                         <!-- <td>{{data.doctor.full_name}}</td> -->
                                         <td>
-                                          <a class="dropdown-item" [routerLink]="['/patients/profile/', data.patient.id]">
+                                          <a class="dropdown-item" [routerLink]="[routes.patientProfile, data.patient.id]" 
+                                          *ngIf="isPermission('profile_patient')">
                                             {{data.patient.full_name}}
                                           </a>
+                                          <span *ngIf="!isPermission('profile_patient')">
+                                            {{data.patient.full_name}}
+                                          </span>
                                         </td>
                                         <td>{{data.date_appointment_format}}</td>
                                         <td>
@@ -136,7 +128,7 @@
                                         <td><button [ngClass]="{'status-green' : data.status === 2, 'status-pink' : data.status === 1}" class="custom-badge">{{data.status === 1 ? 'Pendiente' : 'Atendido'}}</button></td>
                                         
                                         <td><button [ngClass]="{'status-green' : data.confimation === 2, 'status-pink' : data.confimation === 1}" class="custom-badge">{{data.confimation === 1 ? 'Pendiente' : 'Confirmado'}}</button></td>
-                                        <td *ngIf="isPermission('edit_appointment')">
+                                        <td *ngIf="isPermission('add_cita_doctor')">
                                           <!--begin::Input-->
                                           <select
                                           class="form-control form-select-solid fw-bolder"
@@ -153,7 +145,7 @@
                                                 <a href="javascript:void(0);" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-end">
                                                     <!-- <a class="dropdown-item" [routerLink]="['/appointments/list/edit/', data.id]" *ngIf="isPermission('edit_appointment')"><i class="fa-solid fa-pen-to-square m-r-5"></i> Edit</a> -->
-                                                    <a class="dropdown-item" [routerLink]="['/appointments/cita-medica/', data.id]" *ngIf="isPermission('edit_appointment')"><i class="fa-solid fa-eye m-r-5"></i> View</a>
+                                                    <a class="dropdown-item" [routerLink]="['/appointments/cita-medica/', data.id]" *ngIf="isPermission('view_appointment')"><i class="fa-solid fa-eye m-r-5"></i> Atender </a>
                                                     <a class="dropdown-item" href="javascript:void(0);" (click)="selectUser(data)" 
                                                     data-bs-toggle="modal" *ngIf="isPermission('delete_appointment')"
                                                     [attr.data-bs-target]="'#delete_staff-'+data.id">

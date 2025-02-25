@@ -9,9 +9,13 @@ export class AdminFilterPipe implements PipeTransform {
   }
   transform<T extends { name: string }>(roles: T[]): T[] {
     return roles.filter((role) => 
-        role.name === 'MANAGER' || 
-        role.name === 'BCBA' || 
-        role.name === 'RBT'
+        role.name === 'ADMIN' || 
+        role.name === 'DOCTOR' || 
+        role.name === 'ASISTENTE' || 
+        role.name === 'ENFERMERA' || 
+        role.name === 'PERSONAL' || 
+        role.name === 'LABORATORIO' || 
+        role.name === 'RECEPCION'
     );
   }
 }

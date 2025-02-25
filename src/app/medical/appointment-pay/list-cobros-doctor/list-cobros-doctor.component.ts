@@ -18,6 +18,7 @@ export class ListCobrosDoctorComponent {
 
   public routes = routes;
 
+  titlePage = 'Mis Transferencias';
   public paymentList: any = [];
   public payments: any ;
   dataSource!: MatTableDataSource<any>;
@@ -59,7 +60,7 @@ export class ListCobrosDoctorComponent {
     this.doctorService.closeMenuSidebar();
     
 
-    let USER = localStorage.getItem("user");
+    const USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER: '');
     // this.doctor_id = this.user.id;
     // this.user = this.roleService.authService.user;
@@ -70,6 +71,16 @@ export class ListCobrosDoctorComponent {
     });
 
     this.getTableData();
+  }
+
+  isPermission(permission:string){
+    if(this.user.roles.includes('SUPERADMIN')){
+      return true;
+    }
+    if(this.user.permissions.includes(permission)){
+      return true;
+    }
+    return false;
   }
 
   private getTableData(page=1): void {
@@ -284,7 +295,7 @@ export class ListCobrosDoctorComponent {
   }
 
   cambiarStatus(data:any){
-    let VALUE = data.status;
+    const VALUE = data.status;
     console.log(VALUE);
     
     this.paymentService.updateStatus(data, data.id).subscribe(

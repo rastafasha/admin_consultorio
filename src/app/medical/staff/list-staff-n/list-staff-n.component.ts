@@ -6,6 +6,7 @@ import { FileSaverService } from 'ngx-filesaver';
 import * as XLSX from 'xlsx';
 import jspdf from 'jspdf';
 import { DoctorService } from '../../doctors/service/doctor.service';
+import { RolesService } from '../../roles/service/roles.service';
 
 declare var $:any;  
 
@@ -18,7 +19,7 @@ export class ListStaffNComponent {
   public routes = routes;
   @ViewChild('content') content:ElementRef;
   
-
+  titlePage   = 'Personal';
   public staffList: any = [];
   dataSource!: MatTableDataSource<any>;
 
@@ -40,11 +41,14 @@ export class ListStaffNComponent {
   public staff_id:any;
   public staff_selected:any;
   public text_validation:any;
+  public user:any;
+  public roles:any;
  
   public addClass = false;
   constructor(
     public staffService: StaffService,
     public doctorService: DoctorService,
+    public roleService: RolesService,
     private fileSaver: FileSaverService
     ){
 
@@ -53,6 +57,8 @@ export class ListStaffNComponent {
     this.doctorService.closeMenuSidebar();
     window.scrollTo(0, 0);
     this.getTableData();
+    this.user = this.roleService.authService.user;
+    this.roles = this.user.roles[0];
   }
   private getTableData(): void {
     this.staffList = [];
@@ -68,6 +74,16 @@ export class ListStaffNComponent {
      this.getTableDataGeneral();
     })
 
+  }
+
+  isPermission(permission:string){
+    if(this.user.roles.includes('SUPERADMIN')){
+      return true;
+    }
+    if(this.user.permissions.includes(permission)){
+      return true;
+    }
+    return false;
   }
 
   getTableDataGeneral(){
@@ -98,7 +114,7 @@ export class ListStaffNComponent {
         this.text_validation = resp.message_text;
       }else{
 
-        let INDEX = this.staffList.findIndex((item:any)=> item.id == this.staff_selected.id);
+        const INDEX = this.staffList.findIndex((item:any)=> item.id == this.staff_selected.id);
       if(INDEX !=-1){
         this.staffList.splice(INDEX,1);
 

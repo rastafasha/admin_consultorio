@@ -80,6 +80,11 @@ const routes: Routes = [
       import('./medical/laboratory/laboratory.module').then((m) => m.LaboratoryModule),
   },
   {
+    path: 'presupuesto',
+    loadChildren: () =>
+      import('./medical/presupuesto/presupuesto.module').then((m) => m.PresupuestoModule),
+  },
+  {
     path: 'error',
     loadChildren: () =>
       import('./error/error.module').then((m) => m.ErrorModule),

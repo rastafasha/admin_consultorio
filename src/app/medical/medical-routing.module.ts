@@ -62,6 +62,11 @@ const routes: Routes = [
       loadChildren: () =>
         import('./laboratory/laboratory.module').then((m) => m.LaboratoryModule),
     },
+    {
+      path: 'presupuesto',
+      loadChildren: () =>
+        import('./presupuesto/presupuesto.module').then((m) => m.PresupuestoModule),
+    },
   ]  
 }
 ];

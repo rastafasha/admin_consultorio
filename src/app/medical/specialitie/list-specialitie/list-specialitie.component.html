@@ -1,19 +1,10 @@
 <div class="page-wrapper">
     <div class="content">
     
-        <!-- Page Header -->
-        <div class="page-header">
-            <div class="row">
-                <div class="col-sm-12">
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a routerLink="/">Dashboard</a></li>
-                        <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
-                        <li class="breadcrumb-item active"> Especilidad Lista</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <!-- /Page Header -->
+         <!-- Page Header -->
+         <app-breadcum-doctor-dashboard *ngIf="isPermission('admin_dashboard') " [titlePage]="titlePage" [routes]="routes.adminDashboard"></app-breadcum-doctor-dashboard>
+         <app-breadcum-doctor-dashboard *ngIf="isPermission('doctor_dashboard')" [titlePage]="titlePage" [routes]="routes.doctorDashboard"></app-breadcum-doctor-dashboard>
+         <!-- /Page Header -->
         
         <div class="row">
             <div class="col-sm-12">
@@ -26,27 +17,22 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     <div class="doctor-table-blk">
-                                        <h3>Especialidad Lista</h3>
+                                        <h3>{{titlePage}}</h3>
                                         <div class="doctor-search-blk">
-                                            <div class="top-nav-search table-search-blk">
+                                            <div class="top-nav-search table-search-blk" >
                                                     <input  class="form-control" placeholder="Search here" [(ngModel)]="searchDataValue"
                                                     (ngModelChange)="searchData(searchDataValue)">
                                                     <a class="btn"><img src="assets/img/icons/search-normal.svg" alt=""></a>
                                             </div>
                                             <div class="add-group">
-                                                <a routerLink="/specialities/register" class="btn btn-primary add-pluss ms-2"><img src="assets/img/icons/plus.svg" alt=""></a>
+                                                <a routerLink="/specialities/register" *ngIf="isPermission('register_specialty')"
+                                                 class="btn btn-primary add-pluss ms-2"><img src="assets/img/icons/plus.svg" alt=""></a>
                                                 <a href="javascript:;" (click)="PageSize()" class="btn btn-primary doctor-refresh ms-2"><img src="assets/img/icons/re-fresh.svg" alt=""></a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-auto text-end float-end ms-auto download-grp">
-                                     <!-- <a type="button" (click)="pdfExport()" class=" me-2"><img src="assets/img/icons/pdf-icon-01.svg"   alt="Export to Pdf"  title="Export to Pdf"></a> -->
-                                     <a type="button" (click)="txtExport()" class=" me-2"><img src="assets/img/icons/pdf-icon-02.svg"   alt="Export to TXT" title="Export to TXT"></a>
-                                     <a type="button" (click)="csvExport()" class=" me-2"><img src="assets/img/icons/pdf-icon-03.svg"    alt="Export to CSV" title="Export to CSV"></a>
-                                     <a type="button" (click)="excelExport()" ><img src="assets/img/icons/pdf-icon-04.svg"   alt="Export to XLS" title="Export to XLS"></a>
-                                    
-                                </div>
+                                <app-export-lists></app-export-lists>
                             </div>
                         </div>
                         <!-- /Table Header -->
@@ -56,7 +42,7 @@
                                 <thead>
                                     <tr>
                                         <th mat-sort-header="name">Nombre</th>
-                                        <th mat-sort-header="price">Precio</th>
+                                        <!-- <th mat-sort-header="price">Precio</th> -->
                                         <th mat-sort-header="state">Status</th>
                                         <th mat-sort-header="created_at">Fecha de registro</th>
                                         <th ></th>
@@ -66,13 +52,13 @@
                                     <tr *ngFor="let data of specialitiesList">
                                        
                                         <td>{{data.name}}</td>
-                                        <td>{{data.price}}</td>
+                                        <!-- <td>{{data.price}}</td> -->
                                         <td>
                                           <button [ngClass]="{'status-green' : data.state === 1, 'status-pink' : data.state === 2}" class="custom-badge">
-                                            {{data.state == 1 ? 'Activo' : 'Inactivo' }}
+                                            {{data.state === 1 ? 'Activo' : 'Inactivo' }}
                                           </button>
                                         </td>
-                                        <td>{{data.created_at}}</td>
+                                        <td>{{data.created_at | date : 'dd/MM/yyyy'}}</td>
                                         <td class="text-end">
                                             <div class="dropdown dropdown-action">
                                                 <a href="javascript:void(0);" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>

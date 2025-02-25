@@ -6,6 +6,7 @@ import jspdf from 'jspdf';
 import { FileSaverService } from 'ngx-filesaver';
 import { routes } from 'src/app/shared/routes/routes';
 import { DoctorService } from '../../doctors/service/doctor.service';
+import { RolesService } from '../../roles/service/roles.service';
 declare var $:any;    
 @Component({
   selector: 'app-list-specialitie',
@@ -16,6 +17,7 @@ export class ListSpecialitieComponent {
   public routes = routes;
   public specialitiesList:any = [];
   dataSource!: MatTableDataSource<any>;
+  titlePage = 'Listado de Especialidades';
 
   public showFilter = false;
   public searchDataValue = '';
@@ -30,12 +32,14 @@ export class ListSpecialitieComponent {
   public pageNumberArray: Array<number> = [];
   public pageSelection: Array<any> = [];
   public totalPages = 0;
-
+  
   public specialitie_generals:any = [];
   public specialitie_selected:any;
+  user:any;
   constructor(
     public specialitiesService: SpecialitieService,
     public doctorService: DoctorService,
+    public roleService: RolesService,
     private fileSaver: FileSaverService
   ){
 
@@ -44,6 +48,7 @@ export class ListSpecialitieComponent {
     window.scrollTo(0, 0);
     this.doctorService.closeMenuSidebar();
     this.getTableData();
+    this.user = this.roleService.authService.user;
   }
   private getTableData(): void {
     this.specialitiesList = [];
@@ -58,7 +63,15 @@ export class ListSpecialitieComponent {
       this.getTableDataGeneral();
     })
 
-
+  }
+  isPermission(permission:string){
+    if(this.user.roles.includes('SUPERADMIN')){
+      return true;
+    }
+    if(this.user.permissions.includes(permission)){
+      return true;
+    }
+    return false;
   }
 
   getTableDataGeneral() {
@@ -85,7 +98,7 @@ export class ListSpecialitieComponent {
 
     this.specialitiesService.deleteSpecialities(this.specialitie_selected.id).subscribe((resp:any) => {
       // console.log(resp);
-      let INDEX = this.specialitiesList.findIndex((item:any) => item.id == this.specialitie_selected.id);
+      const INDEX = this.specialitiesList.findIndex((item:any) => item.id == this.specialitie_selected.id);
       if(INDEX != -1){
         this.specialitiesList.splice(INDEX,1);
 

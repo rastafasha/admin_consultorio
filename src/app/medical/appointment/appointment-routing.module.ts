@@ -29,6 +29,9 @@ const routes: Routes = [
     {
       path:'atender/:id', component:AtenderComponent
     },
+    {
+      path:'atender/local/', component:AtenderComponent
+    },
     
   ]
   }

@@ -14,10 +14,10 @@ export class EditRoleUserComponent {
 
   sideBar:any = [];
   role_id:any = null;
-  name:string = '';
+  name = '';
   permissions:any = [];
-  valid_form:boolean = false;
-  valid_form_success:boolean = false;
+  valid_form = false;
+  valid_form_success = false;
   text_validation:any = null;
 
   constructor(
@@ -49,7 +49,7 @@ export class EditRoleUserComponent {
 
   addPermission(subMenu:any){
     if(subMenu.permision){
-      let INDEX = this.permissions.findIndex((item:any)=>item == subMenu.permision);
+      const INDEX = this.permissions.findIndex((item:any)=>item == subMenu.permision);
       if(INDEX != -1){
         this.permissions.splice(INDEX,1);
       }else{
@@ -66,7 +66,7 @@ export class EditRoleUserComponent {
       this.valid_form = true;
       return;
     }
-    let data = {
+    const data = {
       name:this.name,
       permissions: this.permissions,
     }

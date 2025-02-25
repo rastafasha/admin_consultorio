@@ -3,7 +3,8 @@
         <!-- Page Header -->
         <div class="page-header">
             <div class="row">
-                <div class="col-sm-12">
+                <app-back-bottn style="width: 50px;"></app-back-bottn>
+                <div class="col-sm-10">
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a routerLink="/roles/list">Roles </a></li>
                         <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
@@ -91,7 +92,7 @@
                                                     </ng-container>
                                                     
                                                 </div> 
-                                                <div class="" *ngIf="side.subMenus && side.subMenus.length == 0">
+                                                <div class="" *ngIf="side.subMenus && side.subMenus.length === 0">
                                                     <div class="checkbox">
                                                         <label>
                                                             <input type="checkbox" [checked]="permissions.includes(side.permision)" name="checkbox" (click)="addPermission(side)">{{side.menuValue}} 

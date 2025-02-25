@@ -12,6 +12,7 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ProfilePatientMComponent } from './profile-patient-m/profile-patient-m.component';
 import { PatientDoctorListComponent } from './patient-doctor-list/patient-doctor-list.component';
+import { ReusablesModule } from 'src/app/reusables/reusables.module';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { PatientDoctorListComponent } from './patient-doctor-list/patient-doctor
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule,
-    SharedModule
+    SharedModule,
+    ReusablesModule
   ]
 })
 export class PatientMModule { }

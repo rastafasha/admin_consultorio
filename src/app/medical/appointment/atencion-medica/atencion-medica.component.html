@@ -6,7 +6,10 @@
             <div class="row">
                 <div class="col-sm-12">
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a [routerLink]="['/appointments/list/doctor/', doctor_id]">Citas </a></li>
+                        <li class="breadcrumb-item"><a routerLink="/">Dashboard </a></li>
+                        <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
+                        <li class="breadcrumb-item" *ngIf="user.roles[0] ==='SUPERADMIN'"><a routerLink="/appointments/list">Citas </a></li>
+                        <li class="breadcrumb-item" *ngIf="user.roles[0] ==='DOCTOR'"><a [routerLink]="['/appointments/list/doctor/', doctor_id]">Mis Citas </a></li>
                         <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
                         <li class="breadcrumb-item active">Edit/ Add: Atención Médica </li>
                     </ul>
@@ -14,6 +17,8 @@
                 <app-back-bottn></app-back-bottn>
             </div>
         </div>
+        <app-skeleton-loader *ngIf="isLoading" [rows]="5" [columns]="4"></app-skeleton-loader>
+        <!-- <app-loader-anim *ngIf="isLoading"></app-loader-anim> -->
         <!-- /Page Header -->
         <div class="row">
             <!-- paciente -->
@@ -124,18 +129,18 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-6">
-                                    <!-- <div class="col-xs-12 col-sm-3">
+                                    <div class="col-xs-12 col-sm-3">
 
                                         <div class="form-group ">
                                             <div _ngcontent-rhp-c92="" class="card-header d-flex justify-content-between align-items-center">
                                                 <h5 _ngcontent-rhp-c92="" class="card-title">Laboratorio?</h5>
                                                 <div _ngcontent-rhp-c92="" class="status-toggle d-flex justify-content-between align-items-center">
-                                                    <input _ngcontent-rhp-c92="" type="checkbox" id="laboratory"  class="check" name="laboratory" [checked]="laboratory == true" [ngModelOptions]="{standalone: true}" [(ngModel)]="laboratory">
+                                                    <input _ngcontent-rhp-c92="" type="checkbox" id="laboratory"  class="check" name="laboratory" [checked]="laboratory === true" [ngModelOptions]="{standalone: true}" [(ngModel)]="laboratory">
                                                     <label _ngcontent-rhp-c92="" for="laboratory" class="checktoggle" value="true">checkbox</label>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div> -->
+                                    </div>
                                     <div class="table-responsive">
                                         <table class="table mb-0">
                                             <thead>

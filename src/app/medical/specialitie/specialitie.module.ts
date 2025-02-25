@@ -11,6 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ListPatientSpecialitiesComponent } from './list-patient-specialities/list-patient-specialities.component';
+import { ReusablesModule } from 'src/app/reusables/reusables.module';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { ListPatientSpecialitiesComponent } from './list-patient-specialities/li
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule,
-    SharedModule
+    SharedModule,
+    ReusablesModule
   ]
 })
 export class SpecialitieModule { }

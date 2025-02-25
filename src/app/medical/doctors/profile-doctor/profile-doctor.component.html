@@ -4,11 +4,12 @@
         <!-- Page Header -->
         <div class="page-header">
             <div class="row">
-                <div class="col-sm-12">
+                <app-back-bottn style="width: 50px;"></app-back-bottn>
+                <div class="col-sm-10">
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a routerLink="/dashboard/doctor-dashboard">Dashboard</a></li>
+                        <!-- <li class="breadcrumb-item"><a routerLink="/dashboard/doctor-dashboard">Dashboard</a></li> -->
                         
-                        <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
+                        <!-- <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li> -->
                         <li class="breadcrumb-item active">Perfil del Doctor</li>
                     </ul>
                 </div>
@@ -17,7 +18,7 @@
         <!-- /Page Header -->
         <div class="row">
             <div class="col-sm-12" *ngIf="doctor_selected">
-                <div class="card">
+                <div class="card" *ngIf="user.roles[0]!=='GUEST'">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12">
@@ -32,17 +33,17 @@
                                         <div class="col-lg-4 col-md-4">
                                             <div class="profile-user-box">
                                                 <div class="profile-user-img">
-                                                    <div *ngIf="!doctor_selected.avatar">
+                                                    <div *ngIf="!doctor_selected?.avatar">
                                                         <img src="./assets/img/no-image.jpg" >
                                                     </div>
-                                                    <div *ngIf="doctor_selected.avatar">
-                                                        <img  [src]="doctor_selected.avatar"  [alt]="doctor_selected.name">
+                                                    <div *ngIf="doctor_selected?.avatar">
+                                                        <img  [src]="doctor_selected?.avatar"  [alt]="doctor_selected?.name">
                                                     </div>
                                                     
                                                 </div>
                                                 <div class="names-profiles">
-                                                    <h4>{{doctor_selected.full_name}}</h4>
-                                                    <h5>{{doctor_selected.speciality.name}}</h5>
+                                                    <h4>{{doctor_selected?.full_name}}</h4>
+                                                    <h5>{{doctor_selected?.speciality?.name}}</h5>
                                                 </div>
                                             </div>
                                         </div>
@@ -64,7 +65,10 @@
                                         </div>
                                         <div class="col-lg-4 col-md-4 d-flex align-items-center">
                                             <div class="follow-btn-group">
-                                                <a [routerLink]="['/doctors/list/edit/', doctor_id]" *ngIf="isPermission('edit_doctor')" class="btn btn-info follow-btns">Edit</a>
+                                                <a [routerLink]="['/doctors/list/edit/', doctor_id]" *ngIf="isPermission('edit_doctor') && user.roles[0] === 'SUPERADMIN' && doctor.roles === 'DOCTOR' && doctor.status === 2"  class="btn btn-info follow-btns">Edit</a>
+                                                <a [routerLink]="['/doctors/list/edit/', doctor_id]" *ngIf="isPermission('edit_staff')  && doctor.roles.name === 'DOCTOR' && doctor.status === 2" class="btn btn-info follow-btns">Edit doctor profile</a>
+                                                <a [routerLink]="['/doctors/list/edit/', doctor_id]" *ngIf="isPermission('edit_staff')  && doctor.roles.name === 'DOCTOR' && doctor.status === 1" class="btn btn-info follow-btns">Edit staffDoctor profile</a>
+                                                <a [routerLink]="['/staffs/list/edit/', doctor_id]" *ngIf="isPermission('edit_staff')  && doctor.roles.name !== 'DOCTOR' && doctor.status === 1" class="btn btn-info follow-btns">Edit staff profile</a>
                                                 <!-- <button type="submit" class="btn btn-info message-btns">Message</button> -->
                                             </div>
                                         </div>
@@ -74,9 +78,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="doctor-personals-grp">
+                <div class="row" >
+                    <div class="col-lg-4" *ngIf="user.roles[0]!=='GUEST'">
+                        <div class="doctor-personals-grp" *ngIf="user.roles[0]!=='GUEST'">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="heading-detail ">
@@ -87,50 +91,50 @@
                                         <ul class="list-space">
                                             <li>
                                                 <h4>Género</h4>
-                                                <span *ngIf="doctor_selected.gender == 2">Femenino</span>
-                                                <span *ngIf="doctor_selected.gender == 1">Masculino</span>
+                                                <span *ngIf="doctor_selected?.gender === 2">Femenino</span>
+                                                <span *ngIf="doctor_selected?.gender === 1">Masculino</span>
                                             </li>
                                             <li>
                                                 <h4>Educación</h4>
-                                                <span>{{doctor_selected.education}}</span>
+                                                <span>{{doctor_selected?.education}}</span>
                                             </li>
                                             <li>
                                                 <h4>Designación</h4>
-                                                <span>{{doctor_selected.designation}}</span>
+                                                <span>{{doctor_selected?.designation}}</span>
                                             </li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="doctor-personals-grp">
+                        <div class="doctor-personals-grp" *ngIf="user.roles[0]!=='GUEST'">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="about-me-list">
                                         <ul class="list-space">
                                             <li>
                                                 <h4>Nacimiento</h4>
-                                                <span>{{doctor_selected.birth_date}}</span>
+                                                <span>{{doctor_selected?.birth_date}}</span>
                                             </li>
                                             <li>
                                                 <h4>Email</h4>
-                                                <span>{{doctor_selected.email}}</span>
+                                                <span>{{doctor_selected?.email}}</span>
                                             </li>
                                             <li>
                                                 <h4>Teléfono</h4>
-                                                <span>{{doctor_selected.mobile}}</span>
+                                                <span>{{doctor_selected?.mobile}}</span>
                                             </li>
                                             <li>
                                                 <h4>Role</h4>
-                                                <span>{{doctor_selected.roles.name}}</span>
+                                                <span>{{doctor_selected?.roles.name}}</span>
                                             </li>
                                             <li>
                                                 <h4>Dias de Trabajo</h4>
-                                                <span>{{doctor_selected.days_name}}</span>
+                                                <span>{{doctor_selected?.days_name}}</span>
                                             </li>
                                             <li>
                                                 <h4>Precio Cita</h4>
-                                                <span>{{doctor_selected.precio_cita|currency}}</span>
+                                                <span>{{doctor_selected?.precio_cita|currency}}</span>
                                             </li>
                                         </ul>
                                     </div>
@@ -141,18 +145,39 @@
                     <div class="col-lg-8">
                         <div class="doctor-personals-grp">
                             <div class="card">
-                                <div class="card-body">
+                                <div class="card-body ">
                                     <div class="tab-content-set">
                                         <ul class="nav">
-                                            <li>
-                                                <a href="#" onclick="return false;" [ngClass]="{'active': option_selected == 1}" (click)="optionSelected(1)"><span class="set-about-icon me-2"><img src="assets/img/icons/menu-icon-02.svg" alt=""></span>Citas Realizadas </a>
+                                            <li *ngIf="user.roles[0]==='GUEST'">
+                                                <a [routerLink]="['/staffs/list/edit',user.id]" ><span class="set-about-icon me-2"><img src="assets/img/icons/menu-icon-02.svg" alt=""
+                                                    [ngClass]="{'active': option_selected === 1}" (click)="optionSelected(1)"></span>Bienvenido, Edita tu perfil Aquí </a>
+                                            </li>
+                                            <li *ngIf="user.roles[0]!=='GUEST'">
+                                                <a href="#" onclick="return false;" [ngClass]="{'active': option_selected === 2}" (click)="optionSelected(2)"><span class="set-about-icon me-2"><img src="assets/img/icons/menu-icon-02.svg" alt=""></span>Citas Realizadas </a>
                                             </li>
                                             <li>
-                                                <a href="#" onclick="return false;" [ngClass]="{'active': option_selected == 2}" (click)="optionSelected(2)"><span class="set-about-icon me-2"><img src="assets/img/icons/menu-icon-16.svg" alt=""></span>Configuración</a>
+                                                <a href="#" onclick="return false;" [ngClass]="{'active': option_selected === 3}" (click)="optionSelected(3)"><span class="set-about-icon me-2"><img src="assets/img/icons/menu-icon-16.svg" alt=""></span>Configuración</a>
                                             </li>
                                         </ul>
                                     </div>
-                                    <ng-container *ngIf="option_selected == 1">
+                                    <ng-container  *ngIf="user.roles[0]==='GUEST' && option_selected === 1 ">
+                                        <div class="bienvenido">
+                                            <h1 *ngIf="doctor.gender === null" >Bienvenido!</h1>
+                                            <h1 *ngIf="doctor.gender !== null" >Gracias!</h1>
+                                            <p *ngIf="doctor.gender === null ">Favor, finalice su registo de perfil</p>
+                                            <p *ngIf="doctor.gender !== null && doctor.status === 1" class="text-center">
+                                                Favor, Espere el correo electrónico de Activación de Cuenta.
+                                                 Nos pondremos en contacto para verificar sus datos</p>
+                                            <button *ngIf="doctor.gender === null " [routerLink]="['/staffs/list/edit',user.id]"
+                                             type="button" class="btn btn-outline-success mb-3">
+                                                Continuar con el registro
+                                            </button>
+                                            <button type="button" class="btn btn-warning mb-3" (click)="onLogout()">
+                                                Salir
+                                            </button>
+                                        </div>
+                                    </ng-container>
+                                    <ng-container *ngIf="option_selected === 2">
                                         <div class="activity scrooldiv">
                                             <div class="activity-box">
                                                 <ul class="activity-list">
@@ -185,7 +210,7 @@
                                             </div>
                                         </div>
                                     </ng-container>
-                                    <ng-container *ngIf="option_selected == 2">
+                                    <ng-container *ngIf="option_selected === 3">
                                         <div class="setting-form-blk">
                                             <form>
                                                 <div class="row">
@@ -277,7 +302,7 @@
                                     
                                 </div>
                             </div>
-                            <div class="card">
+                            <div class="card" *ngIf="user.roles[0]!=='GUEST'">
                                 <div class="card-header">
                                     <h4 class="card-title ">Citas Pendientes</h4> <a [routerLink]="['/appointments/list/doctor/', doctor_id]" class="patient-views float-end">Todo</a>
                                 </div>
@@ -301,10 +326,10 @@
                                                     <td >{{data.date_appointment_format}}</td>
                                                     <td >{{data.patient.full_name}}</td>
                                                     <td>
-                                                        <button [ngClass]="{'status-green' : data.status === 2, 'status-pink' : data.status === 1}" class="custom-badge">{{data.status == 1 ? 'Pendiente' : 'Atendido'}}</button>
+                                                        <button [ngClass]="{'status-green' : data.status === 2, 'status-pink' : data.status === 1}" class="custom-badge">{{data.status === 1 ? 'Pendiente' : 'Atendido'}}</button>
                                                     </td>
                                                     <td>
-                                                        <button [ngClass]="{'status-green' : data.status_pay === 1, 'status-pink' : data.status_pay === 2}" class="custom-badge">{{data.status_pay == 1 ? 'Pagado' : 'Deuda'}}</button>
+                                                        <button [ngClass]="{'status-green' : data.status_pay === 1, 'status-pink' : data.status_pay === 2}" class="custom-badge">{{data.status_pay === 1 ? 'Pagado' : 'Deuda'}}</button>
                                                     </td>
                                                     <td>{{data.amount }}</td>
                                                     <td class="text-end">

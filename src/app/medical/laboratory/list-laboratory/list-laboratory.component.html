@@ -1,18 +1,10 @@
 <div class="page-wrapper">
     <div class="content">
     
-        <!-- Page Header -->
-        <div class="page-header">
-            <div class="row">
-                <div class="col-sm-12">
-                    <ul class="breadcrumb">
-                      <li class="breadcrumb-item"><a routerLink="/">Dashboard</a></li>
-                        <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
-                        <li class="breadcrumb-item active">Laboratory List</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+         <!-- Page Header -->
+        <app-breadcum-doctor-dashboard *ngIf="isPermission('admin_dashboard')  && user.roles[0] === 'SUPERADMIN' " [titlePage]="titlePage" [routes]="routes.adminDashboard"></app-breadcum-doctor-dashboard>
+        <app-breadcum-doctor-dashboard *ngIf="isPermission('admin_dashboard')  && user.roles[0] === 'ADMIN' " [titlePage]="titlePage" [routes]="routes.adminDashboard"></app-breadcum-doctor-dashboard>
+        <app-breadcum-doctor-dashboard *ngIf="isPermission('doctor_dashboard') && user.roles[0] !== 'SUPERADMIN'  " [titlePage]="titlePage" [routes]="routes.doctorDashboard"></app-breadcum-doctor-dashboard>
         <!-- /Page Header -->
         
         <div class="row">
@@ -26,7 +18,7 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     <div class="doctor-table-blk">
-                                        <h3>Listado</h3>
+                                        <h3>{{titlePage}}</h3>
                                         <div class="doctor-search-blk">
                                             <div class="top-nav-search table-search-blk">
                                                     <input  class="form-control" placeholder="Search here" [(ngModel)]="searchDataValue"
@@ -60,13 +52,7 @@
                                     <a href="javascript:;" (click)="PageSize()" class="btn btn-primary doctor-refresh ms-2"><img src="assets/img/icons/re-fresh.svg" alt=""></a>
                                 </div>
                                 </div>
-                                <div class="col-auto text-end float-end ms-auto download-grp" *ngIf="isPermission('edit_laboratory')">
-                                    <!-- <a type="button" (click)="pdfExport()" class=" me-2"><img src="assets/img/icons/pdf-icon-01.svg"   alt="Export to Pdf"  title="Export to Pdf"></a> -->
-                                    <a type="button" (click)="txtExport()" class=" me-2"><img src="assets/img/icons/pdf-icon-02.svg"   alt="Export to TXT" title="Export to TXT"></a>
-                                    <a type="button" (click)="csvExport()" class=" me-2"><img src="assets/img/icons/pdf-icon-03.svg"    alt="Export to CSV" title="Export to CSV"></a>
-                                    <a type="button" (click)="excelExport()" ><img src="assets/img/icons/pdf-icon-04.svg"   alt="Export to XLS" title="Export to XLS"></a>
-                                    
-                                </div>
+                                <app-export-lists></app-export-lists>
                             </div>
                         </div>
                         <!-- /Table Header -->
@@ -89,11 +75,19 @@
                                     <tr *ngFor="let data of appointmentList">
                                         
                                         <td>{{data.doctor.full_name}}</td>
-                                        <td>{{data.patient.full_name}}</td>
+                                        <td>
+                                          <a class="dropdown-item" [routerLink]="[routes.patientProfile, data.patient.id]" 
+                                          *ngIf="isPermission('profile_patient')">
+                                            {{data.patient.full_name}}
+                                          </a>
+                                          <span *ngIf="isPermission('profile_patient')">
+                                            {{data.patient.full_name}}
+                                          </span>
+                                        </td>
                                         <td>{{data.date_appointment_format}}</td>
                                         <!-- <td>{{data.segment_hour.format_segment.format_hour_start + ' - ' + data.segment_hour.format_segment.format_hour_end}}</td> -->
                                         <td>{{data.speciality.name}}</td>
-                                        <td><button [ngClass]="{'status-green' : data.status === 2, 'status-pink' : data.status === 1}" class="custom-badge">{{data.status == 1 ? 'Pendiente' : 'Atendido'}}</button></td>
+                                        <td><button [ngClass]="{'status-green' : data.status === 2, 'status-pink' : data.status === 1}" class="custom-badge">{{data.status === 1 ? 'Pendiente' : 'Atendido'}}</button></td>
                                         
                                         <td>{{data.created_at | date }}</td>
                                         
