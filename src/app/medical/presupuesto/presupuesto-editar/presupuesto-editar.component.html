@@ -126,8 +126,15 @@
                                         
                                         <div class="col-12 ">  
                                             <div class="form-group local-forms">
-                                                <label >Item<span class="login-danger">*</span></label>
-                                                <input class="form-control" name="name_medical" [ngModelOptions]="{standalone: true}"  [(ngModel)]="name_medical" type="text"  >
+                                            <label >Item<span class="login-danger">*</span></label>
+                                            <input class="form-control" name="name_medical" [ngModelOptions]="{standalone: true}"  [(ngModel)]="name_medical" type="text" required>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-12 ">
+                                            <div class="form-group local-forms">
+                                                <label >Cantidad<span class="login-danger">*</span></label>
+                                                <input class="form-control" name="cantidad" [ngModelOptions]="{standalone: true}" [(ngModel)]="cantidad" type="number"  >
                                             </div>
                                         </div>
                                         <div class="col-12 ">
@@ -152,11 +159,15 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr *ngFor="let key of medical ; let i=index">
+                                                <tr *ngFor="let item of medical ; let i=index">
                                                     <td>
-                                                        Item: {{key.name_medical}}
+                                                        Item: {{item.name_medical}}
                                                         <br>
-                                                        Precio: {{key.precio | number:'1.2-2' | currency }}
+                                                        cantidad: {{item.cantidad }}
+                                                        <br>
+                                                        Precio: {{item.precio  | currency }}
+                                                        <br>
+                                                        subtotal: {{item.precio * item.cantidad   | currency }}
                                                     </td>
                                                     <td>
                                                         <button class="btn btn-danger btn-sm" (click)="deleteMedical(i)">x</button>

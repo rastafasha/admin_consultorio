@@ -37,7 +37,8 @@ export class PresupuestoEditarComponent {
     n_doc :number;
     phone = '';
     email = '';
-    amount : number;
+    
+    
   
     laboratory = false;
     laboratory_number = 1;
@@ -46,6 +47,8 @@ export class PresupuestoEditarComponent {
     description:any;
     name_medical:any;
     precio:number;
+    cantidad:number;
+    amount = 0;
     
     presupuesto_id:number;
     speciality_id:number;
@@ -246,15 +249,18 @@ export class PresupuestoEditarComponent {
       if (this.name_medical && this.precio > 0) {
         this.medical.push({
           name_medical: this.name_medical,
+          cantidad: this.cantidad+'',
           precio: this.precio+''
         });
         this.name_medical = '';
         this.precio = 0;
+        this.cantidad = 0;
+        this.amount = 0;
         
       }
       this.amount = 0;
       for (let i = 0; i < this.medical.length; i++) {
-        this.amount += parseFloat(this.medical[i].precio);
+        this.amount += parseFloat(this.medical[i].precio) * parseFloat(this.medical[i].cantidad);
       }
     }
 
@@ -263,10 +269,13 @@ export class PresupuestoEditarComponent {
       this.name_medical = '';
       this.precio = 0;
       this.amount = 0;
-      for (let i = 0; i < this.medical.length; i++) {
-        this.amount += parseFloat(this.medical[i].precio);
-      }
+      this.cantidad = 0;
+      
+
       if(this.medical.length === 0){
+        this.name_medical = '';
+        this.precio = 0;
+        this.cantidad = 0;
         this.amount = 0;
       }
     }
