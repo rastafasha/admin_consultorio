@@ -8,7 +8,6 @@ export class AdminFilterPipe implements PipeTransform {
     //
   }
   transform<T extends { name: string }>(roles: T[]): T[] {
-   
     return roles.filter((role) => 
         role.name === 'ADMIN' || 
         role.name === 'DOCTOR' || 
