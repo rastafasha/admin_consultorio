@@ -109,8 +109,7 @@ export class PresupuestoListaComponent {
         return false;
       }
     
-      // eslint-disable-next-line no-debugger
-      private getTableData(page=1): void {debugger
+      private getTableData(page=1): void {
         this.presupuestoList = [];
         this.serialNumberArray = [];
         this.isLoading = true;

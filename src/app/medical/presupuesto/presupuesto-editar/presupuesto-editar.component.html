@@ -127,7 +127,7 @@
                                         <div class="col-12 ">  
                                             <div class="form-group local-forms">
                                             <label >Item<span class="login-danger">*</span></label>
-                                            <input class="form-control" name="name" [ngModelOptions]="{standalone: true}"  [(ngModel)]="name" type="text" required>
+                                            <input class="form-control" name="name_medical" [ngModelOptions]="{standalone: true}"  [(ngModel)]="name_medical" type="text" required>
 
                                             </div>
                                         </div>
@@ -161,7 +161,7 @@
                                             <tbody>
                                                 <tr *ngFor="let item of presupuestoitems; let i = index">
                                                     <td>
-                                                        Item: {{item.name}}
+                                                        Item: {{item.name_medical}}
                                                         <br>
                                                         cantidad: {{item.cantidad }}
                                                         <br>

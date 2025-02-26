@@ -38,13 +38,13 @@ export class PresupuestoEditarComponent {
     phone = '';
     email = '';
     amount = 0;
-  
+    
     laboratory = false;
     laboratory_number = 1;
   
     public presupuestoitems: any = []; // Ensure medical is initialized as an array
     description:any;
-    item:any;
+    name_medical = '';
     precio:number;
     cantidad:number;
     item_id:number;
@@ -154,7 +154,7 @@ export class PresupuestoEditarComponent {
         surname: [''],
         n_doc: [''],
         phone: [''],
-        name_medical:[''],
+        // name_medical:[''],
         description:[''],
         diagnostico: [''],
         amount: [''],
@@ -215,14 +215,14 @@ export class PresupuestoEditarComponent {
       if (!this.presupuestoitems) {
           this.presupuestoitems = [];
       }
-      if (this.name && this.precio > 0) {
+      if (this.name_medical && this.precio > 0) {
         this.presupuestoitems.push({
-          // item_id : 1,
-          name: this.name,
+          id : this.presupuestoitems.length+1,
+          name_medical: this.name_medical,
           cantidad: this.cantidad+'',
           precio: this.precio+''
         });
-        this.name = '';
+        this.name_medical = '';
         this.precio = 0;
         this.cantidad = 0;
         this.amount = 0;
@@ -235,9 +235,11 @@ export class PresupuestoEditarComponent {
     }
 
     
+    // eslint-disable-next-line no-debugger
     deleteMedical(i:any){
       this.presupuestoitems.splice(i,1);
-      this.item = '';
+      
+      this.name_medical = '';
       this.cantidad = 0;
       this.precio = 0;
       this.amount = 0;
@@ -245,7 +247,7 @@ export class PresupuestoEditarComponent {
 
       if(this.presupuestoitems.length === 0){
         this.amount = 0;
-        this.item = '';
+        this.name_medical = '';
         this.cantidad = 0;
         this.precio = 0;
       }
@@ -258,42 +260,26 @@ export class PresupuestoEditarComponent {
   
     
     // eslint-disable-next-line no-debugger
-    save() {
-       this.presupuestoitems = {
-        id: this.presupuestoitems.length,
-        presupuesto_id: this.presupuesto_id,
-        name: this.name,
-        precio: this.precio,
-        cantidad: this.cantidad,
-       }
-
-      const data ={
+    save() {debugger
       
-        //revisamos si hubo actualizacion de la lista de presupuestoitems
-        presupuestoitems: this.presupuestoitems,
 
-
-
-
+      const data = {
         amount: this.amount,
         speciality_id: this.speciality_id,
         description: this.description,
         diagnostico: this.diagnostico,
-        
         patient_id: this.patient_id,
         name: this.name,
         email: this.email,
         n_doc: this.n_doc,
         surname: this.surname,
         phone: this.phone,
-        
         presupuesto_id: this.presupuesto_id,
         user_id: this.doctor_id,
         doctor_id: this.doctor_id,
-      }
+        presupuestoitems: [...this.presupuestoitems],
+      };
 
-      
-  
       if(this.presupuesto_id){
         this.presupuestoService.editPresupuesto(data, this.presupuesto_id).subscribe((resp:any)=>{
           console.log(data);
@@ -318,13 +304,12 @@ export class PresupuestoEditarComponent {
                   if(this.user.roles[0] === 'DOCTOR'){
                     this.router.navigate(['/presupuesto/list/doctor']);
                   }else{
-
                     this.router.navigate(['/presupuesto/list']);
                   }
               }
         })
       } else {
-      console.log('Creating new presupuesto with data:', data);
+        console.log('Creating new presupuesto with data:', data);
         this.presupuestoService.createPresupuesto(data).subscribe((resp:any)=>{
           if(resp.message == 403){
             this.text_validation = resp.message_text;
@@ -347,7 +332,6 @@ export class PresupuestoEditarComponent {
                   if(this.user.roles[0] === 'DOCTOR'){
                     this.router.navigate(['/presupuesto/list/doctor']);
                   }else{
-
                     this.router.navigate(['/presupuesto/list']);
                   }
               }
