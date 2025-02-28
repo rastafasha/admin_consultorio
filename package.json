@@ -5,8 +5,11 @@
     "ng": "ng",
     "start": "ng serve",
     "start:dev": "ng serve --port 4300",
+    "start:local": "ng serve --configuration local --port 4300",
     "start:prod": "ng build && lite-server -p 8080 --baseDir dist/health_connect_admin",
     "build": "ng build",
+    "build:consultorio": "ng build --configuration consultorio",
+    "build:local": "ng build --configuration local --base-href /",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint"
