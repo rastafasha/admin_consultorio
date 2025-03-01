@@ -64,6 +64,56 @@
               ],
               "outputHashing": "all"
             },
+            
+            "consultorio": {
+              "outputPath": "dist/consultorio",
+              "index": {
+                "input": "src/env/consultorio/index.html",
+                "output": "index.html"
+              },
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.consultorio.ts"
+                }
+              ],
+              "assets": [
+                "src/.htaccess",
+                "src/assets",
+                "src/manifest.webmanifest",
+                "src/env/consultorio/manifest.webmanifest",
+                  "src/env/consultorio/QR/**",
+                {
+                  "glob": "_redirects",
+                  "input": "src",
+                  "output": "/"
+                },
+                {
+                  "glob": "**.*",
+                  "input": "src/env/consultorio/QR",
+                  "output": "/QR/"
+                },
+                {
+                  "glob": "**.*",
+                  "input": "src/env/consultorio/manifest.webmanifest",
+                  "output": "src/manifest.webmanifest"
+                }
+                
+              ],
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "3mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "75kb",
+                  "maximumError": "90kb"
+                }
+              ],
+              "outputHashing": "all"
+            },
             "development": {
               "buildOptimizer": false,
               "optimization": false,
