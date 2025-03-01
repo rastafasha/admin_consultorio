@@ -64,18 +64,7 @@
               ],
               "outputHashing": "all"
             },
-            "local": {
-              "serviceWorker": false,
-              "optimization": false,
-              "outputHashing": "none",
-              "sourceMap": true,
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.local.ts"
-                }
-              ]
-            },
+            
             "consultorio": {
               "outputPath": "dist/consultorio",
               "index": {
