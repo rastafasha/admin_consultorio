@@ -1,7 +1,10 @@
 <ul class="nav user-menu float-end" >
         <li class="nav-item dropdown d-none d-sm-block" *ngIf="isPermission('view_notification')" >
-            <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+            <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" *ngIf="user.roles[0]=== 'SUPERADMIN'">
                 <img src="assets/img/icons/note-icon-02.svg" alt=""><span class="pulse" *ngIf="payments?.length > 0 || appointments.length > 0"></span> 
+            </a>
+            <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" *ngIf="user.roles[0]=== 'DOCTOR'">
+                <img src="assets/img/icons/note-icon-02.svg" alt=""><span class="pulse" *ngIf="payments_doctors?.length > 0 || appointments_doctors.length > 0"></span> 
             </a>
             <div class="dropdown-menu notifications">
                 <div class="topnav-dropdown-header">
@@ -10,7 +13,7 @@
                 <!-- user.roles[0] === 'DOCTOR' -->
                 <div class="drop-scroll" *ngIf="user.roles[0] === 'DOCTOR'">
                     <ul class="notification-list">
-                        <li class="notification-message" *ngIf="payments?.length > 0 && isPermission('view_notification_pagos')">
+                        <li class="notification-message" *ngIf="payments_doctors?.length > 0 && isPermission('view_notification_pagos')">
                             <a [routerLink]="[routes.trasfereciasListDoctor, user.id]">
                                 <div class="media">
                                     <span class="avatar">

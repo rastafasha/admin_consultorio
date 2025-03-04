@@ -20,7 +20,7 @@
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                        <form [formGroup]="atentionForm" >
+                        <form #form >
                             <!-- consulta -->
                             <div class="row align-items-center" >
                                 <div class="col-12">
@@ -182,7 +182,7 @@
                                     <div class="col-12">
                                         <div class="form-group local-forms">
                                             <label>Antecedentes Alergicos </label>
-                                            <textarea class="form-control"  [disabled]="true" formControlName="antecedent_alerg" rows="4" cols="30"></textarea>
+                                            <textarea class="form-control"  [disabled]="true" [ngModelOptions]="{standalone: true}" [(ngModel)]="antecedent_alerg" rows="4" cols="30"></textarea>
                                         </div>
                                     </div>
                                 </div>

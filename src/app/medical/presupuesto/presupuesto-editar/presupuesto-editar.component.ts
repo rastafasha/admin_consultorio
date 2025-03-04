@@ -37,7 +37,8 @@ export class PresupuestoEditarComponent {
     n_doc :number;
     phone = '';
     email = '';
-    amount : number;
+    
+    
   
     laboratory = false;
     laboratory_number = 1;
@@ -46,6 +47,8 @@ export class PresupuestoEditarComponent {
     description:any;
     name_medical:any;
     precio:number;
+    cantidad:number;
+    amount = 0;
     
     presupuesto_id:number;
     speciality_id:number;
@@ -121,42 +124,6 @@ export class PresupuestoEditarComponent {
       
     }
   
-    cargarPresupuesto(){
-
-      // this.patient_id = id;
-  
-      if (this.patient_id) {
-        this.pageTitle = 'Edit ';
-        this.presupuestoService.getPresupuesto(this.presupuesto_id).subscribe(
-          (resp:any) => {
-            // this.presupuestoForm.patchValue({
-            //   id: resp.id,
-            //   n_doc: resp.patient.n_doc,
-            //   name: resp.patient.name,
-            //   surname: resp.patient.surname,
-            //   phone: resp.patient.phone,
-            //   name_companion: resp.patient.name_companion,
-            //   surname_companion: resp.patient.surname_companion,
-            //   antecedent_alerg: resp.patient.antecedent_alerg,
-            //   description: resp.description,
-            //   diagnostico: resp.diagnostico,
-            //   speciality_id: resp.speciality_id,
-            //   amount: resp.amount,
-            //   medical: resp.medical,
-            //   // user_id: this.patientSeleccionado.id,
-  
-            // });
-            this.presupuestoSeleccionado = resp;
-            console.log(this.presupuestoSeleccionado);
-          }
-        );
-      } else {
-        this.pageTitle = 'Create Blog';
-      }
-
-      // this.validarFormulario();
-  
-    }
     getPresupuesto(){
       this.presupuestoService.getPresupuesto(this.presupuesto_id).subscribe((resp:any)=>{
         this.presupuesto_selected = resp;
@@ -246,15 +213,18 @@ export class PresupuestoEditarComponent {
       if (this.name_medical && this.precio > 0) {
         this.medical.push({
           name_medical: this.name_medical,
+          cantidad: this.cantidad+'',
           precio: this.precio+''
         });
         this.name_medical = '';
         this.precio = 0;
+        this.cantidad = 0;
+        this.amount = 0;
         
       }
       this.amount = 0;
       for (let i = 0; i < this.medical.length; i++) {
-        this.amount += parseFloat(this.medical[i].precio);
+        this.amount += parseFloat(this.medical[i].precio) * parseFloat(this.medical[i].cantidad);
       }
     }
 
@@ -263,10 +233,13 @@ export class PresupuestoEditarComponent {
       this.name_medical = '';
       this.precio = 0;
       this.amount = 0;
-      for (let i = 0; i < this.medical.length; i++) {
-        this.amount += parseFloat(this.medical[i].precio);
-      }
+      this.cantidad = 0;
+      
+
       if(this.medical.length === 0){
+        this.name_medical = '';
+        this.precio = 0;
+        this.cantidad = 0;
         this.amount = 0;
       }
     }
@@ -274,7 +247,6 @@ export class PresupuestoEditarComponent {
     
   
     save(){
-      
       const data ={
       
         medical: this.medical,
@@ -321,7 +293,12 @@ export class PresupuestoEditarComponent {
                     showConfirmButton: false,
                     timer: 1500
                   });
-                  this.router.navigate(['/presupuesto/list']);
+                  if(this.user.roles[0] === 'DOCTOR'){
+                    this.router.navigate(['/presupuesto/list/doctor']);
+                  }else{
+
+                    this.router.navigate(['/presupuesto/list']);
+                  }
               }
         })
       } else {
@@ -345,7 +322,12 @@ export class PresupuestoEditarComponent {
                     showConfirmButton: false,
                     timer: 1500
                   });
-                  this.router.navigate(['/presupuesto/list']);
+                  if(this.user.roles[0] === 'DOCTOR'){
+                    this.router.navigate(['/presupuesto/list/doctor']);
+                  }else{
+
+                    this.router.navigate(['/presupuesto/list']);
+                  }
               }
         })
       }

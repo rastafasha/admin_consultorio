@@ -733,6 +733,7 @@ export class DataService {
           ],
         },
         // Presupuestos
+        
         {
           menuValue: 'Presupuestos',
           route: routes.presupuestoList,
@@ -743,6 +744,7 @@ export class DataService {
           permision: 'list_presupuesto',
           show_nav: true,
           subMenus: [
+            
             {
               menuValue: 'register Presupuesto',
               route: '',
@@ -764,6 +766,19 @@ export class DataService {
               permision: 'list_presupuesto',
               show_nav: false,
             },],
+        },
+
+        {
+          menuValue: 'Mis Presupuestos',
+          route: routes.presupuestoListDoctor,
+          hasSubRoute: false,
+          showSubRoute: false,
+          img: 'assets/img/icons/menu-icon-16.svg',
+          base: 'presupuestoListDoctor',
+          permision: 'list_presupuesto_doctor',
+          show_nav: true,
+          subMenus: [
+          ],
         },
 
 

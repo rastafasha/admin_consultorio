@@ -114,11 +114,7 @@ export class PresupuestoListaComponent {
         this.presupuestoList = [];
         this.serialNumberArray = [];
         this.isLoading = true;
-        if(this.roles === 'DOCTOR'){
-          // this.doctor_id = this.user.id;
-          this.getTableDataDoctor();
-          
-        }
+        
         this.presupuestoService.listPresupuestos(page, this.searchDataValue, this.speciality_id, this.date).subscribe((resp:any)=>{
           // console.log(resp);
           this.isLoading = false;
@@ -131,22 +127,6 @@ export class PresupuestoListaComponent {
         })
       }
 
-      private getTableDataDoctor(page=1): void {
-    
-        this.presupuestoService.listAppointmentDocts(this.doctor_id, page, 
-          this.searchDataValue,  this.date).subscribe((resp:any)=>{
-          // console.log(resp);
-    
-          this.totalDataPatient = resp.total;
-          this.presupuestoList = resp.presupuestos.data;
-          this.presupuestoList = resp.presupuestos.id;
-          console.log(this.presupuestoList);
-          // this.getTableDataGeneral();
-          this.dataSource = new MatTableDataSource<any>(this.presupuestoList);
-          this.calculateTotalPages(this.totalDataPatient, this.pageSize);
-        })
-      }
-    
       getTableDataGeneral(){
         this.presupuestoList = [];
         this.serialNumberArray = [];
