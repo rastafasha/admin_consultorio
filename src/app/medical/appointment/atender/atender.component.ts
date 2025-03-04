@@ -296,27 +296,18 @@ resetPatient(){
     }
     
 
-    // eslint-disable-next-line no-debugger
-    onSave(){debugger
-    //   this.text_validation = '';
-    // if(!this.description || this.medical.length == 0){
-    //   this.text_validation = 'Es requerido ingresar el diagnostico y una receta medica';
-    //   return;
-    // }
+    onSave(){
    
     const data ={
       
       segment_hour: this.hour,
-      // "doctor_schedule_join_hour_id": this.hour,
-
       "date_appointment": this.date_appointment,
-        "speciality_id": this.speciality_id,
-        "doctor_schedule_join_hour_id": this.selected_segment_hour.id,
+      "speciality_id": this.speciality_id,
+      "doctor_schedule_join_hour_id": this.selected_segment_hour.id,
 
       amount_add: this.amount_add,
       amount: this.amount,
       method_payment: this.method_payment,
-      // medical: this.medical,
       
       name: this.name,
       surname: this.surname,
@@ -326,17 +317,10 @@ resetPatient(){
       surname_companion: this.surname_companion,
 
       appointment_id: 0,
-      patient_id: this.patient.id,
+      patient_id: this.patient ? this.patient.id : null, // Updated line
       doctor_id: this.doctor_id,
-      user_id: this.patient.id,
-      
-      // ...this.atentionForm.value,
-
-      
+      user_id: this.patient ? this.patient.id : null, // Updated line
     }
-
-
-
     
     this.appointmentService.registerAttentionLocal(data).subscribe((resp:any)=>{
       // console.log(data );
@@ -350,4 +334,3 @@ resetPatient(){
     });
     }
 }
-

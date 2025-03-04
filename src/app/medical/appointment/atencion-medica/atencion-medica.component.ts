@@ -160,7 +160,12 @@ export class AtencionMedicaComponent {
                       showConfirmButton: false,
                       timer: 1500
                     });
-                    this.router.navigate(['/appointments/list']);
+                    if(this.user.roles === 'SUPERADMIN'){
+                      this.router.navigate(['/appointments/list']);
+                    }
+                    if(this.user.roles === 'DOCTOR'){
+                      this.router.navigate(['/appointments/list/doctor/', this.user.id]);
+                    }
                 }
     })
 
