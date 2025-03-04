@@ -124,42 +124,6 @@ export class PresupuestoEditarComponent {
       
     }
   
-    cargarPresupuesto(){
-
-      // this.patient_id = id;
-  
-      if (this.patient_id) {
-        this.pageTitle = 'Edit ';
-        this.presupuestoService.getPresupuesto(this.presupuesto_id).subscribe(
-          (resp:any) => {
-            // this.presupuestoForm.patchValue({
-            //   id: resp.id,
-            //   n_doc: resp.patient.n_doc,
-            //   name: resp.patient.name,
-            //   surname: resp.patient.surname,
-            //   phone: resp.patient.phone,
-            //   name_companion: resp.patient.name_companion,
-            //   surname_companion: resp.patient.surname_companion,
-            //   antecedent_alerg: resp.patient.antecedent_alerg,
-            //   description: resp.description,
-            //   diagnostico: resp.diagnostico,
-            //   speciality_id: resp.speciality_id,
-            //   amount: resp.amount,
-            //   medical: resp.medical,
-            //   // user_id: this.patientSeleccionado.id,
-  
-            // });
-            this.presupuestoSeleccionado = resp;
-            console.log(this.presupuestoSeleccionado);
-          }
-        );
-      } else {
-        this.pageTitle = 'Create Blog';
-      }
-
-      // this.validarFormulario();
-  
-    }
     getPresupuesto(){
       this.presupuestoService.getPresupuesto(this.presupuesto_id).subscribe((resp:any)=>{
         this.presupuesto_selected = resp;
@@ -283,14 +247,10 @@ export class PresupuestoEditarComponent {
     
   
     save(){
-      // this.text_validation = '';
-      
-
       const data ={
       
         medical: this.medical,
         amount: this.amount,
-        speciality_id: this.speciality_id,
         description: this.description,
         diagnostico: this.diagnostico,
         
@@ -301,9 +261,9 @@ export class PresupuestoEditarComponent {
         surname: this.surname,
         phone: this.phone,
         
+        speciality_id: this.DOCTOR_SELECTED.speciality_id,
         presupuesto_id: this.presupuesto_id,
-        user_id: this.doctor_id,
-        doctor_id: this.doctor_id,
+        doctor_id: this.DOCTOR_SELECTED.id,
 
         // ...this.atentionForm.value,
   

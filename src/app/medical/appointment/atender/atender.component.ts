@@ -189,7 +189,6 @@ getDoctor(){
   })
 }
 
-// eslint-disable-next-line no-debugger
 filtroDoctor(){
     this.isfiltered = false;
     const data = {
@@ -264,6 +263,7 @@ filterPatient(){
       this.name= '';
       this.surname= '';
       this.phone= '';
+      this.phone= '';
       this.n_doc= 0;
     }else{
       this.name= this.patient.name;
@@ -296,7 +296,8 @@ resetPatient(){
     }
     
 
-    onSave(){
+    // eslint-disable-next-line no-debugger
+    onSave(){debugger
     //   this.text_validation = '';
     // if(!this.description || this.medical.length == 0){
     //   this.text_validation = 'Es requerido ingresar el diagnostico y una receta medica';
@@ -305,23 +306,31 @@ resetPatient(){
    
     const data ={
       
-      medical: this.medical,
-      method_payment: this.method_payment,
-      date_appointment: this.date_appointment,
-      amount: this.amount,
-      amount_add: this.amount_add,
-      "doctor_schedule_join_hour_id": this.hour,
       segment_hour: this.hour,
-      speciality_id: this.speciality_id,
-      name: this.patient.name,
-      surname: this.patient.surname,
-      phone: this.patient.phone,
-      n_doc: this.patient.n_doc,
+      // "doctor_schedule_join_hour_id": this.hour,
+
+      "date_appointment": this.date_appointment,
+        "speciality_id": this.speciality_id,
+        "doctor_schedule_join_hour_id": this.selected_segment_hour.id,
+
+      amount_add: this.amount_add,
+      amount: this.amount,
+      method_payment: this.method_payment,
+      // medical: this.medical,
+      
+      name: this.name,
+      surname: this.surname,
+      phone: this.phone,
+      n_doc: this.n_doc,
+      name_companion: this.name_companion,
+      surname_companion: this.surname_companion,
+
       appointment_id: 0,
-      user_id: this.doctor_id,
-      doctor_id: this.doctor_id,
       patient_id: this.patient.id,
-      ...this.atentionForm.value,
+      doctor_id: this.doctor_id,
+      user_id: this.patient.id,
+      
+      // ...this.atentionForm.value,
 
       
     }
