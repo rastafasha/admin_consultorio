@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<!-- ClassHome -->
+<svg
+   width="26.622021mm"
+   height="25.986317mm"
+   viewBox="0 0 26.62202 25.986316"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="logo.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.74118967"
+     inkscape:cx="564.6328"
+     inkscape:cy="-296.14552"
+     inkscape:current-layer="g1593" />
+  <defs
+     id="defs2">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath842">
+      <path
+         d="M 0,629.008 H 809.008 V 0 H 0 Z"
+         id="path840" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1597">
+      <path
+         d="M 0,629.008 H 809.008 V 0 H 0 Z"
+         id="path1595" />
+    </clipPath>
+  </defs>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-35.404487,-255.22765)">
+    <g
+       id="g830"
+       inkscape:label="Classhome marca"
+       transform="matrix(0.35277777,0,0,-0.35277777,-22.905205,279.89764)">
+      <g
+         id="g836">
+        <g
+           id="g1583"
+           inkscape:label="Classhome marca"
+           transform="translate(89.20232,-68.765324)">
+          <g
+             id="g1591">
+            <g
+               id="g1593"
+               clip-path="url(#clipPath1597)">
+              <path
+                 d="M 97.546,65.195 H 76.085 v 73.5 h 21.461 z"
+                 style="fill:#e54e62;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                 id="path2063" />
+              <path
+                 d="m 130.088,66.932 h 19.461 v 69.865 h -19.461 z m 21.461,-1.898 h -23.461 v 73.661 h 23.461 z"
+                 style="fill:#e54e62;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                 id="path2065" />
+              <path
+                 d="m 103.476,92.524 h 18.733 v 18.733 h -18.733 z m 20.569,-1.836 H 101.64 v 22.405 h 22.405 z"
+                 style="fill:#e54e62;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                 id="path2067" />
+              <path
+                 d="m 124.056,65.086 h -22.405 v 22.405 h 22.405 z"
+                 style="fill:#e54e62;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                 id="path2069" />
+              <path
+                 d="M 124.045,116.29 H 101.64 v 22.406 h 22.405 z"
+                 style="fill:#e54e62;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                 id="path2071" />
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
