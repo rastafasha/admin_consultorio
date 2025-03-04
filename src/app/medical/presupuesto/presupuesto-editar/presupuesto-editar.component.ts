@@ -247,14 +247,10 @@ export class PresupuestoEditarComponent {
     
   
     save(){
-      // this.text_validation = '';
-      
-
       const data ={
       
         medical: this.medical,
         amount: this.amount,
-        speciality_id: this.speciality_id,
         description: this.description,
         diagnostico: this.diagnostico,
         
@@ -265,9 +261,9 @@ export class PresupuestoEditarComponent {
         surname: this.surname,
         phone: this.phone,
         
+        speciality_id: this.DOCTOR_SELECTED.speciality_id,
         presupuesto_id: this.presupuesto_id,
-        user_id: this.doctor_id,
-        doctor_id: this.doctor_id,
+        doctor_id: this.DOCTOR_SELECTED.id,
 
         // ...this.atentionForm.value,
   
