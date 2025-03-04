@@ -189,7 +189,6 @@ getDoctor(){
   })
 }
 
-// eslint-disable-next-line no-debugger
 filtroDoctor(){
     this.isfiltered = false;
     const data = {
