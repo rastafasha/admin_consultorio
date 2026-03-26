@@ -14,7 +14,7 @@ export class User {
     address: string;
     avatar: string;
     speciality_id: number;
-    location_id: number;
+    pais_id: number;
     precio_cita: number;
     status: string;
     roles:Role;

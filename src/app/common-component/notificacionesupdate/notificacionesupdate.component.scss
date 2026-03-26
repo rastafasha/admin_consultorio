@@ -2,3 +2,29 @@
     height: auto;
     width: 400px;
 }
+
+.globowhite {
+    display: flex;
+    width: 30px;
+    height: 30px;
+    transform: translate(20px, 10px);
+}
+
+.globowhite.globoblack {
+    display: none;
+}
+
+.globoblack {
+    display: none;
+    width: 30px;
+    height: 30px;
+    transform: translate(20px, 10px);
+}
+
+body.dark .globoblack {
+    display: flex;
+}
+
+body.dark .globowhite {
+    display: none;
+}

@@ -18,7 +18,7 @@
         <!-- /Page Header -->
         <div class="row">
             <div class="col-sm-12" *ngIf="doctor_selected">
-                <div class="card" *ngIf="user.roles[0]!=='GUEST'">
+                <div class="card" *ngIf="doctor.roles.name !=='GUEST'">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12">
@@ -65,7 +65,7 @@
                                         </div>
                                         <div class="col-lg-4 col-md-4 d-flex align-items-center">
                                             <div class="follow-btn-group">
-                                                <a [routerLink]="['/doctors/list/edit/', doctor_id]" *ngIf="isPermission('edit_doctor') && user.roles[0] === 'SUPERADMIN' && doctor.roles === 'DOCTOR' && doctor.status === 2"  class="btn btn-info follow-btns">Edit</a>
+                                                <a [routerLink]="['/doctors/list/edit/', doctor_id]" *ngIf="isPermission('edit_doctor') && user.roles.name  === 'SUPERADMIN' && doctor.roles === 'DOCTOR' && doctor.status === 2"  class="btn btn-info follow-btns">Edit</a>
                                                 <a [routerLink]="['/doctors/list/edit/', doctor_id]" *ngIf="isPermission('edit_staff')  && doctor.roles.name === 'DOCTOR' && doctor.status === 2" class="btn btn-info follow-btns">Edit doctor profile</a>
                                                 <a [routerLink]="['/doctors/list/edit/', doctor_id]" *ngIf="isPermission('edit_staff')  && doctor.roles.name === 'DOCTOR' && doctor.status === 1" class="btn btn-info follow-btns">Edit staffDoctor profile</a>
                                                 <a [routerLink]="['/staffs/list/edit/', doctor_id]" *ngIf="isPermission('edit_staff')  && doctor.roles.name !== 'DOCTOR' && doctor.status === 1" class="btn btn-info follow-btns">Edit staff profile</a>
@@ -79,8 +79,8 @@
                     </div>
                 </div>
                 <div class="row" >
-                    <div class="col-lg-4" *ngIf="user.roles[0]!=='GUEST'">
-                        <div class="doctor-personals-grp" *ngIf="user.roles[0]!=='GUEST'">
+                    <div class="col-lg-4" *ngIf="doctor.roles.name !=='GUEST'">
+                        <div class="doctor-personals-grp" *ngIf="doctor.roles.name !=='GUEST'">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="heading-detail ">
@@ -107,7 +107,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="doctor-personals-grp" *ngIf="user.roles[0]!=='GUEST'">
+                        <div class="doctor-personals-grp" *ngIf="user.roles.name !=='GUEST'">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="about-me-list">
@@ -148,19 +148,33 @@
                                 <div class="card-body ">
                                     <div class="tab-content-set">
                                         <ul class="nav">
-                                            <li *ngIf="user.roles[0]==='GUEST'">
-                                                <a [routerLink]="['/staffs/list/edit',user.id]" ><span class="set-about-icon me-2"><img src="assets/img/icons/menu-icon-02.svg" alt=""
-                                                    [ngClass]="{'active': option_selected === 1}" (click)="optionSelected(1)"></span>Bienvenido, Edita tu perfil Aquí </a>
+                                            <li *ngIf="doctor.roles.name ==='GUEST'">
+                                                <a href="#" onclick="return false;" [ngClass]="{'active': option_selected === 1}" (click)="optionSelected(1)">
+                                                    <span class="set-about-icon me-2">
+                                                    <img src="assets/img/icons/menu-icon-02.svg" alt="" >
+                                                </span>
+                                                    Bienvenido, Edita tu perfil Aquí 
+                                            </a>
                                             </li>
-                                            <li *ngIf="user.roles[0]!=='GUEST'">
-                                                <a href="#" onclick="return false;" [ngClass]="{'active': option_selected === 2}" (click)="optionSelected(2)"><span class="set-about-icon me-2"><img src="assets/img/icons/menu-icon-02.svg" alt=""></span>Citas Realizadas </a>
+                                            <li *ngIf="doctor.roles.name !=='GUEST'">
+                                                <a href="#" onclick="return false;" [ngClass]="{'active': option_selected === 2}" (click)="optionSelected(2)">
+                                                    <span class="set-about-icon me-2">
+                                                        <img src="assets/img/icons/menu-icon-02.svg" alt="">
+                                                    </span>
+                                                    Citas Realizadas 
+                                                </a>
                                             </li>
-                                            <li>
-                                                <a href="#" onclick="return false;" [ngClass]="{'active': option_selected === 3}" (click)="optionSelected(3)"><span class="set-about-icon me-2"><img src="assets/img/icons/menu-icon-16.svg" alt=""></span>Configuración</a>
+                                            <li *ngIf="doctor.roles.name !=='GUEST'">
+                                                <a href="#" onclick="return false;" [ngClass]="{'active': option_selected === 3}" (click)="optionSelected(3)">
+                                                    <span class="set-about-icon me-2">
+                                                        <img src="assets/img/icons/menu-icon-16.svg" alt="">
+                                                    </span>
+                                                    Configuración
+                                                </a>
                                             </li>
                                         </ul>
                                     </div>
-                                    <ng-container  *ngIf="user.roles[0]==='GUEST' && option_selected === 1 ">
+                                    <ng-container  *ngIf="doctor.roles.name ==='GUEST' && option_selected === 1 ">
                                         <div class="bienvenido">
                                             <h1 *ngIf="doctor.gender === null" >Bienvenido!</h1>
                                             <h1 *ngIf="doctor.gender !== null" >Gracias!</h1>
@@ -168,7 +182,7 @@
                                             <p *ngIf="doctor.gender !== null && doctor.status === 1" class="text-center">
                                                 Favor, Espere el correo electrónico de Activación de Cuenta.
                                                  Nos pondremos en contacto para verificar sus datos</p>
-                                            <button *ngIf="doctor.gender === null " [routerLink]="['/staffs/list/edit',user.id]"
+                                            <button *ngIf="doctor.gender === null " [routerLink]="['/staffs/staff-n/',user.id]"
                                              type="button" class="btn btn-outline-success mb-3">
                                                 Continuar con el registro
                                             </button>
@@ -302,7 +316,7 @@
                                     
                                 </div>
                             </div>
-                            <div class="card" *ngIf="user.roles[0]!=='GUEST'">
+                            <div class="card" *ngIf="doctor.roles.name !=='GUEST'">
                                 <div class="card-header">
                                     <h4 class="card-title ">Citas Pendientes</h4> <a [routerLink]="['/appointments/list/doctor/', doctor_id]" class="patient-views float-end">Todo</a>
                                 </div>

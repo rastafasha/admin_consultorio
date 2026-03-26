@@ -6,6 +6,7 @@ import { StaffService } from '../../../services/staff.service';
 import { DoctorService } from '../../../services/doctor.service';
 import { RolesService } from '../../../services/roles.service';
 import { User } from 'src/app/models/user.model';
+import Swal from 'sweetalert2';
 
 declare let $: any;
 
@@ -19,6 +20,7 @@ export class StaffNComponent implements OnInit {
   public staffForm: FormGroup;
   public titlePage = 'Agregar Personal';
   public isEditing = false;
+  public isLoading = false;
   public user_id: number | null = null;
   public staff_selected: any = null;
   public roles: any[] = [];
@@ -43,7 +45,6 @@ export class StaffNComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       birth_date: ['', Validators.required],
       gender: [1, Validators.required],
-      education: [''],
       designation: [''],
       address: [''],
       role_id: ['', Validators.required],
@@ -79,6 +80,7 @@ export class StaffNComponent implements OnInit {
   }
 
   loadUser() {
+    this.isLoading = true;
     this.staffService.getUser(this.user_id!).subscribe((resp: any) => {
       this.staff_selected = resp.user;
       this.staffForm.patchValue({
@@ -88,7 +90,6 @@ export class StaffNComponent implements OnInit {
         email: this.staff_selected.email,
         birth_date: new Date(this.staff_selected.birth_date).toISOString().slice(0, 16),
         gender: this.staff_selected.gender,
-        education: this.staff_selected.education,
         designation: this.staff_selected.designation,
         address: this.staff_selected.address,
         role_id: this.staff_selected.roles.id
@@ -104,13 +105,13 @@ export class StaffNComponent implements OnInit {
         email: [this.staff_selected.email, [Validators.required, Validators.email]],
         birth_date: [new Date(this.staff_selected.birth_date).toISOString().slice(0, 16), Validators.required],
         gender: [this.staff_selected.gender, Validators.required],
-        education: [this.staff_selected.education],
         designation: [this.staff_selected.designation],
         address: [this.staff_selected.address],
         role_id: [this.staff_selected.roles.id, Validators.required],
         password: [''],
         password_confirmation: ['']
       });
+      this.isLoading = false;
     });
   }
 
@@ -128,6 +129,7 @@ export class StaffNComponent implements OnInit {
   }
 
   save() {
+    this.isLoading = true;
     this.text_validation = '';
     this.text_success = '';
 
@@ -153,7 +155,6 @@ export class StaffNComponent implements OnInit {
     formData.append('email', formValue.email);
     formData.append('birth_date', formValue.birth_date);
     formData.append('gender', formValue.gender.toString());
-    formData.append('education', formValue.education);
     formData.append('designation', formValue.designation);
     formData.append('address', formValue.address);
     formData.append('role_id', formValue.role_id);
@@ -170,10 +171,14 @@ export class StaffNComponent implements OnInit {
     if (this.isEditing && this.user_id) {
       this.staffService.editUser(formData, this.user_id).subscribe((resp: any) => {
         this.handleResponse(resp);
+        
+        this.isLoading = false
       });
     } else {
       this.staffService.createUser(formData).subscribe((resp: any) => {
         this.handleResponse(resp);
+        
+        this.isLoading = false
       });
     }
   }
@@ -182,10 +187,11 @@ export class StaffNComponent implements OnInit {
     if (resp.message === 403) {
       this.text_validation = resp.message_text;
     } else {
-      this.text_success = this.isEditing ? 'El Usuario se ha editado correctamente' : 'El Usuario se ha creado correctamente';
-      setTimeout(() => {
-        this.router.navigate(['/staffs/list']);
-      }, 1500);
+      Swal.fire('Exito!', `El Usuario se ha ${this.isEditing ? 'Actualizado' : 'Creado'}`, 'success');
+      // this.text_success = this.isEditing ? 'El Usuario se ha editado correctamente' : 'El Usuario se ha creado correctamente';
+      // setTimeout(() => {
+      //   this.router.navigate(['/staffs/list']);
+      // }, 1500);
     }
   }
 }

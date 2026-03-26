@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { AppoitmentPayService } from "src/app/services/appoitment-pay.service";
 import { PaymentService } from "src/app/services/payment.service";
 import { AppointmentService } from "src/app/services/appointment.service";
 import { RolesService } from "src/app/services/roles.service";
 import { AuthService } from "src/app/shared/auth/auth.service";
+import { StaffService } from "src/app/services/staff.service";
+import { User } from "src/app/models/user.model";
 
 @Component({
   selector: "app-notificacionesupdate",
@@ -12,9 +13,8 @@ import { AuthService } from "src/app/shared/auth/auth.service";
 })
 export class NotificacionesupdateComponent implements OnInit {
   @Input() routes;
-  @Input() darkMode;
   @Input() user;
-  @Input() usuario;
+ @Input() usuario;
   @Input() imagenSerUrl;
   @Input() logout;
 
@@ -27,25 +27,34 @@ export class NotificacionesupdateComponent implements OnInit {
   totalT: any = 0;
   totalTTr: any = 0;
   roles: any = [];
+  userremoto:User;
+
+  public IMAGE_PREVISUALIZA = 'assets/img/user-06.jpg';
+
   constructor(
     private appointmentService: AppointmentService,
     public paymentService: PaymentService,
     public roleService: RolesService,
     public authService: AuthService,
+    public staffService: StaffService,
   ) {}
   ngOnInit(): void {
     this.user = this.roleService.authService.user;
-    this.roles = this.user.roles[0];
+    this.roles = this.user.roles;
     setTimeout(() => {
       this.getAppointmentRecientes();
       this.getAppointmentRecientesbyDoctor();
       this.getTrastransferenciasRecientesByDoctor();
       this.getTrastransferenciasRecientes();
     }, 3000);
+    this.getUserRemoto();
     
-    
+  }
 
-
+  getUserRemoto(){
+    this.staffService.getUser(this.user.id).subscribe((resp:any)=>{
+      this.userremoto = resp.user;
+    })
   }
   //obtiene las citas pendientes por atender
   getAppointmentRecientesbyDoctor() {
@@ -84,7 +93,6 @@ export class NotificacionesupdateComponent implements OnInit {
       (response: any) => {
         this.payments_doctors = response.payments.data;
         this.totalT = response.total;
-        console.log(this.payments_doctors);
       },
       (error) => {
         console.log(error);
@@ -96,7 +104,6 @@ export class NotificacionesupdateComponent implements OnInit {
       (response: any) => {
         this.payments = response.payments.data;
         this.totalTTr = response.total;
-        console.log(this.payments);
       },
       (error) => {
         console.log(error);
@@ -116,5 +123,28 @@ export class NotificacionesupdateComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  darkmode(dark: string) {
+    const body = document.querySelector('body');
+    const header = document.querySelector('header');
+    const aside = document.querySelector('aside');
+
+    // Toggle dark class on elements if they exist
+    if (body) body.classList.toggle('dark');
+    if (header) header.classList.toggle('dark');
+    if (aside) aside.classList.toggle('dark');
+
+    // Toggle globoblack class on all globowhite elements safely
+    Array.from(document.getElementsByClassName('globowhite')).forEach((el: Element) => {
+      el.classList.toggle('globoblack');
+    });
+
+    // Update localStorage based on body state (more reliable)
+    if (body && body.classList.contains('dark')) {
+      localStorage.setItem('dark', 'true');
+    } else {
+      localStorage.removeItem('dark');
+    }
   }
 }

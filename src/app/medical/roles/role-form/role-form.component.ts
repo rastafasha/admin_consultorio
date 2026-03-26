@@ -75,8 +75,8 @@ export class RoleFormComponent implements OnInit {
   }   // Update FormArray    this.permissionsArray.clear();    this.permissions.forEach((p: string) => this.permissionsArray.push(new FormControl(p)));  }
 
   save(): void {
-    if (this.roleForm.invalid || this.permissionsArray.length === 0) {
-      this.text_validation = 'Nombre y al menos un permiso requeridos';
+    if (this.roleForm.invalid ) {
+      // this.text_validation = 'Nombre y al menos un permiso requeridos';
       return;
     }
 

@@ -20,6 +20,7 @@ export class ListRoleUserComponent {
   dataSource!: MatTableDataSource<any>;
 
   public showFilter = false;
+  public isLoading = false;
   public searchDataValue = '';
   public lastIndex = 0;
   public pageSize = 10;
@@ -51,6 +52,7 @@ export class ListRoleUserComponent {
     this.getTableData();
   }
   private getTableData(): void {
+    this.isLoading = true;
     this.rolesList = [];
     this.serialNumberArray = [];
 
@@ -61,12 +63,14 @@ export class ListRoleUserComponent {
       this.totalData = resp.roles.length;
       this.role_generals = resp.roles;
       this.role_id = resp.roles.id;
+      this.isLoading = false;
      this.getTableDataGeneral();
     })
 
   }
 
   getTableDataGeneral(){
+    this.isLoading = true;
     this.rolesList = [];
     this.serialNumberArray = [];
     
@@ -80,14 +84,13 @@ export class ListRoleUserComponent {
     });
     this.dataSource = new MatTableDataSource<any>(this.rolesList);
     this.calculateTotalPages(this.totalData, this.pageSize);
+    this.isLoading = false
   }
   selectRol(rol:any){
     this.role_selected = rol;
   }
+
   deleteRol(){
-
-    
-
     this.rolesService.deconsteRole(this.role_selected.id).subscribe((resp:any)=>{
       // console.log(resp);
 

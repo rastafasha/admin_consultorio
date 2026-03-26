@@ -17,6 +17,7 @@ import { RouterModule } from '@angular/router';
 import { HeaderComponent } from '../common-component/header/header.component';
 import { SidebarComponent } from '../common-component/sidebar/sidebar.component';
 import { NotificacionesupdateComponent } from '../common-component/notificacionesupdate/notificacionesupdate.component';
+import { PipesModule } from '../pipes/pipes.module';
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -53,6 +54,7 @@ import { NotificacionesupdateComponent } from '../common-component/notificacione
     ReactiveFormsModule,
     NgxMaterialTimepickerModule,
     RouterModule,
+    PipesModule
   ],
   exports: [
     CommonModule,

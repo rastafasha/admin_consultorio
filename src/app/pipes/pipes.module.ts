@@ -6,6 +6,7 @@ import { ArrayFindPipe } from './array-find.pipe';
 import { ArrayFilterPipe } from './array-filter.pipe';
 import { AdminFilterPipe } from './admin-filter.pipe';
 import { SuperAdminFilterPipe } from './superadmin-filter.pipe';
+import { ImagenPipe } from './imagen.pipe';
 
 
 
@@ -16,7 +17,8 @@ import { SuperAdminFilterPipe } from './superadmin-filter.pipe';
     ArrayFindPipe,
     ArrayFilterPipe,
     AdminFilterPipe,
-    SuperAdminFilterPipe
+    SuperAdminFilterPipe,
+    ImagenPipe
 
   ],
   exports: [
@@ -25,7 +27,8 @@ import { SuperAdminFilterPipe } from './superadmin-filter.pipe';
     ArrayFindPipe,
     ArrayFilterPipe,
     AdminFilterPipe,
-    SuperAdminFilterPipe
+    SuperAdminFilterPipe,
+    ImagenPipe
 
   ],
   imports: [

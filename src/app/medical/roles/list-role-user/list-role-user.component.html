@@ -21,9 +21,9 @@
             
                 <div class="card card-table show-entire">
                     <div class="card-body">
-                    
+                      
                         <!-- Table Header -->
-                        <div class="page-table-header mb-2">
+                        <div class="page-table-header mb-2" >
                             <div class="row align-items-center">
                                 <div class="col">
                                     <div class="doctor-table-blk">
@@ -45,8 +45,8 @@
                             </div>
                         </div>
                         <!-- /Table Header -->
-                        
-                        <div class="table-responsive">
+                        <app-loading *ngIf="isLoading"></app-loading>
+                        <div class="table-responsive" *ngIf="!isLoading">
                             <table matSort (matSortChange)="sortData($event)" class="table border-0 custom-table comman-table datatable mb-0">
                                 <thead>
                                     <tr>
@@ -63,7 +63,13 @@
                                         <td>{{data.name}}</td>
                                         <td>
                                           <ul class="persmisoslista">
-                                            <li>{{data.permision_pluck.length > 0 ? data.permision_pluck: 'TODOS LOS PERMISOS' }}</li>
+                                            <li>
+                                                {{ 
+                                                  data.permision_pluck.length > 0 
+                                                  ? data.permision_pluck 
+                                                  : (data.all_permissions_condition ? 'TODOS LOS PERMISOS' : 'NINGÚN PERMISO') 
+                                                }}
+                                              </li>
                                           </ul>
                                         </td>
                                         <td>{{data.created_at}}</td>

@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { routes } from 'src/app/shared/routes/routes';
 import { DoctorService } from '../../../services/doctor.service';
 import Swal from 'sweetalert2';
+import { Pais } from 'src/app/models/pais';
 
 @Component({
   selector: 'app-doctors-form',
@@ -21,7 +22,7 @@ export class DoctorsFormComponent implements OnInit {
   public speciality_id: any = null;
   public roles: any[] = [];
   public specialities: any[] = [];
-  public locations: any[] = [];
+  public countries: Pais;
   public hours_days: any[] = [];
   public hours_selecteds: any[] = [];
   public days_week = [
@@ -78,7 +79,7 @@ export class DoctorsFormComponent implements OnInit {
     this.doctorService.listConfig().subscribe((resp: any) => {
       this.roles = resp.roles;
       this.specialities = resp.specialities;
-      this.locations = resp.locations;
+      this.countries = resp.countries;
       this.hours_days = resp.hours_days;
       if (this.isEditMode) {
         this.loadDoctor();
@@ -86,11 +87,13 @@ export class DoctorsFormComponent implements OnInit {
     });
   }
 
+
+
   loadDoctor(): void {
     this.doctorService.showDoctor(+this.doctorId!).subscribe((resp: any) => {
       this.doctor_selected = resp.user;
       this.selectedValue = this.doctor_selected.roles.id;
-      this.selectedValueLocation = this.doctor_selected.location_id;
+      this.selectedValueLocation = this.doctor_selected.pais_id;
       this.speciality_id = this.doctor_selected.speciality?.id || null;
       this.doctorForm.patchValue({
         name: this.doctor_selected.name,
