@@ -1,0 +1,50 @@
+h2{
+    color: #b02b2b !important;
+    text-align: center;
+}
+
+
+.step-indicators {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.step-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #ddd;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.step-circle.active {
+  background: #00c0ef;
+  color: white;
+}
+
+.step-line {
+  flex: 1;
+  height: 2px;
+  background: #ddd;
+  margin: 0 10px;
+}
+
+.botonesmodal{
+  display: flex;
+  flex-direction: row;
+  gap:10px
+}
+
+@media (max-width:780px) {
+  .botonesmodal{
+  display: flex;
+  flex-direction: column;
+}
+}

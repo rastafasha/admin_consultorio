@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { routes } from 'src/app/shared/routes/routes';
 import { PatientMService } from '../../../services/patient-m.service';
 import { DoctorService } from '../../../services/doctor.service';
+import { catchError, throwError } from 'rxjs';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -24,6 +25,8 @@ export class PatientFormMComponent implements OnInit {
 
   public text_validation: string;
   public patient_selected: any;
+  public isLoading = false;
+  public isSaving = false;
 
   constructor(
     private fb: FormBuilder,
@@ -70,14 +73,30 @@ export class PatientFormMComponent implements OnInit {
     this.doctor_id = this.user.id;
 
     this.patientId = this.activatedRoute.snapshot.paramMap.get('id');
+    console.log('DEBUG patient-form ngOnInit: route patientId =', this.patientId);
+    console.log('DEBUG patient-form ngOnInit: isEditMode before =', this.isEditMode);
     if (this.patientId) {
       this.isEditMode = true;
+      console.log('DEBUG patient-form ngOnInit: entering edit mode, id=', this.patientId);
       this.loadPatient();
+    } else {
+      console.log('DEBUG patient-form ngOnInit: create mode');
     }
   }
 
   loadPatient(): void {
-    this.patientService.getPatient(+this.patientId!).subscribe((resp: any) => {
+    console.log('DEBUG patient-form loadPatient: calling getPatient(', +this.patientId!, ')');
+    this.isLoading = true;
+    this.patientService.getPatient(+this.patientId!).pipe(
+      catchError(err => {
+        console.error('DEBUG patient-form loadPatient ERROR:', err);
+        this.text_validation = 'Error loading patient: ' + (err.error?.message || err.message);
+        this.isEditMode = false; // Fallback to create if load fails
+        this.isLoading = false;
+        return throwError(() => err);
+      })
+    ).subscribe((resp: any) => {
+      console.log('DEBUG patient-form loadPatient SUCCESS:', resp);
       this.patient_selected = resp.patient;
       this.patientForm.patchValue({
         name: this.patient_selected.name,
@@ -111,6 +130,7 @@ export class PatientFormMComponent implements OnInit {
         relationship_responsable: this.patient_selected.person?.relationship_responsable || ''
       });
       this.IMAGE_PREVISUALIZA = this.patient_selected.avatar || 'assets/img/user-06.jpg';
+      this.isLoading = false;
     });
   }
 
@@ -127,9 +147,19 @@ export class PatientFormMComponent implements OnInit {
     reader.onloadend = () => this.IMAGE_PREVISUALIZA = reader.result;
   }
 
+  // eslint-disable-next-line no-debugger
   save(): void {
+    console.log('DEBUG patient-form save(): isEditMode=', this.isEditMode, 'patientId=', this.patientId);
+    if (this.isSaving || this.isLoading) {
+      console.log('DEBUG save(): already saving/loading, ignore');
+      return;
+    }
+    this.isSaving = true;
+    this.isLoading = true;
     if (this.patientForm.invalid) {
       this.text_validation = 'Los campos con * son obligatorios';
+      this.isSaving = false;
+      this.isLoading = false;
       return;
     }
 
@@ -170,21 +200,35 @@ export class PatientFormMComponent implements OnInit {
 
     this.text_validation = '';
 
-    const observable = this.isEditMode
+
+    let observable = this.isEditMode
       ? this.patientService.editPatient(formData, +this.patientId!)
       : this.patientService.createPatient(formData);
-
+    
+    observable = observable.pipe(
+      catchError((err: any) => {
+        console.error('DEBUG patient-form save ERROR:', err, 'isEditMode:', this.isEditMode);
+        this.text_validation = err.error?.message_text || err.error?.message || 'Error saving patient';
+        this.isLoading = false;
+        this.isSaving = false;
+        return throwError(() => err);
+      })
+    );
+    
     observable.subscribe((resp: any) => {
+      console.log('DEBUG patient-form save SUCCESS:', resp);
       if (resp.message === 403) {
         this.text_validation = resp.message_text;
       } else {
+        this.isLoading = false;
+        this.isSaving = false;
         Swal.fire('Exito!', `El Paciente se ha ${this.isEditMode ? 'Actualizado' : 'Creado'}`, 'success');
-        this.router.navigate(['/patient-m/list/doctor/', this.doctor_id]);
+        // this.router.navigate(['/patient-m/list/doctor/', this.doctor_id]);
       }
     });
   }
 
-  get title(): string {
+  public get title(): string {
     return this.isEditMode ? `Editar Paciente #${this.patientId}` : 'Agregar Paciente';
   }
 }

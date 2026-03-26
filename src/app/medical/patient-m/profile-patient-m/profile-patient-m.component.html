@@ -15,8 +15,9 @@
             </div>
         </div>
         <!-- /Page Header -->
+         <app-loading *ngIf="isLoading"></app-loading>
         <div class="row">
-            <div class="col-sm-12" *ngIf="patient_selected">
+            <div class="col-sm-12" *ngIf="!isLoading && patient_selected">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">

@@ -186,7 +186,7 @@ export class DoctorsFormComponent implements OnInit {
         this.text_validation = resp.message_text;
       } else {
         Swal.fire('Éxito!', `Doctor ${this.isEditMode ? 'actualizado' : 'creado'} correctamente`, 'success');
-        this.router.navigate(['/doctors/list']);
+        // this.router.navigate(['/doctors/list']);
       }
     });
   }
@@ -318,6 +318,6 @@ export class DoctorsFormComponent implements OnInit {
   }
 
   get title(): string {
-    return this.isEditMode ? `Editar Doctor #${this.doctorId}` : 'Agregar Doctor';
+    return this.isEditMode ? `Editar Doctor ` : 'Agregar Doctor';
   }
 }

@@ -1,0 +1,60 @@
+
+<div class="modal fade" id="modalInical" tabindex="-1" aria-labelledby="modalInicalLabel" aria-hidden="true" *ngIf="showModal">
+  <div class="modal-backdrop fade show"></div>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalInicalLabel">Bienvenido</h1>
+        <button type="button" class="btn-close" (click)="onNoShowMore()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="step-indicators text-center mb-4">
+          <span class="step-circle" [class.active]="currentStep >= 1">1</span>
+          <span class="step-line"></span>
+          <span class="step-circle" [class.active]="currentStep >= 2">2</span>
+        </div>
+        <div *ngIf="currentStep === 1">
+          <h2>¡Bienvenido al Admin Klyntic! </h2>
+          <p>Gracias por acceder a la versión Demo!</p>
+          <p>En esta sección podrás ver:</p>
+          <ul>
+            <li>El comportamiento diario, mensual y anual del comportamiento de tu Consultorio.</li>
+            <li>Pacientes Recientes</li>
+            <li>Citas Pendientes</li>
+            <li>Pagos y Transferencias</li>
+          </ul>
+          <p>Además tienes mas opciones en el menu lateral Izquierdo</p>
+          <small>Eventualmente estaremos mejorando y agregando más opciones, con actualiaciones periodicas</small>
+        </div>
+        <div *ngIf="currentStep === 2">
+          <h2>Instalalo en tu Dispositivo! </h2>
+          <p>Si puedes ver este icon en la barra de dirección:</p>
+          <img src="./assets/img/barra.jpg" class="img-fluid" style="width: 100%; display: block; margin:auto" alt="">
+          <div class="row">
+            <div class="col-12 col-sm-6">
+              <p>1 Pulsa sobre el icono y podras instalarlo en tu dispositivo (Computador, Tabla, Movil):</p>
+              <img src="./assets/img/install.jpg" class="img-fluid" style="width: 100%; display: block; margin:auto" alt="">
+              <p>2 Pulsa el Boton Install</p>
+            </div>
+            <div class="col-12 col-sm-6">
+              <p>3 Agregalo a tu barra de Inicio:</p>
+              <img src="./assets/img/instalado.png" class="img-fluid" style="width: 100%; display: block; margin:auto" alt="">
+            </div>
+          </div>
+        </div>
+        <div class="text-center mt-4">
+          <button *ngIf="currentStep === 1" class="btn btn-info btn-md text-uppercase me-2" (click)="nextStep()">
+            Siguiente
+          </button>
+          <button *ngIf="currentStep === 2" class="btn btn-secondary btn-md me-2" (click)="prevStep()">
+            Volver
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer botonesmodal">
+        <button type="button" class="btn btn-outline-success me-2" (click)="onNoShowMore(); nextStep()">Continuar</button>
+        <button type="button" class="btn btn-outline-danger" (click)="onNoShowMore()">No quiero ver más este mensaje</button>
+      </div>
+    </div>
+  </div>
+</div>

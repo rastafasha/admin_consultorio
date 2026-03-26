@@ -7,7 +7,7 @@
                 <app-back-bottn style="width: 50px;"></app-back-bottn>
                 <div class="col-sm-10">
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a [routerLink]="['/patient-m/list/doctor/', doctor_id]">Pacientes </a></li>
+                        <li class="breadcrumb-item"><a [routerLink]="['/patients/list/doctor/', doctor_id]">Pacientes </a></li>
                         <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
                         <li class="breadcrumb-item active">{{ title }} </li>
                     </ul>
@@ -15,11 +15,13 @@
             </div>
         </div>
         <!-- /Page Header -->
-        <div class="row">
+         <app-loading *ngIf="isLoading"></app-loading>
+        <div class="row" *ngIf="!isLoading" >
             <!-- paciente -->
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
+                        
                         <form [formGroup]="patientForm">
                             <div class="row" >
                                 <div class="col-12">
@@ -284,7 +286,10 @@
                                 
                                 <div class="col-12">
                                     <div class="doctor-submit text-end">
-                                        <button type="button" class="btn btn-primary submit-form me-2" (click)="save()">Guardar</button>
+                                        <button type="button" [disabled]="isLoading || isSaving" class="btn btn-primary submit-form me-2" (click)="save()">
+                                          <span *ngIf="isLoading || isSaving">Guardando...</span>
+                                          <span *ngIf="!isLoading && !isSaving">Guardar</span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>

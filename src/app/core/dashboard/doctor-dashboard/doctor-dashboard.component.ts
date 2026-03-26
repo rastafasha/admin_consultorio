@@ -74,6 +74,8 @@ export class DoctorDashboardComponent {
   public doctors:any = [];
   public doctor_id:any;
 
+  isLoading=false;
+
 
   public appointments:any = []
   public num_appointments_current = 0;
@@ -266,7 +268,6 @@ export class DoctorDashboardComponent {
     const USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER: '');
     this.doctor_id = this.user.id;
-    console.log(this.doctor_id);
 
     if(this.user.roles[0]==='DOCTOR'){
 
@@ -281,13 +282,14 @@ export class DoctorDashboardComponent {
 
 
   getDoctor(){
+    this.isLoading=true;
     this.doctor_id = this.user.id
     this.doctorService.showDoctorProfile(this.doctor_id).subscribe((resp:any)=>{
-      console.log(resp);
       this.doctor = resp.doctor;
       this.appointment_pendings= resp.appointment_pendings.data;
       this.appointments= resp.appointments;
       this.schedule_selecteds= resp.schedule_selecteds;
+      this.isLoading=false;
 
   
     })
@@ -314,13 +316,13 @@ export class DoctorDashboardComponent {
   }
 
   dashboardDoctorProfile(){
+    this.isLoading=true;
     this.doctor_id = this.user.id;
     const data ={
       doctor_id:this.doctor_id
     }
     
     this.dashboardService.dashboardDoctor(data).subscribe((resp:any)=>{
-      console.log(resp);
 
       this.appointments= resp.appointments.data;
 
@@ -342,9 +344,11 @@ export class DoctorDashboardComponent {
       this.doctorPatientList= resp.patientsbydoc.data;
       this.paymentsbydoc= resp.paymentsbydoc.data;
       this.appointmentpaysbydoc= resp.appointmentpaysbydoc.data;
+      this.isLoading=false;
     });
   }
   dashboardDoctorProfileYear(){
+    this.isLoading=true;
     this.doctor_id = this.user.id;
     const data ={
       year: this.selectedValue,
@@ -502,11 +506,12 @@ export class DoctorDashboardComponent {
         },
       };
       //end
+      this.isLoading=false;
     })
   }
 
   dashboardDoctor(){
-    
+    this.isLoading=true;
     const data ={
       doctor_id:this.doctor_id
     }
@@ -530,9 +535,11 @@ export class DoctorDashboardComponent {
       this.num_appointments_total_pending_current= resp.num_appointments_total_pending_current;
       this.num_appointments_total_pending_before= resp.num_appointments_total_pending_before;
       this.porcentaje_dtpn= resp.porcentaje_dtpn;
+      this.isLoading=false;
     })
   }
   dashboardDoctorYear(){
+    this.isLoading=true;
     const data ={
       year: this.selectedValue,
       doctor_id:this.doctor_id
@@ -689,6 +696,7 @@ export class DoctorDashboardComponent {
         },
       };
       //end
+      this.isLoading=false;
     })
   }
 

@@ -22,6 +22,7 @@ export class PatientDoctorListComponent {
   dataSource!: MatTableDataSource<any>;
 
   public showFilter = false;
+  public isLoading = false;
   public searchDataValue = '';
   public lastIndex = 0;
   public pageSize = 10;
@@ -81,11 +82,12 @@ export class PatientDoctorListComponent {
   }
 
   private getTableData(page=1): void {
+    this.isLoading = true;
     this.patientList = [];
     this.serialNumberArray = [];
 
     this.patientService.listPatientDocts(this.doctor_id, page,this.searchDataValue).subscribe((resp:any)=>{
-      console.log(resp);
+      
 
       this.totalDataPatient = resp.total;
       this.patientList = resp.patients.data;
@@ -93,6 +95,7 @@ export class PatientDoctorListComponent {
       // this.getTableDataGeneral();
       this.dataSource = new MatTableDataSource<any>(this.patientList);
       this.calculateTotalPages(this.totalDataPatient, this.pageSize);
+       this.isLoading = false;
     })
   }
 
@@ -101,7 +104,7 @@ export class PatientDoctorListComponent {
     //   console.log(resp);
     //   this.doctorPatientList = resp.patients.data;
     // })
-
+    this.isLoading = true;
     this.doctorPatientList = [];
     this.serialNumberArray = [];
 
@@ -114,12 +117,15 @@ export class PatientDoctorListComponent {
       // this.getTableDataGeneral();
       this.dataSource = new MatTableDataSource<any>(this.patientList);
       this.calculateTotalPages(this.totalDataPatient, this.pageSize);
+      this.isLoading = false;
     })
   }
 
   getTableDataGeneral(){
+    this.isLoading = true;
     this.patientList = [];
     this.serialNumberArray = [];
+
     
     this.patient_generals.map((res: any, index: number) => {
       const serialNumber = index + 1;
@@ -131,6 +137,7 @@ export class PatientDoctorListComponent {
     });
     this.dataSource = new MatTableDataSource<any>(this.patientList);
     this.calculateTotalPages(this.totalDataPatient, this.pageSize);
+    this.isLoading = false;
   }
   selectUser(staff:any){
     this.patient_selected = staff;
