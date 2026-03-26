@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { SpecialitieService } from '../service/specialitie.service';
+import { SpecialitieService } from '../../../services/specialitie.service';
 import { MatTableDataSource } from '@angular/material/table';
 import * as XLSX from 'xlsx';
 import jspdf from 'jspdf';
 import { FileSaverService } from 'ngx-filesaver';
 import { routes } from 'src/app/shared/routes/routes';
-import { DoctorService } from '../../doctors/service/doctor.service';
-import { RolesService } from '../../roles/service/roles.service';
+import { DoctorService } from '../../../services/doctor.service';
+import { RolesService } from '../../../services/roles.service';
 declare var $:any;    
 @Component({
   selector: 'app-list-specialitie',
@@ -20,6 +20,7 @@ export class ListSpecialitieComponent {
   titlePage = 'Listado de Especialidades';
 
   public showFilter = false;
+  public isLoading = false;
   public searchDataValue = '';
   public lastIndex = 0;
   public pageSize = 10;
@@ -77,6 +78,7 @@ export class ListSpecialitieComponent {
   getTableDataGeneral() {
     this.specialitiesList = [];
     this.serialNumberArray = [];
+    this.isLoading=true;
 
     this.specialitie_generals.map((res: any, index: number) => {
       const serialNumber = index + 1;
@@ -88,6 +90,7 @@ export class ListSpecialitieComponent {
     });
     this.dataSource = new MatTableDataSource<any>(this.specialitiesList);
     this.calculateTotalPages(this.totalData, this.pageSize);
+    this.isLoading=false;
   }
 
   selectSpecialitie(rol:any){
@@ -163,6 +166,7 @@ export class ListSpecialitieComponent {
   }
 
   public PageSize(): void {
+    
     this.pageSelection = [];
     this.limit = this.pageSize;
     this.skip = 0;

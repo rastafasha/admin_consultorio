@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { routes } from 'src/app/shared/routes/routes';
-import { PatientMService } from '../service/patient-m.service';
-import { DoctorService } from '../../doctors/service/doctor.service';
+import { PatientMService } from '../../../services/patient-m.service';
+import { DoctorService } from '../../../services/doctor.service';
 import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-profile-patient-m',

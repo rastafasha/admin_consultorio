@@ -1,21 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { StaffComponent } from './staff.component';
-import { AddStaffNComponent } from './add-staff-n/add-staff-n.component';
 import { ListStaffNComponent } from './list-staff-n/list-staff-n.component';
-import { EditStaffNComponent } from './edit-staff-n/edit-staff-n.component';
+import { StaffNComponent } from './staff-n/staff-n.component';
 
 const routes: Routes = [
   {path:'', component:StaffComponent,
   children:[
     {
-      path:'add-staff', component:AddStaffNComponent
+      path:'add-staff', component:StaffNComponent
+    },
+    {
+      path:'staff-n/:id', component:StaffNComponent
     },
     {
       path:'list', component:ListStaffNComponent
-    },
-    {
-      path:'list/edit/:id', component:EditStaffNComponent
     },
     
   ]

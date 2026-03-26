@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PatientMService } from '../../patient-m/service/patient-m.service';
+import { PatientMService } from '../../../services/patient-m.service';
 import { Patient } from 'src/app/models/patient.model';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { Validators } from 'ngx-editor';
 import { routes } from 'src/app/shared/routes/routes';
-import { AppointmentService } from '../service/appointment.service';
-import { DoctorService } from '../../doctors/service/doctor.service';
-import { RolesService } from '../../roles/service/roles.service';
-import { SpecialitieService } from '../../specialitie/service/specialitie.service';
+import { AppointmentService } from '../../../services/appointment.service';
+import { DoctorService } from '../../../services/doctor.service';
+import { RolesService } from '../../../services/roles.service';
+import { SpecialitieService } from '../../../services/specialitie.service';
 import { SettignService } from 'src/app/core/settings/settigs.service';
 import Swal from 'sweetalert2';
 

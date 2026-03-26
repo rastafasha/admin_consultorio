@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { FileSaverService } from 'ngx-filesaver';
 import { routes } from 'src/app/shared/routes/routes';
-import { PaymentService } from '../../appointment-pay/service/payment.service';
-import { DoctorService } from '../../doctors/service/doctor.service';
-import { PubService } from '../service/pub.service';
+import { PaymentService } from '../../../services/payment.service';
+import { DoctorService } from '../../../services/doctor.service';
+import { PubService } from '../../../services/pub.service';
 
 declare var $:any;  
 @Component({

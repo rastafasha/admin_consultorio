@@ -3,10 +3,10 @@ import { routes } from 'src/app/shared/routes/routes';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import { CalendarAppointmentService } from '../sevice/calendar-appointment.service';
-import { AppoitmentPayService } from '../../appointment-pay/service/appoitment-pay.service';
-import { DoctorService } from '../../doctors/service/doctor.service';
-import { RolesService } from '../../roles/service/roles.service';
+import { AppoitmentPayService } from '../../../services/appoitment-pay.service';
+import { DoctorService } from '../../../services/doctor.service';
+import { RolesService } from '../../../services/roles.service';
+import { CalendarAppointmentService } from 'src/app/services/calendar-appointment.service';
 
 @Component({
   selector: 'app-appointment-calendar',
@@ -22,7 +22,7 @@ export class AppointmentCalendarComponent {
   public search_doctor = '';
   public search_patient = '';
   public specialities:any = [];
-  public speciality_id:number= 0;
+  public speciality_id:number;
 
   public user:any;
 
@@ -82,7 +82,7 @@ export class AppointmentCalendarComponent {
     })
   }
   getCalendar(){
-    let data = {
+    const data = {
       search_doctor: this.search_doctor,
       search_patient: this.search_patient,
       speciality_id: this.speciality_id,

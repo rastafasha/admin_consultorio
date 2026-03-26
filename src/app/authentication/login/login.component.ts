@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { RolesService } from 'src/app/medical/roles/service/roles.service';
+import { RolesService } from 'src/app/services/roles.service';
 import { AuthService } from 'src/app/shared/auth/auth.service';
 import { routes } from 'src/app/shared/routes/routes';
 
@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
   public routes = routes;
   public passwordClass = false;
  public ERROR = false;
+ public isLoading = false;
  public user:any;
  public roles:any = [] ;
 
@@ -81,18 +82,20 @@ export class LoginComponent implements OnInit {
 
 
   loginFormSubmit() {
+    this.isLoading = true;
     if (this.form.valid) {
       this.ERROR = false;
       this.auth.login(this.form.value.email ? this.form.value.email : '' ,this.form.value.password ? this.form.value.password: '')
       .subscribe((resp:any) => {
         if(resp === true){
           // EL LOGIN ES EXITOSO
-          
+          this.isLoading = false;
           setTimeout(() => {
             this.getLocalStorage();
             // this.router.navigate([routes.adminDashboard]);
           }, 50);
         }else{
+          this.isLoading = false;
           // EL LOGIN NO ES EXITOSO
           this.ERROR = true;
         }

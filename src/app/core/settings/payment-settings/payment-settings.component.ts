@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { routes } from 'src/app/shared/routes/routes';
 import { PaymentMethod } from '../paymentMethod';
 import { SettignService } from '../settigs.service';
-import { DoctorService } from 'src/app/medical/doctors/service/doctor.service';
+import { DoctorService } from 'src/app/services/doctor.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({

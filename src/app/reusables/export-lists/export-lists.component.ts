@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FileSaverService } from 'ngx-filesaver';
-import { DoctorService } from 'src/app/medical/doctors/service/doctor.service';
-import { RolesService } from 'src/app/medical/roles/service/roles.service';
-import { SpecialitieService } from 'src/app/medical/specialitie/service/specialitie.service';
+import { DoctorService } from 'src/app/services/doctor.service';
+import { RolesService } from 'src/app/services/roles.service';
+import { SpecialitieService } from 'src/app/services/specialitie.service';
 
 @Component({
   selector: 'app-export-lists',

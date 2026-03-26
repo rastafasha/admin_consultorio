@@ -3,8 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { LocationRoutingModule } from './location-routing.module';
 import { LocationComponent } from './location.component';
-import { LocationAddComponent } from './location-add/location-add.component';
-import { LocationEditComponent } from './location-edit/location-edit.component';
+import { LocationFormComponent } from './location-form/location-form.component';
 import { LocationListComponent } from './location-list/location-list.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -17,8 +16,13 @@ import { ReusablesModule } from 'src/app/reusables/reusables.module';
 @NgModule({
   declarations: [
     LocationComponent,
-    LocationAddComponent,
-    LocationEditComponent,
+    LocationFormComponent,
+    LocationListComponent,
+    LocationViewComponent
+  ],
+  exports: [
+    LocationComponent,
+    LocationFormComponent,
     LocationListComponent,
     LocationViewComponent
   ],
@@ -34,3 +38,4 @@ import { ReusablesModule } from 'src/app/reusables/reusables.module';
   ]
 })
 export class LocationModule { }
+

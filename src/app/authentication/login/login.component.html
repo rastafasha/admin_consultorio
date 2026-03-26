@@ -28,8 +28,9 @@
                   <p style="text-align:center;">Consultorio.</p>
                 </div>
                 <h2>Ingresar</h2>
+                <app-loading *ngIf="isLoading"></app-loading>
                 <!-- Form -->
-                <form [formGroup]="form" (ngSubmit)="loginFormSubmit()">
+                <form *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="loginFormSubmit()">
                   <div class="form-group">
                     <label>Email <span class="login-danger">*</span></label>
                     <input

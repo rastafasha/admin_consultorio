@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { AppointmentRoutingModule } from './appointment-routing.module';
 import { AppointmentComponent } from './appointment.component';
-import { AddAppointmentsComponent } from './add-appointments/add-appointments.component';
-import { EditAppointmentsComponent } from './edit-appointments/edit-appointments.component';
 import { ListAppointmentsComponent } from './list-appointments/list-appointments.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -15,13 +13,13 @@ import { ListDocComponent } from './list-doc/list-doc.component';
 import { AtenderComponent } from './atender/atender.component';
 import { PipesModule } from 'src/app/pipes/pipes.module';
 import { ReusablesModule } from 'src/app/reusables/reusables.module';
+import { AppointmentFormComponent } from './appointment-form/appointment-form.component';
 
 
 @NgModule({
   declarations: [
     AppointmentComponent,
-    AddAppointmentsComponent,
-    EditAppointmentsComponent,
+    AppointmentFormComponent,
     ListAppointmentsComponent,
     AtencionMedicaComponent,
     ListDocComponent,
@@ -29,8 +27,7 @@ import { ReusablesModule } from 'src/app/reusables/reusables.module';
   ],
   exports: [
     AppointmentComponent,
-    AddAppointmentsComponent,
-    EditAppointmentsComponent,
+    AppointmentFormComponent,
     ListAppointmentsComponent,
     AtencionMedicaComponent,
     AtenderComponent

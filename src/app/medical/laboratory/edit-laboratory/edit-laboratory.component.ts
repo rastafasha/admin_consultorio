@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { routes } from 'src/app/shared/routes/routes';
-import { AppointmentService } from '../../appointment/service/appointment.service';
+import { AppointmentService } from '../../../services/appointment.service';
 import Swal from 'sweetalert2';
-import { LaboratoryService } from '../service/laboratory.service';
+import { LaboratoryService } from '../../../services/laboratory.service';
 import { DomSanitizer } from '@angular/platform-browser';
 declare var $:any;  
 @Component({

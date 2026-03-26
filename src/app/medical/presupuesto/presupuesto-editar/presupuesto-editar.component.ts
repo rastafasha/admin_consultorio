@@ -3,15 +3,17 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Router, ActivatedRoute } from '@angular/router';
 import { routes } from 'src/app/shared/routes/routes';
 import Swal from 'sweetalert2';
-import { LaboratoryService } from '../../laboratory/service/laboratory.service';
-import { PresupuestoService } from '../service/presupuesto.service';
-import { Doctor, Patient, Presupuesto, Speciality } from '../presupuesto-model';
+import { LaboratoryService } from '../../../services/laboratory.service';
+import { PresupuestoService } from '../../../services/presupuesto.service';
 import { AuthService } from 'src/app/shared/auth/auth.service';
-import { DoctorService } from '../../doctors/service/doctor.service';
-import { SpecialitieService } from '../../specialitie/service/specialitie.service';
-import { RolesService } from '../../roles/service/roles.service';
-import { AppointmentService } from '../../appointment/service/appointment.service';
+import { DoctorService } from '../../../services/doctor.service';
+import { SpecialitieService } from '../../../services/specialitie.service';
+import { RolesService } from '../../../services/roles.service';
+import { AppointmentService } from '../../../services/appointment.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Patient } from 'src/app/models/patient.model';
+import { Doctor } from 'src/app/models/presupuesto.model';
+import { Speciality } from 'src/app/models/speciality.model';
 declare let $:any;  
 
 @Component({
@@ -65,7 +67,7 @@ export class PresupuestoEditarComponent {
     patient:Patient [];
     patient_id:Patient;
     doctor:Doctor [];
-    doctor_id:Doctor;
+    doctor_id:number;
     speciality:Speciality [];
     specialities:Speciality [];
     DOCTOR_SELECTED:any;

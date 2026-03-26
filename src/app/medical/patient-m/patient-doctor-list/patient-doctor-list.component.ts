@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { routes } from 'src/app/shared/routes/routes';
-import { PatientMService } from '../service/patient-m.service';
+import { PatientMService } from '../../../services/patient-m.service';
 import { FileSaverService } from 'ngx-filesaver';
-import { DoctorService } from '../../doctors/service/doctor.service';
+import { DoctorService } from '../../../services/doctor.service';
 import * as XLSX from 'xlsx';
 import jspdf from 'jspdf';
-import { RolesService } from '../../roles/service/roles.service';
+import { RolesService } from '../../../services/roles.service';
 import { ActivatedRoute } from '@angular/router';
 
 declare var $:any;  

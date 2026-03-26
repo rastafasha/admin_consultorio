@@ -1,0 +1,120 @@
+<div class="page-wrapper">
+    <div class="content">
+    
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="row">
+                <app-back-bottn style="width: 50px;"></app-back-bottn>
+                <div class="col-sm-10">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a routerLink="/location/list">Locations </a></li>
+                        <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
+                        <li class="breadcrumb-item active">{{ isEdit ? 'Edit Location' : 'Add Location' }} </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- /Page Header -->
+        <div class="row">
+            <!-- location -->
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form [formGroup]="locationForm" (ngSubmit)="save()" autocomplete="false">
+                            <div class="row" >
+                                <div class="col-12">
+                                    <div class="form-heading">
+                                        <h4>{{ isEdit ? 'Edit Location: ' + locationId : 'Local Detail' }}</h4>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">  
+                                    <div class="form-group local-forms">
+                                        <label >Title<span class="login-danger">*</span></label>
+                                        <input class="form-control" formControlName="title" type="text" [class.is-invalid]="f['title'].touched && f['title'].errors?.['required']">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label >Phone</label>
+                                        <input class="form-control" formControlName="phone1" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label >Phone2</label>
+                                        <input class="form-control" formControlName="phone2" type="text">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label >Email</label>
+                                        <input class="form-control" formControlName="email" type="email" [class.is-invalid]="f['email'].touched && f['email'].errors?.['email']">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label >City</label>
+                                        <input class="form-control" formControlName="city" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label >ZIP</label>
+                                        <input class="form-control" formControlName="zip" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label >State</label>
+                                        <input class="form-control" formControlName="state" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8">
+                                    <div class="form-group local-forms">
+                                        <label>Address  <span class="login-danger">*</span></label>
+                                        <textarea class="form-control" formControlName="address" rows="3" cols="30" [class.is-invalid]="f['address'].touched && f['address'].errors?.['required']"></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-12 col-md-6 col-xl-6">
+                                    <div class="form-group local-top-form">
+                                        <label class="local-top">Picture</label>
+                                        <div class="settings-btn upload-files-avator">
+                                            <input type="file" accept="image/*" id="file" (change)="loadFile($event)" class="hide-input">
+                                            <label for="file" class="upload">Choose File</label>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="IMAGE_PREVISUALIZA">
+                                        <img [src]="IMAGE_PREVISUALIZA" style="width: 250px;" alt="">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-12" *ngIf="text_validation">
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                <strong>!</strong> {{text_validation}}.
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true"> </span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="doctor-submit text-end">
+                                        <button type="submit" class="btn btn-primary submit-form me-2">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>	
+            </div>
+            <!-- fin location -->
+        </div>
+    </div>
+</div>
+

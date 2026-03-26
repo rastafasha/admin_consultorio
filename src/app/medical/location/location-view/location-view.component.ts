@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { routes } from 'src/app/shared/routes/routes';
-import { DoctorService } from '../../doctors/service/doctor.service';
+import { DoctorService } from '../../../services/doctor.service';
 import { Location } from '@angular/common';
-import { LocationService } from '../services/location.service';
+import { LocationService } from 'src/app/services/location.service';
 
 @Component({
   selector: 'app-location-view',
@@ -14,7 +14,7 @@ export class LocationViewComponent {
   public routes = routes;
   public selectedValue!: string;
 
-  public title: string = '';
+  public title: string ;
 
 
   public services:any = [];
@@ -33,11 +33,11 @@ export class LocationViewComponent {
   public location_selected: any;
 
 
-  valid_form:boolean = false;
-  valid_form_success:boolean = false;
+  valid_form:boolean ;
+  valid_form_success:boolean ;
 
-  public text_success:string = '';
-  public text_validation:string = '';
+  public text_success:string ;
+  public text_validation:string ;
 
   
   constructor(

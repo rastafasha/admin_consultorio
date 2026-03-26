@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { Sort } from '@angular/material/sort';
 import { DataService } from 'src/app/shared/data/data.service';
 import { routes } from 'src/app/shared/routes/routes';
-import { DoctorService } from '../service/doctor.service';
+import { DoctorService } from '../../../services/doctor.service';
 import { ActivatedRoute } from '@angular/router';
-import { RolesService } from '../../roles/service/roles.service';
+import { RolesService } from '../../../services/roles.service';
 import { AuthService } from 'src/app/shared/auth/auth.service';
 
 @Component({

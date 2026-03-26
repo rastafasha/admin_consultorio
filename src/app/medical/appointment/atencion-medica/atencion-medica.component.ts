@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { routes } from 'src/app/shared/routes/routes';
-import { AppointmentService } from '../service/appointment.service';
+import { AppointmentService } from '../../../services/appointment.service';
 import Swal from 'sweetalert2';
 
 @Component({

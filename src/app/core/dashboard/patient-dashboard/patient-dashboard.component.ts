@@ -23,7 +23,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { pageSelection, apiResultFormat, patientDashboard } from 'src/app/shared/models/models';
 import { DashboardService } from '../service/dashboard.service';
 import { ActivatedRoute } from '@angular/router';
-import { DoctorService } from 'src/app/medical/doctors/service/doctor.service';
+import { DoctorService } from 'src/app/services/doctor.service';
 interface data {
   value: string ;
 }

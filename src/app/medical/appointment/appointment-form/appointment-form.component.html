@@ -1,0 +1,168 @@
+<div class="page-wrapper">
+    <div class="content">
+        <div class="page-header">
+            <div class="row">
+                <app-back-bottn style="width: 50px;"></app-back-bottn>
+                <div class="col-sm-10">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a [routerLink]="['/appointments/list/doctor/', doctor_id]">Citas</a></li>
+                        <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
+                        <li class="breadcrumb-item active">{{ title }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form [formGroup]="appointmentForm">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-heading">
+                                        <h4>{{ title }}</h4>
+                                    </div>
+                                </div>
+                                <!-- Filter -->
+                                <div class="col-12 col-md-6 col-xl-3">
+                                    <div class="form-group">
+                                        <label>Fecha <span class="login-danger">*</span></label>
+                                        <input class="form-control" formControlName="date_appointment" type="date" (dateChange)="onDateChange()">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-3">
+                                    <div class="form-group">
+                                        <label>Hora <span class="login-danger">*</span></label>
+                                        <mat-select formControlName="hour" class="form-control">
+                                            <mat-option *ngFor="let data of hours" [value]="data.id">{{data.name}}</mat-option>
+                                        </mat-select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-3">
+                                    <div class="form-group">
+                                        <label>Especialidad <span class="login-danger">*</span></label>
+                                        <mat-select [(ngModel)]="speciality_id" [ngModelOptions]="{standalone: true}" class="form-control">
+                                            <mat-option *ngFor="let data of specialities" [value]="data.id">{{data.name}}</mat-option>
+                                        </mat-select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-3">
+                                    <button type="button" class="btn btn-primary" (click)="filtro()">Filtro</button>
+                                </div>
+                            </div>
+                            <!-- Doctors table -->
+                            <div class="row">
+                                <div class="col-8">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Doctor</th>
+                                                <th>Disponibilidad</th>
+                                                <th>Ver</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let DOCTOR of DOCTORS">
+                                                <td>{{DOCTOR.doctor.full_name}}</td>
+                                                <td>{{countDisponibilidad(DOCTOR)}}</td>
+                                                <td><button class="btn btn-primary btn-sm" (click)="showSegment(DOCTOR)">+</button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-4" *ngIf="DOCTOR_SELECTED">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr *ngFor="let SEGMENT of DOCTOR_SELECTED.segments">
+                                                <td>
+                                                    <input type="radio" *ngIf="!SEGMENT.is_appointment" name="segment" (click)="selecSegment(SEGMENT)">
+                                                    {{SEGMENT.format_segment.format_hour_start}} a {{SEGMENT.format_segment.format_hour_end}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- Patient -->
+                            <div class="row py-4">
+                                <div class="col-12">
+                                    <h4>Datos del Paciente</h4>
+                                    <button class="btn btn-dark btn-sm" (click)="resetPatientForm()">Reset</button>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group">
+                                        <label>N.Documento <span class="login-danger">*</span></label>
+                                        <input class="form-control" formControlName="n_doc" (keyup.enter)="filterPatient()">
+                                        <button class="btn btn-sm btn-secondary" (click)="filterPatient()">Buscar</button>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group">
+                                        <label>Nombre <span class="login-danger">*</span></label>
+                                        <input class="form-control" formControlName="name">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group">
+                                        <label>Apellido <span class="login-danger">*</span></label>
+                                        <input class="form-control" formControlName="surname">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group">
+                                        <label>Teléfono <span class="login-danger">*</span></label>
+                                        <input class="form-control" formControlName="phone">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group">
+                                        <label>Nombre Acompañante</label>
+                                        <input class="form-control" formControlName="name_companion">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group">
+                                        <label>Apellido Acompañante</label>
+                                        <input class="form-control" formControlName="surname_companion">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Payment -->
+                            <div class="row py-4">
+                                <div class="col-12">
+                                    <h4>Datos de Pago</h4>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group">
+                                        <label>Precio Cita <span class="login-danger">*</span></label>
+                                        <input type="number" class="form-control" formControlName="amount">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group">
+                                        <label>Monto Adelanto <span class="login-danger">*</span></label>
+                                        <input type="number" class="form-control" formControlName="amount_add">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group">
+                                        <label>Método Pago <span class="login-danger">*</span></label>
+                                        <mat-select formControlName="method_payment" class="form-control">
+                                            <mat-option *ngFor="let tipop of tiposdepagos" [value]="tipop.tipo">{{tipop.bankName}}</mat-option>
+                                        </mat-select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="text_validation" class="alert alert-danger">
+                                {{text_validation}}
+                            </div>
+                            <div class="text-end">
+                                <button class="btn btn-primary" (click)="save()">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

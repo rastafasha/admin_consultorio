@@ -3,9 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { StaffRoutingModule } from './staff-routing.module';
 import { StaffComponent } from './staff.component';
-import { AddStaffNComponent } from './add-staff-n/add-staff-n.component';
-import { EditStaffNComponent } from './edit-staff-n/edit-staff-n.component';
 import { ListStaffNComponent } from './list-staff-n/list-staff-n.component';
+import { StaffNComponent } from './staff-n/staff-n.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
@@ -19,15 +18,13 @@ import { PipesModule } from 'src/app/pipes/pipes.module';
 @NgModule({
   declarations: [
     StaffComponent,
-    AddStaffNComponent,
-    EditStaffNComponent,
-    ListStaffNComponent
+    ListStaffNComponent,
+    StaffNComponent
   ],
   exports: [
     StaffComponent,
-    AddStaffNComponent,
-    EditStaffNComponent,
-    ListStaffNComponent
+    ListStaffNComponent,
+    StaffNComponent
   ],
   imports: [
     CommonModule,

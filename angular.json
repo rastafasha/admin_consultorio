@@ -43,7 +43,6 @@
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/slick-carousel/slick/slick.min.js"
-              
             ],
             "serviceWorker": true,
             "ngswConfigPath": "ngsw-config.json"
@@ -64,10 +63,10 @@
               ],
               "outputHashing": "all"
             },
-            
             "consultorio": {
               "outputPath": "dist/consultorio",
-              "index": {
+              "resourcesOutputPath": "media",
+               "index": {
                 "input": "src/env/consultorio/index.html",
                 "output": "index.html"
               },
@@ -78,27 +77,23 @@
                 }
               ],
               "assets": [
-                "src/.htaccess",
                 "src/assets",
-                "src/manifest.webmanifest",
-                "src/env/consultorio/manifest.webmanifest",
-                  "src/env/consultorio/QR/**",
+                "src/favicon.ico",
                 {
                   "glob": "_redirects",
                   "input": "src",
                   "output": "/"
                 },
                 {
-                  "glob": "**.*",
+                  "glob": "**/*",
                   "input": "src/env/consultorio/QR",
-                  "output": "/QR/"
+                  "output": "/QR"
                 },
                 {
-                  "glob": "**.*",
-                  "input": "src/env/consultorio/manifest.webmanifest",
-                  "output": "src/manifest.webmanifest"
+                  "glob": "manifest.webmanifest", 
+                  "input": "src/env/consultorio/", 
+                  "output": "/"
                 }
-                
               ],
               "budgets": [
                 {

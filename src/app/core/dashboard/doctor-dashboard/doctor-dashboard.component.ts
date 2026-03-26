@@ -18,9 +18,9 @@ import {
   ApexTooltip,
 } from 'ng-apexcharts';
 import { DashboardService } from '../service/dashboard.service';
-import { DoctorService } from 'src/app/medical/doctors/service/doctor.service';
+import { DoctorService } from 'src/app/services/doctor.service';
 import { ActivatedRoute } from '@angular/router';
-import { PatientMService } from 'src/app/medical/patient-m/service/patient-m.service';
+import { PatientMService } from 'src/app/services/patient-m.service';
 interface data {
   value: string ;
 }

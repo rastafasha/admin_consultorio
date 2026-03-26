@@ -1,0 +1,188 @@
+<div class="page-wrapper">
+    <div class="content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="row">
+                <app-back-bottn style="width: 50px;"></app-back-bottn>
+                <div class="col-sm-10">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a routerLink="/staffs/list">Staffs</a></li>
+                        <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
+                        <li class="breadcrumb-item active">{{titlePage}}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- /Page Header -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form [formGroup]="staffForm">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-heading">
+                                        <h4>Personal {{isEditing ? 'Editar' : 'Agregar'}}</h4>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label>Nombre <span class="login-danger">*</span></label>
+                                        <input class="form-control" formControlName="name" type="text">
+                                        <mat-error *ngIf="staffForm.get('name')?.invalid && staffForm.get('name')?.touched">
+                                            Nombre es requerido
+                                        </mat-error>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label>Apellido <span class="login-danger">*</span></label>
+                                        <input class="form-control" formControlName="surname" type="text">
+                                        <mat-error *ngIf="staffForm.get('surname')?.invalid && staffForm.get('surname')?.touched">
+                                            Apellido es requerido
+                                        </mat-error>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label>Teléfono</label>
+                                        <input class="form-control" formControlName="mobile" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-6">
+                                    <div class="form-group local-forms">
+                                        <label>Email <span class="login-danger">*</span></label>
+                                        <input class="form-control" formControlName="email" type="email">
+                                        <mat-error *ngIf="staffForm.get('email')?.invalid && staffForm.get('email')?.touched">
+                                            Email inválido o requerido
+                                        </mat-error>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-6" *ngIf="!isEditing">
+                                    <div class="form-group local-forms">
+                                        <label>Contraseña <span class="login-danger">*</span></label>
+                                        <input class="form-control" formControlName="password" type="password">
+                                        <mat-error *ngIf="staffForm.get('password')?.invalid && staffForm.get('password')?.touched">
+                                            Contraseña requerida (min 6 chars)
+                                        </mat-error>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-6" *ngIf="!isEditing">
+                                    <div class="form-group local-forms">
+                                        <label>Confirmar Contraseña <span class="login-danger">*</span></label>
+                                        <input class="form-control" formControlName="password_confirmation" type="password">
+                                        <mat-error *ngIf="staffForm.hasError('mismatch') && staffForm.get('password_confirmation')?.touched">
+                                            Contraseñas no coinciden
+                                        </mat-error>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-6" *ngIf="isEditing">
+                                    <div class="form-group local-forms">
+                                        <label>Nueva Contraseña (opcional)</label>
+                                        <input class="form-control" formControlName="password" type="password">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-6">
+                                    <div class="form-group local-forms">
+                                        <label>Fecha de Nacimiento <span class="login-danger">*</span></label>
+                                        <input class="form-control" formControlName="birth_date" type="datetime-local">
+                                        <mat-error *ngIf="staffForm.get('birth_date')?.invalid && staffForm.get('birth_date')?.touched">
+                                            Fecha requerida
+                                        </mat-error>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-6">
+                                    <div class="form-group select-gender">
+                                        <label class="gen-label">Género <span class="login-danger">*</span></label>
+                                        <div class="form-check-inline">
+                                            <label class="form-check-label">
+                                                <input type="radio" formControlName="gender" value="1" class="form-check-input"> Masculino
+                                            </label>
+                                        </div>
+                                        <div class="form-check-inline">
+                                            <label class="form-check-label">
+                                                <input type="radio" formControlName="gender" value="2" class="form-check-input"> Femenino
+                                            </label>
+                                        </div>
+                                        <mat-error *ngIf="staffForm.get('gender')?.invalid && staffForm.get('gender')?.touched" class="text-danger">
+                                            Género requerido
+                                        </mat-error>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label>Educación/Especialidad</label>
+                                        <input class="form-control" formControlName="education" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label>Designación</label>
+                                        <input class="form-control" formControlName="designation" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4" *ngIf="user?.roles[0] === 'SUPERADMIN'">
+                                    <div class="form-group local-forms">
+                                        <label>Roles <span class="login-danger">*</span></label>
+                                        <mat-select formControlName="role_id" class="form-control select" placeholder="Select Role">
+                                            <mat-option *ngFor="let data of roles | superAdminFilter" [value]="data.id">
+                                                {{data.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error *ngIf="staffForm.get('role_id')?.invalid && staffForm.get('role_id')?.touched">
+                                            Rol requerido
+                                        </mat-error>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4" *ngIf="user?.roles[0] === 'ADMIN'">
+                                    <div class="form-group local-forms">
+                                        <label>Roles <span class="login-danger">*</span></label>
+                                        <mat-select formControlName="role_id" class="form-control select" placeholder="Select Role">
+                                            <mat-option *ngFor="let data of roles | adminFilter" [value]="data.id">
+                                                {{data.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group local-forms">
+                                        <label>Dirección</label>
+                                        <textarea class="form-control" formControlName="address" rows="3"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-6">
+                                    <div class="form-group local-top-form">
+                                        <label class="local-top">Avatar</label>
+                                        <div class="settings-btn upload-files-avator">
+                                            <input type="file" accept="image/*" id="file" (change)="loadFile($event)" class="hide-input">
+                                            <label for="file" class="upload">Seleccione foto</label>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="IMAGE_PREVISUALIZA">
+                                        <img [src]="IMAGE_PREVISUALIZA" style="width: 250px;" alt="">
+                                    </div>
+                                </div>
+                                <!-- Messages -->
+                                <div class="col-12" *ngIf="text_success">
+                                    <div class="alert alert-success alert-dismissible fade show">
+                                        <strong>Éxito!</strong> {{text_success}}
+                                    </div>
+                                </div>
+                                <div class="col-12" *ngIf="text_validation">
+                                    <div class="alert alert-warning alert-dismissible fade show">
+                                        <strong>!</strong> {{text_validation}}
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="doctor-submit text-end">
+                                        <button type="button" class="btn btn-primary submit-form me-2" (click)="save()">Guardar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

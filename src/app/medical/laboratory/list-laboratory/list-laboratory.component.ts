@@ -4,10 +4,10 @@ import { routes } from 'src/app/shared/routes/routes';
 import { FileSaverService } from 'ngx-filesaver';
 import * as XLSX from 'xlsx';
 import jspdf from 'jspdf';
-import { DoctorService } from '../../doctors/service/doctor.service';
-import { AppointmentService } from '../../appointment/service/appointment.service';
-import { LaboratoryService } from '../service/laboratory.service';
-import { RolesService } from '../../roles/service/roles.service';
+import { DoctorService } from '../../../services/doctor.service';
+import { AppointmentService } from '../../../services/appointment.service';
+import { LaboratoryService } from '../../../services/laboratory.service';
+import { RolesService } from '../../../services/roles.service';
 declare var $:any;
 @Component({
   selector: 'app-list-laboratory',

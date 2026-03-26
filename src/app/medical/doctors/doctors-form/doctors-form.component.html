@@ -1,0 +1,206 @@
+<div class="page-wrapper">
+    <div class="content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="row">
+                <app-back-bottn style="width: 50px;"></app-back-bottn>
+                <div class="col-sm-10">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a routerLink="/doctors/list">Doctores</a></li>
+                        <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
+                        <li class="breadcrumb-item active">{{ title }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form [formGroup]="doctorForm">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-heading">
+                                        <h4>Doctor Detalle {{ isEditMode ? '#'+doctorId : '' }}</h4>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label>Nombre <span class="login-danger">*</span></label>
+                                        <input class="form-control" formControlName="name" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label>Apellido <span class="login-danger">*</span></label>
+                                        <input class="form-control" formControlName="surname" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label>Teléfono</label>
+                                        <input class="form-control" formControlName="mobile" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-6">
+                                    <div class="form-group local-forms">
+                                        <label>Email <span class="login-danger">*</span></label>
+                                        <input class="form-control" formControlName="email" type="email">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-6">
+                                    <div class="form-group local-forms">
+                                        <label>Contraseña {{ isEditMode ? '(opcional)' : '' }} <span class="login-danger">*</span></label>
+                                        <input class="form-control" formControlName="password" type="password">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-6" *ngIf="!isEditMode">
+                                    <div class="form-group local-forms">
+                                        <label>Confirmar Contraseña <span class="login-danger">*</span></label>
+                                        <input class="form-control" formControlName="password_confirmation" type="password">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-6">
+                                    <div class="form-group local-forms">
+                                        <label>Fecha de Nacimiento</label>
+                                        <input class="form-control" formControlName="birth_date" type="date">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-6">
+                                    <div class="form-group select-gender">
+                                        <label class="gen-label">Género</label>
+                                        <div class="form-check-inline">
+                                            <label class="form-check-label">
+                                                <input type="radio" formControlName="gender" value="1" class="form-check-input">Masculino
+                                            </label>
+                                        </div>
+                                        <div class="form-check-inline">
+                                            <label class="form-check-label">
+                                                <input type="radio" formControlName="gender" value="2" class="form-check-input">Femenino
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label>Designación</label>
+                                        <input class="form-control" formControlName="designation" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label>Roles</label>
+                                        <mat-select [(ngModel)]="selectedValue" [ngModelOptions]="{standalone: true}" class="form-control select" placeholder="Select Role">
+                                            <mat-option *ngFor="let data of roles" [value]="data.id">
+                                              {{data.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label>Especialidad</label>
+                                        <mat-select [(ngModel)]="speciality_id" [ngModelOptions]="{standalone: true}" class="form-control select" placeholder="Select Speciality">
+                                            <mat-option *ngFor="let data of specialities" [value]="data.id">
+                                              {{data.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label>Location</label>
+                                        <mat-select [(ngModel)]="selectedValueLocation" [ngModelOptions]="{standalone: true}" class="form-control select" placeholder="Select Location">
+                                            <mat-option *ngFor="let data of locations" [value]="data.id">
+                                              {{data.title}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-8">
+                                    <div class="form-group local-forms">
+                                        <label>Dirección</label>
+                                        <textarea class="form-control" formControlName="address" rows="3" cols="30"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label>Precio de la Cita</label>
+                                        <input class="form-control" formControlName="precio_cita" type="number">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-6">
+                                    <div class="form-group local-top-form">
+                                        <label class="local-top">Avatar</label>
+                                        <div class="settings-btn upload-files-avator">
+                                            <input type="file" accept="image/*" id="file" (change)="loadFile($event)" class="hide-input">
+                                            <label for="file" class="upload">Seleccione Foto</label>
+                                        </div>
+                                    </div>
+                                    <img *ngIf="IMAGE_PREVISUALIZA" [src]="IMAGE_PREVISUALIZA" style="width: 250px;" alt="">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Disponibilidad de Horario</h4>
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>DIAS/HORAS</th>
+                                        <ng-container *ngFor="let day of days_week">
+                                            <td [class]="day.class">{{day.day}}</td>
+                                        </ng-container>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <ng-container *ngFor="let hours_day of hours_days">
+                                        <tr>
+                                            <td>
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" (change)="addHourAllDay($event, hours_day)"> {{hours_day.format_hour}}
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <ng-container *ngFor="let day of days_week">
+                                                <td>
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox" [checked]="isCheckedHourAll(hours_day, day)" (click)="addHourAll(hours_day, day)"> {{hours_day.hour}}:TODOS
+                                                        </label>
+                                                    </div>
+                                                    <br>
+                                                    <ng-container *ngFor="let item of hours_day.items">
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" [checked]="isCheckedHour(hours_day, day, item)" (click)="addHourItem(hours_day, day, item)"> {{item.format_hour_start}} - {{item.format_hour_end}}
+                                                            </label>
+                                                        </div>
+                                                    </ng-container>
+                                                </td>
+                                            </ng-container>
+                                        </tr>
+                                    </ng-container>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="text_validation" class="alert alert-danger" role="alert">
+                {{text_validation}}
+            </div>
+            <div class="col-12">
+                <div class="doctor-submit text-end">
+                    <button type="button" class="btn btn-primary submit-form me-2" (click)="save()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

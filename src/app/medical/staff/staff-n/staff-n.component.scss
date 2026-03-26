@@ -1,0 +1,30 @@
+/* Copy typical styles from existing add/edit components - empty for now, extend as needed */
+.content {
+  padding: 20px;
+}
+
+.card {
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.form-control {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.login-danger {
+  color: red;
+}
+
+.doctor-submit {
+  margin-top: 20px;
+}
+
+.upload-files-avator {
+  position: relative;
+}
+
+.hide-input {
+  display: none;
+}
