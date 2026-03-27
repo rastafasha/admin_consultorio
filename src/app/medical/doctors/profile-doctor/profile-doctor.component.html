@@ -18,7 +18,7 @@
         <!-- /Page Header -->
         <div class="row">
             <div class="col-sm-12" *ngIf="doctor_selected">
-                <div class="card" *ngIf="user.roles !=='GUEST'">
+                <div class="card" *ngIf="user.roles[0] !=='GUEST'">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12">
@@ -65,10 +65,10 @@
                                         </div>
                                         <div class="col-lg-4 col-md-4 d-flex align-items-center">
                                             <div class="follow-btn-group">
-                                                <a [routerLink]="['/doctors/list/edit/', doctor_id]" *ngIf="isPermission('edit_doctor') && user.roles  === 'SUPERADMIN' && doctor.roles === 'DOCTOR' && doctor.status === 2"  class="btn btn-info follow-btns">Edit</a>
-                                                <a [routerLink]="['/doctors/list/edit/', doctor_id]" *ngIf="isPermission('edit_staff')  && user.roles === 'DOCTOR' && doctor.status === 2" class="btn btn-info follow-btns">Edit doctor profile</a>
-                                                <a [routerLink]="['/doctors/list/edit/', doctor_id]" *ngIf="isPermission('edit_staff')  && user.roles === 'DOCTOR' && doctor.status === 1" class="btn btn-info follow-btns">Edit staffDoctor profile</a>
-                                                <a [routerLink]="['/staffs/staff-n/', doctor_id]" *ngIf="isPermission('edit_staff')  && user.roles !== 'DOCTOR' && doctor.status === 1" class="btn btn-info follow-btns">Edit staff profile</a>
+                                                <a [routerLink]="['/doctors/list/edit/', doctor_id]" *ngIf="isPermission('edit_doctor') && user.roles[0]  === 'SUPERADMIN' && doctor.roles[0] === 'DOCTOR' && doctor.status === 2"  class="btn btn-info follow-btns">Edit</a>
+                                                <a [routerLink]="['/doctors/list/edit/', doctor_id]" *ngIf="isPermission('edit_staff')  && user.roles[0] === 'DOCTOR' && doctor.status === 2" class="btn btn-info follow-btns">Edit doctor profile</a>
+                                                <a [routerLink]="['/doctors/list/edit/', doctor_id]" *ngIf="isPermission('edit_staff')  && user.roles[0] === 'DOCTOR' && doctor.status === 1" class="btn btn-info follow-btns">Edit staffDoctor profile</a>
+                                                <a [routerLink]="['/staffs/staff-n/', doctor_id]" *ngIf="isPermission('edit_staff')  && user.roles[0] !== 'DOCTOR' && doctor.status === 1" class="btn btn-info follow-btns">Edit staff profile</a>
                                                 <!-- <button type="submit" class="btn btn-info message-btns">Message</button> -->
                                             </div>
                                         </div>
@@ -79,8 +79,8 @@
                     </div>
                 </div>
                 <div class="row" >
-                    <div class="col-lg-4" *ngIf="user.roles !=='GUEST'">
-                        <div class="doctor-personals-grp" *ngIf="user.roles !=='GUEST'">
+                    <div class="col-lg-4" *ngIf="user.roles[0] !=='GUEST'">
+                        <div class="doctor-personals-grp" *ngIf="user.roles[0] !=='GUEST'">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="heading-detail ">
@@ -107,7 +107,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="doctor-personals-grp" *ngIf="user.roles !=='GUEST'">
+                        <div class="doctor-personals-grp" *ngIf="user.roles[0] !=='GUEST'">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="about-me-list">
@@ -126,7 +126,7 @@
                                             </li>
                                             <li>
                                                 <h4>Role</h4>
-                                                <span>{{doctor_selected?.roles}}</span>
+                                                <span>{{doctor_selected?.roles[0]}}</span>
                                             </li>
                                             <li>
                                                 <h4>Dias de Trabajo</h4>
@@ -148,7 +148,7 @@
                                 <div class="card-body ">
                                     <div class="tab-content-set">
                                         <ul class="nav">
-                                            <li *ngIf="user.roles ==='GUEST'">
+                                            <li *ngIf="user.roles[0] ==='GUEST'">
                                                 <a href="#" onclick="return false;" [ngClass]="{'active': option_selected === 1}" (click)="optionSelected(1)">
                                                     <span class="set-about-icon me-2">
                                                     <img src="assets/img/icons/menu-icon-02.svg" alt="" >
@@ -156,7 +156,7 @@
                                                     Bienvenido, Edita tu perfil Aquí 
                                             </a>
                                             </li>
-                                            <li *ngIf="user.roles !=='GUEST'">
+                                            <li *ngIf="user.roles[0] !=='GUEST'">
                                                 <a href="#" onclick="return false;" [ngClass]="{'active': option_selected === 2}" (click)="optionSelected(2)">
                                                     <span class="set-about-icon me-2">
                                                         <img src="assets/img/icons/menu-icon-02.svg" alt="">
@@ -164,7 +164,7 @@
                                                     Citas Realizadas 
                                                 </a>
                                             </li>
-                                            <li *ngIf="user.roles !=='GUEST'">
+                                            <li *ngIf="user.roles[0] !=='GUEST'">
                                                 <a href="#" onclick="return false;" [ngClass]="{'active': option_selected === 3}" (click)="optionSelected(3)">
                                                     <span class="set-about-icon me-2">
                                                         <img src="assets/img/icons/menu-icon-16.svg" alt="">
@@ -174,7 +174,7 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    <ng-container  *ngIf="user.roles ==='GUEST' && option_selected === 1 ">
+                                    <ng-container  *ngIf="user.roles[0] ==='GUEST' && option_selected === 1 ">
                                         <div class="bienvenido">
                                             <h1 *ngIf="doctor.gender === null" >Bienvenido!</h1>
                                             <h1 *ngIf="doctor.gender !== null" >Gracias!</h1>
@@ -316,7 +316,7 @@
                                     
                                 </div>
                             </div>
-                            <div class="card" *ngIf="doctor.roles !=='GUEST'">
+                            <div class="card" *ngIf="user.roles[0] !=='GUEST'">
                                 <div class="card-header">
                                     <h4 class="card-title ">Citas Pendientes</h4> <a [routerLink]="['/appointments/list/doctor/', doctor_id]" class="patient-views float-end">Todo</a>
                                 </div>

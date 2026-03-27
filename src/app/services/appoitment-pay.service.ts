@@ -16,7 +16,7 @@ export class AppoitmentPayService {
 
   listConfig(){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
-    const URL = url_servicios+'/appointment/config';
+    const URL = url_servicios+'/appointments/config';
     return this.http.get(URL, {headers:headers});
   }
 
