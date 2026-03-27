@@ -89,11 +89,12 @@ export class LoginComponent implements OnInit {
       .subscribe((resp:any) => {
         if(resp === true){
           // EL LOGIN ES EXITOSO
+          this.isLoading = false;
+          this.getLocalStorage();
           setTimeout(() => {
-            this.getLocalStorage();
             // this.router.navigate([routes.adminDashboard]);
           }, 50);
-          this.isLoading = false;
+          
         }else{
           this.isLoading = false;
           // EL LOGIN NO ES EXITOSO

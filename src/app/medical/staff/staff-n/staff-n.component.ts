@@ -58,6 +58,7 @@ export class StaffNComponent implements OnInit {
     window.scrollTo(0, 0);
     this.getRoles();
     this.user = this.roleService.authService.user;
+    console.log(this.user)
 
     this.activatedRoute.params.subscribe((params: any) => {
       if (params.id) {

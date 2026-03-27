@@ -1,10 +1,10 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, OnDestroy } from "@angular/core";
+import { User } from "src/app/models/user.model";
 import { PaymentService } from "src/app/services/payment.service";
 import { AppointmentService } from "src/app/services/appointment.service";
 import { RolesService } from "src/app/services/roles.service";
 import { AuthService } from "src/app/shared/auth/auth.service";
 import { StaffService } from "src/app/services/staff.service";
-import { User } from "src/app/models/user.model";
 
 @Component({
   selector: "app-notificacionesupdate",
@@ -14,7 +14,7 @@ import { User } from "src/app/models/user.model";
 export class NotificacionesupdateComponent implements OnInit {
   @Input() routes;
   @Input() user;
- @Input() usuario;
+  @Input() usuario;
   @Input() imagenSerUrl;
   @Input() logout;
 
@@ -26,8 +26,9 @@ export class NotificacionesupdateComponent implements OnInit {
   totalTApp: any = 0;
   totalT: any = 0;
   totalTTr: any = 0;
-  roles: any = [];
-  userremoto:User;
+  roles: any[] = [];
+  userremoto: User | null = null;
+  private userSubscription: any;
 
   public IMAGE_PREVISUALIZA = 'assets/img/user-06.jpg';
 
@@ -38,23 +39,39 @@ export class NotificacionesupdateComponent implements OnInit {
     public authService: AuthService,
     public staffService: StaffService,
   ) {}
+
   ngOnInit(): void {
-    this.user = this.roleService.authService.user;
-    this.roles = this.user.roles;
+    this.userSubscription = this.authService.currentUser$.subscribe((user) => {
+      this.user = user;
+      this.roles = user?.roles ? (Array.isArray(user.roles) ? user.roles.map(r => r.name || r).flat() : [user.roles.name || user.roles]) : [];
+      if (user) {
+        this.getUserRemoto();
+        this.loadNotifications();
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
+  }
+
+  private loadNotifications(): void {
     setTimeout(() => {
       this.getAppointmentRecientes();
       this.getAppointmentRecientesbyDoctor();
       this.getTrastransferenciasRecientesByDoctor();
       this.getTrastransferenciasRecientes();
     }, 3000);
-    this.getUserRemoto();
-    
   }
 
-  getUserRemoto(){
-    this.staffService.getUser(this.user.id).subscribe((resp:any)=>{
+
+  getUserRemoto(): void {
+    if (!this.user?.id) return;
+    this.staffService.getUser(this.user.id).subscribe((resp: any) => {
       this.userremoto = resp.user;
-    })
+    });
   }
   //obtiene las citas pendientes por atender
   getAppointmentRecientesbyDoctor() {

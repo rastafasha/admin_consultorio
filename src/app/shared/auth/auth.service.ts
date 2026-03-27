@@ -1,27 +1,28 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-// import { BehaviorSubject } from 'rxjs';
+import { Router, NavigationEnd } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 import { routes } from '../routes/routes';
 import { url_servicios } from 'src/app/config/config';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { User } from 'src/app/models/user.model';
 
 import { LoginForm } from 'src/app/authentication/interfaces/login-form.interface';
-// import {tap, map, catchError, } from 'rxjs/operators';
 import { catchError, map, of } from 'rxjs';
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-
-  user:any;
-  token:any;
+  user: User | null = null;
+  token: string | null = null;
+  public currentUser$ = new BehaviorSubject<User | null>(null);
 
   constructor(
     private router: Router,
     public http: HttpClient
-    ) {
-      this.getLocalStorage();//devuelve el usuario logueado
-    }
+  ) {
+    this.getLocalStorage();
+  }
 
     // get token():string{
     //   return localStorage.getItem('token') || '';
@@ -50,20 +51,28 @@ export class AuthService {
     // }
   
   
-    getLocalStorage(){
-      if(localStorage.getItem('token') && localStorage.getItem('user')){
-        const USER = localStorage.getItem('user');
-        this.user = JSON.parse(USER ? USER: '');
-      }else{
-        this.user = null;
-      }
-   }
+  getLocalStorage(){
+    const token = localStorage.getItem('token');
+    const userStr = localStorage.getItem('user');
+    if (token && userStr) {
+      this.token = token;
+      this.user = JSON.parse(userStr) as User;
+      this.currentUser$.next(this.user);
+    } else {
+      this.user = null;
+      this.token = null;
+      this.currentUser$.next(null);
+    }
+  }
 
-   saveLocalStorage(auth:any){
-    if(auth && auth.access_token){
-      localStorage.setItem("token",auth.access_token.original.access_token);
-      localStorage.setItem("user",JSON.stringify(auth.user));
+  saveLocalStorage(auth: any): boolean {
+    if (auth && auth.access_token && auth.user) {
+      this.token = auth.access_token.original.access_token;
+      localStorage.setItem("token", this.token!);
+      this.user = auth.user as User;
+      localStorage.setItem("user", JSON.stringify(this.user));
       localStorage.setItem('authenticated', 'true');
+      this.currentUser$.next(this.user);
       return true;
     }
     return false;
@@ -110,21 +119,24 @@ export class AuthService {
 
 
   
- getUserRomoto(data){
-  const headers = new HttpHeaders({'Authorization': 'Bearer'+this.token})
-  const URL = url_servicios+'/me';
-  return this.http.post(URL,data, {headers:headers});
- }
+  getUserRomoto(data: any) {
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${this.token}` });
+    const URL = url_servicios + '/me';
+    return this.http.post(URL, data, { headers });
+  }
   
 
  
 
- logout(){
-  localStorage.removeItem('token');
-  localStorage.removeItem('user');
-  localStorage.removeItem('authenticated');
-  this.router.navigate([routes.login]);
- }
+  logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('authenticated');
+    this.user = null;
+    this.token = null;
+    this.currentUser$.next(null);
+    this.router.navigate([routes.login]);
+  }
 
   
 //  logout(){

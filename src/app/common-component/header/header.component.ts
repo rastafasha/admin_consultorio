@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SettignService } from 'src/app/core/settings/settigs.service';
 import { AuthService } from 'src/app/shared/auth/auth.service';
+import { User } from 'src/app/models/user.model';
 import { routes } from 'src/app/shared/routes/routes';
 import { SideBarService } from 'src/app/shared/side-bar/side-bar.service';
 import { environment } from 'src/environments/environment';
@@ -11,28 +12,30 @@ import { environment } from 'src/environments/environment';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit, OnDestroy {
   public routes = routes;
   public openBox = false;
   public miniSidebar  = false;
   public addClass = false;
-  public user:any;
-  public usuario:any;
-  public user_id:any;
-  public avatar:any;
-  public settings:any;
-  public setting_selectedId:any;
-  public avatar_setting:any;
-  public name_setting:any;
+  public user: User | null = null;
+  public usuario: any;
+  public user_id: any;
+  public avatar: any;
+  public settings: any;
+  public setting_selectedId: any;
+  public avatar_setting: any;
+  public name_setting: any;
 
   imagenSerUrl = environment.url_media;
+  private userSubscription: any;
+
   constructor(
     public router: Router,
     private sideBar: SideBarService,
     public authService: AuthService,
     public activatedRoute: ActivatedRoute,
     public settingService: SettignService,
-    ) {
+  ) {
     this.sideBar.toggleSideBar.subscribe((res: string) => {
       if (res == 'true') {
         this.miniSidebar = true;
@@ -40,22 +43,31 @@ export class HeaderComponent {
         this.miniSidebar = false;
       }
     });
-    let USER = localStorage.getItem("user");
-    this.user = JSON.parse(USER ? USER: '');
-    // this.user = this.authService.user;
-    // console.log(this.user);
   }
 
   ngOnInit(): void {
-    let USER = localStorage.getItem("user");
-    this.user = JSON.parse(USER ? USER: '');
+    this.userSubscription = this.authService.currentUser$.subscribe((user) => {
+      this.user = user;
+      if (user && this.user_id) {
+        this.getDoctor();
+      }
+    });
+
     window.scrollTo(0, 0);
     this.activatedRoute.params.subscribe((resp:any)=>{
       // console.log(resp);
       this.user_id = resp.id;
+      if (this.user) {
+        this.getDoctor();
+      }
     });
-    this.getDoctor();
     this.getSettings();
+  }
+
+  ngOnDestroy(): void {
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
   }
 
 

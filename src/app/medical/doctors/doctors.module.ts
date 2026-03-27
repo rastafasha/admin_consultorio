@@ -10,6 +10,7 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ProfileDoctorComponent } from './profile-doctor/profile-doctor.component';
 import { DoctorsFormComponent } from './doctors-form/doctors-form.component'; import { ReusablesModule } from 'src/app/reusables/reusables.module';
+import { PipesModule } from 'src/app/pipes/pipes.module';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { DoctorsFormComponent } from './doctors-form/doctors-form.component'; im
     HttpClientModule,
     RouterModule,
     SharedModule,
-    ReusablesModule
+    ReusablesModule,
+    PipesModule
   ]
 })
 export class DoctorsModule { }
