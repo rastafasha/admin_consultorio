@@ -20,6 +20,10 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="form-heading">
+                                        <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm"
+                                            (click)="modalEditarCita.open()" title="Ayuda de la sección">
+                                            <i class="fas fa-question"></i>
+                                        </button>
                                         <h4>{{ title }}</h4>
                                     </div>
                                 </div>
@@ -166,3 +170,6 @@
         </div>
     </div>
 </div>
+
+
+<app-modal-instrucciones [info]="info_editar_cita" sectionId="editar_cita" #modalEditarCita></app-modal-instrucciones>

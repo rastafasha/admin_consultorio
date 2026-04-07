@@ -11,7 +11,7 @@ import { PresupuestoRoutingModule } from './presupuesto-routing.module';
 import { ReusablesModule } from 'src/app/reusables/reusables.module';
 import { PipesModule } from 'src/app/pipes/pipes.module';
 import { PresupuestoDoctorListComponent } from './presupuesto-doctor-list/presupuesto-doctor-list.component';
-
+import { ModalInstruccionesModule } from 'src/app/modales/modal-instrucciones.module';
 
 
 @NgModule({
@@ -30,7 +30,8 @@ import { PresupuestoDoctorListComponent } from './presupuesto-doctor-list/presup
         RouterModule,
         SharedModule,
         ReusablesModule,
-        PipesModule
+        PipesModule,
+        ModalInstruccionesModule
   ]
 })
 export class PresupuestoModule { }

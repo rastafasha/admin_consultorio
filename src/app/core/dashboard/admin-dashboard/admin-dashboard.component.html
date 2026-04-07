@@ -198,10 +198,10 @@
                                         <td >{{data.date_appointment_format}}</td>
                                         <td >{{data.doctor.full_name}}</td>
                                         <td>
-                                            <button [ngClass]="{'status-green' : data.status === 2, 'status-pink' : data.status === 1}" class="custom-badge">{{data.status == 1 ? 'Pendiente' : 'Atendido'}}</button>
+                                            <button [ngClass]="{'status-green' : data.status === 2, 'status-pink' : data.status === 1}" class="custom-badge">{{data.status === 1 ? 'Pendiente' : 'Atendido'}}</button>
                                         </td>
                                         <td>
-                                            <button [ngClass]="{'status-green' : data.status_pay === 1, 'status-pink' : data.status_pay === 2}" class="custom-badge">{{data.status_pay == 1 ? 'Pagado' : 'Deuda'}}</button>
+                                            <button [ngClass]="{'status-green' : data.status_pay === 1, 'status-pink' : data.status_pay === 2}" class="custom-badge">{{data.status_pay === 1 ? 'Pagado' : 'Deuda'}}</button>
                                         </td>
                                         <td>{{data.amount }}</td>
                                         <td class="text-end">
@@ -223,3 +223,4 @@
         </div>
     </div>
 </div>
+<app-pwa-notif-installer></app-pwa-notif-installer>

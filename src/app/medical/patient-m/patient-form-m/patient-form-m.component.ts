@@ -28,6 +28,15 @@ export class PatientFormMComponent implements OnInit {
   public isLoading = false;
   public isSaving = false;
 
+  info_form_paciente = `
+  <p>En esta sección :</p>
+          <ul>
+            <li>Podrás llenar la ficha médica de tu paciente</li>
+            <li>Información Básica, de contacto, persona de contacto o familiar</li>
+            <li>Es Recomendable llenar la sección de Signos Vitales para tener un control del estado de salud</li>
+            <li>Con Signos Vitales esto podrá ayudar a la aplicación a futuro para mostrar un comportamiento y reportes presentados en la App  </li>
+          </ul>`;
+
   constructor(
     private fb: FormBuilder,
     public patientService: PatientMService,

@@ -19,6 +19,10 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     <div class="doctor-table-blk">
+                                      <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm" (click)="modalListaPacientes.open()"
+                            title="Ayuda de la sección">
+                            <i class="fas fa-question"></i>
+                        </button>
                                         <h3>{{titlePage}}: </h3>
                                         <div class="doctor-search-blk">
                                             <div class="top-nav-search table-search-blk">
@@ -237,6 +241,8 @@
         </div>
     </div>
 </div>
+
+<app-modal-instrucciones [info]="info_mis_pacientes_list" sectionId="lista_pacientes" #modalListaPacientes ></app-modal-instrucciones>
 
 
  

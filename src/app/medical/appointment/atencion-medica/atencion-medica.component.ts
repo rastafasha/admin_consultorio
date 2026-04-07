@@ -42,6 +42,17 @@ export class AtencionMedicaComponent {
   user:any;
   roles:any;
 
+  info_atender_cita = `
+  <p>En esta sección :</p>
+          <ul>
+            <li>Podrás Atender una cita creada por ti o por tus pacientes</li>
+            <li>Al Cargar, traerá la información de interés para tener una guía de su condicion de salud</li>
+            <li>Crear El Diagnostico u observación </li>
+            <li>Crear el Recipe de Medicinas</li>
+            <li>Coloca el nombre del medicamento, su uso o aplicación y la lista se ira creando</li>
+            <li>Al Pulsar Actualizar se compartirá esta información en la App Versión Paciente</li>
+          </ul>`;
+
 
   constructor(
     public appointmentService:AppointmentService,

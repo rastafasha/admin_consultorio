@@ -64,6 +64,18 @@ export class ListDoctorComponent {
   public doctor_id:any;
   public tiposdepagos:any;
 
+  info_cobros = `
+  <p>En esta sección :</p>
+          <ul>
+            <li>Lista de Pagos Recibidos</li>
+            <li>Filtrar por nombre, fechas Desde y hasta</li>
+            <li>Cambiar el Estado del pago</li>
+            <li>Colocar el monto pagado total o Abonado</li>
+            <li>Podrás Editar el pago recibido por las opciones creadas</li>
+            <li>Generar un Nuevo Pago con el monto pagado total o Abonado</li>
+            <li>Esta información es necesaria para ver tus avances finacieros</li>
+          </ul>`;
+
   constructor(
     public appointmentpayService : AppoitmentPayService,
     public doctorService : DoctorService,

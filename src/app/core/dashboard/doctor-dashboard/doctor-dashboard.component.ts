@@ -21,6 +21,7 @@ import { DashboardService } from '../service/dashboard.service';
 import { DoctorService } from 'src/app/services/doctor.service';
 import { ActivatedRoute } from '@angular/router';
 import { PatientMService } from 'src/app/services/patient-m.service';
+import { ModalInstruccionesComponent } from 'src/app/modales/modal-instrucciones/modal-instrucciones.component';
 interface data {
   value: string ;
 }
@@ -104,6 +105,61 @@ export class DoctorDashboardComponent {
   public appointmentpaysbydoc: any =[];
   public doctor: any =[];
   public schedule_selecteds: any =[];
+
+  @ViewChild('modalInstrucciones') modal!: ModalInstruccionesComponent;
+
+  // infomodales
+  info_pacientes_recientes = `
+  <p>En esta sección :</p>
+          <ul>
+            <li>Podrás ver una lista resumida de tus Pacientes</li>
+            <li>En el boton ver Mis Pacientes verás todos tus pacientes</li>
+          </ul>`;
+
+   info_citas = `
+  <p>En esta sección :</p>
+          <ul>
+            <li>Podrás ver una tus Citas  pendientes</li>
+            <li>El estado de pago de la cita, el monto abonado o pagado </li>
+            <li>En el boton ver Todos verás todos tus citas</li>
+          </ul>`;
+
+  info_transferencias_recientes = `
+  <p>En esta sección :</p>
+          <ul>
+            <li>Podrás ver tus trasnferecias</li>
+            <li>Gestionar tus Metodos de pago</li>
+            <li>En el boton ver Todos verás Todo, podras Gestionar tus Metodos de pago </li>
+          </ul>`;
+
+  info_pagos_recientes = `
+  <p>En esta sección :</p>
+          <ul>
+            <li>Podrás los pagos confirmados</li>
+            <li>El estado de pago de la cita, el monto abonado o pagado </li>
+            <li>En el boton ver Todos verás Todo, podras Gestionar tus Metodos de pago </li>
+          </ul>`;
+  info_entradas = `
+  <p>En esta sección :</p>
+          <ul>
+            <li>Podrás ver un gráfico económico por año</li>
+            <li>Estar al tanto del movimiento de tu consultorio mensualmente</li>
+          </ul>`;
+  info_mis_citas = `
+  <p>En esta sección :</p>
+          <ul>
+             <li>Podrás ver un gráfico de comportamiento por mes</li>
+            <li>Este gráfico indica el movimiento por cantidad de citas mensuales</li>
+          </ul>`;
+  info_generos = `
+  <p>En esta sección :</p>
+          <ul>
+             <li>Podrás ver un gráfico referente a géneros</li>
+            <li>Cantidad de hombres y mujeres atendidas</li>
+          </ul>`;
+  // infomodales
+
+
 
   constructor(
     public dashboardService:DashboardService,
@@ -294,6 +350,7 @@ export class DoctorDashboardComponent {
   
     })
   }
+
 
   
   isPermission(permission:string){

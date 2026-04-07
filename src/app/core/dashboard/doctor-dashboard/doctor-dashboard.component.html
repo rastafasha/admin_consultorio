@@ -151,6 +151,10 @@
                 <div class="card flex-fill comman-shadow">
                     
                     <div class="card-header">
+                         <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm" (click)="modalPacientes.open()"
+                            title="Ayuda de la sección">
+                            <i class="fas fa-question"></i>
+                        </button>
                         <h4 class="card-title d-inline-block">Pacientes Recientes</h4> <a [routerLink]="['/patients/list/doctor/', doctor_id]"  class="patient-views float-end">Mis Pacientes</a>
                     </div>
                     <div class="card-body">
@@ -191,6 +195,10 @@
             <div class="col-12 col-md-12 col-lg-12 col-xl-6 ">
                 <div class="card flex-fill comman-shadow">
                     <div class="card-header">
+                        <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm" (click)="modalCitas.open()"
+                            title="Ayuda de la sección">
+                            <i class="fas fa-question"></i>
+                        </button>
                         <h4 class="card-title d-inline-block">Citas Recientes</h4> <a [routerLink]="[routes.appointmentListDoct, doctor_id]" *ngIf="isPermission('local_appointment')" class="patient-views float-end">Todo</a>
                     </div>
                     <div class="card-body">
@@ -246,6 +254,10 @@
             <div class="col-12 col-md-12 col-lg-12 col-xl-6 ">
                 <div class="card flex-fill comman-shadow">
                     <div class="card-header">
+                        <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm" (click)="modalTransferencias.open()"
+                            title="Ayuda de la sección">
+                            <i class="fas fa-question"></i>
+                        </button>
                         <h4 class="card-title d-inline-block">Transferencias Recientes</h4> <a [routerLink]="[routes.trasfereciasListDoctor, doctor_id]"  class="patient-views float-end">Todo</a>
                     </div>
                     <div class="card-body">
@@ -284,6 +296,10 @@
             <div class="col-12 col-md-12 col-lg-12 col-xl-6 " *ngIf="doctor.status === 2 && schedule_selecteds !== null">
                 <div class="card flex-fill comman-shadow">
                     <div class="card-header">
+                        <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm" (click)="modalPagos.open()"
+                            title="Ayuda de la sección">
+                            <i class="fas fa-question"></i>
+                        </button>
                         <h4 class="card-title d-inline-block">Pagos Recientes</h4> <a [routerLink]="[routes.pagosListDoctor, doctor_id]" class="patient-views float-end">Todo</a>
                     </div>
                     <div class="card-body">
@@ -337,6 +353,10 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="chart-title patient-visit mb-0">
+                            <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm" (click)="modalEntradas.open()"
+                            title="Ayuda de la sección">
+                            <i class="fas fa-question"></i>
+                        </button>
                             <h4>Entrada</h4>
                             <!-- <div class="income-value" >
                                 <h3><span>$</span> 20,560</h3>
@@ -369,6 +389,10 @@
             <div class="col-12 col-md-12 col-lg-6 col-xl-5 d-flex" *ngIf="doctor.status === 2 && schedule_selecteds !== null">
                 <div class="card">
                     <div class="card-body">
+                        <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm" (click)="modalGeneros.open()"
+                            title="Ayuda de la sección">
+                            <i class="fas fa-question"></i>
+                        </button>
                             <apx-chart class="donut-chart-radial"
                             [series]="chartOptionsTwo.series"
                             [chart]="chartOptionsTwo.chart"
@@ -388,6 +412,10 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="chart-title patient-visit">
+                            <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm" (click)="modalMisCitas.open()"
+                            title="Ayuda de la sección">
+                            <i class="fas fa-question"></i>
+                        </button>
                             <h4>Citas </h4>
                             <div >
                                 <ul class="nav chat-user-total">
@@ -453,4 +481,16 @@
         </div>
     </div>
 </div>
+
+<app-pwa-notif-installer></app-pwa-notif-installer>
+<app-modal-inicial></app-modal-inicial>
+<!-- modales intrucciones -->
+ <app-modal-instrucciones [info]="info_pacientes_recientes" sectionId="pacientes_recientes" #modalPacientes ></app-modal-instrucciones>
+ <app-modal-instrucciones [info]="info_citas" sectionId="citas_recientes" #modalCitas ></app-modal-instrucciones>
+ <app-modal-instrucciones [info]="info_transferencias_recientes" sectionId="transferencias_recientes" #modalTransferencias ></app-modal-instrucciones>
+ <app-modal-instrucciones [info]="info_pagos_recientes" sectionId="pagos_recientes" #modalPagos ></app-modal-instrucciones>
+ <app-modal-instrucciones [info]="info_entradas" sectionId="entradas" #modalEntradas ></app-modal-instrucciones>
+ <app-modal-instrucciones [info]="info_mis_citas" sectionId="mis_citas" #modalMisCitas ></app-modal-instrucciones>
+ <app-modal-instrucciones [info]="info_generos" sectionId="generos" #modalGeneros ></app-modal-instrucciones>
+
 

@@ -46,6 +46,15 @@ export class ListCobrosDoctorComponent {
 
   public date_start:any;
   public date_end:any;
+   info_trasnferencias = `
+  <p>En esta sección :</p>
+          <ul>
+            <li>Lista de Transferencias Recibidas</li>
+            <li>Al lado derecho tienes un botón para gestionar tu metodos de pago, fácil de llenar</li>
+            <li>Filtrar por número de referencia</li>
+            <li>Una vez confirmado con tu Banco, podrás Cambiar el Estado del pago</li>
+            <li>Una vez este confirmado el pago, recomendamos que accedas a Pagos Recienes para ver tus avances finacieros</li>
+          </ul>`;
 
   constructor(
     public paymentService: PaymentService,

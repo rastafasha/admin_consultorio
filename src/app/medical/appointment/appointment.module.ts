@@ -14,7 +14,7 @@ import { AtenderComponent } from './atender/atender.component';
 import { PipesModule } from 'src/app/pipes/pipes.module';
 import { ReusablesModule } from 'src/app/reusables/reusables.module';
 import { AppointmentFormComponent } from './appointment-form/appointment-form.component';
-
+import { ModalInstruccionesModule } from 'src/app/modales/modal-instrucciones.module';
 
 @NgModule({
   declarations: [
@@ -41,7 +41,8 @@ import { AppointmentFormComponent } from './appointment-form/appointment-form.co
     RouterModule,
     SharedModule,
     PipesModule,
-    ReusablesModule
+    ReusablesModule,
+    ModalInstruccionesModule
   ]
 })
 export class AppointmentModule { }

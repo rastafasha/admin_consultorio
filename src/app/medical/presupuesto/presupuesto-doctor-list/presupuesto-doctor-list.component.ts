@@ -51,6 +51,14 @@ export class PresupuestoDoctorListComponent implements OnInit {
   public text_validation = '';
 
   public roles: string[] = [];
+  info_mis_presupuestos_list = `
+  <p>En esta sección :</p>
+          <ul>
+            <li>Podrás la lista completa de tus Presupuestos</li>
+            <li>Con el botón + podras crear a tu lista</li>
+            <li>Encontrar por nombre del paciente, fecha</li>
+            <li>Al final de la lista en cada paciente en el boton selector (3 puntos), podrás crear Recipe para ese paciente, editar y ver </li>
+          </ul>`;
 
   constructor(
     public presupuestoService: PresupuestoService,

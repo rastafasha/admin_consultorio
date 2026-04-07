@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { AdminDashboardRoutingModule } from './admin-dashboard-routing.module';
 import { AdminDashboardComponent } from './admin-dashboard.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { ReusablesModule } from 'src/app/reusables/reusables.module';
 
 
 @NgModule({
@@ -13,7 +14,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
   imports: [
     CommonModule,
     AdminDashboardRoutingModule,
-    SharedModule
+    SharedModule,
+    ReusablesModule
   ]
 })
 export class AdminDashboardModule { }

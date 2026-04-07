@@ -74,6 +74,20 @@ export class PresupuestoEditarComponent {
     presupuestoSeleccionado:any;
 
     id = 0;
+
+    info_crear_presupuesto = `
+  <p>En esta sección :</p>
+          <ul>
+            <li>Podrás crear y editar el presupuesto para cada uno de tus pacientes</li>
+            <li>Encuentra el paciente por número de cédula, si existe se llenarán los campos </li>
+            <li>Con el botón Reset, puedes borrar la info que trae el botón de filtro y los campos y rehacer una busqueda</li>
+            <li>Tienes el campo descripción o motivo del presupuesto</li>
+            <li>El Diagnostico u observación </li>
+            <li>En los campos: Item, Cantidad y Precio, podras colocar los costos de cada valor para sumarlos a la lista</li>
+            <li>El sistema te mostrará una tabla con la información recibida costos y cantidades</li>
+            <li>El sistema se encargará de hacer la suma total</li>
+            <li>Al Pulsar Guardar se compartirá esta información en la App Versión Paciente, así tendran un archivo para poder consultarlo a futuro</li>
+          </ul>`;
   
     constructor(
       public presupuestoService:PresupuestoService,

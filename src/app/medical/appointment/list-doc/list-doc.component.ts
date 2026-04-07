@@ -52,6 +52,19 @@ export class ListDocComponent {
   public user:any;
   public doctor_id:any;
 
+  info_lista_citas = `
+  <p>En esta sección :</p>
+          <ul>
+            <li>Podrás ver la lista completa de tus Citas</li>
+            <li>Estas son creadas desde esta Aplicació y desde la aplicación Pacientes</li>
+            <li>Con el botón + podras crear una cita</li>
+            <li>Encontrar por nombre del paciente</li>
+            <li>Ver la hora y fecha de la solicitud</li>
+            <li>Ver los estados de pago y de cita, si esta confirmado</li>
+            <li>Podrás confirmar la cita</li>
+            <li>Al final de la lista en cada paciente en el boton selector (3 puntos), podrás Atender al paciente seleccionado </li>
+          </ul>`;
+
   constructor(
     public appointmentService: AppointmentService,
     public doctorService: DoctorService,

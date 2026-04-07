@@ -45,6 +45,16 @@ export class PatientDoctorListComponent {
   public doctor_id:any;
   public roles:any;
 
+    info_mis_pacientes_list = `
+  <p>En esta sección :</p>
+          <ul>
+            <li>Tedrás la lista completa de tus Pacientes</li>
+            <li>Con el botón + podras agregar a tu lista</li>
+            <li>Con iconos de Documentos podrás descargar en formato excel, texto y CSV esta lista para respaldo</li>
+            <li>Al Pulsar sobre el nombre del paciente podras ver la ficha médica e información adicional </li>
+            <li>Al final de la lista en cada paciente en el boton selector (3 puntos), podrás crear Recipe para ese paciente, editar y ver </li>
+          </ul>`;
+
   constructor(
     public patientService: PatientMService,
     public doctorService: DoctorService,

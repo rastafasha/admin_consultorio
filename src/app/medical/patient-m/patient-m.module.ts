@@ -12,6 +12,7 @@ import { ProfilePatientMComponent } from './profile-patient-m/profile-patient-m.
 import { PatientDoctorListComponent } from './patient-doctor-list/patient-doctor-list.component';
 import { PatientFormMComponent } from './patient-form-m/patient-form-m.component';
 import { ReusablesModule } from 'src/app/reusables/reusables.module';
+import { ModalInstruccionesModule } from 'src/app/modales/modal-instrucciones.module';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { ReusablesModule } from 'src/app/reusables/reusables.module';
     HttpClientModule,
     RouterModule,
     SharedModule,
-    ReusablesModule
+    ReusablesModule,
+    ModalInstruccionesModule
   ]
 })
 export class PatientMModule { }

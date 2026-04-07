@@ -66,6 +66,18 @@ export class AtenderComponent implements OnInit{
   name_companion = '';
   surname_companion = '';
 
+  info_crear_cita = `
+  <p>En esta sección :</p>
+          <ul>
+            <li>Podrás Crear una cita nueva para tus pacientes</li>
+            <li>Ve llenando segun lo inicialmente suminstrado, fecha, hora, se mostrará tu especialidad</li>
+            <li>Con el botón Filtro, se mosrará las horas disponibles según tu horario de atención</li>
+            <li>Seguidamente se mostrará campos importantes para ser llenados</li>
+            <li>Sección donde se mostrará tus metodos de pago</li>
+            <li>Una sección para filtrar tu paciente por número de Cédula</li>
+            <li>Al filtrar traerá información previamente suminstrada</li>
+          </ul>`;
+
   constructor(
     public patientService: PatientMService,
     public ativatedRoute: ActivatedRoute,

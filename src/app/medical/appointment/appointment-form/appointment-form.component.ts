@@ -47,6 +47,14 @@ export class AppointmentFormComponent implements OnInit {
 
   public text_validation = '';
 
+   info_editar_cita = `
+  <p>En esta sección :</p>
+          <ul>
+            <li>Podrás Editar una cita ya creada</li>
+            <li>Cambiar la información de la cita como fecha y hora</li>
+          </ul>`;
+
+
   constructor(
     private fb: FormBuilder,
     public appointmentService: AppointmentService,
