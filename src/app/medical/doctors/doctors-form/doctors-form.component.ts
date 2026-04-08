@@ -92,6 +92,7 @@ export class DoctorsFormComponent implements OnInit {
   loadDoctor(): void {
     this.doctorService.showDoctor(+this.doctorId!).subscribe((resp: any) => {
       this.doctor_selected = resp.user;
+      console.log(resp)
       this.selectedValue = this.doctor_selected.roles.id;
       this.selectedValueLocation = this.doctor_selected.pais_id;
       this.speciality_id = this.doctor_selected.speciality?.id || null;
@@ -108,7 +109,7 @@ export class DoctorsFormComponent implements OnInit {
         precio_cita: this.doctor_selected.precio_cita || 0
       });
       this.IMAGE_PREVISUALIZA = this.doctor_selected.avatar;
-      this.hours_selecteds = this.doctor_selected.schedule_selecteds || [];
+      this.hours_selecteds = [...resp.user.schedule_selecteds]; 
     });
   }
 
@@ -176,7 +177,7 @@ export class DoctorsFormComponent implements OnInit {
         children: DAYS_HOURS
       });
     });
-    formData.append('schedule_hours', JSON.stringify(HOUR_SCHEDULES));
+    formData.append('schedule_hours', JSON.stringify(this.hours_selecteds));
 
     this.text_validation = '';
 
@@ -297,28 +298,23 @@ export class DoctorsFormComponent implements OnInit {
     }
   }
 
-  isCheckedHourAll(hours_day: any, day: any): boolean {
-    const INDEX = this.hours_selecteds.findIndex(
-      (hour: any) => hour.day_name === day.day &&
-        hour.hour === hours_day.hour &&
-        hour.grupo === 'all'
-    );
-    const COUNT_SELECTED = this.hours_selecteds.filter(
-      (hour: any) => hour.day_name === day.day &&
-        hour.hour === hours_day.hour
-    ).length;
-    return INDEX !== -1 && COUNT_SELECTED === hours_day.items.length;
-  }
+  isCheckedHourAll(hours_day: any, day: any) {
+  // Filtramos los items de esta hora que ya están en la lista de seleccionados
+  const selectedInThisHour = hours_day.items.filter((item: any) => 
+    this.hours_selecteds.some((hour: any) => 
+      hour.day_name === day.day && hour.item.id === item.id
+    )
+  );
+  // Se marca "TODOS" solo si todos los segmentos de esa hora están presentes
+  return selectedInThisHour.length === hours_day.items.length && hours_day.items.length > 0;
+}
 
-  isCheckedHour(hours_day: any, day: any, item: any): boolean {
-    const INDEX = this.hours_selecteds.findIndex(
-      (hour: any) => hour.day_name === day.day &&
-        hour.hour === hours_day.hour &&
-        hour.item.hour_start === item.hour_start &&
-        hour.item.hour_end === item.hour_end
-    );
-    return INDEX !== -1;
-  }
+  isCheckedHour(hours_day: any, day: any, item: any) {
+  // Verificamos si existe el ID de la hora para ese día específico
+  return this.hours_selecteds.some((hour: any) => 
+    hour.day_name === day.day && hour.item.id === item.id
+  );
+}
 
   get title(): string {
     return this.isEditMode ? `Editar Doctor ` : 'Agregar Doctor';
