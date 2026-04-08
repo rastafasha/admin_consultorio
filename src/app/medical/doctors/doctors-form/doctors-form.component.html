@@ -165,7 +165,10 @@
                                             <td>
                                                 <div class="checkbox">
                                                     <label>
-                                                        <input type="checkbox" (change)="addHourAllDay($event, hours_day)"> {{hours_day.format_hour}}
+                                                    <input type="checkbox" 
+                                                        [checked]="isHourRowFullySelected(hours_day)" 
+                                                        (change)="addHourAllDay($event, hours_day)">
+                                                        {{hours_day.format_hour}}
                                                     </label>
                                                 </div>
                                             </td>

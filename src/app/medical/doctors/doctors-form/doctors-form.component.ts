@@ -109,7 +109,7 @@ export class DoctorsFormComponent implements OnInit {
         precio_cita: this.doctor_selected.precio_cita || 0
       });
       this.IMAGE_PREVISUALIZA = this.doctor_selected.avatar;
-      this.hours_selecteds = [...resp.user.schedule_selecteds]; 
+      this.hours_selecteds = [...resp.user.schedule_selecteds];
     });
   }
 
@@ -263,58 +263,85 @@ export class DoctorsFormComponent implements OnInit {
     }
   }
 
-  addHourAllDay(event: any, hours_day: any) {
-    const INDEX = this.hours_selecteds.findIndex((hour: any) => hour.hour === hours_day.hour);
+  // 1. Función para que el checkbox se marque/desmarque solo
+  isHourRowFullySelected(hours_day: any): boolean {
+    if (!this.hours_selecteds || this.hours_selecteds.length === 0) return false;
 
-    if (INDEX !== -1 && !event.currentTarget.checked) {
-      this.days_week.forEach((day) => {
-        hours_day.items.forEach((item: any) => {
-          const INDEX_ITEM = this.hours_selecteds.findIndex((hour: any) => hour.day_name === day.day &&
-            hour.hour === hours_day.hour &&
-            hour.item.hour_start === item.hour_start &&
-            hour.item.hour_end === item.hour_end);
-          if (INDEX_ITEM !== -1) {
-            this.hours_selecteds.splice(INDEX_ITEM, 1);
-          }
-        });
-      });
-    } else {
-      this.days_week.forEach((day) => {
-        hours_day.items.forEach((item: any) => {
-          const INDEX_ITEM = this.hours_selecteds.findIndex((hour: any) => hour.day_name === day.day &&
-            hour.hour === hours_day.hour &&
-            hour.item.hour_start === item.hour_start &&
-            hour.item.hour_end === item.hour_end);
-          if (INDEX_ITEM !== -1) {
-            this.hours_selecteds.splice(INDEX_ITEM, 1);
-          }
-        });
-      });
-      setTimeout(() => {
-        this.days_week.forEach((day) => {
-          this.addHourAll(hours_day, day);
-        });
-      }, 25);
-    }
+    // Contamos cuántos segmentos de esta hora específica (ej: 01:00 PM) 
+    // están seleccionados en total para todos los días
+    const selectedCount = this.hours_selecteds.filter(h => h.hour === hours_day.hour).length;
+
+    // El total esperado es (segmentos por hora) x (días de la semana)
+    const expectedCount = hours_day.items.length * this.days_week.length;
+
+    return selectedCount === expectedCount && expectedCount > 0;
   }
 
-  isCheckedHourAll(hours_day: any, day: any) {
-  // Filtramos los items de esta hora que ya están en la lista de seleccionados
-  const selectedInThisHour = hours_day.items.filter((item: any) => 
-    this.hours_selecteds.some((hour: any) => 
-      hour.day_name === day.day && hour.item.id === item.id
-    )
-  );
-  // Se marca "TODOS" solo si todos los segmentos de esa hora están presentes
-  return selectedInThisHour.length === hours_day.items.length && hours_day.items.length > 0;
+  // 2. Función para marcar/desmarcar toda la fila
+  addHourAllDay(event: any, hours_day: any) {
+    const isChecked = event.target.checked;
+
+    // 1. Obtenemos todos los IDs de los segmentos de esta fila (los 4 o 5 segmentos de esa hora)
+    const rowItemIds = hours_day.items.map((i: any) => i.id);
+
+    if (!isChecked) {
+        // DESMARCAR: Quitamos del array cualquier objeto cuyo item.id esté en esta fila
+        this.hours_selecteds = this.hours_selecteds.filter((hour: any) => 
+            !rowItemIds.includes(hour.item.id)
+        );
+    } else {
+        // MARCAR: Primero limpiamos para no duplicar
+        this.hours_selecteds = this.hours_selecteds.filter((hour: any) => 
+            !rowItemIds.includes(hour.item.id)
+        );
+
+        // Agregamos todos los días para cada item de esta fila
+        this.days_week.forEach((day: any) => {
+            hours_day.items.forEach((item: any) => {
+                this.hours_selecteds.push({
+                    day_name: day.day,
+                    hour: hours_day.hour, // Asegúrate de que hours_day tenga esta prop
+                    item: item
+                });
+            });
+        });
+    }
 }
 
+
+  // Función auxiliar para que el checkbox principal se marque/desmarque solo
+  isRowFull(hours_day: any): boolean {
+    // Cuenta cuántos items de esta hora hay en total para toda la semana
+    const totalItemsInWeek = hours_day.items.length * this.days_week.length;
+
+    // Cuenta cuántos de esos están seleccionados actualmente
+    const selectedInWeek = this.hours_selecteds.filter((hour: any) =>
+      hour.hour === hours_day.hour
+    ).length;
+
+    return totalItemsInWeek === selectedInWeek && totalItemsInWeek > 0;
+  }
+
+
+  isCheckedHourAll(hours_day: any, day: any) {
+    // Filtramos los items de esta hora que ya están en la lista de seleccionados
+    const selectedInThisHour = hours_day.items.filter((item: any) =>
+      this.hours_selecteds.some((hour: any) =>
+        hour.day_name === day.day && hour.item.id === item.id
+      )
+    );
+    // Se marca "TODOS" solo si todos los segmentos de esa hora están presentes
+    return selectedInThisHour.length === hours_day.items.length && hours_day.items.length > 0;
+  }
+
   isCheckedHour(hours_day: any, day: any, item: any) {
-  // Verificamos si existe el ID de la hora para ese día específico
-  return this.hours_selecteds.some((hour: any) => 
-    hour.day_name === day.day && hour.item.id === item.id
-  );
-}
+    // Verificamos si existe el ID de la hora para ese día específico
+    return this.hours_selecteds.some((hour: any) =>
+      hour.day_name === day.day && hour.item.id === item.id
+    );
+  }
+
+
 
   get title(): string {
     return this.isEditMode ? `Editar Doctor ` : 'Agregar Doctor';
