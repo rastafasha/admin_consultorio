@@ -33,7 +33,7 @@ export class PresupuestoService {
     return this.http.get(URL, {headers:headers});
   }
 
-  listAppointmentDocts(
+  listPresupuestoDocts(
     doctor_id:number, 
     page=1, 
     search='', 

@@ -98,11 +98,11 @@ export class PresupuestoDoctorListComponent implements OnInit {
   private getTableData(page = 1): void {
     this.serialNumberArray = [];
     
-    this.presupuestoService.listAppointmentDocts(this.doctor_id, page, 
+    this.presupuestoService.listPresupuestoDocts(this.doctor_id, page, 
       this.searchDataValue, this.searchDataPatient, this.date || '').subscribe({
       next: (resp: any) => {
-        this.totalDataPatient = resp.total;
-        this.presupuestoList = resp.data || [];
+        this.totalDataPatient = resp.presupuestos.total;
+        this.presupuestoList = resp.presupuestos.data || [];
         this.dataSource.data = this.presupuestoList;
         this.calculateTotalPages(this.totalDataPatient, this.pageSize);
       },
