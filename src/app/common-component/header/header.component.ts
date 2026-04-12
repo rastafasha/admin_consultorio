@@ -6,6 +6,7 @@ import { User } from 'src/app/models/user.model';
 import { routes } from 'src/app/shared/routes/routes';
 import { SideBarService } from 'src/app/shared/side-bar/side-bar.service';
 import { environment } from 'src/environments/environment';
+import { TasabcvService } from 'src/app/services/tasabcv.service';
 
 @Component({
   selector: 'app-header',
@@ -28,6 +29,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   imagenSerUrl = environment.url_media;
   private userSubscription: any;
+  
 
   constructor(
     public router: Router,
@@ -69,6 +71,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.userSubscription.unsubscribe();
     }
   }
+
 
 
 

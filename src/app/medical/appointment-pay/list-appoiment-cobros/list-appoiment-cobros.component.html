@@ -54,11 +54,13 @@
                                 <thead>
                                     <tr>
                                         
+                                        <th mat-sort-header="imagen">Imagen</th>
                                         <th mat-sort-header="name">Nombre</th>
                                         <th mat-sort-header="banco">Banco</th>
                                         <th mat-sort-header="metodo">metodo</th>
                                         <th mat-sort-header="referencia">referencia</th>
                                         <th mat-sort-header="monto">monto</th>
+                                        <th mat-sort-header="tasa">Tasa BCV</th>
                                         <th mat-sort-header="fecha">Fecha</th>
                                         <th mat-sort-header="status">status</th>
                                         <th mat-sort-header="confirmar">Confirmar</th>
@@ -69,11 +71,13 @@
                                 <tbody>
                                     <tr *ngFor="let data of paymentList">
                                         
+                                      <td><img [src]="data.image | imagenPipe:'payments'" ></td>
                                         <td>{{data.nombre + ' ' + (data.surname ? data.surname: '')}}</td>
                                         <td>{{data.bank_name}}</td>
                                         <td>{{data.metodo}}</td>
                                         <td>{{data.referencia}}</td>
                                         <td>{{data.monto}}</td>
+                                        <td>{{data.tasabacv}}</td>
                                         <td>{{data.fecha|date}}</td>
                                         <td>
                                             <span class="badge bg-success"

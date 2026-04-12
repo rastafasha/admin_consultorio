@@ -13,6 +13,7 @@ import { ListDoctorComponent } from './list-doctor/list-doctor.component';
 import { ListCobrosDoctorComponent } from './list-cobros-doctor/list-cobros-doctor.component';
 import { ReusablesModule } from 'src/app/reusables/reusables.module';
 import { ModalInstruccionesModule } from 'src/app/modales/modal-instrucciones.module';
+import { PipesModule } from 'src/app/pipes/pipes.module';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { ModalInstruccionesModule } from 'src/app/modales/modal-instrucciones.mo
     RouterModule,
     SharedModule,
     ReusablesModule,
-    ModalInstruccionesModule
+    ModalInstruccionesModule,
+    PipesModule
   ]
 })
 export class AppointmentPayModule { }

@@ -128,6 +128,9 @@ export class routes {
   public static get calendar(): string {
     return this.baseUrl + '/appointment-calendar/show';
   }
+  public static get tasabcv(): string {
+    return this.baseUrl + '/tasabcv/edit';
+  }
   public static get incomingCall(): string {
     return this.baseUrl + '/calls/incoming-call';
   }

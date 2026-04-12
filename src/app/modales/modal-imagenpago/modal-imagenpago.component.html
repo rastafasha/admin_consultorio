@@ -1,0 +1,26 @@
+<!-- Modal Dinámico de Instrucciones -->
+ <!-- [id]="data.id" -->
+<div class="modal fade" id="viewPago"  tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true" data-bs-backdrop="static">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content border-0 shadow">
+      <!-- Header con color dinámico si lo deseas, aquí mantenemos el success -->
+      <div class="modal-header bg-info text-white border-0">
+        <h5 class="modal-title d-flex align-items-center" id="infoModalLabel">
+          <i class="fas fa-info-circle me-2"></i> 
+          <span>Comprobante Pago: {{ pagoSeleccionado?.referencia }}</span>
+        </h5>
+        <button type="button" class="btn-close btn-close-white" (click)="onClose()" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body py-4">
+        <img [src]="pagoSeleccionado?.image | imagenPipe:'payments' " class="image-responsive">
+      </div>
+
+      <div class="modal-footer border-0 bg-light d-flex justify-content-between">
+        <button type="button" class="btn btn-success px-4" (click)="onClose()">
+          Entendido
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

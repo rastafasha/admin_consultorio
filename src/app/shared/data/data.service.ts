@@ -576,6 +576,18 @@ export class DataService {
           show_nav: true,
           subMenus: [],
         },
+        // Tasa BCV
+        {
+          menuValue: 'Tasa Bcv',
+          route: routes.tasabcv,
+          hasSubRoute: false,
+          showSubRoute: false,
+          img: 'assets/img/icons/call-icon-01.svg',
+          base: 'tasabcv',
+          permision: 'tasa_bcv',
+          show_nav: true,
+          subMenus: [],
+        },
         // Publicidad
         {
           menuValue: 'Publicidad',

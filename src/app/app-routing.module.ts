@@ -85,6 +85,11 @@ const routes: Routes = [
       import('./medical/presupuesto/presupuesto.module').then((m) => m.PresupuestoModule),
   },
   {
+    path: 'tasabcv',
+    loadChildren: () =>
+      import('./medical/tasabcv/tasabcv.module').then((m) => m.TasabcvModule),
+  },
+  {
     path: 'error',
     loadChildren: () =>
       import('./error/error.module').then((m) => m.ErrorModule),

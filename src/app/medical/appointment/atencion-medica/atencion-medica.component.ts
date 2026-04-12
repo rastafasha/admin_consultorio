@@ -16,10 +16,6 @@ export class AtencionMedicaComponent {
   valid_form_success = false;
   public text_validation = '';
   public text_success = '';
-
-  
-
-  
   name = '';
   surname = '';
   n_doc = 0;

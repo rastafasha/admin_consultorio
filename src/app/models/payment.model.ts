@@ -12,4 +12,6 @@ export class Payment{
         image:string;
         fecha:Date;
         status:string;
+        motivo_rechazo:string;
+        tasabcv:number;
 }

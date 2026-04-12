@@ -18,11 +18,13 @@ import { HeaderComponent } from '../common-component/header/header.component';
 import { SidebarComponent } from '../common-component/sidebar/sidebar.component';
 import { NotificacionesupdateComponent } from '../common-component/notificacionesupdate/notificacionesupdate.component';
 import { PipesModule } from '../pipes/pipes.module';
+import { TasabcvComponent } from '../common-component/tasabcv/tasabcv.component';
 @NgModule({
   declarations: [
     HeaderComponent,
     SidebarComponent,
     NotificacionesupdateComponent,
+    TasabcvComponent
   ],
   imports: [
     CommonModule,

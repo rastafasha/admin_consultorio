@@ -1,0 +1,83 @@
+<div class="page-wrapper">
+    <div class="content">
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="row">
+                <div class="col-sm-12">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a routerLink="/">Dashboard </a></li>
+                        <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
+                        <li class="breadcrumb-item" *ngIf="user.roles[0] ==='SUPERADMIN'"><a
+                                routerLink="/appointments/list">Citas </a></li>
+                        <li class="breadcrumb-item" *ngIf="user.roles[0] ==='DOCTOR'"><a
+                                [routerLink]="['/appointments/list/doctor/', doctor_id]">Mis Citas </a></li>
+                        <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
+                        <li class="breadcrumb-item active">Edit/ Add: Atención Médica </li>
+                    </ul>
+                </div>
+                <app-back-bottn></app-back-bottn>
+            </div>
+        </div>
+        <app-skeleton-loader *ngIf="isLoading" [rows]="5" [columns]="4"></app-skeleton-loader>
+        <!-- /Page Header -->
+        <div class="row" *ngIf="!isLoading" >
+            <!-- paciente -->
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form>
+
+                            <div class="row align-items-center">
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="row">
+
+                                        <div class="col-12 ">
+                                            <div class="form-group local-forms">
+                                                <label for="exampleInputEmail1">Precio</label>
+                                                <input [(ngModel)]="precio_dia" name="precio_dia" type="text"
+                                                    class="form-control" [ngModelOptions]="{standalone: true}">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 mb-3">
+                                            <button class="btn btn-primary  btn-sm" (click)="save()">+ Agregar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="table-responsive">
+                                        <table class="table mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Monto</th>
+                                                    <th>Fecha</th>
+                                                    <th>Opciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let tasa of tasasbcv; let i = index">
+                                                    <td>{{tasa.precio_dia}}</td>
+                                                    <td>{{tasa.created_at|date}}</td>
+                                                    <td>
+                                                        <button class="btn btn-danger btn-sm"
+                                                            (click)="deleteTasa(i)">x</button>
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- fin paciente -->
+        </div>
+    </div>
+</div>

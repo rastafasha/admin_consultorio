@@ -9,7 +9,7 @@ const base_url = environment.url_media;
 })
 export class ImagenPipe implements PipeTransform {
 
-  transform(avatar: string, tipo: 'staffs'|'publicidad'|'patients' ): string {
+  transform(avatar: string, tipo: 'staffs'|'publicidad'|'patients'|'payments' ): string {
 
     if(!avatar){
       return `./assets/img/user-06.jpg`;
