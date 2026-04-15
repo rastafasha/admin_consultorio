@@ -8,9 +8,10 @@ interface Route {
   // Add other properties if necessary
 }
 @Component({
-  selector: 'app-presupuesto',
-  templateUrl: './presupuesto.component.html',
-  styleUrls: ['./presupuesto.component.scss']
+    selector: 'app-presupuesto',
+    templateUrl: './presupuesto.component.html',
+    styleUrls: ['./presupuesto.component.scss'],
+    standalone: false
 })
 export class PresupuestoComponent {
 

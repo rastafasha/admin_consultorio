@@ -10,9 +10,10 @@ import { LaboratoryService } from '../../../services/laboratory.service';
 import { RolesService } from '../../../services/roles.service';
 declare var $:any;
 @Component({
-  selector: 'app-list-laboratory',
-  templateUrl: './list-laboratory.component.html',
-  styleUrls: ['./list-laboratory.component.scss']
+    selector: 'app-list-laboratory',
+    templateUrl: './list-laboratory.component.html',
+    styleUrls: ['./list-laboratory.component.scss'],
+    standalone: false
 })
 export class ListLaboratoryComponent {
 

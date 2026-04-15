@@ -5,9 +5,10 @@ import { PatientMService } from '../../../services/patient-m.service';
 import { DoctorService } from '../../../services/doctor.service';
 import { environment } from 'src/environments/environment';
 @Component({
-  selector: 'app-profile-patient-m',
-  templateUrl: './profile-patient-m.component.html',
-  styleUrls: ['./profile-patient-m.component.scss']
+    selector: 'app-profile-patient-m',
+    templateUrl: './profile-patient-m.component.html',
+    styleUrls: ['./profile-patient-m.component.scss'],
+    standalone: false
 })
 export class ProfilePatientMComponent {
   public routes = routes;

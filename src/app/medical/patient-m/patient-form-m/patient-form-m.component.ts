@@ -8,9 +8,10 @@ import { catchError, throwError } from 'rxjs';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-patient-form-m',
-  templateUrl: './patient-form-m.component.html',
-  styleUrls: ['./patient-form-m.component.scss']
+    selector: 'app-patient-form-m',
+    templateUrl: './patient-form-m.component.html',
+    styleUrls: ['./patient-form-m.component.scss'],
+    standalone: false
 })
 export class PatientFormMComponent implements OnInit {
   public routes = routes;

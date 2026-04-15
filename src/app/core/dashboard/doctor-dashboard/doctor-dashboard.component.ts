@@ -60,9 +60,10 @@ export type ChartOptions = {
 };
 
 @Component({
-  selector: 'app-doctor-dashboard',
-  templateUrl: './doctor-dashboard.component.html',
-  styleUrls: ['./doctor-dashboard.component.scss'],
+    selector: 'app-doctor-dashboard',
+    templateUrl: './doctor-dashboard.component.html',
+    styleUrls: ['./doctor-dashboard.component.scss'],
+    standalone: false
 })
 export class DoctorDashboardComponent {
   public routes = routes;

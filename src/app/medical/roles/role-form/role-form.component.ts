@@ -7,9 +7,10 @@ import { RolesService } from '../../../services/roles.service';
 import { DoctorService } from '../../../services/doctor.service';
 
 @Component({
-  selector: 'app-role-form',
-  templateUrl: './role-form.component.html',
-  styleUrls: ['./role-form.component.scss']
+    selector: 'app-role-form',
+    templateUrl: './role-form.component.html',
+    styleUrls: ['./role-form.component.scss'],
+    standalone: false
 })
 export class RoleFormComponent implements OnInit {
   public routes = routes;

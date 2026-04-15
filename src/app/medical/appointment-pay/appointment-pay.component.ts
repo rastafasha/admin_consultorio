@@ -9,9 +9,10 @@ interface Route {
 }
 
 @Component({
-  selector: 'app-appointment-pay',
-  templateUrl: './appointment-pay.component.html',
-  styleUrls: ['./appointment-pay.component.scss']
+    selector: 'app-appointment-pay',
+    templateUrl: './appointment-pay.component.html',
+    styleUrls: ['./appointment-pay.component.scss'],
+    standalone: false
 })
 export class AppointmentPayComponent {
   public miniSidebar = 'false';

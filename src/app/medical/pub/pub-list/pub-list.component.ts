@@ -8,9 +8,10 @@ import { PubService } from '../../../services/pub.service';
 
 declare var $:any;  
 @Component({
-  selector: 'app-pub-list',
-  templateUrl: './pub-list.component.html',
-  styleUrls: ['./pub-list.component.scss']
+    selector: 'app-pub-list',
+    templateUrl: './pub-list.component.html',
+    styleUrls: ['./pub-list.component.scss'],
+    standalone: false
 })
 export class PubListComponent {
   public routes = routes;

@@ -7,9 +7,10 @@ import { LocationService } from 'src/app/services/location.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-location-form',
-  templateUrl: './location-form.component.html',
-  styleUrls: ['./location-form.component.scss']
+    selector: 'app-location-form',
+    templateUrl: './location-form.component.html',
+    styleUrls: ['./location-form.component.scss'],
+    standalone: false
 })
 export class LocationFormComponent implements OnInit {
   public routes = routes;

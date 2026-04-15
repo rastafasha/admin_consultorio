@@ -9,9 +9,10 @@ import { environment } from 'src/environments/environment';
 import { TasabcvService } from 'src/app/services/tasabcv.service';
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
+    selector: 'app-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.scss'],
+    standalone: false
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   public routes = routes;

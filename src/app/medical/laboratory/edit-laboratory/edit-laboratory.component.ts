@@ -7,9 +7,10 @@ import { LaboratoryService } from '../../../services/laboratory.service';
 import { DomSanitizer } from '@angular/platform-browser';
 declare var $:any;  
 @Component({
-  selector: 'app-edit-laboratory',
-  templateUrl: './edit-laboratory.component.html',
-  styleUrls: ['./edit-laboratory.component.scss']
+    selector: 'app-edit-laboratory',
+    templateUrl: './edit-laboratory.component.html',
+    styleUrls: ['./edit-laboratory.component.scss'],
+    standalone: false
 })
 export class EditLaboratoryComponent {
 

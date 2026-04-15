@@ -10,9 +10,10 @@ import { RolesService } from '../../../services/roles.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-appointment-form',
-  templateUrl: './appointment-form.component.html',
-  styleUrls: ['./appointment-form.component.scss']
+    selector: 'app-appointment-form',
+    templateUrl: './appointment-form.component.html',
+    styleUrls: ['./appointment-form.component.scss'],
+    standalone: false
 })
 export class AppointmentFormComponent implements OnInit {
   public routes = routes;

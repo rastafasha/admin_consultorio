@@ -11,9 +11,10 @@ import { ActivatedRoute } from '@angular/router';
 
 declare var $:any;  
 @Component({
-  selector: 'app-patient-doctor-list',
-  templateUrl: './patient-doctor-list.component.html',
-  styleUrls: ['./patient-doctor-list.component.scss']
+    selector: 'app-patient-doctor-list',
+    templateUrl: './patient-doctor-list.component.html',
+    styleUrls: ['./patient-doctor-list.component.scss'],
+    standalone: false
 })
 export class PatientDoctorListComponent {
   public routes = routes;

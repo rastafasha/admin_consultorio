@@ -4,9 +4,10 @@ import { Observable, catchError, of } from 'rxjs';
 import { NewsletterService } from 'src/app/services/newsletter.service';
 
 @Component({
-  selector: 'app-subcribe-notification',
-  templateUrl: './subcribe-notification.component.html',
-  styleUrls: ['./subcribe-notification.component.scss']
+    selector: 'app-subcribe-notification',
+    templateUrl: './subcribe-notification.component.html',
+    styleUrls: ['./subcribe-notification.component.scss'],
+    standalone: false
 })
 export class SubcribeNotificationComponent {
 

@@ -6,7 +6,8 @@ interface EspecialidadFilter {
 }
 
 @Pipe({
-  name: 'especialidadFilter'
+    name: 'especialidadFilter',
+    standalone: false
 })
 export class EspecialidadFilterPipe implements PipeTransform {
 

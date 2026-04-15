@@ -2,9 +2,10 @@
 import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-modal-instrucciones',
+    selector: 'app-modal-instrucciones',
     templateUrl: './modal-instrucciones.component.html',
-    styleUrls: ['./modal-instrucciones.component.css']
+    styleUrls: ['./modal-instrucciones.component.css'],
+    standalone: false
 })
 export class ModalInstruccionesComponent implements AfterViewInit {
 

@@ -15,11 +15,12 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/health_connect_admin_consultorio",
+            "outputPath": {
+              "base": "dist/health_connect_admin_consultorio"
+            },
             "index": "src/index.html",
-            "main": "src/main.ts",
             "polyfills": [
               "zone.js"
             ],
@@ -44,8 +45,13 @@
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/slick-carousel/slick/slick.min.js"
             ],
-            "serviceWorker": true,
-            "ngswConfigPath": "ngsw-config.json"
+            "serviceWorker": "ngsw-config.json",
+            "browser": "src/main.ts",
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "."
+              ]
+            }
           },
           "configurations": {
             "production": {
@@ -64,8 +70,9 @@
               "outputHashing": "all"
             },
             "consultorio": {
-              "outputPath": "dist/consultorio",
-              "resourcesOutputPath": "media",
+              "outputPath": {
+                "base": "dist/consultorio"
+              },
                "index": {
                 "input": "src/env/consultorio/index.html",
                 "output": "index.html"
@@ -110,9 +117,7 @@
               "outputHashing": "all"
             },
             "development": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true,
@@ -130,10 +135,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "health_connect_admin:build:production"
+              "buildTarget": "health_connect_admin:build:production"
             },
             "development": {
-              "browserTarget": "health_connect_admin:build:development"
+              "buildTarget": "health_connect_admin:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -141,7 +146,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "health_connect_admin:build"
+            "buildTarget": "health_connect_admin:build"
           }
         },
         "test": {

@@ -8,9 +8,10 @@ interface Route {
   // Add other properties if necessary
 }
 @Component({
-  selector: 'app-location',
-  templateUrl: './location.component.html',
-  styleUrls: ['./location.component.scss']
+    selector: 'app-location',
+    templateUrl: './location.component.html',
+    styleUrls: ['./location.component.scss'],
+    standalone: false
 })
 export class LocationComponent {
   public miniSidebar = 'false';

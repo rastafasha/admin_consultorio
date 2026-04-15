@@ -12,9 +12,10 @@ import Swal from 'sweetalert2';
 
 declare var $:any;
 @Component({
-  selector: 'app-list-doc',
-  templateUrl: './list-doc.component.html',
-  styleUrls: ['./list-doc.component.scss']
+    selector: 'app-list-doc',
+    templateUrl: './list-doc.component.html',
+    styleUrls: ['./list-doc.component.scss'],
+    standalone: false
 })
 export class ListDocComponent {
   public routes = routes;

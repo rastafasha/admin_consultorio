@@ -8,9 +8,10 @@ interface Route {
   // Add other properties if necessary
 }
 @Component({
-  selector: 'app-patient-m',
-  templateUrl: './patient-m.component.html',
-  styleUrls: ['./patient-m.component.scss']
+    selector: 'app-patient-m',
+    templateUrl: './patient-m.component.html',
+    styleUrls: ['./patient-m.component.scss'],
+    standalone: false
 })
 export class PatientMComponent {
   public miniSidebar = 'false';

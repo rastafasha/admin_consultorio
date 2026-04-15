@@ -8,9 +8,10 @@ import { RolesService } from '../../../services/roles.service';
 import { AuthService } from 'src/app/shared/auth/auth.service';
 
 @Component({
-  selector: 'app-profile-doctor',
-  templateUrl: './profile-doctor.component.html',
-  styleUrls: ['./profile-doctor.component.scss']
+    selector: 'app-profile-doctor',
+    templateUrl: './profile-doctor.component.html',
+    styleUrls: ['./profile-doctor.component.scss'],
+    standalone: false
 })
 export class ProfileDoctorComponent {
   public routes = routes;

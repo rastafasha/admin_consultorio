@@ -4,9 +4,10 @@ import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { filter, map } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-status-online',
-  templateUrl: './status-online.component.html',
-  styleUrls: ['./status-online.component.scss']
+    selector: 'app-status-online',
+    templateUrl: './status-online.component.html',
+    styleUrls: ['./status-online.component.scss'],
+    standalone: false
 })
 export class StatusOnlineComponent implements OnInit {
 

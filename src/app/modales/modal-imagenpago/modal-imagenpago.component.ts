@@ -2,9 +2,10 @@ import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/
 import { Payment } from 'src/app/models/payment.model';
 
 @Component({
-  selector: 'app-modal-imagenpago',
-  templateUrl: './modal-imagenpago.component.html',
-  styleUrls: ['./modal-imagenpago.component.scss']
+    selector: 'app-modal-imagenpago',
+    templateUrl: './modal-imagenpago.component.html',
+    styleUrls: ['./modal-imagenpago.component.scss'],
+    standalone: false
 })
 export class ModalImagenpagoComponent {
   @Output() closeModal: EventEmitter<void> = new EventEmitter<void>();

@@ -8,9 +8,10 @@ interface Route {
   // Add other properties if necessary
 }
 @Component({
-  selector: 'app-laboratory',
-  templateUrl: './laboratory.component.html',
-  styleUrls: ['./laboratory.component.scss']
+    selector: 'app-laboratory',
+    templateUrl: './laboratory.component.html',
+    styleUrls: ['./laboratory.component.scss'],
+    standalone: false
 })
 export class LaboratoryComponent {
 

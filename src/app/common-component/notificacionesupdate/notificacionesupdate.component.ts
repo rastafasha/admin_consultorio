@@ -7,9 +7,10 @@ import { AuthService } from "src/app/shared/auth/auth.service";
 import { StaffService } from "src/app/services/staff.service";
 
 @Component({
-  selector: "app-notificacionesupdate",
-  templateUrl: "./notificacionesupdate.component.html",
-  styleUrls: ["./notificacionesupdate.component.scss"],
+    selector: "app-notificacionesupdate",
+    templateUrl: "./notificacionesupdate.component.html",
+    styleUrls: ["./notificacionesupdate.component.scss"],
+    standalone: false
 })
 export class NotificacionesupdateComponent implements OnInit {
   @Input() routes;

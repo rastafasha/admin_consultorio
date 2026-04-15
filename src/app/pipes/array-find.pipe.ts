@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'arrayFind',
+    name: 'arrayFind',
+    standalone: false
 })
 export class ArrayFindPipe implements PipeTransform {
   transform<T>(items: T[], field: keyof T, value: unknown): T {

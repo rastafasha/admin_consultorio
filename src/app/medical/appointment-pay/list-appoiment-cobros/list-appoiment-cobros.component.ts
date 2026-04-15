@@ -10,9 +10,10 @@ import { ActivatedRoute } from '@angular/router';
 
 declare var $:any;  
 @Component({
-  selector: 'app-list-appoiment-cobros',
-  templateUrl: './list-appoiment-cobros.component.html',
-  styleUrls: ['./list-appoiment-cobros.component.scss']
+    selector: 'app-list-appoiment-cobros',
+    templateUrl: './list-appoiment-cobros.component.html',
+    styleUrls: ['./list-appoiment-cobros.component.scss'],
+    standalone: false
 })
 export class ListAppoimentCobrosComponent {
 

@@ -7,9 +7,10 @@ import Swal from 'sweetalert2';
 import { Pais } from 'src/app/models/pais';
 
 @Component({
-  selector: 'app-doctors-form',
-  templateUrl: './doctors-form.component.html',
-  styleUrls: ['./doctors-form.component.scss']
+    selector: 'app-doctors-form',
+    templateUrl: './doctors-form.component.html',
+    styleUrls: ['./doctors-form.component.scss'],
+    standalone: false
 })
 export class DoctorsFormComponent implements OnInit {
   public routes = routes;

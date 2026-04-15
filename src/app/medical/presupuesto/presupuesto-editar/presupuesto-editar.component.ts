@@ -17,9 +17,10 @@ import { Speciality } from 'src/app/models/speciality.model';
 declare let $:any;  
 
 @Component({
-  selector: 'app-presupuesto-editar',
-  templateUrl: './presupuesto-editar.component.html',
-  styleUrls: ['./presupuesto-editar.component.scss']
+    selector: 'app-presupuesto-editar',
+    templateUrl: './presupuesto-editar.component.html',
+    styleUrls: ['./presupuesto-editar.component.scss'],
+    standalone: false
 })
 export class PresupuestoEditarComponent {
 

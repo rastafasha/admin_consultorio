@@ -8,9 +8,10 @@ interface Route {
   // Add other properties if necessary
 }
 @Component({
-  selector: 'app-tasabcv',
-  templateUrl: './tasabcv.component.html',
-  styleUrls: ['./tasabcv.component.scss']
+    selector: 'app-tasabcv',
+    templateUrl: './tasabcv.component.html',
+    styleUrls: ['./tasabcv.component.scss'],
+    standalone: false
 })
 export class TasabcvComponent {
 

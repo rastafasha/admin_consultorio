@@ -13,9 +13,10 @@ import { catchError } from 'rxjs';
 import { throwError } from 'rxjs';
 declare var $:any;
 @Component({
-  selector: 'app-presupuesto-doctor-list',
-  templateUrl: './presupuesto-doctor-list.component.html',
-  styleUrls: ['./presupuesto-doctor-list.component.scss']
+    selector: 'app-presupuesto-doctor-list',
+    templateUrl: './presupuesto-doctor-list.component.html',
+    styleUrls: ['./presupuesto-doctor-list.component.scss'],
+    standalone: false
 })
 export class PresupuestoDoctorListComponent implements OnInit {
   public routes = routes;

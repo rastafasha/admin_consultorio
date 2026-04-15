@@ -13,9 +13,10 @@ import { SettignService } from 'src/app/core/settings/settigs.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-atender',
-  templateUrl: './atender.component.html',
-  styleUrls: ['./atender.component.scss']
+    selector: 'app-atender',
+    templateUrl: './atender.component.html',
+    styleUrls: ['./atender.component.scss'],
+    standalone: false
 })
 export class AtenderComponent implements OnInit{
 

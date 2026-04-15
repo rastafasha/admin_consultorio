@@ -11,9 +11,10 @@ import Swal from 'sweetalert2';
 declare let $: any;
 
 @Component({
-  selector: 'app-staff-n',
-  templateUrl: './staff-n.component.html',
-  styleUrls: ['./staff-n.component.scss']
+    selector: 'app-staff-n',
+    templateUrl: './staff-n.component.html',
+    styleUrls: ['./staff-n.component.scss'],
+    standalone: false
 })
 export class StaffNComponent implements OnInit {
   public routes = routes;

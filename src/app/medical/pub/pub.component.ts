@@ -9,9 +9,10 @@ interface Route {
 }
 
 @Component({
-  selector: 'app-pub',
-  templateUrl: './pub.component.html',
-  styleUrls: ['./pub.component.scss']
+    selector: 'app-pub',
+    templateUrl: './pub.component.html',
+    styleUrls: ['./pub.component.scss'],
+    standalone: false
 })
 export class PubComponent {
   public miniSidebar = 'false';

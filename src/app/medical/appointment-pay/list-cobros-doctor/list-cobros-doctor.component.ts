@@ -12,9 +12,10 @@ import Swal from 'sweetalert2';
 
 declare var $:any;  
 @Component({
-  selector: 'app-list-cobros-doctor',
-  templateUrl: './list-cobros-doctor.component.html',
-  styleUrls: ['./list-cobros-doctor.component.scss']
+    selector: 'app-list-cobros-doctor',
+    templateUrl: './list-cobros-doctor.component.html',
+    styleUrls: ['./list-cobros-doctor.component.scss'],
+    standalone: false
 })
 export class ListCobrosDoctorComponent {
 

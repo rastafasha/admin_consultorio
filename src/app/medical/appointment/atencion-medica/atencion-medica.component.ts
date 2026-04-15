@@ -5,9 +5,10 @@ import { AppointmentService } from '../../../services/appointment.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-atencion-medica',
-  templateUrl: './atencion-medica.component.html',
-  styleUrls: ['./atencion-medica.component.scss']
+    selector: 'app-atencion-medica',
+    templateUrl: './atencion-medica.component.html',
+    styleUrls: ['./atencion-medica.component.scss'],
+    standalone: false
 })
 export class AtencionMedicaComponent {
   public routes = routes;

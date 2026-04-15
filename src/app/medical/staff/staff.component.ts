@@ -9,9 +9,10 @@ interface Route {
   // Add other properties if necessary
 }
 @Component({
-  selector: 'app-staff',
-  templateUrl: './staff.component.html',
-  styleUrls: ['./staff.component.scss']
+    selector: 'app-staff',
+    templateUrl: './staff.component.html',
+    styleUrls: ['./staff.component.scss'],
+    standalone: false
 })
 export class StaffComponent {
   public miniSidebar = 'false';

@@ -4,9 +4,10 @@ import { TasabcvService } from 'src/app/services/tasabcv.service';
 import { routes } from 'src/app/shared/routes/routes';
 import Swal from 'sweetalert2';
 @Component({
-  selector: 'app-tasabcv-edit',
-  templateUrl: './tasabcv-edit.component.html',
-  styleUrls: ['./tasabcv-edit.component.scss']
+    selector: 'app-tasabcv-edit',
+    templateUrl: './tasabcv-edit.component.html',
+    styleUrls: ['./tasabcv-edit.component.scss'],
+    standalone: false
 })
 export class TasabcvEditComponent {
  public tasasbcv!: Tasabcv[];

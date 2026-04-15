@@ -7,9 +7,10 @@ import { DoctorService } from '../../../services/doctor.service';
 import { Speciality } from 'src/app/models/speciality.model';
 
 @Component({
-  selector: 'app-specialitie-n',
-  templateUrl: './specialitie-n.component.html',
-  styleUrls: ['./specialitie-n.component.scss']
+    selector: 'app-specialitie-n',
+    templateUrl: './specialitie-n.component.html',
+    styleUrls: ['./specialitie-n.component.scss'],
+    standalone: false
 })
 export class SpecialitieNComponent implements OnInit {
   public routes = routes;

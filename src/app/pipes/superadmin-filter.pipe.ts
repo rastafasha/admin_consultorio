@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'superAdminFilter',
+    name: 'superAdminFilter',
+    standalone: false
 })
 export class SuperAdminFilterPipe implements PipeTransform {
   constructor() {

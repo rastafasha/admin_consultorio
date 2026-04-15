@@ -15,9 +15,10 @@ import { catchError } from 'rxjs';
 import { throwError } from 'rxjs';
 declare var $: any;
 @Component({
-  selector: 'app-presupuesto-lista',
-  templateUrl: './presupuesto-lista.component.html',
-  styleUrls: ['./presupuesto-lista.component.scss']
+    selector: 'app-presupuesto-lista',
+    templateUrl: './presupuesto-lista.component.html',
+    styleUrls: ['./presupuesto-lista.component.scss'],
+    standalone: false
 })
 export class PresupuestoListaComponent implements OnInit {
 

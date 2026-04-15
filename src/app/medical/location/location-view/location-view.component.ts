@@ -6,9 +6,10 @@ import { Location } from '@angular/common';
 import { LocationService } from 'src/app/services/location.service';
 
 @Component({
-  selector: 'app-location-view',
-  templateUrl: './location-view.component.html',
-  styleUrls: ['./location-view.component.scss']
+    selector: 'app-location-view',
+    templateUrl: './location-view.component.html',
+    styleUrls: ['./location-view.component.scss'],
+    standalone: false
 })
 export class LocationViewComponent {
   public routes = routes;
