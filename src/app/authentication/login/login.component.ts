@@ -48,7 +48,6 @@ export class LoginComponent implements OnInit {
 
   constructor(
     public auth: AuthService,
-
     public router:Router,
     private fb: FormBuilder,
     ) {
@@ -56,7 +55,6 @@ export class LoginComponent implements OnInit {
     }
 
   ngOnInit(): void {
-   
     this.getLocalStorage();
     
   }

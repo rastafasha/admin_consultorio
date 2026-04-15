@@ -32,16 +32,12 @@
                                     <div class="row">
                                         <div class="col-lg-4 col-md-4">
                                             <div class="profile-user-box">
-                                                <div class="profile-user-img">
-                                                    <div *ngIf="!patient_selected.avatar">
+                                                <div class="profile-user-img">                                <div *ngIf="!patient_selected?.avatar">
                                                         <img src="./assets/img/no-image.jpg" >
                                                     </div>
-                                                    <div *ngIf="patient_selected.avatar">
-                                                        <img  src="{{imagenSerUrl}}{{patient_selected.avatar}}"  [alt]="patient_selected.first_name">
+                                                    <div *ngIf="patient_selected?.avatar">
+                                                        <img  [src]="patient_selected?.avatar | imagenPipe:'patients'"  [alt]="doctor_selected?.name">
                                                     </div>
-                                                    <!-- <div *ngIf="patient_selected.avatar">
-                                                        <img  [src]="patient_selected.avatar"  [alt]="patient_selected.name">
-                                                    </div> -->
                                                 </div>
                                                 <div class="names-profiles">
                                                     <h4>{{patient_selected.full_name}}</h4>
