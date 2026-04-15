@@ -1,16 +1,17 @@
 # Angular 17 Update TODO
 
-## Completed: []
+## Completed: 
+- [x] Node v22.22.2 ✓
+
 ## Pending:
-1. [x] Check Node version (`node -v`): v22.22.2 ✓ (`nvm use 22`)
-2. [ ] Update local CLI: `ng update @angular/cli
-4. [ ] Update Material: `ng update @angular/material@17`
-5. [ ] Update devDependencies in package.json (typescript ~5.4.0, @angular-devkit/* ^17, eslint-angular 17)
-6. [ ] `npm install`
-7. [ ] `ng lint --fix`
-8. [ ] `ng build --configuration=consultorio`
-9. [ ] `ng test`
-10. [ ] Test serve: `ng serve --configuration=consultorio`
-11. [ ] Fix any remaining errors (libs, deprecated code)
-12. [ ] Update TODO as steps complete
-13. [ ] Final verification
+1. [ ] Update local CLI: `ng update @angular/cli@17` (running...)
+2. [ ] Update Angular core: `ng update @angular/core@17`
+3. [ ] Update Material: `ng update @angular/material@17`
+4. [ ] Update dev deps: typescript ~5.4.0, @angular-devkit/* ^17, @angular-eslint/* 17
+5. [ ] `npm install`
+6. [ ] `ng lint --fix`
+7. [ ] `ng build --configuration=consultorio`
+8. [ ] `ng test`
+9. [ ] `ng serve --configuration=consultorio`
+10. [ ] Fix errors, test all features
+11. [ ] Commit changes
