@@ -2,9 +2,10 @@
 
 ## Completed: 
 - [x] Node v22.22.2 ✓
+- [x] Local CLI: `ng update @angular/cli@17` ✓
 
 ## Pending:
-1. [ ] Update local CLI: `ng update @angular/cli@17` (running...)
+1. [ ] Update Angular core: `ng update @angular/core@17`
 2. [ ] Update Angular core: `ng update @angular/core@17`
 3. [ ] Update Material: `ng update @angular/material@17`
 4. [ ] Update dev deps: typescript ~5.4.0, @angular-devkit/* ^17, @angular-eslint/* 17
