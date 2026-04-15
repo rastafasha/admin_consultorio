@@ -15,11 +15,6 @@ const routes: Routes = [
           import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
       },
       {
-        path: 'doctor',
-        loadChildren: () =>
-          import('./doctor/doctor.module').then((m) => m.DoctorModule),
-      },
-      {
         path: 'patient',
         loadChildren: () =>
           import('./patient/patient.module').then((m) => m.PatientModule),
@@ -51,16 +46,6 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'accounts',
-        loadChildren: () =>
-          import('./accounts/accounts.module').then((m) => m.AccountsModule),
-      },
-      {
-        path: 'payroll',
-        loadChildren: () =>
-          import('./payroll/payroll.module').then((m) => m.PayrollModule),
-      },
-      {
         path: 'chat',
         loadChildren: () =>
           import('./chat/chat.module').then((m) => m.ChatModule),
@@ -69,11 +54,6 @@ const routes: Routes = [
         path: 'calls',
         loadChildren: () =>
           import('./calls/calls.module').then((m) => m.CallsModule),
-      },
-      {
-        path: 'email',
-        loadChildren: () =>
-          import('./email/email.module').then((m) => m.EmailModule),
       },
       {
         path: 'blogs',
@@ -96,11 +76,6 @@ const routes: Routes = [
         path: 'reports',
         loadChildren: () =>
           import('./reports/reports.module').then((m) => m.ReportsModule),
-      },
-      {
-        path: 'invoice',
-        loadChildren: () =>
-          import('./invoice/invoice.module').then((m) => m.InvoiceModule),
       },
       {
         path: 'settings',

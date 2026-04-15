@@ -19,6 +19,7 @@ import { SidebarComponent } from '../common-component/sidebar/sidebar.component'
 import { NotificacionesupdateComponent } from '../common-component/notificacionesupdate/notificacionesupdate.component';
 import { PipesModule } from '../pipes/pipes.module';
 import { TasabcvComponent } from '../common-component/tasabcv/tasabcv.component';
+
 @NgModule({ declarations: [
         HeaderComponent,
         SidebarComponent,
@@ -35,7 +36,6 @@ import { TasabcvComponent } from '../common-component/tasabcv/tasabcv.component'
         materialModule,
         NgxEditorModule,
         FullCalendarModule,
-        HttpClientModule,
         MatSortModule,
         FormsModule,
         ReactiveFormsModule,
