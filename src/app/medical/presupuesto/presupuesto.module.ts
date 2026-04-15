@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { PresupuestoComponent } from './presupuesto.component';
 import { PresupuestoListaComponent } from './presupuesto-lista/presupuesto-lista.component';
 import { PresupuestoEditarComponent } from './presupuesto-editar/presupuesto-editar.component';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -14,24 +14,18 @@ import { PresupuestoDoctorListComponent } from './presupuesto-doctor-list/presup
 import { ModalInstruccionesModule } from 'src/app/modales/modal-instrucciones.module';
 
 
-@NgModule({
-  declarations: [
-    PresupuestoComponent,
-    PresupuestoListaComponent,
-    PresupuestoEditarComponent,
-    PresupuestoDoctorListComponent
-  ],
-  imports: [
-    CommonModule,
-    PresupuestoRoutingModule,
+@NgModule({ declarations: [
+        PresupuestoComponent,
+        PresupuestoListaComponent,
+        PresupuestoEditarComponent,
+        PresupuestoDoctorListComponent
+    ], imports: [CommonModule,
+        PresupuestoRoutingModule,
         FormsModule,
         ReactiveFormsModule,
-        HttpClientModule,
         RouterModule,
         SharedModule,
         ReusablesModule,
         PipesModule,
-        ModalInstruccionesModule
-  ]
-})
+        ModalInstruccionesModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class PresupuestoModule { }

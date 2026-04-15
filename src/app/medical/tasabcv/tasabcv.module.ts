@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TasabcvComponent } from './tasabcv.component';
 import { TasabcvEditComponent } from './tasabcv-edit/tasabcv-edit.component';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ModalInstruccionesModule } from 'src/app/modales/modal-instrucciones.module';
@@ -13,22 +13,16 @@ import { TasabcvRoutingModule } from './tasabcv-routing.module';
 
 
 
-@NgModule({
-  declarations: [
-    TasabcvComponent,
-    TasabcvEditComponent
-  ],
-  imports: [
-    CommonModule,
-    TasabcvRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    RouterModule,
-    SharedModule,
-    ReusablesModule,
-    PipesModule,
-    ModalInstruccionesModule,
-  ]
-})
+@NgModule({ declarations: [
+        TasabcvComponent,
+        TasabcvEditComponent
+    ], imports: [CommonModule,
+        TasabcvRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterModule,
+        SharedModule,
+        ReusablesModule,
+        PipesModule,
+        ModalInstruccionesModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class TasabcvModule { }
