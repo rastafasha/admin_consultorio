@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { routes } from 'src/app/shared/routes/routes';
+import { routes } from '../../shared/routes/routes';
 
 @Component({
     selector: 'app-change-password2',

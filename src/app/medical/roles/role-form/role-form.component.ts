@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { routes } from 'src/app/shared/routes/routes';
-import { DataService } from 'src/app/shared/data/data.service';
 import { RolesService } from '../../../services/roles.service';
 import { DoctorService } from '../../../services/doctor.service';
+import { DataService } from '../../../shared/data/data.service';
+import { routes } from '../../../shared/routes/routes';
 
 @Component({
     selector: 'app-role-form',

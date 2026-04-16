@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
-import { ModalInstruccionesModule } from 'src/app/modales/modal-instrucciones.module';
-import { ReusablesModule } from 'src/app/reusables/reusables.module';
+import { ModalInstruccionesModule } from '../../modales/modal-instrucciones.module';
+import { ReusablesModule } from '../../reusables/reusables.module';
 
 
 @NgModule({

@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
-import { Payment } from 'src/app/models/payment.model';
 
 @Component({
     selector: 'app-modal-imagenpago',

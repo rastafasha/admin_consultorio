@@ -1,8 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { url_servicios } from 'src/app/config/config';
-import { AuthService } from 'src/app/shared/auth/auth.service';
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+import { url_servicios } from '../config/config';
+import { AuthService } from '../shared/auth/auth.service';
 declare let $:any;
 
 @Injectable({

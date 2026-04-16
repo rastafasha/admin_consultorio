@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { Tasabcv } from 'src/app/models/tasabcba';
-import { TasabcvService } from 'src/app/services/tasabcv.service';
-import { routes } from 'src/app/shared/routes/routes';
 import Swal from 'sweetalert2';
+import { Tasabcv } from '../../../models/tasabcba';
+import { TasabcvService } from '../../../services/tasabcv.service';
 @Component({
     selector: 'app-tasabcv-edit',
     templateUrl: './tasabcv-edit.component.html',

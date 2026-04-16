@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { routes } from 'src/app/shared/routes/routes';
 import { AppointmentService } from '../../../services/appointment.service';
 import { DoctorService } from '../../../services/doctor.service';
 import { SpecialitieService } from '../../../services/specialitie.service';
-import { SettignService } from 'src/app/core/settings/settigs.service';
-import { RolesService } from '../../../services/roles.service';
 import Swal from 'sweetalert2';
+import { SettignService } from '../../../core/settings/settigs.service';
+import { RolesService } from '../../../services/roles.service';
+import { routes } from '../../../shared/routes/routes';
 
 @Component({
     selector: 'app-appointment-form',

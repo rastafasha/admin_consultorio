@@ -7,13 +7,13 @@ import { ListAppoimentPayComponent } from './list-appoiment-pay/list-appoiment-p
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { SharedModule } from 'src/app/shared/shared.module';
 import { ListAppoimentCobrosComponent } from './list-appoiment-cobros/list-appoiment-cobros.component';
 import { ListDoctorComponent } from './list-doctor/list-doctor.component';
 import { ListCobrosDoctorComponent } from './list-cobros-doctor/list-cobros-doctor.component';
-import { ReusablesModule } from 'src/app/reusables/reusables.module';
-import { ModalInstruccionesModule } from 'src/app/modales/modal-instrucciones.module';
-import { PipesModule } from 'src/app/pipes/pipes.module';
+import { ModalInstruccionesModule } from '../../modales/modal-instrucciones.module';
+import { PipesModule } from '../../pipes/pipes.module';
+import { ReusablesModule } from '../../reusables/reusables.module';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({ declarations: [
         AppointmentPayComponent,
@@ -26,7 +26,8 @@ import { PipesModule } from 'src/app/pipes/pipes.module';
         AppointmentPayComponent,
         ListAppoimentPayComponent,
         ListAppoimentCobrosComponent,
-    ], imports: [CommonModule,
+    ], imports: [
+        CommonModule,
         AppointmentPayRoutingModule,
         FormsModule,
         ReactiveFormsModule,

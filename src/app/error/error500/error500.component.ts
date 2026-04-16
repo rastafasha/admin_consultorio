@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { routes } from 'src/app/shared/routes/routes';
+import { routes } from '../../shared/routes/routes';
 @Component({
     selector: 'app-error500',
     templateUrl: './error500.component.html',

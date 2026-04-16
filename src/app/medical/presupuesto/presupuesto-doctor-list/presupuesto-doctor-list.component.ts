@@ -1,16 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { FileSaverService } from 'ngx-filesaver';
-import { routes } from 'src/app/shared/routes/routes';
 import Swal from 'sweetalert2';
 import { DoctorService } from '../../../services/doctor.service';
 import { RolesService } from '../../../services/roles.service';
 import * as XLSX from 'xlsx';
 import { PresupuestoService } from '../../../services/presupuesto.service';
-import { Presupuesto } from 'src/app/models/presupuesto.model';
-import { User } from 'src/app/models/user.model';
-import { catchError } from 'rxjs';
-import { throwError } from 'rxjs';
+import { Presupuesto } from '../../../models/presupuesto.model';
+import { User } from '../../../models/user.model';
+import { routes } from '../../../shared/routes/routes';
 declare var $:any;
 @Component({
     selector: 'app-presupuesto-doctor-list',

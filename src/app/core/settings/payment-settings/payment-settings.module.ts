@@ -6,15 +6,20 @@ import { PaymentSettingsComponent } from './payment-settings.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { SharedModule } from 'src/app/shared/shared.module';
+import { SharedModule } from '../../../shared/shared.module';
 
 
-@NgModule({ declarations: [
+@NgModule({ 
+    declarations: [
         PaymentSettingsComponent
-    ], imports: [CommonModule,
+    ], 
+    imports: [
+        CommonModule,
         PaymentSettingsRoutingModule,
         FormsModule,
         ReactiveFormsModule,
         RouterModule,
-        SharedModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
+        SharedModule
+    ], 
+        providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class PaymentSettingsModule { }

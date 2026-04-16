@@ -8,22 +8,23 @@ import { SpecialitieNComponent } from './specialitie-n/specialitie-n.component';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { SharedModule } from 'src/app/shared/shared.module';
 import { ListPatientSpecialitiesComponent } from './list-patient-specialities/list-patient-specialities.component';
-import { ReusablesModule } from 'src/app/reusables/reusables.module';
-
+import { ReusablesModule } from '../../reusables/reusables.module';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({ declarations: [
         SpecialitieComponent,
         ListSpecialitieComponent,
         SpecialitieNComponent,
         ListPatientSpecialitiesComponent
-    ], imports: [CommonModule,
+    ], imports: [
+        CommonModule,
         SpecialitieRoutingModule,
         // 
         FormsModule,
         ReactiveFormsModule,
         RouterModule,
         SharedModule,
-        ReusablesModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
+        ReusablesModule],
+         providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class SpecialitieModule { }

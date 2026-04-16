@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { url_servicios } from 'src/app/config/config';
-import { AuthService } from 'src/app/shared/auth/auth.service';
+import { url_servicios } from '../config/config';
+import { AuthService } from '../shared/auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,13 +15,6 @@ export class PaymentService {
   ) { }
 
   
-
-  // getAll(page:number=1, search:string=''){
-  //   let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
-  //   let URL = url_servicios+'/payment?page='+page+"&search="+search;
-  //   return this.http.get(URL, {headers:headers});
-  // }
-
 
   getAll(page=1, 
     search_referencia='', 

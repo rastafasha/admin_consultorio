@@ -1,12 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SettignService } from 'src/app/core/settings/settigs.service';
-import { AuthService } from 'src/app/shared/auth/auth.service';
-import { User } from 'src/app/models/user.model';
-import { routes } from 'src/app/shared/routes/routes';
-import { SideBarService } from 'src/app/shared/side-bar/side-bar.service';
-import { environment } from 'src/environments/environment';
-import { TasabcvService } from 'src/app/services/tasabcv.service';
+import { environment } from '../../../environments/environment';
+import { SettignService } from '../../core/settings/settigs.service';
+import { User } from '../../models/user.model';
+import { AuthService } from '../../shared/auth/auth.service';
+import { routes } from '../../shared/routes/routes';
+import { SideBarService } from '../../shared/side-bar/side-bar.service';
 
 @Component({
     selector: 'app-header',

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { routes } from 'src/app/shared/routes/routes';
 import { AppointmentService } from '../../../services/appointment.service';
 import Swal from 'sweetalert2';
+import { routes } from '../../../shared/routes/routes';
 
 @Component({
     selector: 'app-atencion-medica',

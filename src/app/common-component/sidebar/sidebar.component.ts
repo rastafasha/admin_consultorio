@@ -1,11 +1,11 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { AuthService } from 'src/app/shared/auth/auth.service';
-import { DataService } from 'src/app/shared/data/data.service';
-import { MenuItem, SideBarData } from 'src/app/shared/models/models';
-import { User } from 'src/app/models/user.model';
-import { routes } from 'src/app/shared/routes/routes';
-import { SideBarService } from 'src/app/shared/side-bar/side-bar.service';
+import { User } from '../../models/user.model';
+import { AuthService } from '../../shared/auth/auth.service';
+import { DataService } from '../../shared/data/data.service';
+import { SideBarData, MenuItem } from '../../shared/models/models';
+import { routes } from '../../shared/routes/routes';
+import { SideBarService } from '../../shared/side-bar/side-bar.service';
 
 @Component({
     selector: 'app-sidebar',

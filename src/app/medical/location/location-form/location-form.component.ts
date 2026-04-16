@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { routes } from 'src/app/shared/routes/routes';
-import { DoctorService } from '../../../services/doctor.service';
-import { LocationService } from 'src/app/services/location.service';
 import Swal from 'sweetalert2';
+import { DoctorService } from '../../../services/doctor.service';
+import { LocationService } from '../../../services/location.service';
+import { routes } from '../../../shared/routes/routes';
 
 @Component({
     selector: 'app-location-form',

@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
     standalone: false
 })
 export class AppComponent {
-  title = 'health_connect_admin';
+  title = 'klyntic_consultorio_admin';
 
   
 }

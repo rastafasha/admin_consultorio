@@ -71,13 +71,18 @@
                                 <tbody>
                                     <tr *ngFor="let data of paymentList">
                                         
-                                      <td><img [src]="data.image | imagenPipe:'payments'" ></td>
+                                      <td><a (click)="openViewModal(data)" href="javascript:void(0)"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#viewPago">
+                      <img [src]="data.image | imagenPipe:'payments'" style="width: 100px; height: 100px;">
+                    </a>
+                  </td>
                                         <td>{{data.nombre + ' ' + (data.surname ? data.surname: '')}}</td>
                                         <td>{{data.bank_name}}</td>
                                         <td>{{data.metodo}}</td>
                                         <td>{{data.referencia}}</td>
-                                        <td>{{data.monto}}</td>
-                                        <td>{{data.tasabacv}}</td>
+                                        <td>{{data.monto | currency }}</td>
+                                         <td>{{data.tasabcv | currency:'Bs. ':'symbol':'1.2-2' }}</td>
                                         <td>{{data.fecha|date}}</td>
                                         <td>
                                             <span class="badge bg-success"
@@ -263,6 +268,9 @@
         </div>
     </div>
 </div>
+
+ <app-modal-imagenpago [pagoSeleccionado]="pagoSeleccionado" (closeModal)="onCloseModal()"></app-modal-imagenpago>
+
 
 
  

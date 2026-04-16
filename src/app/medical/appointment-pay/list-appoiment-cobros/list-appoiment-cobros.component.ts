@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import * as XLSX from 'xlsx';
 import { MatTableDataSource } from '@angular/material/table';
 import { FileSaverService } from 'ngx-filesaver';
-import { routes } from 'src/app/shared/routes/routes';
 import { DoctorService } from '../../../services/doctor.service';
-import { PatientMService } from '../../../services/patient-m.service';
 import { PaymentService } from '../../../services/payment.service';
 import { ActivatedRoute } from '@angular/router';
+import { routes } from '../../../shared/routes/routes';
+import { Payment } from '../../../models/payment.model';
+import Swal from 'sweetalert2';
 
 declare var $:any;  
 @Component({
@@ -44,6 +45,7 @@ export class ListAppoimentCobrosComponent {
   public patient_selected:any;
   public user:any;
   public doctor_id:any;
+  pagoSeleccionado:Payment
 
   constructor(
     public paymentService: PaymentService,
@@ -77,6 +79,15 @@ export class ListAppoimentCobrosComponent {
     }
     return false;
   }
+
+   openViewModal(data: any): void {
+    this.pagoSeleccionado = data;
+
+  }
+
+ onCloseModal(): void {
+    this.pagoSeleccionado = null;
+}
 
   private getTableData(page=1): void {
     this.paymentList = [];
@@ -286,21 +297,109 @@ export class ListAppoimentCobrosComponent {
 
   }
 
-  cambiarStatus(data:any){
-    const VALUE = data.status;
-    console.log(VALUE);
+  // cambiarStatus(data:any){
+  //   const VALUE = data.status;
+  //   console.log(VALUE);
     
-    this.paymentService.updateStatus(data, data.id).subscribe(
-      resp =>{
-        console.log(resp);
-        // Swal.fire('Actualizado', `actualizado correctamente`, 'success');
-        // this.toaster.open({
-        //   text:'Producto Actualizado!',
-        //   caption:'Mensaje de Validación',
-        //   type:'success',
-        // })
-        this.getTableData();
+  //   this.paymentService.updateStatus(data, data.id).subscribe(
+  //     resp =>{
+  //       console.log(resp);
+  //       // Swal.fire('Actualizado', `actualizado correctamente`, 'success');
+  //       // this.toaster.open({
+  //       //   text:'Producto Actualizado!',
+  //       //   caption:'Mensaje de Validación',
+  //       //   type:'success',
+  //       // })
+  //       this.getTableData();
+  //     }
+  //   )
+  // }
+
+   cambiarStatus(data: any) {
+      const nuevoEstado = data.status;
+      const monto = data.monto; // Extraemos de una vez
+      const appointment_id = data.appointment_id;
+      const id = data.id;
+  
+      // 1. Caso: RECHAZADO (Pide motivo)
+      if (nuevoEstado === 'REJECTED') {
+        Swal.fire({
+          title: 'Motivo del Rechazo',
+          input: 'text',
+          inputPlaceholder: 'Ej: Capture borroso, monto incompleto...',
+          showCancelButton: true,
+          confirmButtonText: 'Rechazar y Notificar',
+          confirmButtonColor: '#d33', // Rojo para peligro
+          cancelButtonText: 'Cancelar',
+          inputValidator: (value) => {
+            if (!value) return '¡Debes escribir un motivo para el usuario!';
+            return null;
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.ejecutarUpdateStatus(id, nuevoEstado, monto, appointment_id, result.value);
+          } else {
+            this.getTableData(); // Revierte el select si cancela
+          }
+        });
+  
+      // 2. Caso: APROBADO (Confirmación de seguridad)
+      } else if (nuevoEstado === 'APPROVED') {
+        Swal.fire({
+          title: '¿Confirmar Pago?',
+          text: `¿Estás seguro de marcar como APROBADO el pago de ${data.monto}?`,
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonText: 'Sí, Aprobar',
+          confirmButtonColor: '#198754', // Verde para éxito
+          cancelButtonText: 'No, revisar'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.ejecutarUpdateStatus(id, nuevoEstado, monto, appointment_id);
+          } else {
+            this.getTableData(); // Revierte el select si se arrepiente
+          }
+        });
+  
+      } else {
+        // 3. Caso: PENDIENTE (Cambio directo)
+        this.ejecutarUpdateStatus(id, nuevoEstado, monto, appointment_id);
       }
-    )
+  }
+  
+  
+  // Función auxiliar para no repetir código del subscribe
+  private ejecutarUpdateStatus(id: number, nuevoEstado: string, 
+    monto: any,          // <--- Nuevo parámetro
+    appointment_id: any,
+    // eslint-disable-next-line @typescript-eslint/no-inferrable-types
+    motivo_rechazo: string = '',
+  ) {
+      const payload = {
+        id:id,
+        status: nuevoEstado,
+        motivo_rechazo: motivo_rechazo,
+         monto: monto,            // <--- Usa el parámetro
+         amount: monto,            // <--- Usa el parámetro
+        appointment_id: appointment_id 
+      };
+  
+      this.paymentService.updateStatus(payload, id).subscribe({
+        next: (resp) => {
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: nuevoEstado === 'APPROVED' ? '✅ Pago Aprobado' : '❌ Pago Rechazado',
+            color: 'gray',
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          this.getTableData();
+        },
+        error: (err) => {
+          Swal.fire('Error', 'No se pudo actualizar el pago', 'error');
+          this.getTableData();
+        }
+      });
   }
 }

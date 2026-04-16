@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 
 import { RegisterRoutingModule } from './register-routing.module';
 import { RegisterComponent } from './register.component';
-import { SharedModule } from 'src/app/shared/shared.module';
-import { ReusablesModule } from 'src/app/reusables/reusables.module';
+import { ReusablesModule } from '../../reusables/reusables.module';
+import { SharedModule } from '../../shared/shared.module';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { ReusablesModule } from 'src/app/reusables/reusables.module';
     CommonModule,
     RegisterRoutingModule,
     SharedModule,
-    ReusablesModule
+    ReusablesModule,
+    RouterModule
   ]
 })
 export class RegisterModule { }

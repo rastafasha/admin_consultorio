@@ -7,8 +7,6 @@ export class routes {
 
   private static Url = '';
 
-  
-
   public static get baseUrl(): string {
     return this.Url;
   }

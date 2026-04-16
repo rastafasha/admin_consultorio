@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { DoctorService } from '../../../services/doctor.service';
 import { MatTableDataSource } from '@angular/material/table';
-import { routes } from 'src/app/shared/routes/routes';
 import { FileSaverService } from 'ngx-filesaver';
 import * as XLSX from 'xlsx';
 import jspdf from 'jspdf';
 import { RolesService } from '../../../services/roles.service';
+import { routes } from '../../../shared/routes/routes';
 
 
 declare var $:any;  

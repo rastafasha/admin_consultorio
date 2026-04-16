@@ -7,15 +7,16 @@ import { ListPatientMComponent } from './list-patient-m/list-patient-m.component
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { SharedModule } from 'src/app/shared/shared.module';
 import { ProfilePatientMComponent } from './profile-patient-m/profile-patient-m.component';
 import { PatientDoctorListComponent } from './patient-doctor-list/patient-doctor-list.component';
 import { PatientFormMComponent } from './patient-form-m/patient-form-m.component';
-import { ReusablesModule } from 'src/app/reusables/reusables.module';
-import { ModalInstruccionesModule } from 'src/app/modales/modal-instrucciones.module';
+import { ModalInstruccionesModule } from '../../modales/modal-instrucciones.module';
+import { ReusablesModule } from '../../reusables/reusables.module';
+import { SharedModule } from '../../shared/shared.module';
 
 
-@NgModule({ declarations: [PatientMComponent, PatientFormMComponent, ListPatientMComponent, ProfilePatientMComponent, PatientDoctorListComponent],
+@NgModule({
+    declarations: [PatientMComponent, PatientFormMComponent, ListPatientMComponent, ProfilePatientMComponent, PatientDoctorListComponent],
     exports: [PatientMComponent, PatientFormMComponent, ListPatientMComponent, ProfilePatientMComponent, PatientDoctorListComponent], imports: [CommonModule,
         PatientMRoutingModule,
         FormsModule,
@@ -23,5 +24,6 @@ import { ModalInstruccionesModule } from 'src/app/modales/modal-instrucciones.mo
         RouterModule,
         SharedModule,
         ReusablesModule,
-        ModalInstruccionesModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
+        ModalInstruccionesModule], providers: [provideHttpClient(withInterceptorsFromDi())]
+})
 export class PatientMModule { }

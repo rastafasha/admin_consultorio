@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { StaffService } from 'src/app/services/staff.service';
-import { AuthService } from 'src/app/shared/auth/auth.service';
-import { routes } from 'src/app/shared/routes/routes';
 import Swal from 'sweetalert2';
+import { StaffService } from '../../services/staff.service';
+import { AuthService } from '../../shared/auth/auth.service';
+import { routes } from '../../shared/routes/routes';
 
 @Component({
     selector: 'app-register',
