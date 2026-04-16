@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
-import { routes } from 'src/app/shared/routes/routes';
 import { PaymentMethod } from '../paymentMethod';
-import { SettignService } from '../settigs.service';
-import { DoctorService } from 'src/app/services/doctor.service';
 import { ActivatedRoute } from '@angular/router';
+import { DoctorService } from '../../../services/doctor.service';
+import { routes } from '../../../shared/routes/routes';
+import { SettignService } from '../settigs.service';
 
 @Component({
-  selector: 'app-payment-settings',
-  templateUrl: './payment-settings.component.html',
-  styleUrls: ['./payment-settings.component.scss']
+    selector: 'app-payment-settings',
+    templateUrl: './payment-settings.component.html',
+    styleUrls: ['./payment-settings.component.scss'],
+    standalone: false
 })
 export class PaymentSettingsComponent {
   public routes = routes;

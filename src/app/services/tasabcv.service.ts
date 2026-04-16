@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
 import { Tasabcv } from '../models/tasabcba';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../environments/environment';
 
 const baseUrl = environment.url_servicios;
 

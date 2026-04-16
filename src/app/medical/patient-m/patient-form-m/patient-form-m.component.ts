@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { routes } from 'src/app/shared/routes/routes';
 import { PatientMService } from '../../../services/patient-m.service';
 import { DoctorService } from '../../../services/doctor.service';
 import { catchError, throwError } from 'rxjs';
 import Swal from 'sweetalert2';
+import { routes } from '../../../shared/routes/routes';
 
 @Component({
-  selector: 'app-patient-form-m',
-  templateUrl: './patient-form-m.component.html',
-  styleUrls: ['./patient-form-m.component.scss']
+    selector: 'app-patient-form-m',
+    templateUrl: './patient-form-m.component.html',
+    styleUrls: ['./patient-form-m.component.scss'],
+    standalone: false
 })
 export class PatientFormMComponent implements OnInit {
   public routes = routes;

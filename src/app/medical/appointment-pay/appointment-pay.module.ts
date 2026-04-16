@@ -4,41 +4,36 @@ import { CommonModule } from '@angular/common';
 import { AppointmentPayRoutingModule } from './appointment-pay-routing.module';
 import { AppointmentPayComponent } from './appointment-pay.component';
 import { ListAppoimentPayComponent } from './list-appoiment-pay/list-appoiment-pay.component';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { SharedModule } from 'src/app/shared/shared.module';
 import { ListAppoimentCobrosComponent } from './list-appoiment-cobros/list-appoiment-cobros.component';
 import { ListDoctorComponent } from './list-doctor/list-doctor.component';
 import { ListCobrosDoctorComponent } from './list-cobros-doctor/list-cobros-doctor.component';
-import { ReusablesModule } from 'src/app/reusables/reusables.module';
-import { ModalInstruccionesModule } from 'src/app/modales/modal-instrucciones.module';
-import { PipesModule } from 'src/app/pipes/pipes.module';
+import { ModalInstruccionesModule } from '../../modales/modal-instrucciones.module';
+import { PipesModule } from '../../pipes/pipes.module';
+import { ReusablesModule } from '../../reusables/reusables.module';
+import { SharedModule } from '../../shared/shared.module';
 
-@NgModule({
-  declarations: [
-    AppointmentPayComponent,
-    ListAppoimentPayComponent,
-    ListAppoimentCobrosComponent,
-    ListDoctorComponent,
-    ListCobrosDoctorComponent
-  ],
-  exports: [
-    AppointmentPayComponent,
-    ListAppoimentPayComponent,
-    ListAppoimentCobrosComponent,
-  ],
-  imports: [
-    CommonModule,
-    AppointmentPayRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    RouterModule,
-    SharedModule,
-    ReusablesModule,
-    ModalInstruccionesModule,
-    PipesModule
-  ]
-})
+@NgModule({ declarations: [
+        AppointmentPayComponent,
+        ListAppoimentPayComponent,
+        ListAppoimentCobrosComponent,
+        ListDoctorComponent,
+        ListCobrosDoctorComponent
+    ],
+    exports: [
+        AppointmentPayComponent,
+        ListAppoimentPayComponent,
+        ListAppoimentCobrosComponent,
+    ], imports: [
+        CommonModule,
+        AppointmentPayRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterModule,
+        SharedModule,
+        ReusablesModule,
+        ModalInstruccionesModule,
+        PipesModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppointmentPayModule { }

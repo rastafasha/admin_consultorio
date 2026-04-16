@@ -1,17 +1,18 @@
 import { Component } from '@angular/core';
-import { routes } from 'src/app/shared/routes/routes';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import { AppoitmentPayService } from '../../../services/appoitment-pay.service';
 import { DoctorService } from '../../../services/doctor.service';
+import { CalendarAppointmentService } from '../../../services/calendar-appointment.service';
 import { RolesService } from '../../../services/roles.service';
-import { CalendarAppointmentService } from 'src/app/services/calendar-appointment.service';
+import { routes } from '../../../shared/routes/routes';
 
 @Component({
-  selector: 'app-appointment-calendar',
-  templateUrl: './appointment-calendar.component.html',
-  styleUrls: ['./appointment-calendar.component.scss']
+    selector: 'app-appointment-calendar',
+    templateUrl: './appointment-calendar.component.html',
+    styleUrls: ['./appointment-calendar.component.scss'],
+    standalone: false
 })
 export class AppointmentCalendarComponent {
   public routes = routes;

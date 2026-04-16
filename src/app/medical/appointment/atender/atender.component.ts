@@ -1,21 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PatientMService } from '../../../services/patient-m.service';
-import { Patient } from 'src/app/models/patient.model';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
-import { Validators } from 'ngx-editor';
-import { routes } from 'src/app/shared/routes/routes';
 import { AppointmentService } from '../../../services/appointment.service';
 import { DoctorService } from '../../../services/doctor.service';
 import { RolesService } from '../../../services/roles.service';
 import { SpecialitieService } from '../../../services/specialitie.service';
-import { SettignService } from 'src/app/core/settings/settigs.service';
 import Swal from 'sweetalert2';
+import { SettignService } from '../../../core/settings/settigs.service';
+import { Patient } from '../../../models/patient.model';
+import { routes } from '../../../shared/routes/routes';
 
 @Component({
-  selector: 'app-atender',
-  templateUrl: './atender.component.html',
-  styleUrls: ['./atender.component.scss']
+    selector: 'app-atender',
+    templateUrl: './atender.component.html',
+    styleUrls: ['./atender.component.scss'],
+    standalone: false
 })
 export class AtenderComponent implements OnInit{
 

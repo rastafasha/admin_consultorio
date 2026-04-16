@@ -5,9 +5,10 @@ import { filter, map } from 'rxjs';
 import { PwaService } from 'src/app/services/pwa.service';
 
 @Component({
-  selector: 'app-boton-intall-pwa',
-  templateUrl: './boton-intall-pwa.component.html',
-  styleUrls: ['./boton-intall-pwa.component.scss']
+    selector: 'app-boton-intall-pwa',
+    templateUrl: './boton-intall-pwa.component.html',
+    styleUrls: ['./boton-intall-pwa.component.scss'],
+    standalone: false
 })
 export class BotonIntallPwaComponent implements OnInit {
 

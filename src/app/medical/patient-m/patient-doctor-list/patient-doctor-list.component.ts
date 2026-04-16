@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { routes } from 'src/app/shared/routes/routes';
 import { PatientMService } from '../../../services/patient-m.service';
 import { FileSaverService } from 'ngx-filesaver';
 import { DoctorService } from '../../../services/doctor.service';
@@ -8,12 +7,14 @@ import * as XLSX from 'xlsx';
 import jspdf from 'jspdf';
 import { RolesService } from '../../../services/roles.service';
 import { ActivatedRoute } from '@angular/router';
+import { routes } from '../../../shared/routes/routes';
 
 declare var $:any;  
 @Component({
-  selector: 'app-patient-doctor-list',
-  templateUrl: './patient-doctor-list.component.html',
-  styleUrls: ['./patient-doctor-list.component.scss']
+    selector: 'app-patient-doctor-list',
+    templateUrl: './patient-doctor-list.component.html',
+    styleUrls: ['./patient-doctor-list.component.scss'],
+    standalone: false
 })
 export class PatientDoctorListComponent {
   public routes = routes;

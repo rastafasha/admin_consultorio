@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'arrayFilter',
+    name: 'arrayFilter',
+    standalone: false
 })
 export class ArrayFilterPipe implements PipeTransform {
   transform<T, K extends keyof T>(

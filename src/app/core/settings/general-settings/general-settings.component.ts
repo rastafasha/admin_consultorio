@@ -1,15 +1,16 @@
 import { Component } from '@angular/core';
-import { routes } from 'src/app/shared/routes/routes';
-import { SettignService } from '../settigs.service';
-import { DoctorService } from 'src/app/services/doctor.service';
 import Swal from 'sweetalert2';
+import { DoctorService } from '../../../services/doctor.service';
+import { routes } from '../../../shared/routes/routes';
+import { SettignService } from '../settigs.service';
 interface data {
   value: string ;
 }
 @Component({
-  selector: 'app-general-settings',
-  templateUrl: './general-settings.component.html',
-  styleUrls: ['./general-settings.component.scss']
+    selector: 'app-general-settings',
+    templateUrl: './general-settings.component.html',
+    styleUrls: ['./general-settings.component.scss'],
+    standalone: false
 })
 export class GeneralSettingsComponent {
   public routes = routes;
@@ -23,9 +24,9 @@ export class GeneralSettingsComponent {
   public city: any;
   public state: any;
   public zip: any;
-  public country: any;
-  public setting: any;
-  public settings: any;
+  public country: string;
+  public setting: string;
+  public settings: string;
   public setting_selectedId: any;
 
   public FILE_AVATAR:any;

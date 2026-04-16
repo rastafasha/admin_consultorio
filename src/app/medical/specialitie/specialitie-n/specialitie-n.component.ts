@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { routes } from 'src/app/shared/routes/routes';
 import { SpecialitieService } from '../../../services/specialitie.service';
 import { DoctorService } from '../../../services/doctor.service';
-import { Speciality } from 'src/app/models/speciality.model';
+import { routes } from '../../../shared/routes/routes';
+import { Speciality } from '../../../models/speciality.model';
 
 @Component({
-  selector: 'app-specialitie-n',
-  templateUrl: './specialitie-n.component.html',
-  styleUrls: ['./specialitie-n.component.scss']
+    selector: 'app-specialitie-n',
+    templateUrl: './specialitie-n.component.html',
+    styleUrls: ['./specialitie-n.component.scss'],
+    standalone: false
 })
 export class SpecialitieNComponent implements OnInit {
   public routes = routes;

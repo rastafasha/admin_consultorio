@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { routes } from 'src/app/shared/routes/routes';
 import { PatientMService } from '../../../services/patient-m.service';
 import { DoctorService } from '../../../services/doctor.service';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../../environments/environment';
+import { routes } from '../../../shared/routes/routes';
 @Component({
-  selector: 'app-profile-patient-m',
-  templateUrl: './profile-patient-m.component.html',
-  styleUrls: ['./profile-patient-m.component.scss']
+    selector: 'app-profile-patient-m',
+    templateUrl: './profile-patient-m.component.html',
+    styleUrls: ['./profile-patient-m.component.scss'],
+    standalone: false
 })
 export class ProfilePatientMComponent {
   public routes = routes;

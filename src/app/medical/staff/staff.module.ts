@@ -7,37 +7,31 @@ import { ListStaffNComponent } from './list-staff-n/list-staff-n.component';
 import { StaffNComponent } from './staff-n/staff-n.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
-import { CoreModule } from 'src/app/core/core.module';
-import { SharedModule } from 'src/app/shared/shared.module';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { FileSaverModule } from 'ngx-filesaver';
-import { ReusablesModule } from 'src/app/reusables/reusables.module';
-import { PipesModule } from 'src/app/pipes/pipes.module';
+import { CoreModule } from '../../core/core.module';
+import { PipesModule } from '../../pipes/pipes.module';
+import { ReusablesModule } from '../../reusables/reusables.module';
+import { SharedModule } from '../../shared/shared.module';
 
 
-@NgModule({
-  declarations: [
-    StaffComponent,
-    ListStaffNComponent,
-    StaffNComponent
-  ],
-  exports: [
-    StaffComponent,
-    ListStaffNComponent,
-    StaffNComponent
-  ],
-  imports: [
-    CommonModule,
-    StaffRoutingModule,
-    CoreModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    RouterModule,
-    SharedModule,
-    FileSaverModule,
-    ReusablesModule,
-    PipesModule
-  ]
-})
+@NgModule({ declarations: [
+        StaffComponent,
+        ListStaffNComponent,
+        StaffNComponent
+    ],
+    exports: [
+        StaffComponent,
+        ListStaffNComponent,
+        StaffNComponent
+    ], imports: [CommonModule,
+        StaffRoutingModule,
+        CoreModule,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterModule,
+        SharedModule,
+        FileSaverModule,
+        ReusablesModule,
+        PipesModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class StaffModule { }

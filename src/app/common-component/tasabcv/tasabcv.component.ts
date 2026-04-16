@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { TasabcvService } from 'src/app/services/tasabcv.service';
+import { TasabcvService } from '../../services/tasabcv.service';
 
 @Component({
-  selector: 'app-tasabcv',
-  templateUrl: './tasabcv.component.html',
-  styleUrls: ['./tasabcv.component.scss']
+    selector: 'app-tasabcv',
+    templateUrl: './tasabcv.component.html',
+    styleUrls: ['./tasabcv.component.scss'],
+    standalone: false
 })
 export class TasabcvComponent {
   tasa:number;

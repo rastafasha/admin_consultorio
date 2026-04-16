@@ -8,12 +8,7 @@
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a routerLink="/">Dashboard </a></li>
                         <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
-                        <li class="breadcrumb-item" *ngIf="user.roles[0] ==='SUPERADMIN'"><a
-                                routerLink="/appointments/list">Citas </a></li>
-                        <li class="breadcrumb-item" *ngIf="user.roles[0] ==='DOCTOR'"><a
-                                [routerLink]="['/appointments/list/doctor/', doctor_id]">Mis Citas </a></li>
-                        <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
-                        <li class="breadcrumb-item active">Edit/ Add: Atención Médica </li>
+                        <li class="breadcrumb-item active">Tasa BCV</li>
                     </ul>
                 </div>
                 <app-back-bottn></app-back-bottn>

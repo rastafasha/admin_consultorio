@@ -1,6 +1,7 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@use "@angular/material" as mat;
+@use '@angular/material' as mat;
+
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -11,33 +12,29 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$health_connect_admin-primary: mat.define-palette(mat.$indigo-palette);
-$health_connect_admin-accent: mat.define-palette(
-  mat.$pink-palette,
+$klyntic_consultorio_admin-primary: mat.m2-define-palette(mat.$m2-indigo-palette);
+$klyntic_consultorio_admin-accent: mat.m2-define-palette(
+  mat.$m2-pink-palette,
   A200,
   A100,
   A400
 );
 
-// The warn palette is optional (defaults to red).
-$health_connect_admin-warn: mat.define-palette(mat.$red-palette);
+$klyntic_consultorio_admin-warn: mat.m2-define-palette(mat.$m2-red-palette);
 
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
-$health_connect_admin-theme: mat.define-light-theme(
+// Usar m2-define-light-theme
+$klyntic_consultorio_admin-theme: mat.m2-define-light-theme(
   (
     color: (
-      primary: $health_connect_admin-primary,
-      accent: $health_connect_admin-accent,
-      warn: $health_connect_admin-warn,
+      primary: $klyntic_consultorio_admin-primary,
+      accent: $klyntic_consultorio_admin-accent,
+      warn: $klyntic_consultorio_admin-warn,
     ),
   )
 );
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include mat.all-component-themes($health_connect_admin-theme);
+// Aplicar el tema (el mixin all-component-themes sigue igual)
+@include mat.all-component-themes($klyntic_consultorio_admin-theme);
 
 /* You can add global styles to this file, and also import other style files */
 
@@ -45,7 +42,9 @@ $health_connect_admin-theme: mat.define-light-theme(
 @import url("https://cdn.jsdelivr.net/npm/lightgallery@2.0.0-beta.4/css/lg-zoom.css");
 @import url("https://cdn.jsdelivr.net/npm/lightgallery@2.0.0-beta.4/css/lg-thumbnail.css");
 
-@import "src/assets/style.scss";
+// @import "src/assets/style.scss";
+// @use "src/assets/style" as *;
+@import url('./assets/style.scss');
 
 .full-cal {
   .fc .fc-button .fc-icon {
@@ -94,7 +93,7 @@ $health_connect_admin-theme: mat.define-light-theme(
   .fc-button {
     background: #f1f1f1;
     border: none;
-    color: $color_55;
+    color: #797979;;
     text-transform: capitalize;
     box-shadow: none;
     border-radius: 3px !important;
@@ -149,11 +148,11 @@ $health_connect_admin-theme: mat.define-light-theme(
 .mat-mdc-option.mdc-list-item--selected:not(.mat-mdc-option-multiple):not(
     .mdc-list-item--disabled
   ) {
-  background-color: $background-color_11;
+  background-color: #513081;
 }
 .mat-mdc-option-active .mdc-list-item__primary-text,
 .mat-mdc-option:hover .mdc-list-item__primary-text {
-  color: $color_16;
+  color: #fff;
 }
 .mat-mdc-option {
   min-height: 35px !important;

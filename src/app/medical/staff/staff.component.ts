@@ -1,17 +1,18 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { DataService } from 'src/app/shared/data/data.service';
-import { SideBarData, MenuItem } from 'src/app/shared/models/models';
-import { SideBarService } from 'src/app/shared/side-bar/side-bar.service';
+import { DataService } from '../../shared/data/data.service';
+import { SideBarData, MenuItem } from '../../shared/models/models';
+import { SideBarService } from '../../shared/side-bar/side-bar.service';
 
 interface Route {
   url: string;
   // Add other properties if necessary
 }
 @Component({
-  selector: 'app-staff',
-  templateUrl: './staff.component.html',
-  styleUrls: ['./staff.component.scss']
+    selector: 'app-staff',
+    templateUrl: './staff.component.html',
+    styleUrls: ['./staff.component.scss'],
+    standalone: false
 })
 export class StaffComponent {
   public miniSidebar = 'false';

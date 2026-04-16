@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { routes } from 'src/app/shared/routes/routes';
-import { DoctorService } from '../../../services/doctor.service';
 import Swal from 'sweetalert2';
-import { Pais } from 'src/app/models/pais';
+import { Pais } from '../../../models/pais';
+import { DoctorService } from '../../../services/doctor.service';
+import { routes } from '../../../shared/routes/routes';
 
 @Component({
-  selector: 'app-doctors-form',
-  templateUrl: './doctors-form.component.html',
-  styleUrls: ['./doctors-form.component.scss']
+    selector: 'app-doctors-form',
+    templateUrl: './doctors-form.component.html',
+    styleUrls: ['./doctors-form.component.scss'],
+    standalone: false
 })
 export class DoctorsFormComponent implements OnInit {
   public routes = routes;

@@ -4,28 +4,24 @@ import { CommonModule } from '@angular/common';
 import { DoctorsRoutingModule } from './doctors-routing.module';
 import { DoctorsComponent } from './doctors.component';
 import { ListDoctorComponent } from './list-doctor/list-doctor.component';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { SharedModule } from 'src/app/shared/shared.module';
 import { ProfileDoctorComponent } from './profile-doctor/profile-doctor.component';
-import { DoctorsFormComponent } from './doctors-form/doctors-form.component'; import { ReusablesModule } from 'src/app/reusables/reusables.module';
-import { PipesModule } from 'src/app/pipes/pipes.module';
+import { DoctorsFormComponent } from './doctors-form/doctors-form.component'; 
+import { PipesModule } from '../../pipes/pipes.module';
+import { SharedModule } from '../../shared/shared.module';
+import { ReusablesModule } from '../../reusables/reusables.module';
 
 
-@NgModule({
-  declarations: [DoctorsComponent, DoctorsFormComponent, ListDoctorComponent, ProfileDoctorComponent],
-  exports: [DoctorsComponent, DoctorsFormComponent, ListDoctorComponent, ProfileDoctorComponent],
-  imports: [
-    CommonModule,
-    DoctorsRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    RouterModule,
-    SharedModule,
-    ReusablesModule,
-    PipesModule
-  ]
-})
+
+@NgModule({ declarations: [DoctorsComponent, DoctorsFormComponent, ListDoctorComponent, ProfileDoctorComponent],
+    exports: [DoctorsComponent, DoctorsFormComponent, ListDoctorComponent, ProfileDoctorComponent], imports: [CommonModule,
+        DoctorsRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterModule,
+        SharedModule,
+        ReusablesModule,
+        PipesModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class DoctorsModule { }

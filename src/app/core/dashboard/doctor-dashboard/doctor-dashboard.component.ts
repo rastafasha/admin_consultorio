@@ -1,5 +1,4 @@
 import { Component, ViewChild } from '@angular/core';
-import { routes } from 'src/app/shared/routes/routes';
 import {
   ChartComponent,
   ApexAxisChartSeries,
@@ -18,10 +17,11 @@ import {
   ApexTooltip,
 } from 'ng-apexcharts';
 import { DashboardService } from '../service/dashboard.service';
-import { DoctorService } from 'src/app/services/doctor.service';
 import { ActivatedRoute } from '@angular/router';
-import { PatientMService } from 'src/app/services/patient-m.service';
-import { ModalInstruccionesComponent } from 'src/app/modales/modal-instrucciones/modal-instrucciones.component';
+import { ModalInstruccionesComponent } from '../../../modales/modal-instrucciones/modal-instrucciones.component';
+import { DoctorService } from '../../../services/doctor.service';
+import { PatientMService } from '../../../services/patient-m.service';
+import { routes } from '../../../shared/routes/routes';
 interface data {
   value: string ;
 }
@@ -60,9 +60,10 @@ export type ChartOptions = {
 };
 
 @Component({
-  selector: 'app-doctor-dashboard',
-  templateUrl: './doctor-dashboard.component.html',
-  styleUrls: ['./doctor-dashboard.component.scss'],
+    selector: 'app-doctor-dashboard',
+    templateUrl: './doctor-dashboard.component.html',
+    styleUrls: ['./doctor-dashboard.component.scss'],
+    standalone: false
 })
 export class DoctorDashboardComponent {
   public routes = routes;

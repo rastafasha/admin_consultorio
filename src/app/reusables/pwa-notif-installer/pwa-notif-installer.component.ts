@@ -4,9 +4,10 @@ import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { filter, map } from 'rxjs';
 
 @Component({
-  selector: 'app-pwa-notif-installer',
-  templateUrl: './pwa-notif-installer.component.html',
-  styleUrls: ['./pwa-notif-installer.component.css']
+    selector: 'app-pwa-notif-installer',
+    templateUrl: './pwa-notif-installer.component.html',
+    styleUrls: ['./pwa-notif-installer.component.css'],
+    standalone: false
 })
 export class PwaNotifInstallerComponent implements OnInit {
 

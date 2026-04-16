@@ -1,23 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { FileSaverService } from 'ngx-filesaver';
-import { routes } from 'src/app/shared/routes/routes';
 import { DoctorService } from '../../../services/doctor.service';
 import { LaboratoryService } from '../../../services/laboratory.service';
 import { RolesService } from '../../../services/roles.service';
 import { PresupuestoService } from '../../../services/presupuesto.service';
 import { SpecialitieService } from '../../../services/specialitie.service';
 import Swal from 'sweetalert2';
-import { Speciality } from 'src/app/models/speciality.model';
-import { Permissions, User } from 'src/app/models/user.model';
-import { Presupuesto } from 'src/app/models/presupuesto.model';
-import { catchError } from 'rxjs';
-import { throwError } from 'rxjs';
+import { Presupuesto } from '../../../models/presupuesto.model';
+import { Speciality } from '../../../models/speciality.model';
+import { User } from '../../../models/user.model';
+import { routes } from '../../../shared/routes/routes';
 declare var $: any;
 @Component({
-  selector: 'app-presupuesto-lista',
-  templateUrl: './presupuesto-lista.component.html',
-  styleUrls: ['./presupuesto-lista.component.scss']
+    selector: 'app-presupuesto-lista',
+    templateUrl: './presupuesto-lista.component.html',
+    styleUrls: ['./presupuesto-lista.component.scss'],
+    standalone: false
 })
 export class PresupuestoListaComponent implements OnInit {
 

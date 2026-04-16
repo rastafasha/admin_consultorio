@@ -1,15 +1,16 @@
 import { Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { FileSaverService } from 'ngx-filesaver';
-import { routes } from 'src/app/shared/routes/routes';
 import { DoctorService } from '../../../services/doctor.service';
 import { SpecialitieService } from '../../../services/specialitie.service';
 import * as XLSX from 'xlsx';
+import { routes } from '../../../shared/routes/routes';
 declare var $:any;    
 @Component({
-  selector: 'app-list-patient-specialities',
-  templateUrl: './list-patient-specialities.component.html',
-  styleUrls: ['./list-patient-specialities.component.scss']
+    selector: 'app-list-patient-specialities',
+    templateUrl: './list-patient-specialities.component.html',
+    styleUrls: ['./list-patient-specialities.component.scss'],
+    standalone: false
 })
 export class ListPatientSpecialitiesComponent {
   public routes = routes;

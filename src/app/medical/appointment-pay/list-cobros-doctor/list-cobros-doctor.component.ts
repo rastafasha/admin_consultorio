@@ -2,19 +2,19 @@ import { Component } from '@angular/core';
 import * as XLSX from 'xlsx';
 import { MatTableDataSource } from '@angular/material/table';
 import { FileSaverService } from 'ngx-filesaver';
-import { routes } from 'src/app/shared/routes/routes';
-import { DoctorService } from '../../../services/doctor.service';
-import { PatientMService } from '../../../services/patient-m.service';
-import { PaymentService } from '../../../services/payment.service';
 import { ActivatedRoute } from '@angular/router';
-import { Payment } from 'src/app/models/payment.model';
 import Swal from 'sweetalert2';
+import { Payment } from '../../../models/payment.model';
+import { DoctorService } from '../../../services/doctor.service';
+import { PaymentService } from '../../../services/payment.service';
+import { routes } from '../../../shared/routes/routes';
 
 declare var $:any;  
 @Component({
-  selector: 'app-list-cobros-doctor',
-  templateUrl: './list-cobros-doctor.component.html',
-  styleUrls: ['./list-cobros-doctor.component.scss']
+    selector: 'app-list-cobros-doctor',
+    templateUrl: './list-cobros-doctor.component.html',
+    styleUrls: ['./list-cobros-doctor.component.scss'],
+    standalone: false
 })
 export class ListCobrosDoctorComponent {
 
@@ -315,24 +315,6 @@ export class ListCobrosDoctorComponent {
     // });
 
   }
-
-  // cambiarStatus(data:any){
-  //   const VALUE = data.status;
-  //   console.log(VALUE);
-    
-  //   this.paymentService.updateStatus(data, data.id).subscribe(
-  //     resp =>{
-  //       console.log(resp);
-  //       // Swal.fire('Actualizado', `actualizado correctamente`, 'success');
-  //       // this.toaster.open({
-  //       //   text:'Producto Actualizado!',
-  //       //   caption:'Mensaje de Validación',
-  //       //   type:'success',
-  //       // })
-  //       this.getTableData();
-  //     }
-  //   )
-  // }
 
    cambiarStatus(data: any) {
     const nuevoEstado = data.status;

@@ -24,13 +24,6 @@ const routes: Routes = [
           (m) => m.DoctorDashboardModule
         ),
     },
-    {
-      path: 'patient-dashboard',
-      loadChildren: () =>
-        import('./patient-dashboard/patient-dashboard.module').then(
-          (m) => m.PatientDashboardModule
-        ),
-    },
   ]}
 ];
 

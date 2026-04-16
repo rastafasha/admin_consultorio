@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { routes } from 'src/app/shared/routes/routes';
-import { DoctorService } from '../../../services/doctor.service';
 import { Location } from '@angular/common';
-import { LocationService } from 'src/app/services/location.service';
+import { DoctorService } from '../../../services/doctor.service';
+import { LocationService } from '../../../services/location.service';
+import { routes } from '../../../shared/routes/routes';
 
 @Component({
-  selector: 'app-location-view',
-  templateUrl: './location-view.component.html',
-  styleUrls: ['./location-view.component.scss']
+    selector: 'app-location-view',
+    templateUrl: './location-view.component.html',
+    styleUrls: ['./location-view.component.scss'],
+    standalone: false
 })
 export class LocationViewComponent {
   public routes = routes;

@@ -1,17 +1,18 @@
 import { Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { FileSaverService } from 'ngx-filesaver';
-import { routes } from 'src/app/shared/routes/routes';
 import * as XLSX from 'xlsx';
 import { DoctorService } from '../../../services/doctor.service';
 import { RolesService } from '../../../services/roles.service';
-import { LocationService } from 'src/app/services/location.service';
+import { routes } from '../../../shared/routes/routes';
+import { LocationService } from '../../../services/location.service';
 
 declare var $:any; 
 @Component({
-  selector: 'app-location-list',
-  templateUrl: './location-list.component.html',
-  styleUrls: ['./location-list.component.scss']
+    selector: 'app-location-list',
+    templateUrl: './location-list.component.html',
+    styleUrls: ['./location-list.component.scss'],
+    standalone: false
 })
 export class LocationListComponent {
   public routes = routes;

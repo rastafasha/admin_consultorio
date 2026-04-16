@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { routes } from 'src/app/shared/routes/routes';
 import { AppointmentService } from '../../../services/appointment.service';
 import { FileSaverService } from 'ngx-filesaver';
 import * as XLSX from 'xlsx';
@@ -9,12 +8,14 @@ import { DoctorService } from '../../../services/doctor.service';
 import { RolesService } from '../../../services/roles.service';
 import { ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
+import { routes } from '../../../shared/routes/routes';
 
 declare var $:any;
 @Component({
-  selector: 'app-list-doc',
-  templateUrl: './list-doc.component.html',
-  styleUrls: ['./list-doc.component.scss']
+    selector: 'app-list-doc',
+    templateUrl: './list-doc.component.html',
+    styleUrls: ['./list-doc.component.scss'],
+    standalone: false
 })
 export class ListDocComponent {
   public routes = routes;
