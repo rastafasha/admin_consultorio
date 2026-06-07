@@ -183,6 +183,9 @@ export class routes {
   public static get doctorProfile(): string {
     return this.baseUrl + '/doctors/profile/';
   }
+  public static get conectarWhatsapp(): string {
+    return this.baseUrl + '/doctors/profile-whatsapp';
+  }
   // public static get doctorProfile(): string {
   //   return this.baseUrl + '/doctor/doctor-profile/';
   // }
@@ -479,4 +482,5 @@ export class routes {
   public static get presupuestoListDoctor(): string {
     return this.baseUrl + '/presupuesto/list/doctor';
   }
+  
 }

@@ -161,6 +161,7 @@ export class DataService {
               permision: 'profile_doctor',
               show_nav: false,
             },
+            
             {
               menuValue: 'Doctor Edit',
               route: '',
@@ -596,6 +597,8 @@ export class DataService {
               show_nav: false,
             },],
         },
+        
+
 
         {
           menuValue: 'Mis Presupuestos',
@@ -604,6 +607,18 @@ export class DataService {
           showSubRoute: false,
           img: 'assets/img/icons/menu-icon-16.svg',
           base: 'presupuestoListDoctor',
+          permision: 'list_presupuesto_doctor',
+          show_nav: true,
+          subMenus: [
+          ],
+        },
+        {
+          menuValue: 'Conectar Whatsapp',
+          route: routes.conectarWhatsapp,
+          base: routes.conectarWhatsapp,
+          hasSubRoute: false,
+          showSubRoute: false,
+          img: 'assets/img/icons/menu-icon-16.svg',
           permision: 'list_presupuesto_doctor',
           show_nav: true,
           subMenus: [
