@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ConsultorioService } from '../../../services/consultorio.service';
 import { AuthService } from '../../../shared/auth/auth.service';
-
+import * as QRCode from 'qrcode';
 @Component({
   selector: 'app-perfil-whatsapp',
   imports: [],
@@ -12,6 +12,7 @@ export class PerfilWhatsappComponent {
 
   doctorId: string; // Este ID lo recuperas de tu AuthService (Tu seeder tiene al Dr. ID: 2)
   whatsappStatus: string = 'DESCONECTADO';
+   public whatsappQRString: string = '';
   whatsappQR: string = '';
   pollingInterval: any;
   cargando: boolean = false;
@@ -46,6 +47,8 @@ export class PerfilWhatsappComponent {
       this.whatsappStatus = 'ESPERANDO_QR';
       this.cargando = false;
       this.iniciarPolling(); // Arrancamos el bucle de consulta cada 3 segundos
+
+      
     });
   }
 
@@ -63,6 +66,43 @@ export class PerfilWhatsappComponent {
         }
       });
     }, 3000); // 3 segundos exactos de intervalo
+  }
+
+   iniciarChequeoAutomatico() {
+    // if (this.chequeoInterval) clearInterval(this.chequeoInterval);
+    // const localId = typeof this.user.local === 'string' ? this.user.local : this.user.local?._id;
+
+    // this.chequeoInterval = setInterval(() => {
+    //   this.tiendaService.statusWhatsapp(localId).subscribe((resp: any) => {
+    //     this.whatsappStatus = resp.whatsappStatus;
+        
+    //     // 💥 SI LLEGA EL QR, FORZAMOS EL DIBUJO EN EL CANVAS DEL HTML
+    //     if (this.whatsappStatus === 'ESPERANDO_QR' && resp.whatsappQR) {
+    //       this.whatsappQRString = resp.whatsappQR;
+    //       this.dibujarCodigoQR();
+    //     }
+        
+    //     if (this.whatsappStatus === 'CONECTADO') {
+    //       this.whatsappQRString = '';
+    //       clearInterval(this.chequeoInterval);
+    //       console.log('🎉 ¡Dispositivo enlazado con éxito!');
+    //     }
+    //   });
+    // }, 5000);
+  }
+
+  
+
+   dibujarCodigoQR() {
+    // Le damos un milisegundo de retraso para asegurar que Angular ya renderizó el elemento <canvas> en el DOM
+    setTimeout(() => {
+      const canvas = document.getElementById('canvas-qr') as HTMLCanvasElement;
+      if (canvas && this.whatsappQRString) {
+        QRCode.toCanvas(canvas, this.whatsappQRString, { width: 250 }, (error) => {
+          if (error) console.error('Error generando el canvas QR:', error);
+        });
+      }
+    }, 100);
   }
 
   detenerPolling() {
