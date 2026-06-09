@@ -4,7 +4,7 @@ import { AuthService } from '../../../shared/auth/auth.service';
 import * as QRCode from 'qrcode';
 @Component({
   selector: 'app-perfil-whatsapp',
-  imports: [],
+  standalone:false,
   templateUrl: './perfil-whatsapp.component.html',
   styleUrl: './perfil-whatsapp.component.scss'
 })
@@ -26,6 +26,7 @@ export class PerfilWhatsappComponent {
   ngOnInit() {
     this.user = this.authService.getLocalStorage();
     this.doctorId = this.user.id;
+    console.log(this.user)
     // Al cargar la pantalla, revisamos de una vez cómo está su conexión
     this.verificarEstadoActual();
   }

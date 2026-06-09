@@ -6,6 +6,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, of } from 'rxjs';
 import { url_servicios } from '../../config/config';
 import { User } from '../../models/user.model';
+import { NotificacionService } from '../../services/notificacion.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,14 +18,15 @@ export class AuthService {
 
   constructor(
     private router: Router,
+    private notificacionService: NotificacionService,
     public http: HttpClient
   ) {
     this.getLocalStorage();
   }
 
-  
-  
-  getLocalStorage(){
+
+
+  getLocalStorage() {
     const token = localStorage.getItem('token');
     const userStr = localStorage.getItem('user');
     if (token && userStr) {
@@ -36,6 +38,7 @@ export class AuthService {
       this.token = null;
       this.currentUser$.next(null);
     }
+    return this.user;
   }
 
   saveLocalStorage(auth: any): boolean {
@@ -51,20 +54,22 @@ export class AuthService {
     return false;
   }
 
-  
 
-   
-  login(email:string,password:string) {
+
+
+  login(email: string, password: string) {
     // localStorage.setItem('authenticated', 'true');
     // this.router.navigate([routes.adminDashboard]);
-    const URL = url_servicios+"/login";
-    return this.http.post(URL,{email: email,password: password}).pipe(
-      map((auth:any) => {
+    const URL = url_servicios + "/login";
+    return this.http.post(URL, { email: email, password: password }).pipe(
+      map((auth: any) => {
         console.log(auth);
         const result = this.saveLocalStorage(auth);
+        // Despertamos al motor de sockets con las credenciales nuevas de inmediato
+        this.notificacionService.inicializarEcosistemaAlertas();
         return result;
       }),
-      catchError((error:any) => {
+      catchError((error: any) => {
         console.log(error);
         return of(undefined);
       })
@@ -77,9 +82,9 @@ export class AuthService {
     const URL = url_servicios + '/me';
     return this.http.post(URL, data, { headers });
   }
-  
 
- 
+
+
 
   logout() {
     localStorage.removeItem('token');

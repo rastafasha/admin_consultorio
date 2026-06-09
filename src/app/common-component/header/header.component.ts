@@ -6,6 +6,8 @@ import { User } from '../../models/user.model';
 import { AuthService } from '../../shared/auth/auth.service';
 import { routes } from '../../shared/routes/routes';
 import { SideBarService } from '../../shared/side-bar/side-bar.service';
+import { NotificacionService } from '../../services/notificacion.service';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-header',
@@ -37,6 +39,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     public authService: AuthService,
     public activatedRoute: ActivatedRoute,
     public settingService: SettignService,
+    
   ) {
     this.sideBar.toggleSideBar.subscribe((res: string) => {
       if (res == 'true') {
@@ -48,6 +51,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    
     this.userSubscription = this.authService.currentUser$.subscribe((user) => {
       this.user = user;
       if (user && this.user_id) {

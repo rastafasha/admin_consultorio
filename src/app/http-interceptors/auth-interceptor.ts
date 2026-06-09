@@ -1,56 +1,54 @@
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-// import { AccountService } from '../services/account.service';
 import { catchError, Observable, throwError } from 'rxjs';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
+
+const BackendApi = environment.backend_node;
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   constructor(private _router: Router) {
   }
 
-    // intercept(req: HttpRequest<any>,
-    //           next: HttpHandler): Observable<HttpEvent<any>> {
+    
+    
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    
+    if (!req.url.startsWith('http')) {
+      return next.handle(req);
+    }
 
-    //     const token = localStorage.getItem("auth_token");
+    let headers = new HttpHeaders();
+    let params = req.params;
+    
+    // 🔥 EL BLINDAJE REAL: Comparamos directamente contra tu variable de entorno del Backend de Node
+    const esPeticionNodeAlertas = req.url.startsWith(BackendApi);
 
-    //     if (token) {
-    //         const cloned = req.clone({
-    //             headers: req.headers.set("Authorization",
-    //                 "Bearer " + token)
-    //         });
-
-    //         return next.handle(cloned);
-    //     }
-    //     else {
-    //         return next.handle(req);
-    //     }
-    // }
-    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-      let headers = new HttpHeaders();
-      let params = req.params;
-      if (localStorage.getItem('auth_token')) {
+    if (localStorage.getItem('token')) {
+      if (esPeticionNodeAlertas) {
+        // Formato exclusivo para Node.js
         headers = headers.append('Accept', 'application/json')
-          .append('Authorization', 'Bearer ' + localStorage.getItem('auth_token'));
+                         .append('x-token', localStorage.getItem('token') || '');
       } else {
-        headers = headers.append('Accept', 'application/json');
-        // params = params.append('page', '1');
+        // Formato exclusivo para Laravel
+        headers = headers.append('Accept', 'application/json')
+                         .append('Authorization', 'Bearer ' + localStorage.getItem('token'));
       }
+    } else {
+      headers = headers.append('Accept', 'application/json');
+    }
 
-      return next.handle(req.clone({headers, params})).pipe(catchError(error => {
-        if (error.status === 401 || error.status === 423) {
+    return next.handle(req.clone({ headers, params })).pipe(
+      catchError(error => {
+        // SÓLO expulsamos si el error viene de Laravel. Si viene de Node, dejamos que la app continúe quieta.
+        if ((error.status === 401 || error.status === 423) && !esPeticionNodeAlertas) {
+          localStorage.clear();
           this._router.navigate(['/login']);
         }
-
-        return throwError(error);
-      }));
-    }
-
-    errors(error: HttpErrorResponse) {
-      if (error.status === 4030 || error.status === 4040 || error.status === 4230) {
-        this._router.navigate(['/login']);
-      }
-      return throwError(error);
-    }
-}
+        return throwError(() => error);
+      })
+    );
+  }
+  }
 

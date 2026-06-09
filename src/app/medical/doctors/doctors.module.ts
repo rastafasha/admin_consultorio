@@ -12,11 +12,25 @@ import { DoctorsFormComponent } from './doctors-form/doctors-form.component';
 import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../shared/shared.module';
 import { ReusablesModule } from '../../reusables/reusables.module';
+import { PerfilWhatsappComponent } from './perfil-whatsapp/perfil-whatsapp.component';
 
 
 
-@NgModule({ declarations: [DoctorsComponent, DoctorsFormComponent, ListDoctorComponent, ProfileDoctorComponent],
-    exports: [DoctorsComponent, DoctorsFormComponent, ListDoctorComponent, ProfileDoctorComponent], imports: [CommonModule,
+@NgModule({ declarations: [
+    DoctorsComponent, 
+    DoctorsFormComponent, 
+    ListDoctorComponent, 
+    ProfileDoctorComponent, 
+    PerfilWhatsappComponent
+],
+    exports: [
+        DoctorsComponent, 
+        DoctorsFormComponent, 
+        ListDoctorComponent, 
+        ProfileDoctorComponent, 
+        PerfilWhatsappComponent
+    ], imports: [
+        CommonModule,
         DoctorsRoutingModule,
         FormsModule,
         ReactiveFormsModule,

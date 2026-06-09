@@ -5,6 +5,8 @@ import { PaymentService } from "../../services/payment.service";
 import { RolesService } from "../../services/roles.service";
 import { StaffService } from "../../services/staff.service";
 import { AuthService } from "../../shared/auth/auth.service";
+import { Observable } from "rxjs";
+import { NotificacionService } from "../../services/notificacion.service";
 
 @Component({
     selector: "app-notificacionesupdate",
@@ -32,6 +34,7 @@ export class NotificacionesupdateComponent implements OnInit {
   private userSubscription: any;
 
   public IMAGE_PREVISUALIZA = 'assets/img/user-06.jpg';
+  public unreadCount$!: Observable<number>;
 
   constructor(
     private appointmentService: AppointmentService,
@@ -39,15 +42,24 @@ export class NotificacionesupdateComponent implements OnInit {
     public roleService: RolesService,
     public authService: AuthService,
     public staffService: StaffService,
+    public notifService: NotificacionService,
   ) {}
 
   ngOnInit(): void {
+    // Cargamos el conteo de las alertas pasadas al iniciar la pantalla
+    const userString = localStorage.getItem('user');
+    const userObj = userString ? JSON.parse(userString) : null;
+    
+    if (userObj && userObj.id) {
+      this.notifService.cargarContadorInicial(userObj.id);
+    }
+
     this.userSubscription = this.authService.currentUser$.subscribe((user) => {
       this.user = user;
       this.roles = user?.roles ? (Array.isArray(user.roles) ? user.roles.map(r => r.name || r).flat() : [user.roles.name || user.roles]) : [];
       if (user) {
         this.getUserRemoto();
-        this.loadNotifications();
+        // this.loadNotifications();
       }
     });
   }
@@ -165,4 +177,27 @@ export class NotificacionesupdateComponent implements OnInit {
       localStorage.removeItem('dark');
     }
   }
+
+
+
+  // Limpia solo las notificaciones de pagos
+clearPayments(): void {
+  this.payments_doctors = [];
+  this.totalT = 0;
+  // Aquí puedes agregar la llamada a tu servicio/API si necesitas guardar el estado en la base de datos
+}
+
+// Limpia solo las notificaciones de citas
+clearAppointments(): void {
+  this.appointments_doctors = [];
+  this.total = 0;
+  // Aquí puedes agregar la llamada a tu servicio/API
+}
+
+// Limpia absolutamente todo (Botón global)
+markAllAsRead(): void {
+  this.clearPayments();
+  this.clearAppointments();
+}
+
 }

@@ -11,6 +11,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { PermisionInterceptorInterceptor } from './http-interceptors/permision-interceptor.interceptor';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { PipesModule } from './pipes/pipes.module';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,6 @@ import { PipesModule } from './pipes/pipes.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule,
     SharedModule,
     CoreModule,
     FileSaverModule,
@@ -29,13 +29,19 @@ import { PipesModule } from './pipes/pipes.module';
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
-    })
-  ],
+    }),
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
+    })],
+
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: PermisionInterceptorInterceptor,
-      multi : true
+      multi: true
     }
   ],
   bootstrap: [AppComponent]

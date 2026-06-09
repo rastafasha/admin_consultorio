@@ -325,8 +325,7 @@ export class ListDocComponent {
 
   }
 
-  // eslint-disable-next-line no-debugger
-  cambiarStatus(data:any){debugger
+  cambiarStatus(data:any){
     const VALUE = data.confimation;
     console.log(VALUE);
     
