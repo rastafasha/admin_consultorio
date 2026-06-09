@@ -1,12 +1,14 @@
 <div class="header">
     <div class="header-left pt-3 header-left-modif">
-        <img class="logoav" src="assets/svg/logoHealthConnect-02.svg" width="35" height="35" alt=""> 
-      
-        <span class="nmclin" >Klyntic | {{name_setting}} <br> Dr.{{user.name}} {{user.surname}}</span>
-        
+        <img class="logoav" src="assets/svg/logoHealthConnect-02.svg" width="35" height="35" alt="">
+
+        <span class="nmclin">Klyntic | {{name_setting}} <br> Dr.{{user.name}} {{user.surname}}</span>
+
     </div>
-    <a (click)="toggleSideBar()" id="toggle_btn" href="javascript:void(0);"><img src="assets/img/icons/bar-icon.svg"  alt=""></a>
-    <a (click)="toggleMobileSideBar()" id="mobile_btn" class="mobile_btn float-start" ><img src="assets/img/icons/bar-icon.svg"  alt=""></a>
+    <a (click)="toggleSideBar()" id="toggle_btn" href="javascript:void(0);"><img src="assets/img/icons/bar-icon.svg"
+            alt=""></a>
+    <a (click)="toggleMobileSideBar()" id="mobile_btn" class="mobile_btn float-start"><img
+            src="assets/img/icons/bar-icon.svg" alt=""></a>
     <!-- <div class="top-nav-search mob-view">
         <form>
             <input type="text" class="form-control" placeholder="Search here">
@@ -14,8 +16,32 @@
         </form>
     </div> -->
     <!-- [darkMode]="darkMode" -->
-    <!-- <app-tasabcv></app-tasabcv> -->
-    <app-notificacionesupdate [routes]="routes"  [user]="user" [usuario]="usuario" [imagenSerUrl]="imagenSerUrl" [logout]="logout"></app-notificacionesupdate>
-    
-    
+    <div class="d-flex justify-content-end gap-3">
+        <app-tasabcv></app-tasabcv>
+        <div class="setting-row" *ngIf="!isLoadingSwitch" [class.loading]="pushService.isProcessing$ | async">
+            <div class="setting-info">
+                <i class="fa fa-bell"></i>
+                <div class="text-container">
+                    <strong>Notificaciones Push</strong>
+                    <span>Avisos importantes</span>
+                </div>
+            </div>
+
+            <div class="switch-wrapper">
+                <!-- Spinner pequeño que solo aparece al cargar -->
+                <div *ngIf="pushService.isProcessing$ | async" class="mini-spinner"></div>
+
+                <label class="switch">
+                    <input type="checkbox" [disabled]="pushService.isProcessing$ | async"
+                        [checked]="pushService.isSubscribed$ | async" (change)="togglePush()">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+        <!-- configurar notificaciones push -->
+        <app-notificacionesupdate [routes]="routes" [user]="user" [usuario]="usuario" [imagenSerUrl]="imagenSerUrl"
+            [logout]="logout"></app-notificacionesupdate>
+
+    </div>
+
 </div>
