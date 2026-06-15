@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TasabcvService } from '../../services/tasabcv.service';
+import { TasadollarbcvService } from '../../services/tasabcv.service';
 
 @Component({
     selector: 'app-tasabcv',
@@ -11,7 +11,7 @@ export class TasabcvComponent {
   tasa:number;
 
   constructor(
-      private tasaBcvService: TasabcvService,
+      private tasaBcvService: TasadollarbcvService,
     ) {
      
     }

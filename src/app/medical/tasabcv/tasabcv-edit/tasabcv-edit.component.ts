@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import Swal from 'sweetalert2';
 import { Tasabcv } from '../../../models/tasabcba';
-import { TasabcvService } from '../../../services/tasabcv.service';
+import { TasadollarbcvService } from '../../../services/tasabcv.service';
 @Component({
     selector: 'app-tasabcv-edit',
     templateUrl: './tasabcv-edit.component.html',
@@ -20,7 +20,7 @@ export class TasabcvEditComponent {
   roles:any;
 
   constructor(
-    private tasaBcvService: TasabcvService,
+    private tasaBcvService: TasadollarbcvService,
   ) { }
 
   ngOnInit(): void {

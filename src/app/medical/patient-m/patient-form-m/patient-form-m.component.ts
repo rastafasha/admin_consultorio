@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PatientMService } from '../../../services/patient-m.service';
@@ -8,10 +8,10 @@ import Swal from 'sweetalert2';
 import { routes } from '../../../shared/routes/routes';
 
 @Component({
-    selector: 'app-patient-form-m',
-    templateUrl: './patient-form-m.component.html',
-    styleUrls: ['./patient-form-m.component.scss'],
-    standalone: false
+  selector: 'app-patient-form-m',
+  templateUrl: './patient-form-m.component.html',
+  styleUrls: ['./patient-form-m.component.scss'],
+  standalone: false
 })
 export class PatientFormMComponent implements OnInit {
   public routes = routes;
@@ -20,6 +20,7 @@ export class PatientFormMComponent implements OnInit {
   public patientId: string | null = null;
   public doctor_id: any;
   public user: any;
+  pacienteExiste: boolean = false;
 
   public FILE_AVATAR: any;
   public IMAGE_PREVISUALIZA: any = 'assets/img/user-06.jpg';
@@ -43,18 +44,43 @@ export class PatientFormMComponent implements OnInit {
     public patientService: PatientMService,
     public doctorService: DoctorService,
     public router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private cd: ChangeDetectorRef
   ) {
+
+  }
+
+  ngOnInit(): void {
+    window.scrollTo(0, 0);
+    this.validarFormulario()
+    this.doctorService.closeMenuSidebar();
+    const USER = localStorage.getItem("user");
+    this.user = JSON.parse(USER || '{}');
+    this.doctor_id = this.user.id;
+
+    this.patientId = this.activatedRoute.snapshot.paramMap.get('id');
+    console.log('DEBUG patient-form ngOnInit: route patientId =', this.patientId);
+    console.log('DEBUG patient-form ngOnInit: isEditMode before =', this.isEditMode);
+    if (this.patientId) {
+      this.isEditMode = true;
+      console.log('DEBUG patient-form ngOnInit: entering edit mode, id=', this.patientId);
+      this.loadPatient();
+    } else {
+      console.log('DEBUG patient-form ngOnInit: create mode');
+    }
+  }
+
+  validarFormulario() {
     this.patientForm = this.fb.group({
       name: ['', Validators.required],
       surname: ['', Validators.required],
-      phone: [''],
+      phone: ['', Validators.required],
       email: [''],
       birth_date: [''],
       gender: [1],
       education: [''],
       address: [''],
-      n_doc: ['', Validators.required],
+      n_doc: ['', [Validators.required, Validators.minLength(3)]],
       antecedent_personal: [''],
       antecedent_family: [''],
       antecedent_alerg: [''],
@@ -75,23 +101,57 @@ export class PatientFormMComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    window.scrollTo(0, 0);
-    this.doctorService.closeMenuSidebar();
-    const USER = localStorage.getItem("user");
-    this.user = JSON.parse(USER || '{}');
-    this.doctor_id = this.user.id;
+  verificarPaciente(event: any): void {
+    const documento = event.target.value?.trim();
+    const control = this.patientForm.get('n_doc');
 
-    this.patientId = this.activatedRoute.snapshot.paramMap.get('id');
-    console.log('DEBUG patient-form ngOnInit: route patientId =', this.patientId);
-    console.log('DEBUG patient-form ngOnInit: isEditMode before =', this.isEditMode);
-    if (this.patientId) {
-      this.isEditMode = true;
-      console.log('DEBUG patient-form ngOnInit: entering edit mode, id=', this.patientId);
-      this.loadPatient();
-    } else {
-      console.log('DEBUG patient-form ngOnInit: create mode');
+    // 1. Si está vacío o tiene menos de 3 caracteres, limpiamos el error 'yaExiste'
+    // y dejamos que Angular ejecute sus validadores nativos normales.
+    if (!documento || documento.length < 3) {
+      this.pacienteExiste = false;
+      if (control?.hasError('yaExiste')) {
+        delete control.errors?.['yaExiste'];
+        control.updateValueAndValidity(); // 👈 Fuerza a Angular a recalcular required/minlength
+      }
+      return;
     }
+
+    // 2. Consultamos al backend si pasa los filtros básicos
+    this.patientService.buscarPorDocumento(documento).subscribe({
+      next: (res: any) => {
+        const control = this.patientForm.get('n_doc');
+
+        if (res && res.existe) {
+          this.pacienteExiste = true;
+
+          // Conservamos errores previos y sumamos 'yaExiste'
+          const erroresActuales = control?.errors || {};
+          control?.setErrors({ ...erroresActuales, yaExiste: true });
+
+          // CORREGIDO: Usamos onlySelf en lugar del error de tipeo
+          control?.markAsTouched({ onlySelf: true });
+          control?.markAsDirty();
+        } else {
+          this.pacienteExiste = false;
+          if (control?.errors) {
+            delete control.errors['yaExiste'];
+            if (Object.keys(control.errors).length === 0) {
+              control.setErrors(null);
+            } else {
+              control.setErrors(control.errors);
+            }
+          }
+        }
+
+        // Recalculamos validez y forzamos el renderizado visual en la pantalla
+        control?.updateValueAndValidity({ emitEvent: true });
+        this.patientForm.updateValueAndValidity();
+        this.cd.detectChanges(); // 👈 LA LÍNEA MÁGICA: Fuerza a Angular a pintar el HTML ya mismo
+      },
+      error: (err) => {
+        console.error("Error al verificar el documento", err);
+      }
+    });
   }
 
   loadPatient(): void {
@@ -113,7 +173,7 @@ export class PatientFormMComponent implements OnInit {
         surname: this.patient_selected.surname,
         phone: this.patient_selected.phone,
         email: this.patient_selected.email || '',
-        birth_date: this.patient_selected.birth_date ? new Date(this.patient_selected.birth_date).toISOString().slice(0,10) : '',
+        birth_date: this.patient_selected.birth_date ? new Date(this.patient_selected.birth_date).toISOString().slice(0, 10) : '',
         education: this.patient_selected.education || '',
         gender: this.patient_selected.gender,
         address: this.patient_selected.address || '',
@@ -159,6 +219,12 @@ export class PatientFormMComponent implements OnInit {
 
   // eslint-disable-next-line no-debugger
   save(): void {
+    if (!this.patientForm.valid) {
+      //mostramos las alertas de los campos requeridos
+      this.patientForm.markAllAsTouched(); // Esto activa las validaciones visuales
+      return
+    }
+
     console.log('DEBUG patient-form save(): isEditMode=', this.isEditMode, 'patientId=', this.patientId);
     if (this.isSaving || this.isLoading) {
       console.log('DEBUG save(): already saving/loading, ignore');
@@ -195,14 +261,14 @@ export class PatientFormMComponent implements OnInit {
 
     // Optional others
     ['role_id', 'antecedent_personal', 'antecedent_family', 'antecedent_alerg',
-     'name_companion', 'surname_companion', 'mobile_companion', 'relationship_companion',
-     'name_responsable', 'surname_responsable', 'mobile_responsable', 'relationship_responsable',
-     'current_desease', 'education', 'birth_date', 'email'].forEach(field => {
-      const val = formValue[field];
-      if (val) {
-        formData.append(field, val);
-      }
-    });
+      'name_companion', 'surname_companion', 'mobile_companion', 'relationship_companion',
+      'name_responsable', 'surname_responsable', 'mobile_responsable', 'relationship_responsable',
+      'current_desease', 'education', 'birth_date', 'email'].forEach(field => {
+        const val = formValue[field];
+        if (val) {
+          formData.append(field, val);
+        }
+      });
 
     if (this.FILE_AVATAR) {
       formData.append('imagen', this.FILE_AVATAR);
@@ -214,7 +280,7 @@ export class PatientFormMComponent implements OnInit {
     let observable = this.isEditMode
       ? this.patientService.editPatient(formData, +this.patientId!)
       : this.patientService.createPatient(formData);
-    
+
     observable = observable.pipe(
       catchError((err: any) => {
         console.error('DEBUG patient-form save ERROR:', err, 'isEditMode:', this.isEditMode);
@@ -224,7 +290,7 @@ export class PatientFormMComponent implements OnInit {
         return throwError(() => err);
       })
     );
-    
+
     observable.subscribe((resp: any) => {
       console.log('DEBUG patient-form save SUCCESS:', resp);
       if (resp.message === 403) {

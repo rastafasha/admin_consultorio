@@ -54,6 +54,16 @@ export class PatientMService {
     return this.http.get(URL,{headers:headers});
   }
 
+  buscarPorDocumento(n_doc: string | number) {
+    // Asegúrate de mantener el espacio en blanco después de 'Bearer '
+    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.authService.token });
+    
+    // 💡 CORRECCIÓN: Concatenamos con una barra '/' para que coincida con tu api.php
+    const URL = url_servicios + "/patients/verificar-documento/" + n_doc;
+    
+    return this.http.get(URL, { headers: headers });
+}
+
   listConfig(){
     const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
     const URL = url_servicios+'/patients/config';

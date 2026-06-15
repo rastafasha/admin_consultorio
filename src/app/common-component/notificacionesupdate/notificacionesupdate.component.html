@@ -85,9 +85,6 @@
                 <span>{{user.roles}}</span>
             </div>
             <span class="user-img">
-                <div *ngIf="!userremoto">
-                    <img src="assets/img/user-06.jpg">
-                </div>
                 <div *ngIf="userremoto">
                     <div *ngIf="userremoto.avatar">
                         <img [src]="userremoto.avatar | imagenPipe:'staffs'">

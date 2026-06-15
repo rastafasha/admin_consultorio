@@ -238,8 +238,8 @@ export class PatientDoctorListComponent {
     this.limit = this.pageSize;
     this.skip = 0;
     this.currentPage = 1;
-    this.getTableData();
     this.searchDataValue = '';
+    this.ngOnInit();
   }
 
   private calculateTotalPages(totalDataPatient: number, pageSize: number): void {

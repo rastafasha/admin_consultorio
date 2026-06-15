@@ -16,21 +16,15 @@
         </form>
     </div> -->
     <!-- [darkMode]="darkMode" -->
-    <div class="d-flex justify-content-end gap-3">
+    <div class="header-right">
         <app-tasabcv></app-tasabcv>
         <div class="setting-row" *ngIf="!isLoadingSwitch" [class.loading]="pushService.isProcessing$ | async">
             <div class="setting-info">
                 <i class="fa fa-bell"></i>
-                <div class="text-container">
-                    <strong>Notificaciones Push</strong>
-                    <span>Avisos importantes</span>
-                </div>
             </div>
 
             <div class="switch-wrapper">
-                <!-- Spinner pequeño que solo aparece al cargar -->
                 <div *ngIf="pushService.isProcessing$ | async" class="mini-spinner"></div>
-
                 <label class="switch">
                     <input type="checkbox" [disabled]="pushService.isProcessing$ | async"
                         [checked]="pushService.isSubscribed$ | async" (change)="togglePush()">
