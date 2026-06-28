@@ -21,7 +21,13 @@ export class Patient {
     fc: number;
     fr: number;
     peso: number;
+    talla: number;
+    //solo pediatria
+    peso_al_nacer: number;
+    talla_al_nacer: number;
+    //solo pediatria
     current_desease: string;
+    historia_enfermedad: string;
     location_id: number;
     doctor_id: number;
 }

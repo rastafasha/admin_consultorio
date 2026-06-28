@@ -13,3 +13,34 @@
 .about-info {
     margin-bottom: 35px !important;
 }
+
+.grupobotones {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  .btn-info {
+    font-size: 16px;
+    color: #f2f2f2;
+    padding: 9px 15px;
+  }
+  .follow-btns {
+    background: #513081;
+    border: 1px solid #513081;
+    &:hover {
+      background: #00d3c7;
+      border: 1px solid #00d3c7;
+    }
+  }
+  .message-btns {
+    background: #00d3c7;
+    border: 1px solid #00d3c7;
+    &:hover {
+      background: #513081;
+      border: 1px solid #513081;
+    }
+  }
+}

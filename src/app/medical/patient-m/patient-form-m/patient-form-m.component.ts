@@ -6,6 +6,7 @@ import { DoctorService } from '../../../services/doctor.service';
 import { catchError, throwError } from 'rxjs';
 import Swal from 'sweetalert2';
 import { routes } from '../../../shared/routes/routes';
+import { StaffService } from '../../../services/staff.service';
 
 @Component({
   selector: 'app-patient-form-m',
@@ -30,6 +31,18 @@ export class PatientFormMComponent implements OnInit {
   public isLoading = false;
   public isSaving = false;
 
+  public mvacunas: any = []; // Ensure medical is initialized as an array
+    description:any;
+    name_medical:any;
+    cantidad:number;
+    fecha_vacuna:Date;
+    doctor:string;
+    
+    public mevolucion: any = []; // Ensure medical is initialized as an array
+    name_evolucion:any;
+    fecha_evolucion:Date;
+    
+
   info_form_paciente = `
   <p>En esta sección :</p>
           <ul>
@@ -45,6 +58,7 @@ export class PatientFormMComponent implements OnInit {
     public doctorService: DoctorService,
     public router: Router,
     private activatedRoute: ActivatedRoute,
+    private staffService: StaffService,
     private cd: ChangeDetectorRef
   ) {
 
@@ -57,6 +71,7 @@ export class PatientFormMComponent implements OnInit {
     const USER = localStorage.getItem("user");
     this.user = JSON.parse(USER || '{}');
     this.doctor_id = this.user.id;
+    this.getUserRemoto()
 
     this.patientId = this.activatedRoute.snapshot.paramMap.get('id');
     console.log('DEBUG patient-form ngOnInit: route patientId =', this.patientId);
@@ -70,6 +85,13 @@ export class PatientFormMComponent implements OnInit {
     }
   }
 
+  getUserRemoto(): void {
+    if (!this.user?.id) return;
+    this.staffService.getUser(this.user.id).subscribe((resp: any) => {
+      this.doctor = resp.user;
+    });
+  }
+
   validarFormulario() {
     this.patientForm = this.fb.group({
       name: ['', Validators.required],
@@ -80,6 +102,16 @@ export class PatientFormMComponent implements OnInit {
       gender: [1],
       education: [''],
       address: [''],
+      talla: [''],
+      historia_enfermedad: [''],
+      enfermedad_actual: [''],
+      tratamiento: [''],
+      examen_fisico: [''],
+      reporte_laboratorio: [''],
+      evolucion: [''],
+      vacunas: [''],
+      peso_al_nacer: [''],
+      talla_al_nacer: [''],
       n_doc: ['', [Validators.required, Validators.minLength(3)]],
       antecedent_personal: [''],
       antecedent_family: [''],
@@ -100,6 +132,58 @@ export class PatientFormMComponent implements OnInit {
       current_desease: ['']
     });
   }
+
+   addEvolucion() {
+      if (this.name_evolucion && this.fecha_evolucion) {
+        this.mevolucion.push({
+          name_evolucion: this.name_evolucion,
+          fecha_evolucion: this.fecha_evolucion,
+        });
+        this.name_evolucion = '';
+        this.fecha_evolucion = null;
+        
+      }
+     
+    }
+
+    deleteEvolucion(i:any){
+      this.mevolucion.splice(i,1);
+      this.name_evolucion = '';
+      this.fecha_evolucion = null;
+      
+
+      if(this.mevolucion.length === 0){
+        this.name_evolucion = '';
+        this.fecha_evolucion = null;
+      }
+    }
+
+   addVacuna() {
+      if (this.name_medical && this.cantidad > 0 && this.fecha_vacuna) {
+        this.mvacunas.push({
+          name_medical: this.name_medical,
+          fecha_vacuna: this.fecha_vacuna,
+          cantidad: this.cantidad+'',
+        });
+        this.name_medical = '';
+        this.fecha_vacuna = null;
+        this.cantidad = 0;
+        
+      }
+     
+    }
+
+    deleteVacuna(i:any){
+      this.mvacunas.splice(i,1);
+      this.name_medical = '';
+      this.cantidad = 0;
+      
+
+      if(this.mvacunas.length === 0){
+        this.name_medical = '';
+        this.cantidad = 0;
+      }
+    }
 
   verificarPaciente(event: any): void {
     const documento = event.target.value?.trim();
@@ -249,6 +333,16 @@ export class PatientFormMComponent implements OnInit {
     formData.append('gender', formValue.gender.toString());
     formData.append('address', formValue.address || '');
     formData.append('n_doc', formValue.n_doc);
+    formData.append('talla', formValue.talla);
+    formData.append('historia_enfermedad', formValue.historia_enfermedad);
+    formData.append('enfermedad_actual', formValue.enfermedad_actual);
+    formData.append('tratamiento', formValue.tratamiento);
+    formData.append('examen_fisico', formValue.examen_fisico);
+    formData.append('reporte_laboratorio', formValue.reporte_laboratorio);
+    formData.append('evolucion', formValue.evolucion);
+    formData.append('vacunas', formValue.vacunas);
+    formData.append('peso_al_nacer', formValue.peso_al_nacer);
+    formData.append('talla_al_nacer', formValue.talla_al_nacer);
     formData.append('doctor_id', this.doctor_id.toString());
 
     // Optional vitals

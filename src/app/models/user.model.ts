@@ -1,4 +1,5 @@
 import { Role } from "./role.model";
+import { Speciality } from "./speciality.model";
 
 export class User {
     id: number;
@@ -14,6 +15,7 @@ export class User {
     address: string;
     avatar: string;
     speciality_id: number;
+    speciality: Speciality;
     pais_id: number;
     precio_cita: number;
     status: string;
