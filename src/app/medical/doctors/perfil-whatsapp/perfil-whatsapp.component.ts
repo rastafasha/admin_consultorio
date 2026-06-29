@@ -1,42 +1,49 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ConsultorioService } from '../../../services/consultorio.service';
 import { AuthService } from '../../../shared/auth/auth.service';
+import { NotificacionService } from '../../../services/notificacion.service'; // 👈 IMPORTA TU SERVICIO DE SOCKETS
 import * as QRCode from 'qrcode';
+
 @Component({
   selector: 'app-perfil-whatsapp',
-  standalone:false,
+  standalone: false,
   templateUrl: './perfil-whatsapp.component.html',
   styleUrl: './perfil-whatsapp.component.scss'
 })
-export class PerfilWhatsappComponent {
+export class PerfilWhatsappComponent implements OnInit, OnDestroy {
 
-  doctorId: string; // Este ID lo recuperas de tu AuthService (Tu seeder tiene al Dr. ID: 2)
+  doctorId: string;
   whatsappStatus: string = 'DESCONECTADO';
-   public whatsappQRString: string = '';
-  whatsappQR: string = '';
-  pollingInterval: any;
+  whatsappQR: string = ''; // 👈 Debe llamarse exactamente igual que en tu HTML
+
+  public whatsappQRString: string = '';
   cargando: boolean = false;
-  user:any;
-  
+  user: any;
+
   constructor(
     private consultorioService: ConsultorioService,
-    private authService: AuthService
-  ) {}
+    private authService: AuthService,
+    private notificacionService: NotificacionService // 👈 INYECTA EL SERVICIO DE SOCKETS
+  ) { }
 
   ngOnInit() {
     this.user = this.authService.getLocalStorage();
     this.doctorId = this.user.id;
-    console.log(this.user)
-    // Al cargar la pantalla, revisamos de una vez cómo está su conexión
+
+    // 1. Al cargar la pantalla, revisamos el estado actual guardado en base de datos
     this.verificarEstadoActual();
+
+    // 2. 🔌 ESCUCHA EN TIEMPO REAL: Reemplaza el Polling por la oreja del Socket
+    this.activarEscuchaSocket();
   }
 
   verificarEstadoActual() {
     this.consultorioService.obtenerEstadoWhatsApp(this.doctorId).subscribe(res => {
       if (res) {
         this.whatsappStatus = res.whatsappStatus;
-        if (this.whatsappStatus === 'ESPERANDO_QR') {
-          this.iniciarPolling(); // Si se quedó a medias, reactivamos el bucle
+        if (this.whatsappStatus === 'ESPERANDO_QR' && res.whatsappQR) {
+          this.whatsappQRString = res.whatsappQR;
+          this.dibujarCodigoQR();
         }
       }
     });
@@ -44,58 +51,46 @@ export class PerfilWhatsappComponent {
 
   solicitarConexion() {
     this.cargando = true;
-    this.consultorioService.conectarWhatsApp(this.doctorId).subscribe(res => {
-      this.whatsappStatus = 'ESPERANDO_QR';
-      this.cargando = false;
-      this.iniciarPolling(); // Arrancamos el bucle de consulta cada 3 segundos
+    this.whatsappStatus = 'CARGANDO';
 
-      
+    // Le avisa a Node: "Arranca Puppeteer únicamente porque presioné el botón"
+    this.consultorioService.conectarWhatsApp(this.doctorId).subscribe({
+      next: () => {
+        this.cargando = false;
+        // No iniciamos polling. El socket se encargará de pintar el QR cuando Node lo emita.
+      },
+      error: (err) => {
+        this.cargando = false;
+        this.whatsappStatus = 'DESCONECTADO';
+        console.error('Error al encender el bot de WhatsApp:', err);
+      }
     });
   }
 
-  iniciarPolling() {
-    if (this.pollingInterval) return; // Evita duplicar bucles en memoria
+  /**
+   * 🔥 REEMPLAZO DEL POLLING: Escucha pasiva desde el socket centralizado
+   */
+  activarEscuchaSocket() {
+    const socket = this.notificacionService['socket'];
+    if (!socket) return;
 
-    this.pollingInterval = setInterval(() => {
-      this.consultorioService.obtenerEstadoWhatsApp(this.doctorId).subscribe(res => {
-        this.whatsappStatus = res.whatsappStatus;
-        this.whatsappQR = res.whatsappQR; // String en Base64 listo para pintar
+    socket.on('whatsapp-status-changed', (data: { doctorId: string, whatsappStatus: string, whatsappQR?: string }) => {
+      if (data.doctorId.toString() !== this.doctorId.toString()) return;
 
-        // 🛑 CONDICIÓN DE PARADA: Si el doctor ya escaneó el QR, rompemos el bucle
-        if (this.whatsappStatus === 'CONECTADO' || this.whatsappStatus === 'DESCONECTADO') {
-          this.detenerPolling();
-        }
-      });
-    }, 3000); // 3 segundos exactos de intervalo
+      this.whatsappStatus = data.whatsappStatus;
+
+      // 🖼️ Sockets actualiza directamente la variable que lee el [src] de tu HTML
+      if (this.whatsappStatus === 'ESPERANDO_QR' && data.whatsappQR) {
+        this.whatsappQR = data.whatsappQR;
+      }
+
+      if (this.whatsappStatus === 'CONECTADO') {
+        this.whatsappQR = '';
+      }
+    });
   }
 
-   iniciarChequeoAutomatico() {
-    // if (this.chequeoInterval) clearInterval(this.chequeoInterval);
-    // const localId = typeof this.user.local === 'string' ? this.user.local : this.user.local?._id;
-
-    // this.chequeoInterval = setInterval(() => {
-    //   this.tiendaService.statusWhatsapp(localId).subscribe((resp: any) => {
-    //     this.whatsappStatus = resp.whatsappStatus;
-        
-    //     // 💥 SI LLEGA EL QR, FORZAMOS EL DIBUJO EN EL CANVAS DEL HTML
-    //     if (this.whatsappStatus === 'ESPERANDO_QR' && resp.whatsappQR) {
-    //       this.whatsappQRString = resp.whatsappQR;
-    //       this.dibujarCodigoQR();
-    //     }
-        
-    //     if (this.whatsappStatus === 'CONECTADO') {
-    //       this.whatsappQRString = '';
-    //       clearInterval(this.chequeoInterval);
-    //       console.log('🎉 ¡Dispositivo enlazado con éxito!');
-    //     }
-    //   });
-    // }, 5000);
-  }
-
-  
-
-   dibujarCodigoQR() {
-    // Le damos un milisegundo de retraso para asegurar que Angular ya renderizó el elemento <canvas> en el DOM
+  dibujarCodigoQR() {
     setTimeout(() => {
       const canvas = document.getElementById('canvas-qr') as HTMLCanvasElement;
       if (canvas && this.whatsappQRString) {
@@ -106,15 +101,11 @@ export class PerfilWhatsappComponent {
     }, 100);
   }
 
-  detenerPolling() {
-    if (this.pollingInterval) {
-      clearInterval(this.pollingInterval);
-      this.pollingInterval = null;
+  ngOnDestroy() {
+    // 🧹 LIMPIEZA DE SEGURIDAD: Apagamos el canal del socket si el médico sale de esta pantalla
+    const socket = this.notificacionService['socket'];
+    if (socket) {
+      socket.off('whatsapp-status-changed');
     }
   }
-
-  ngOnDestroy() {
-    this.detenerPolling(); // Seguridad: Si el médico cambia de pantalla, matamos el bucle
-  }
-
 }

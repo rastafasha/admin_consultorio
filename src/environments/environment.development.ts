@@ -5,6 +5,7 @@ export const environment = {
     url_frontend: 'http://localhost:4300/',
     url_media: 'http://127.0.0.1:8000/storage/',
     backend_node:"http://localhost:3000/api",
+    socket_url:"http://localhost:3000",
     
     //remoto consultorio
     // url_backend: 'https://consultorio.klyntic.com/backend-api-citas/',

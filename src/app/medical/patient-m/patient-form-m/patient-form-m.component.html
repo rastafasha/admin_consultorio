@@ -18,14 +18,16 @@
         <!-- /Page Header -->
         <app-loading *ngIf="isLoading"></app-loading>
         <div class="row" *ngIf="!isLoading">
-            <!-- paciente -->
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm" (click)="modalCrearPaciente.open()" title="Ayuda de la sección">
-                            <i class="fas fa-question"></i>
-                         </button>
-                        <form [formGroup]="patientForm">
+            <form [formGroup]="patientForm">
+                <!-- paciente -->
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm"
+                                (click)="modalCrearPaciente.open()" title="Ayuda de la sección">
+                                <i class="fas fa-question"></i>
+                            </button>
+
                             <div class="row">
                                 <div class="col-12">
                                     <div class="form-heading">
@@ -38,18 +40,19 @@
                                         <input class="form-control" formControlName="n_doc" type="text"
                                             (blur)="verificarPaciente($event)" required>
                                         <!-- Contenedor único de validaciones -->
-                                            <div *ngIf="patientForm.get('n_doc')?.touched || patientForm.get('n_doc')?.dirty" class="text-danger mt-1 small">
-                                                <div *ngIf="patientForm.get('n_doc')?.errors?.['required']">
-                                                    * Campo Requerido
-                                                </div>
-                                                <div *ngIf="patientForm.get('n_doc')?.errors?.['minlength']">
-                                                    * Mínimo 3 Caracteres
-                                                </div>
-                                                <!-- Esta es la línea que debe activarse cuando el backend devuelva true -->
-                                                <small *ngIf="pacienteExiste" class="text-danger mt-1 d-block small">
-                                                    * Este número de documento ya está registrado.
-                                                </small>
+                                        <div *ngIf="patientForm.get('n_doc')?.touched || patientForm.get('n_doc')?.dirty"
+                                            class="text-danger mt-1 small">
+                                            <div *ngIf="patientForm.get('n_doc')?.errors?.['required']">
+                                                * Campo Requerido
                                             </div>
+                                            <div *ngIf="patientForm.get('n_doc')?.errors?.['minlength']">
+                                                * Mínimo 3 Caracteres
+                                            </div>
+                                            <!-- Esta es la línea que debe activarse cuando el backend devuelva true -->
+                                            <small *ngIf="pacienteExiste" class="text-danger mt-1 d-block small">
+                                                * Este número de documento ya está registrado.
+                                            </small>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6 col-md-6 col-xl-4">
@@ -65,7 +68,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                                 <div class="col-12 col-sm-6 col-md-6 col-xl-4">
                                     <div class="form-group local-forms">
@@ -110,9 +113,6 @@
                                             type="date">
                                     </div>
                                 </div>
-                                
-
-                                
                                 <div class="col-12 col-sm-6 col-md-6 col-xl-4">
                                     <div class="form-group select-gender">
                                         <label class="gen-label">Sexo<span class="login-danger">*</span></label>
@@ -130,24 +130,27 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12 col-sm-6 col-md-6 col-xl-4" *ngIf="doctor.speciality.name !== 'Pediatría'">
+                                <div class="col-12 col-sm-6 col-md-6 col-xl-4"
+                                    *ngIf="doctor && doctor.speciality?.name !== 'Pediatría'">
                                     <div class="form-group local-forms">
                                         <label>Profesión</label>
                                         <input class="form-control" formControlName="education" type="text">
                                     </div>
                                 </div>
-                                <div class="col-12 col-sm-6 col-md-6 col-xl-4" *ngIf="doctor.speciality.name === 'Pediatría'">
-                                        <div class="form-group local-forms">
-                                            <label>Peso al nacer</label>
-                                            <input class="form-control" formControlName="peso_al_nacer" type="number">
-                                        </div>
+                                <div class="col-12 col-sm-6 col-md-6 col-xl-4"
+                                    *ngIf="doctor && doctor.speciality?.name === 'Pediatría'">
+                                    <div class="form-group local-forms">
+                                        <label>Peso al nacer</label>
+                                        <input class="form-control" formControlName="peso_al_nacer" type="number">
                                     </div>
-                                    <div class="col-12 col-sm-6 col-md-6 col-xl-4" *ngIf="doctor.speciality.name === 'Pediatría'">
-                                        <div class="form-group local-forms">
-                                            <label>Talla al nacer</label>
-                                            <input class="form-control" formControlName="talla_al_nacer" type="number">
-                                        </div>
+                                </div>
+                                <div class="col-12 col-sm-6 col-md-6 col-xl-4"
+                                    *ngIf="doctor && doctor.speciality?.name === 'Pediatría'">
+                                    <div class="form-group local-forms">
+                                        <label>Talla al nacer</label>
+                                        <input class="form-control" formControlName="talla_al_nacer" type="number">
                                     </div>
+                                </div>
 
                                 <div class="col-12 col-sm-12">
                                     <div class="form-group local-forms">
@@ -169,628 +172,54 @@
                                     <img *ngIf="IMAGE_PREVISUALIZA" [src]="IMAGE_PREVISUALIZA" style="width: 250px;"
                                         alt="">
                                 </div>
-                                <div class="col-12 col-sm-6 col-md-6 col-xl-6">
-                                    <div class="form-group local-forms">
-                                        <label>Motivo de consulta</label>
-                                        <textarea class="form-control" formControlName="current_desease" rows="3"
-                                            cols="30"></textarea>
-                                    </div>
-                                </div>
 
                             </div>
 
-                        </form>
 
+                        </div>
+                    </div>
+
+                </div>
+                <!-- fin paciente -->
+                <!-- acompañante -->
+                <app-acompanantes [patientForm]="patientForm"></app-acompanantes>
+                <!-- motivo Consulta -->
+                 <app-motivo-consulta [patientForm]="patientForm"></app-motivo-consulta>
+
+                <!-- antecedentes -->
+                <app-antecedentes [patientForm]="patientForm"></app-antecedentes>
+                <!-- fin antecedentes -->
+                <app-enfermedad-actual [patientForm]="patientForm"></app-enfermedad-actual>
+                <!-- Historial enfermedad -->
+                <app-historial-enfermedad [patientForm]="patientForm"></app-historial-enfermedad>
+                <!-- signos vitales -->
+                <app-signos-vitales [patientForm]="patientForm"></app-signos-vitales>
+                <!-- fin signos vitales -->
+                <!-- Vacunas -->
+                <app-vacunas #componenteVacunas [patientForm]="patientForm" [doctor]="doctor"></app-vacunas>
+                <!-- Examen fisico -->
+                <app-examen-fisico [patientForm]="patientForm"></app-examen-fisico>
+                <!-- Reporte Laboratorio -->
+                <app-reporte-laboratorio [patientForm]="patientForm"></app-reporte-laboratorio>
+                <!-- Diagnostico -->
+                <app-diagnostico [patientForm]="patientForm"></app-diagnostico>
+                <!-- tratamiento -->
+                <app-tratamiento [patientForm]="patientForm"></app-tratamiento>
+                <!-- Evolucion -->
+                <app-evolucion #componenteEvolucion [patientForm]="patientForm"></app-evolucion>
+
+                <div class="col-12 mt-3">
+                    <div class="doctor-submit text-end">
+                        <button type="button" [disabled]="isLoading || isSaving"
+                            class="btn btn-primary submit-form me-2" (click)="save()">
+                            <span *ngIf="isLoading || isSaving">Guardando...</span>
+                            <span *ngIf="!isLoading && !isSaving">Guardar</span>
+                        </button>
                     </div>
                 </div>
 
-            </div>
-            <!-- fin paciente -->
-             <!-- acompañante -->
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <form [formGroup]="patientForm">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="form-heading">
-                                        <h4>Acompañate y/o Responsable</h4>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-md-6 col-xl-3">
-                                    <div class="form-group local-forms">
-                                        <label>Nombre Acompañante</label>
-                                        <input class="form-control" formControlName="name_companion" type="text">
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-md-6 col-xl-3">
-                                    <div class="form-group local-forms">
-                                        <label>Apellido Acompañante</label>
-                                        <input class="form-control" formControlName="surname_companion" type="text">
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-md-6 col-xl-3">
-                                    <div class="form-group local-forms">
-                                        <label>Teléfono Acompañante</label>
-                                        <input class="form-control" formControlName="mobile_companion" type="text">
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-md-6 col-xl-3">
-                                    <div class="form-group local-forms">
-                                        <label>Relación con el paciente</label>
-                                        <input class="form-control" formControlName="relationship_companion"
-                                            type="text">
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-md-6 col-xl-3">
-                                    <div class="form-group local-forms">
-                                        <label>Nombre del Responsable</label>
-                                        <input class="form-control" formControlName="name_responsable" type="text">
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-md-6 col-xl-3">
-                                    <div class="form-group local-forms">
-                                        <label>Apellido del Responsable</label>
-                                        <input class="form-control" formControlName="surname_responsable" type="text">
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-md-6 col-xl-3">
-                                    <div class="form-group local-forms">
-                                        <label>Teléfono del Responsable</label>
-                                        <input class="form-control" formControlName="mobile_responsable" type="text">
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-md-6 col-xl-3">
-                                    <div class="form-group local-forms">
-                                        <label>Relación con el paciente</label>
-                                        <input class="form-control" formControlName="relationship_responsable"
-                                            type="text">
-                                    </div>
-                                </div>
+            </form>
 
-                            </div>
-
-                        </form>
-
-                    </div>
-                </div>
-
-            </div>
-            <!-- fin acompañante -->
-            <!-- antecedentes -->
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <form [formGroup]="patientForm">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="form-heading">
-                                        <h4>Patient Antecedents</h4>
-                                    </div>
-                                </div>
-
-                                <div class="col-12 col-sm-4">
-                                    <div class="form-group local-forms">
-                                        <label>Antecedente Personal</label>
-                                        <textarea class="form-control" formControlName="antecedent_personal" rows="3"
-                                            cols="30"></textarea>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-4">
-                                    <div class="form-group local-forms">
-                                        <label>Antecedente Familiar</label>
-                                        <textarea class="form-control" formControlName="antecedent_family" rows="3"
-                                            cols="30"></textarea>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-4">
-                                    <div class="form-group local-forms">
-                                        <label>Antecedente Alergico</label>
-                                        <textarea class="form-control" formControlName="antecedent_alerg" rows="3"
-                                            cols="30"></textarea>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </form>
-
-                    </div>
-                </div>
-
-            </div>
-            <!-- fin antecedentes -->
-            
-            <!-- Historial enfermedad -->
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <form [formGroup]="patientForm">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="form-heading">
-                                        <h4>Historia Enfermedad</h4>
-                                    </div>
-                                </div>
-
-                                <div class="col-12 ">
-                                    <div class="form-group local-forms">
-                                        <label>Historia Enfermedad</label>
-                                        <textarea class="form-control" formControlName="historia_enfermedad" rows="3"
-                                            cols="30"></textarea>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div *ngIf="text_validation" class="form-group row">
-                                    <div class="col-md-12">
-                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                            <strong>!</strong> {{text_validation}}.
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                                aria-label="Close">
-                                                <span aria-hidden="true"> </span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div class="col-12">
-                                    <div class="doctor-submit text-end">
-                                        <button type="button" [disabled]="isLoading || isSaving"
-                                            class="btn btn-primary submit-form me-2" (click)="save()">
-                                            <span *ngIf="isLoading || isSaving">Guardando...</span>
-                                            <span *ngIf="!isLoading && !isSaving">Guardar</span>
-                                        </button>
-                                    </div>
-                                </div>
-
-                        </form>
-
-                    </div>
-                </div>
-
-            </div>
-            <!-- Historial enfermedad -->
-            <!-- signos vitales -->
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <form [formGroup]="patientForm">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="form-heading">
-                                        <h4>Signos Vitales</h4>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-md-6 col-xl-3">
-                                    <div class="form-group local-forms">
-                                        <label>Presión Arterial TA (mm/Hg)</label>
-                                        <input class="form-control" formControlName="ta" type="number">
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-md-6 col-xl-3">
-                                    <div class="form-group local-forms">
-                                        <label>Temperatura (ºC)</label>
-                                        <input class="form-control" formControlName="temperature" type="number">
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-md-6 col-xl-3">
-                                    <div class="form-group local-forms">
-                                        <label>Frecuencia Card. (por minuto)</label>
-                                        <input class="form-control" formControlName="fc" type="number">
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-md-6 col-xl-3">
-                                    <div class="form-group local-forms">
-                                        <label>Frecuencia Resp. (por minuto)</label>
-                                        <input class="form-control" formControlName="fr" type="number">
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-md-6 col-xl-3">
-                                    <div class="form-group local-forms">
-                                        <label>Peso (Kg)</label>
-                                        <input class="form-control" formControlName="peso" type="number">
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-md-6 col-xl-3">
-                                    <div class="form-group local-forms">
-                                        <label>Talla</label>
-                                        <input class="form-control" formControlName="talla" type="number">
-                                    </div>
-                                </div>
-                                
-
-                                <div *ngIf="text_validation" class="form-group row">
-                                    <div class="col-md-12">
-                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                            <strong>!</strong> {{text_validation}}.
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                                aria-label="Close">
-                                                <span aria-hidden="true"> </span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div class="col-12">
-                                    <div class="doctor-submit text-end">
-                                        <button type="button" [disabled]="isLoading || isSaving"
-                                            class="btn btn-primary submit-form me-2" (click)="save()">
-                                            <span *ngIf="isLoading || isSaving">Guardando...</span>
-                                            <span *ngIf="!isLoading && !isSaving">Guardar</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </form>
-
-                    </div>
-                </div>
-
-            </div>
-            <!-- fin signos vitales -->
-            <!-- Vacunas -->
-            <div class="col-sm-12" *ngIf="doctor.speciality.name === 'Pediatría'">
-                <div class="card">
-                    <div class="card-body">
-                        <form [formGroup]="patientForm">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="form-heading">
-                                        <h4>Vacunas</h4>
-                                    </div>
-                                </div>
-                                <div class="row align-items-center">
-                                <div class="col-xs-12 ">
-                                    <div class="row">
-
-                                        <div class="col-12 col-sm-12 col-md-6">
-                                            <div class="form-group local-forms">
-                                                <label>Item<span class="login-danger">*</span></label>
-                                                <input class="form-control" name="name_medical"
-                                                    [ngModelOptions]="{standalone: true}" [(ngModel)]="name_medical"
-                                                    type="text" required>
-
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-4 col-md-2">
-                                            <div class="form-group local-forms">
-                                                <label>fecha<span class="login-danger">*</span></label>
-                                                <input class="form-control" name="fecha_vacuna"
-                                                    [ngModelOptions]="{standalone: true}" [(ngModel)]="fecha_vacuna"
-                                                    type="date">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-4 col-md-2">
-                                            <div class="form-group local-forms">
-                                                <label>Cantidad<span class="login-danger">*</span></label>
-                                                <input class="form-control" name="cantidad"
-                                                    [ngModelOptions]="{standalone: true}" [(ngModel)]="cantidad"
-                                                    type="number">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-4 col-md-2">
-                                            <button class="btn btn-primary btn-sm text-end "
-                                                (click)="addVacuna()">+ Agregar</button>
-                                            <!-- <button class="btn btn-danger btn-sm">x</button> -->
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 ">
-                                    <div class="table-responsive">
-                                        <table class="table mb-0 table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th>Descripción</th>
-                                                    <th>Cantidad</th>
-                                                    <th>Fecha</th>
-                                                    <th>Acción</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr *ngFor="let item of mvacunas ; let i=index">
-                                                    <td>
-                                                        {{item.name_medical}}
-
-                                                    </td>
-                                                    <td>
-                                                        {{item.cantidad }}
-
-                                                    </td>
-                                                    <td>
-                                                        {{item.fecha_vacuna|date:'DD/MM/YYYY' }}
-
-                                                    </td>
-                                                    <td>
-                                                        <button class="btn btn-danger btn-sm text-end"
-                                                            (click)="deleteVacuna(i)">x</button>
-                                                    </td>
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-                            </div>
-                                
-
-                                <div *ngIf="text_validation" class="form-group row">
-                                    <div class="col-md-12">
-                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                            <strong>!</strong> {{text_validation}}.
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                                aria-label="Close">
-                                                <span aria-hidden="true"> </span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div class="col-12 mt-3">
-                                    <div class="doctor-submit text-end">
-                                        <button type="button" [disabled]="isLoading || isSaving"
-                                            class="btn btn-primary submit-form me-2" (click)="save()">
-                                            <span *ngIf="isLoading || isSaving">Guardando...</span>
-                                            <span *ngIf="!isLoading && !isSaving">Guardar</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </form>
-
-                    </div>
-                </div>
-
-            </div>
-
-             <!-- Examen fisico -->
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <form [formGroup]="patientForm">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="form-heading">
-                                        <h4>Examen físico</h4>
-                                    </div>
-                                </div>
-
-                                <!-- contenido -->
-
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-             <!-- Reporte Laboratorio -->
-              <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <form [formGroup]="patientForm">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="form-heading">
-                                        <h4>Reporte laboratorio</h4>
-                                    </div>
-                                </div>
-
-                                <!-- contenido -->
-
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-             <!-- Diagnostico -->
-              <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <form [formGroup]="patientForm">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="form-heading">
-                                        <h4>Diagnóstico</h4>
-                                    </div>
-                                </div>
-
-                                <div class="col-12 ">
-                                    <div class="form-group local-forms">
-                                        <label>Diagnóstico</label>
-                                        <textarea class="form-control" formControlName="historia_enfermedad" rows="3"
-                                            cols="30"></textarea>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div *ngIf="text_validation" class="form-group row">
-                                    <div class="col-md-12">
-                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                            <strong>!</strong> {{text_validation}}.
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                                aria-label="Close">
-                                                <span aria-hidden="true"> </span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div class="col-12">
-                                    <div class="doctor-submit text-end">
-                                        <button type="button" [disabled]="isLoading || isSaving"
-                                            class="btn btn-primary submit-form me-2" (click)="save()">
-                                            <span *ngIf="isLoading || isSaving">Guardando...</span>
-                                            <span *ngIf="!isLoading && !isSaving">Guardar</span>
-                                        </button>
-                                    </div>
-                                </div>
-
-                        </form>
-
-                    </div>
-                </div>
-
-            </div>
-             <!-- tratamiento -->
-              <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <form [formGroup]="patientForm">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="form-heading">
-                                        <h4>Tratamiento</h4>
-                                    </div>
-                                </div>
-
-                                <div class="col-12 ">
-                                    <div class="form-group local-forms">
-                                        <label>Tratamiento</label>
-                                        <textarea class="form-control" formControlName="tratamiento" rows="3"
-                                            cols="30"></textarea>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div *ngIf="text_validation" class="form-group row">
-                                    <div class="col-md-12">
-                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                            <strong>!</strong> {{text_validation}}.
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                                aria-label="Close">
-                                                <span aria-hidden="true"> </span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div class="col-12">
-                                    <div class="doctor-submit text-end">
-                                        <button type="button" [disabled]="isLoading || isSaving"
-                                            class="btn btn-primary submit-form me-2" (click)="save()">
-                                            <span *ngIf="isLoading || isSaving">Guardando...</span>
-                                            <span *ngIf="!isLoading && !isSaving">Guardar</span>
-                                        </button>
-                                    </div>
-                                </div>
-
-                        </form>
-
-                    </div>
-                </div>
-
-            </div>
-             <!-- Evolucion -->
-              <div class="col-sm-12" >
-                <div class="card">
-                    <div class="card-body">
-                        <form [formGroup]="patientForm">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="form-heading">
-                                        <h4>Evolución</h4>
-                                    </div>
-                                </div>
-                                <div class="row align-items-center">
-                                <div class="col-xs-12 ">
-                                    <div class="row">
-
-                                        <div class="col-12 col-sm-6 col-md-8">
-                                            <div class="form-group local-forms">
-                                                <label>Item<span class="login-danger">*</span></label>
-                                                <input class="form-control" name="name_evolucion"
-                                                    [ngModelOptions]="{standalone: true}" [(ngModel)]="name_evolucion"
-                                                    type="text" required>
-
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-4 col-md-2">
-                                            <div class="form-group local-forms">
-                                                <label>fecha<span class="login-danger">*</span></label>
-                                                <input class="form-control" name="fecha_evolucion"
-                                                    [ngModelOptions]="{standalone: true}" [(ngModel)]="fecha_evolucion"
-                                                    type="date">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-2 col-md-2">
-                                            <button class="btn btn-primary btn-sm text-end "
-                                                (click)="addEvolucion()">+ Agregar</button>
-                                            <!-- <button class="btn btn-danger btn-sm">x</button> -->
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 ">
-                                    <div class="table-responsive">
-                                        <table class="table mb-0 table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th>Descripción</th>
-                                                    <th>Fecha</th>
-                                                    <th>Acción</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr *ngFor="let item of mevolucion ; let i=index">
-                                                    <td>
-                                                        {{item.name_evolucion}}
-
-                                                    </td>
-                                                    <td>
-                                                        {{item.fecha_evolucion|date:'DD/MM/YYYY'}}
-
-                                                    </td>
-                                                    <td>
-                                                        <button class="btn btn-danger btn-sm text-end"
-                                                            (click)="deleteEvolucion(i)">x</button>
-                                                    </td>
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-                            </div>
-                                
-
-                                <div *ngIf="text_validation" class="form-group row">
-                                    <div class="col-md-12">
-                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                            <strong>!</strong> {{text_validation}}.
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                                aria-label="Close">
-                                                <span aria-hidden="true"> </span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div class="col-12 mt-3">
-                                    <div class="doctor-submit text-end">
-                                        <button type="button" [disabled]="isLoading || isSaving"
-                                            class="btn btn-primary submit-form me-2" (click)="save()">
-                                            <span *ngIf="isLoading || isSaving">Guardando...</span>
-                                            <span *ngIf="!isLoading && !isSaving">Guardar</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </form>
-
-                    </div>
-                </div>
-
-            </div>
         </div>
     </div>
 </div>

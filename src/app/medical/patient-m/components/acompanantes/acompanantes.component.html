@@ -1,0 +1,71 @@
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-body">
+            <!-- Removimos las tarjetas duplicadas y el formulario aislado -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-heading">
+                        <h4>Acompañante y/o Responsable</h4>
+                    </div>
+                </div>
+
+                <!-- 👥 SECCIÓN: ACOMPAÑANTE -->
+                <div [formGroup]="patientForm">
+                    <div class="row">
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+                        <div class="form-group local-forms">
+                            <label>Nombre Acompañante</label>
+                            <input class="form-control" formControlName="name_companion" type="text">
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+                        <div class="form-group local-forms">
+                            <label>Apellido Acompañante</label>
+                            <input class="form-control" formControlName="surname_companion" type="text">
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+                        <div class="form-group local-forms">
+                            <label>Teléfono Acompañante</label>
+                            <input class="form-control" formControlName="mobile_companion" type="text">
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+                        <div class="form-group local-forms">
+                            <label>Relación con el paciente</label>
+                            <input class="form-control" formControlName="relationship_companion" type="text">
+                        </div>
+                    </div>
+
+                    <!-- 🛡️ SECCIÓN: RESPONSABLE -->
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+                        <div class="form-group local-forms">
+                            <label>Nombre del Responsable</label>
+                            <input class="form-control" formControlName="name_responsable" type="text">
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+                        <div class="form-group local-forms">
+                            <label>Apellido del Responsable</label>
+                            <input class="form-control" formControlName="surname_responsable" type="text">
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+                        <div class="form-group local-forms">
+                            <label>Teléfono del Responsable</label>
+                            <input class="form-control" formControlName="mobile_responsable" type="text">
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+                        <div class="form-group local-forms">
+                            <label>Relación con el paciente</label>
+                            <input class="form-control" formControlName="relationship_responsable" type="text">
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <!-- ❌ El botón de guardar se eliminó de aquí; ahora reside al final del componente Padre -->
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,42 @@
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-heading">
+                        <h4>Antecedentes</h4>
+                    </div>
+                </div>
+                <div [formGroup]="patientForm">
+                    <div class="row">
+                        <div class="col-12 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label>Antecedente Personal</label>
+                                <textarea class="form-control" formControlName="antecedent_personal" rows="3"
+                                    cols="30"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label>Antecedente Familiar</label>
+                                <textarea class="form-control" formControlName="antecedent_family" rows="3"
+                                    cols="30"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label>Antecedente Alergico</label>
+                                <textarea class="form-control" formControlName="antecedent_alerg" rows="3"
+                                    cols="30"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>

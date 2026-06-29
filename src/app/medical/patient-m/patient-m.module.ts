@@ -13,16 +13,19 @@ import { PatientFormMComponent } from './patient-form-m/patient-form-m.component
 import { ModalInstruccionesModule } from '../../modales/modal-instrucciones.module';
 import { ReusablesModule } from '../../reusables/reusables.module';
 import { SharedModule } from '../../shared/shared.module';
+import { PatientComponentsModule } from './components/patient-components.module';
 
 
 @NgModule({
-    declarations: [PatientMComponent, PatientFormMComponent, ListPatientMComponent, ProfilePatientMComponent, PatientDoctorListComponent],
+    declarations: [
+        PatientMComponent, PatientFormMComponent, ListPatientMComponent, ProfilePatientMComponent, PatientDoctorListComponent],
     exports: [PatientMComponent, PatientFormMComponent, ListPatientMComponent, ProfilePatientMComponent, PatientDoctorListComponent], imports: [CommonModule,
         PatientMRoutingModule,
         FormsModule,
         ReactiveFormsModule,
         RouterModule,
         SharedModule,
+        PatientComponentsModule,
         ReusablesModule,
         ModalInstruccionesModule], providers: [provideHttpClient(withInterceptorsFromDi())]
 })

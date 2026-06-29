@@ -1,0 +1,66 @@
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-heading">
+                        <h4>Signos Vitales</h4>
+                    </div>
+                </div>
+                <div [formGroup]="patientForm">
+                    <div class="row">
+                        <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+                            <div class="form-group local-forms">
+                                <label>Presión Arterial TA (mm/Hg)</label>
+                                <input class="form-control" formControlName="ta" type="number">
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+                            <div class="form-group local-forms">
+                                <label>Temperatura (ºC)</label>
+                                <input class="form-control" formControlName="temperature" type="number">
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+                            <div class="form-group local-forms">
+                                <label>Frecuencia Card. (por minuto)</label>
+                                <input class="form-control" formControlName="fc" type="number">
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+                            <div class="form-group local-forms">
+                                <label>Frecuencia Resp. (por minuto)</label>
+                                <input class="form-control" formControlName="fr" type="number">
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+                            <div class="form-group local-forms">
+                                <label>Peso (Kg)</label>
+                                <input class="form-control" formControlName="peso" type="number">
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+                            <div class="form-group local-forms">
+                                <label>Talla</label>
+                                <input class="form-control" formControlName="talla" type="number">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div *ngIf="text_validation" class="form-group row">
+                        <div class="col-md-12">
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>!</strong> {{text_validation}}.
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true"> </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

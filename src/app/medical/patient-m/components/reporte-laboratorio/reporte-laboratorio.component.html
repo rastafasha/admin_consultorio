@@ -1,0 +1,221 @@
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-heading">
+                        <h4>Reporte laboratorio</h4>
+                    </div>
+                </div>
+                <div [formGroup]="patientForm">
+
+                    <!-- contenido -->
+                    <div class="col-xs-12 col-sm-6">
+                        campo texto
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="row align-items-center">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="col-xl-12">
+                                        <label class="form-label">Suibir Archivos: *</label>
+                                    </div>
+                                    <div class="col-5">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="customFile" multiple="true"
+                                                (change)="processFile($event)">
+                                            <label class="custom-file-label" for="customFile">Seleccione
+                                                archivo(s)</label>
+                                        </div>
+                                    </div>
+                                    <div class="row align-items-center">
+                                        <div class="card card-flush">
+                                            <!--begin::Header-->
+                                            <div class="card-header pt-7">
+                                                <!--begin::Title-->
+                                                <h3 class="card-title align-items-start flex-column">
+                                                    <span class="card-label fw-bolder text-dark">Lista de
+                                                        Archivos</span>
+                                                </h3>
+                                                <div class="card-toolbar">
+                                                </div>
+                                            </div>
+                                            <!--end::Header-->
+                                            <!--begin::Body-->
+                                            <div class="card-body">
+                                                <!--begin::Scroll-->
+                                                <div class="hover-scroll-overlay-y pe-6 me-n6">
+                                                    <ng-container *ngFor="let FILE of FILES">
+                                                        <!--begin::Item-->
+                                                        <div
+                                                            class="rounded border-gray-300 border-1 border-gray-300 border-dashed px-7 py-3 mb-6">
+                                                            <!--begin::Info-->
+                                                            <div class="d-flex flex-stack mb-3">
+                                                                <!--begin::Wrapper-->
+                                                                <div class="me-3">
+                                                                    <!--begin::Icon-->
+
+                                                                    <img src="assets/svg/doc.svg"
+                                                                        class="w-50px ms-n1 me-1" alt="">
+                                                                    <!--end::Icon-->
+                                                                    <!--begin::Title-->
+                                                                    <a href="#" onclick="return false;"
+                                                                        class="text-gray-800 text-hover-primary fw-bolder">{{FILE.name}}</a>
+                                                                    <!--end::Title-->
+                                                                </div>
+                                                                <!--end::Wrapper-->
+                                                            </div>
+                                                            <!--end::Info-->
+                                                            <!--begin::Customer-->
+                                                            <div class="d-flex flex-stack">
+                                                                <!--begin::Name-->
+                                                                <span class="text-gray-400 fw-bolder">Size:
+                                                                    <a href="#" onclick="return false;"
+                                                                        class="text-gray-800 text-hover-primary fw-bolder">{{FILE.size}}
+                                                                        Kb.</a></span>
+                                                                <!--end::Name-->
+                                                                <!--begin::Label-->
+                                                                <span class="badge badge-light-success">Activo</span>
+                                                                <button class="btn btn-danger btn-sm"
+                                                                    (click)="deleteDocument(i)">x</button>
+                                                                <!--end::Label-->
+                                                            </div>
+                                                            <!--end::Customer-->
+                                                        </div>
+                                                        <!--end::Item-->
+                                                    </ng-container>
+
+
+                                                </div>
+                                                <!--end::Scroll-->
+                                            </div>
+                                            <!--end::Body-->
+                                        </div>
+                                        <!-- validaciones -->
+                                        <div class="form-group row" *ngIf="text_success">
+                                            <div class="col-12">
+                                                <div class="alert alert-success alert-dismissible fade show"
+                                                    role="alert">
+                                                    <strong>Exito!</strong>{{text_success}}.
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true"> </span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row" *ngIf="text_validation">
+                                            <div class="col-12">
+                                                <div class="alert alert-warning alert-dismissible fade show"
+                                                    role="alert">
+                                                    <strong>!</strong> {{ text_validation }}.
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true"> </span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- validaciones -->
+                                        <div class="col-12">
+                                            <div class="doctor-submit text-end">
+                                                <button type="button" class="btn btn-primary submit-form me-2"
+                                                    (click)="save()">Actualizar</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="card card-flush">
+                                        <!--begin::Header-->
+                                        <div class="card-header pt-7">
+                                            <!--begin::Title-->
+                                            <h3 class="card-title align-items-start flex-column">
+                                                <span class="card-label fw-bolder text-dark">Lista de
+                                                    Archivos
+                                                    Agregados</span>
+                                            </h3>
+                                            <div class="card-toolbar">
+                                            </div>
+                                        </div>
+                                        <!--end::Header-->
+                                        <!--begin::Body-->
+                                        <div class="card-body">
+                                            <!--begin::Scroll-->
+                                            <div class="hover-scroll-overlay-y pe-6 me-n6">
+                                                <div class="col-xs-6">
+                                                    <ng-container *ngFor="let FILE of FilesAdded">
+                                                        <div class="filesAdded">
+                                                            <!--begin::Wrapper-->
+                                                            <div class="files">
+                                                                <a href="javascript:void(0);" (click)="selectDoc(FILE)"
+                                                                    data-bs-toggle="modal"
+                                                                    [attr.data-bs-target]="'#view-doc-'+FILE.id">
+                                                                    <img src="assets/svg/doc.svg"
+                                                                        class="w-50px ms-n1 me-1 filesvg" alt="">
+                                                                </a>
+                                                                <div class="infofile">
+                                                                    <a href="javascript:void(0);"
+                                                                        (click)="selectDoc(FILE)" data-bs-toggle="modal"
+                                                                        [attr.data-bs-target]="'#view-doc-'+FILE.id">
+                                                                        {{FILE.name_file}}</a>
+                                                                    <br>
+                                                                    <span class="text-gray-400 fw-bolder sizeee">Size:
+                                                                        <a href="#" onclick="return false;"
+                                                                            class="text-gray-800 text-hover-primary fw-bolder">{{FILE.size}}
+                                                                            Kb.</a></span>
+                                                                </div>
+                                                                <button class="btn btn-danger btn-sm"
+                                                                    (click)="deleteFile(FILE)">x</button>
+                                                            </div>
+                                                            <!--end::Wrapper-->
+                                                        </div>
+                                                        <!--end::Info-->
+                                                        <!-- modal -->
+
+
+
+                                                        <div [attr.id]="'view-doc-'+FILE.id"
+                                                            class="modal fade add-modal" role="dialog">
+                                                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="exampleModalLabel">
+                                                                            {{FILE.name_file}}</h5>
+                                                                        <a href="javascript:void(0);"
+                                                                            (click)="closeReload()"
+                                                                            class="btn btn-white me-1"
+                                                                            data-bs-dismiss="modal">Close</a>
+                                                                    </div>
+                                                                    <div class="modal-body text-center">
+                                                                        <embed [src]="getDocumentIframe(FILE.file)"
+                                                                            class="pdf-content" />
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- modal -->
+                                                    </ng-container>
+                                                </div>
+
+
+                                            </div>
+                                            <!--end::Scroll-->
+                                        </div>
+                                        <!--end::Body-->
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PatientMService } from '../../../services/patient-m.service';
@@ -7,6 +7,8 @@ import { catchError, throwError } from 'rxjs';
 import Swal from 'sweetalert2';
 import { routes } from '../../../shared/routes/routes';
 import { StaffService } from '../../../services/staff.service';
+import { EvolucionComponent } from '../components/evolucion/evolucion.component';
+import { VacunasComponent } from '../components/vacunas/vacunas.component';
 
 @Component({
   selector: 'app-patient-form-m',
@@ -15,6 +17,12 @@ import { StaffService } from '../../../services/staff.service';
   standalone: false
 })
 export class PatientFormMComponent implements OnInit {
+
+  // 🔌 Conectamos los cables hacia el interior de los componentes hijos
+  @ViewChild('componenteVacunas') vacunasHijo!: VacunasComponent;
+  @ViewChild('componenteEvolucion') evolucionHijo!: EvolucionComponent;
+
+  
   public routes = routes;
   public patientForm: FormGroup;
   public isEditMode = false;
@@ -30,18 +38,10 @@ export class PatientFormMComponent implements OnInit {
   public patient_selected: any;
   public isLoading = false;
   public isSaving = false;
+  doctor: string;
 
   public mvacunas: any = []; // Ensure medical is initialized as an array
-    description:any;
-    name_medical:any;
-    cantidad:number;
-    fecha_vacuna:Date;
-    doctor:string;
-    
-    public mevolucion: any = []; // Ensure medical is initialized as an array
-    name_evolucion:any;
-    fecha_evolucion:Date;
-    
+  public mevolucion: any = []; // Ensure medical is initialized as an array
 
   info_form_paciente = `
   <p>En esta sección :</p>
@@ -74,11 +74,11 @@ export class PatientFormMComponent implements OnInit {
     this.getUserRemoto()
 
     this.patientId = this.activatedRoute.snapshot.paramMap.get('id');
-    console.log('DEBUG patient-form ngOnInit: route patientId =', this.patientId);
-    console.log('DEBUG patient-form ngOnInit: isEditMode before =', this.isEditMode);
+    // console.log('DEBUG patient-form ngOnInit: route patientId =', this.patientId);
+    // console.log('DEBUG patient-form ngOnInit: isEditMode before =', this.isEditMode);
     if (this.patientId) {
       this.isEditMode = true;
-      console.log('DEBUG patient-form ngOnInit: entering edit mode, id=', this.patientId);
+      // console.log('DEBUG patient-form ngOnInit: entering edit mode, id=', this.patientId);
       this.loadPatient();
     } else {
       console.log('DEBUG patient-form ngOnInit: create mode');
@@ -133,57 +133,7 @@ export class PatientFormMComponent implements OnInit {
     });
   }
 
-   addEvolucion() {
-      if (this.name_evolucion && this.fecha_evolucion) {
-        this.mevolucion.push({
-          name_evolucion: this.name_evolucion,
-          fecha_evolucion: this.fecha_evolucion,
-        });
-        this.name_evolucion = '';
-        this.fecha_evolucion = null;
-        
-      }
-     
-    }
 
-    deleteEvolucion(i:any){
-      this.mevolucion.splice(i,1);
-      this.name_evolucion = '';
-      this.fecha_evolucion = null;
-      
-
-      if(this.mevolucion.length === 0){
-        this.name_evolucion = '';
-        this.fecha_evolucion = null;
-      }
-    }
-
-   addVacuna() {
-      if (this.name_medical && this.cantidad > 0 && this.fecha_vacuna) {
-        this.mvacunas.push({
-          name_medical: this.name_medical,
-          fecha_vacuna: this.fecha_vacuna,
-          cantidad: this.cantidad+'',
-        });
-        this.name_medical = '';
-        this.fecha_vacuna = null;
-        this.cantidad = 0;
-        
-      }
-     
-    }
-
-    deleteVacuna(i:any){
-      this.mvacunas.splice(i,1);
-      this.name_medical = '';
-      this.cantidad = 0;
-      
-
-      if(this.mvacunas.length === 0){
-        this.name_medical = '';
-        this.cantidad = 0;
-      }
-    }
 
   verificarPaciente(event: any): void {
     const documento = event.target.value?.trim();
@@ -243,7 +193,7 @@ export class PatientFormMComponent implements OnInit {
     this.isLoading = true;
     this.patientService.getPatient(+this.patientId!).pipe(
       catchError(err => {
-        console.error('DEBUG patient-form loadPatient ERROR:', err);
+        // console.error('DEBUG patient-form loadPatient ERROR:', err);
         this.text_validation = 'Error loading patient: ' + (err.error?.message || err.message);
         this.isEditMode = false; // Fallback to create if load fails
         this.isLoading = false;
@@ -269,9 +219,30 @@ export class PatientFormMComponent implements OnInit {
         ta: this.patient_selected.ta || 0,
         fc: this.patient_selected.fc || 0,
         fr: this.patient_selected.fr || 0,
+        temperature: this.patient_selected.temperature || 0,
         peso: this.patient_selected.peso || 0,
-        temperature: this.patient_selected.temperature || 0
+        talla: this.patient_selected.talla || 0,
+        talla_al_nacer: this.patient_selected.talla_al_nacer || 0,
+        peso_al_nacer: this.patient_selected.peso_al_nacer || 0,
+        tratamiento: this.patient_selected.tratamiento || '',
+        historia_enfermedad: this.patient_selected.historia_enfermedad ||'',
+        examen_fisico: this.patient_selected.examen_fisico || '',
+        enfermedad_actual: this.patient_selected.enfermedad_actual || '',
+        // Sincronizamos las llaves del formulario reactivo con los datos del backend
+        vacunas: this.patient_selected.vacunas || [],
+        evolucion: this.patient_selected.evolucion || []
       });
+      // 2. 💥 LA MAGIA: Le llenamos el array local a los hijos y forzamos el redibujado de sus tablas
+    // Usamos setTimeout para darle un milisegundo a Angular de procesar el renderizado
+    setTimeout(() => {
+      if (this.vacunasHijo && this.patient_selected.vacunas) {
+        this.vacunasHijo.mvacunas = [...this.patient_selected.vacunas];
+      }
+      
+      if (this.evolucionHijo && this.patient_selected.evolucion) {
+        this.evolucionHijo.mevolucion = [...this.patient_selected.evolucion];
+      }
+    }, 50);
       // Companions from person
       this.patientForm.patchValue({
         name_companion: this.patient_selected.person?.name_companion || '',
@@ -309,9 +280,9 @@ export class PatientFormMComponent implements OnInit {
       return
     }
 
-    console.log('DEBUG patient-form save(): isEditMode=', this.isEditMode, 'patientId=', this.patientId);
+    // console.log('DEBUG patient-form save(): isEditMode=', this.isEditMode, 'patientId=', this.patientId);
     if (this.isSaving || this.isLoading) {
-      console.log('DEBUG save(): already saving/loading, ignore');
+      // console.log('DEBUG save(): already saving/loading, ignore');
       return;
     }
     this.isSaving = true;
@@ -339,11 +310,29 @@ export class PatientFormMComponent implements OnInit {
     formData.append('tratamiento', formValue.tratamiento);
     formData.append('examen_fisico', formValue.examen_fisico);
     formData.append('reporte_laboratorio', formValue.reporte_laboratorio);
-    formData.append('evolucion', formValue.evolucion);
-    formData.append('vacunas', formValue.vacunas);
     formData.append('peso_al_nacer', formValue.peso_al_nacer);
     formData.append('talla_al_nacer', formValue.talla_al_nacer);
     formData.append('doctor_id', this.doctor_id.toString());
+    // (Usamos un fallback de arreglo vacío [] por si el componente no se renderizó)
+    const listaVacunas = this.patientForm.get('vacunas')?.value || [];
+    const listaEvoluciones = this.patientForm.get('evolucion')?.value || [];
+
+    // 2. 🛡️ SERIALIZACIÓN CRÍTICA: Convertimos los arrays a texto estructurado JSON
+    formData.append('vacunas', JSON.stringify(listaVacunas));
+    formData.append('evolucion', JSON.stringify(listaEvoluciones));
+
+    // 3. Adjuntar el resto de campos normales de tu formulario
+    // Recorremos todos los controles del formulario para meterlos al FormData de un solo golpe
+    Object.keys(this.patientForm.controls).forEach(key => {
+      // Evitamos duplicar vacunas y evoluciones en texto plano
+      if (key !== 'vacunas' && key !== 'evolucion') {
+        const value = this.patientForm.get(key)?.value;
+        if (value !== null && value !== undefined) {
+          formData.append(key, value);
+        }
+      }
+    });
+
 
     // Optional vitals
     ['ta', 'fc', 'fr', 'peso', 'temperature'].forEach(field => {
@@ -401,4 +390,7 @@ export class PatientFormMComponent implements OnInit {
   public get title(): string {
     return this.isEditMode ? `Editar Paciente #${this.patientId}` : 'Agregar Paciente';
   }
+
+
+
 }

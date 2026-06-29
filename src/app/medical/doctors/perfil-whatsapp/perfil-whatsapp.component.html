@@ -37,15 +37,20 @@
               <div *ngIf="whatsappStatus === 'ESPERANDO_QR'">
                 <p class="text-warning">⏳ Cargando código QR de WhatsApp Web...</p>
 
-                <!-- Imagen dinámica que lee el Base64 generado por Node -->
-                <div *ngIf="whatsappQR" class="my-3">
-                  <img [src]="whatsappQR" alt="Escanear QR Médico"
-                    style="max-width: 250px; border: 1px solid #ccc; p: 10px;">
-                  <p class="text-muted small mt-2">Abre WhatsApp en tu teléfono, ve a Dispositivos Vinculados y escanea
-                    el código.</p>
+                <!-- Reemplazamos la etiqueta <img> por el Canvas que busca tu función dibujarCodigoQR() -->
+                <div class="my-3 d-flex justify-content-center">
+                  <canvas id="canvas-qr" style="border: 1px solid #ccc; padding: 10px; background: white;"></canvas>
                 </div>
 
-                <div *ngIf="!whatsappQR" class="spinner-border text-primary" role="status"></div>
+                <p class="text-muted small mt-2">Abre WhatsApp en tu teléfono, ve a Dispositivos Vinculados y escanea el
+                  código.</p>
+              </div>
+
+              <!-- 🔵 ESTADO INTERMEDIO: CARGANDO (Colócalo justo arriba o abajo de ESPERANDO_QR) -->
+              <div *ngIf="whatsappStatus === 'CARGANDO'">
+                <div class="spinner-border text-primary my-3" role="status"></div>
+                <p class="text-info">Iniciando el extractor médico en segundo plano... Por favor, espera unos segundos.
+                </p>
               </div>
 
               <!-- 🟢 ESTADO: CONECTADO -->
@@ -55,9 +60,6 @@
                   forma automática.</p>
               </div>
             </div>
-
-
-
           </div>
         </div>
       </div>

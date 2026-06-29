@@ -4,6 +4,7 @@ import { PatientMService } from '../../../services/patient-m.service';
 import { DoctorService } from '../../../services/doctor.service';
 import { environment } from '../../../../environments/environment';
 import { routes } from '../../../shared/routes/routes';
+import { StaffService } from '../../../services/staff.service';
 @Component({
     selector: 'app-profile-patient-m',
     templateUrl: './profile-patient-m.component.html',
@@ -26,7 +27,9 @@ export class ProfilePatientMComponent {
   public patient_selected: any;
   public appointment_pendings: any = [];
   public appointments: any = [];
-
+  public vacunas: any = [];
+  public evolucion: any = [];
+  doctor:string;
 
   public text_success = '';
   public text_validation = '';
@@ -35,6 +38,7 @@ export class ProfilePatientMComponent {
     public patientService: PatientMService,
     public activatedRoute: ActivatedRoute,
     public doctorService: DoctorService,
+    private staffService: StaffService,
   ) {
   }
   ngOnInit(): void {
@@ -48,7 +52,16 @@ export class ProfilePatientMComponent {
     this.user = JSON.parse(USER ? USER : '');
     this.roles = this.user.roles[0];
     this.getPatient();
+    this.getUserRemoto();
   }
+
+  getUserRemoto(): void {
+    if (!this.user?.id) return;
+    this.staffService.getUser(this.user.id).subscribe((resp: any) => {
+      this.doctor = resp.user;
+    });
+  }
+
   isPermission(permission: string) {
     if (this.user.roles.includes('SUPERADMIN')) {
       return true;
@@ -68,6 +81,8 @@ export class ProfilePatientMComponent {
       this.num_appointment_pendings = resp.num_appointment_pendings;
       this.patient_selected = resp.patient;
       this.appointment_pendings = resp.appointment_pendings.data;
+      this.vacunas = resp.patient.vacunas;
+      this.evolucion = resp.patient.evolucion;
       this.isLoading = false;
 
     })

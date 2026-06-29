@@ -195,7 +195,7 @@
                                                 <p>{{patient_selected.peso}}</p>
                                             </div>
                                             <div class="progress mb-0">
-                                                <div class="progress-bar bg-visit" role="progressbar"
+                                                <div class="progress-bar bg-weight" role="progressbar"
                                                     [style.width]="patient_selected.peso+''+'%'"
                                                     [attr.aria-valuenow]="patient_selected.peso" aria-valuemin="0"
                                                     aria-valuemax="100"></div>
@@ -207,9 +207,9 @@
                                                 <p>{{patient_selected.talla}}</p>
                                             </div>
                                             <div class="progress mb-0">
-                                                <div class="progress-bar bg-visit" role="progressbar"
-                                                    [style.width]="patient_selected.peso+''+'%'"
-                                                    [attr.aria-valuenow]="patient_selected.peso" aria-valuemin="0"
+                                                <div class="progress-bar bg-size" role="progressbar"
+                                                    [style.width]="patient_selected.talla+''+'%'"
+                                                    [attr.aria-valuenow]="patient_selected.talla" aria-valuemin="0"
                                                     aria-valuemax="100"></div>
                                             </div>
                                         </div>
@@ -491,7 +491,7 @@
                                 <div class="card-header">
                                     <h4 class="card-title ">Enfermedad Actual</h4>
                                 </div>
-                                <div class="card-body p-0 ">
+                                <div class="card-body  ">
                                     <p>{{patient_selected.enfermedad_actual}}</p>
                                 </div>
                             </div>
@@ -500,71 +500,13 @@
                                 <div class="card-header">
                                     <h4 class="card-title ">Historia Enfermedad</h4>
                                 </div>
-                                <div class="card-body p-0 ">
+                                <div class="card-body  ">
                                     <p>{{patient_selected.historia_enfermedad}}</p>
                                 </div>
                             </div>
-                            <!-- Examen Físico -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title ">Examen Físico</h4>
-                                </div>
-                                <div class="card-body p-0 ">
-                                    <p>{{patient_selected.examen_fisico}}</p>
-                                </div>
-                            </div>
-
-                            <!-- Diagnóstico -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title ">Diagnóstico</h4>
-                                </div>
-                                <div class="card-body p-0 ">
-                                    <p>{{patient_selected.examen_fisico}}</p>
-                                </div>
-                            </div>
-                            <!-- Tratamiento -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title ">Tratamiento</h4>
-                                </div>
-                                <div class="card-body p-0 ">
-                                    <p>{{patient_selected.examen_fisico}}</p>
-                                </div>
-                            </div>
+                            
                             <!-- Vacunas -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title ">Evolucion</h4>
-                                </div>
-                                <div class="card-body p-0 table-dash">
-                                    <div class="table-responsive scrooldiv2">
-                                        <table class="table mb-0 table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th>Descripción</th>
-                                                    <th>Fecha</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr *ngFor="let item of evolucion ; let i=index">
-                                                    <td>
-                                                        {{item.name_evolucion}}
-
-                                                    </td>
-                                                    <td>
-                                                        {{item.fecha_evolucion }}
-
-                                                    </td>
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Vacunas -->
-                            <div class="card">
+                            <div class="card" *ngIf="doctor && doctor.speciality.name === 'Pediatría'">
                                 <div class="card-header">
                                     <h4 class="card-title ">Vacunas</h4>
                                 </div>
@@ -589,7 +531,7 @@
 
                                                     </td>
                                                     <td>
-                                                        {{item.fecha_vacuna|date:'DD/MM/YYYY' }}
+                                                        {{item.fecha_vacuna|date:'dd/MM/yyyy' }}
 
                                                     </td>
                                                 </tr>
@@ -599,6 +541,16 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- Examen Físico -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title ">Examen Físico</h4>
+                                </div>
+                                <div class="card-body  ">
+                                    <p>{{patient_selected.examen_fisico}}</p>
+                                </div>
+                            </div>
+                            
                             <!-- Reporte Laboratorio -->
                             <div class="card">
                                 <div class="card-header">
@@ -661,6 +613,56 @@
                                                         </div>
                                                     </td>
                                                 </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Diagnóstico -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title ">Diagnóstico</h4>
+                                </div>
+                                <div class="card-body  ">
+                                    <p>{{patient_selected.examen_fisico}}</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Tratamiento -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title ">Tratamiento</h4>
+                                </div>
+                                <div class="card-body  ">
+                                    <p>{{patient_selected.examen_fisico}}</p>
+                                </div>
+                            </div>
+                            <!-- evolucion -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title ">Evolucion</h4>
+                                </div>
+                                <div class="card-body p-0 table-dash">
+                                    <div class="table-responsive scrooldiv2">
+                                        <table class="table mb-0 table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Descripción</th>
+                                                    <th>Fecha</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let item of evolucion ; let i=index">
+                                                    <td>
+                                                        {{item.name_evolucion}}
+
+                                                    </td>
+                                                    <td>
+                                                        {{item.fecha_evolucion | date:'dd/MM/yyyy'}}
+
+                                                    </td>
+                                                </tr>
+
                                             </tbody>
                                         </table>
                                     </div>

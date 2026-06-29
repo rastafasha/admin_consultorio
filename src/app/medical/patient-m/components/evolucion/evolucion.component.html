@@ -1,0 +1,66 @@
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-heading">
+                        <h4>Evolución Paciente</h4>
+                    </div>
+                </div>
+                <div class="row align-items-center">
+                    <div class="col-xs-12">
+                        <div class="row">
+                            <div class="col-12 col-sm-6 col-md-8">
+                                <div class="form-group local-forms">
+                                    <label>Item / Descripción de la Evolución<span class="login-danger">*</span></label>
+                                    <input class="form-control" name="name_evolucion" [(ngModel)]="name_evolucion"
+                                        type="text">
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4 col-md-2">
+                                <div class="form-group local-forms">
+                                    <label>Fecha<span class="login-danger">*</span></label>
+                                    <input class="form-control" name="fecha_evolucion" [(ngModel)]="fecha_evolucion"
+                                        type="date">
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-2 col-md-2">
+                                <button type="button" class="btn btn-primary btn-sm w-100" (click)="addEvolucion()">+
+                                    Agregar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TABLA DE LISTADO EN TIEMPO REAL -->
+                    <div class="col-xs-12 mt-3">
+                        <div class="table-responsive">
+                            <table class="table mb-0 table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Descripción</th>
+                                        <th>Fecha</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of mevolucion; let i = index">
+                                        <td>{{ item.name_evolucion }}</td>
+                                        <td>{{ item.fecha_evolucion | date:'dd/MM/yyyy' }}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm"
+                                                (click)="deleteEvolucion(i)">x</button>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="mevolucion.length === 0">
+                                        <td colspan="3" class="text-center text-muted small">No hay evoluciones
+                                            registradas aún.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

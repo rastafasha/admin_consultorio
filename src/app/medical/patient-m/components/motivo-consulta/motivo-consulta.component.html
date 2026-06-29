@@ -1,0 +1,28 @@
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-body">
+            <div [formGroup]="patientForm">
+                <div class="row">
+                    <div class="col-12 ">
+                        <div class="form-group local-forms">
+                            <label>Motivo consulta</label>
+                            <textarea class="form-control" formControlName="current_desease" rows="3"
+                                cols="30"></textarea>
+                        </div>
+                    </div>
+
+                </div>
+                <div *ngIf="text_validation" class="form-group row">
+                    <div class="col-md-12">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>!</strong> {{text_validation}}.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true"> </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment';
 import { io, Socket } from 'socket.io-client';
 
 const BackendApi = environment.backend_node;
+const SocketUrl = environment.socket_url; 
 
 export interface Notificacion {
   _id: string;
@@ -58,20 +59,22 @@ export class NotificacionService {
    */
   inicializarEcosistemaAlertas() {
     const token = localStorage.getItem('token') || '';
-    if (!token) return; // Si no hay token (pantalla de login), salimos pacíficamente
+    if (!token) return; 
 
-    // Si ya existe una conexión previa activa, la desconectamos para evitar duplicados
     if (this.socket) {
       this.socket.disconnect();
     }
-    this.socket = io(BackendApi, {
+
+    // 🔌 Conectamos a la URL raíz de producción y forzamos los transportes correctos
+    this.socket = io(SocketUrl, {
       autoConnect: true,
+      transports: ['websocket', 'polling'], // 👈 Indispensable para que Render no tire error
       extraHeaders: { 'x-token': token }
     });
+
     this.socket.on('connect', () => {
       console.log(`⚡ Sockets centralizados de Klyntic listos para el rol: ${this.currentRole}`);
 
-      // Metemos al usuario logueado en su sala privada de forma automática
       const userString = localStorage.getItem('user');
       const userObj = userString ? JSON.parse(userString) : null;
       if (userObj && userObj.id) {
