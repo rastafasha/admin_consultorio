@@ -1,0 +1,16 @@
+.lista{
+    display: flex;
+    flex-direction: row;
+    float: left;
+    margin: 3px;
+    box-sizing: content-box;
+    
+    & .archivo{
+        border-radius: 8px;
+        border: 1px dashed #ccc;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+    }
+
+}

@@ -9,6 +9,7 @@ import { routes } from '../../../shared/routes/routes';
 import { StaffService } from '../../../services/staff.service';
 import { EvolucionComponent } from '../components/evolucion/evolucion.component';
 import { VacunasComponent } from '../components/vacunas/vacunas.component';
+import { ReporteLaboratorioComponent } from '../components/reporte-laboratorio/reporte-laboratorio.component';
 
 @Component({
   selector: 'app-patient-form-m',
@@ -21,6 +22,7 @@ export class PatientFormMComponent implements OnInit {
   // 🔌 Conectamos los cables hacia el interior de los componentes hijos
   @ViewChild('componenteVacunas') vacunasHijo!: VacunasComponent;
   @ViewChild('componenteEvolucion') evolucionHijo!: EvolucionComponent;
+  @ViewChild('reporteLaboratory') reporteHijo!: ReporteLaboratorioComponent;
 
   
   public routes = routes;
@@ -200,7 +202,7 @@ export class PatientFormMComponent implements OnInit {
         return throwError(() => err);
       })
     ).subscribe((resp: any) => {
-      console.log('DEBUG patient-form loadPatient SUCCESS:', resp);
+      // console.log('DEBUG patient-form loadPatient SUCCESS:', resp);
       this.patient_selected = resp.patient;
       this.patientForm.patchValue({
         name: this.patient_selected.name,
@@ -209,7 +211,7 @@ export class PatientFormMComponent implements OnInit {
         email: this.patient_selected.email || '',
         birth_date: this.patient_selected.birth_date ? new Date(this.patient_selected.birth_date).toISOString().slice(0, 10) : '',
         education: this.patient_selected.education || '',
-        gender: this.patient_selected.gender,
+        gender: this.patient_selected.gender || 0,
         address: this.patient_selected.address || '',
         n_doc: this.patient_selected.n_doc || '',
         antecedent_personal: this.patient_selected.antecedent_personal || '',
@@ -230,7 +232,8 @@ export class PatientFormMComponent implements OnInit {
         enfermedad_actual: this.patient_selected.enfermedad_actual || '',
         // Sincronizamos las llaves del formulario reactivo con los datos del backend
         vacunas: this.patient_selected.vacunas || [],
-        evolucion: this.patient_selected.evolucion || []
+        evolucion: this.patient_selected.evolucion || [],
+        reporte_laboratorio: this.patient_selected.reporte_laboratorio || []
       });
       // 2. 💥 LA MAGIA: Le llenamos el array local a los hijos y forzamos el redibujado de sus tablas
     // Usamos setTimeout para darle un milisegundo a Angular de procesar el renderizado
@@ -241,6 +244,9 @@ export class PatientFormMComponent implements OnInit {
       
       if (this.evolucionHijo && this.patient_selected.evolucion) {
         this.evolucionHijo.mevolucion = [...this.patient_selected.evolucion];
+      }
+      if (this.reporteHijo && this.patient_selected.reporte_laboratorio) {
+        this.evolucionHijo.mevolucion = [...this.patient_selected.reporte_laboratorio];
       }
     }, 50);
       // Companions from person
