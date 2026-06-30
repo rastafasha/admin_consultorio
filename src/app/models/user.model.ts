@@ -1,3 +1,4 @@
+import { DoctorAddress } from "./DoctorAddress.model";
 import { Role } from "./role.model";
 import { Speciality } from "./speciality.model";
 
@@ -21,5 +22,6 @@ export class User {
     status: string;
     roles:Role;
     permissions:Permissions;
+    addresses!: DoctorAddress[]; 
 }
 export type Permissions = string[];

@@ -2,6 +2,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { url_servicios } from '../config/config';
 import { AuthService } from '../shared/auth/auth.service';
+import { Observable } from 'rxjs';
+import { DoctorAddress } from '../models/DoctorAddress.model';
 declare let $:any;
 
 @Injectable({
@@ -94,5 +96,34 @@ export class DoctorService {
       return true;
     }
     return false;
+  }
+
+
+  // 🏥 ========================================================
+  // MÉTODOS ADICIONALES PARA GESTIÓN DE CONSULTORIOS INDEPENDIENTES
+  // ========================================================
+
+  // 1. Obtener la lista de consultorios de un médico específico
+  getAddressesByDoctor(doctorId: number): Observable<any> {
+    const url = `${url_servicios}/doctor-addresses/doctor/${doctorId}`;
+    return this.http.get<any>(url);
+  }
+
+  // 2. Guardar un consultorio suelto (Por si quieres un botón rápido de "Guardar Sede")
+  storeDoctorAddress(data: DoctorAddress): Observable<any> {
+    const url = `${url_servicios}/doctor-addresses/store`;
+    return this.http.post<any>(url, data);
+  }
+
+  // 3. Actualizar un consultorio de forma aislada
+  updateDoctorAddress(addressId: number, data: Partial<DoctorAddress>): Observable<any> {
+    const url = `${url_servicios}/doctor-addresses/update/${addressId}`;
+    return this.http.put<any>(url, data);
+  }
+
+  // 4. Eliminar físicamente o dar de baja lógica a un consultorio
+  deleteDoctorAddress(addressId: number): Observable<any> {
+    const url = `${url_servicios}/doctor-addresses/destroy/${addressId}`;
+    return this.http.delete<any>(url);
   }
 }

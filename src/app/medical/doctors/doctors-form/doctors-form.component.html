@@ -7,7 +7,7 @@
                 <div class="col-sm-10">
                     <ul class="breadcrumb">
                         <!-- <li class="breadcrumb-item"><a routerLink="/doctors/list">Doctores</a></li> -->
-                         <li class="breadcrumb-item"><a routerLink="/">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a routerLink="/">Dashboard</a></li>
                         <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
                         <li class="breadcrumb-item active">{{ title }}</li>
                     </ul>
@@ -51,14 +51,16 @@
                                 </div>
                                 <div class="col-12 col-sm-6 col-md-6 col-xl-4">
                                     <div class="form-group local-forms">
-                                        <label>Contraseña {{ isEditMode ? '(opcional)' : '' }} <span class="login-danger">*</span></label>
+                                        <label>Contraseña {{ isEditMode ? '(opcional)' : '' }} <span
+                                                class="login-danger">*</span></label>
                                         <input class="form-control" formControlName="password" type="password">
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6 col-md-6 col-xl-4" *ngIf="!isEditMode">
                                     <div class="form-group local-forms">
                                         <label>Confirmar Contraseña <span class="login-danger">*</span></label>
-                                        <input class="form-control" formControlName="password_confirmation" type="password">
+                                        <input class="form-control" formControlName="password_confirmation"
+                                            type="password">
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6 col-md-6 col-xl-4">
@@ -72,23 +74,26 @@
                                         <label class="gen-label">Género</label>
                                         <div class="form-check-inline">
                                             <label class="form-check-label">
-                                                <input type="radio" formControlName="gender" [value]="1" class="form-check-input">Masculino
+                                                <input type="radio" formControlName="gender" [value]="1"
+                                                    class="form-check-input">Masculino
                                             </label>
                                         </div>
                                         <div class="form-check-inline">
                                             <label class="form-check-label">
-                                                <input type="radio" formControlName="gender" [value]="2" class="form-check-input">Femenino
+                                                <input type="radio" formControlName="gender" [value]="2"
+                                                    class="form-check-input">Femenino
                                             </label>
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="col-12 col-sm-6 col-md-6 col-xl-4">
                                     <div class="form-group local-forms">
                                         <label>Roles</label>
-                                        <mat-select [(ngModel)]="selectedValue" [ngModelOptions]="{standalone: true}" class="form-control select" placeholder="Select Role">
+                                        <mat-select [(ngModel)]="selectedValue" [ngModelOptions]="{standalone: true}"
+                                            class="form-control select" placeholder="Select Role">
                                             <mat-option *ngFor="let data of roles" [value]="data.id">
-                                              {{data.name}}
+                                                {{data.name}}
                                             </mat-option>
                                         </mat-select>
                                     </div>
@@ -96,9 +101,10 @@
                                 <div class="col-12 col-sm-6 col-md-6 col-xl-4">
                                     <div class="form-group local-forms">
                                         <label>Especialidad</label>
-                                        <mat-select [(ngModel)]="speciality_id" [ngModelOptions]="{standalone: true}" class="form-control select" placeholder="Select Speciality">
+                                        <mat-select [(ngModel)]="speciality_id" [ngModelOptions]="{standalone: true}"
+                                            class="form-control select" placeholder="Select Speciality">
                                             <mat-option *ngFor="let data of specialities" [value]="data.id">
-                                              {{data.name}}
+                                                {{data.name}}
                                             </mat-option>
                                         </mat-select>
                                     </div>
@@ -106,9 +112,11 @@
                                 <div class="col-12 col-sm-6 col-md-6 col-xl-4">
                                     <div class="form-group local-forms">
                                         <label>Pais</label>
-                                        <mat-select [(ngModel)]="selectedValueLocation" [ngModelOptions]="{standalone: true}" class="form-control select" placeholder="Select Pais">
+                                        <mat-select [(ngModel)]="selectedValueLocation"
+                                            [ngModelOptions]="{standalone: true}" class="form-control select"
+                                            placeholder="Select Pais">
                                             <mat-option *ngFor="let data of countries" [value]="data.id">
-                                              {{data.title}}
+                                                {{data.title}}
                                             </mat-option>
                                         </mat-select>
                                     </div>
@@ -119,28 +127,88 @@
                                         <input class="form-control" formControlName="precio_cita" type="number">
                                     </div>
                                 </div>
-                                <div class="col-12 col-sm-6 col-md-6 col-xl-6">
+                                <!-- <div class="col-12 col-sm-6 col-md-6 col-xl-6">
                                     <div class="form-group local-forms">
                                         <label>Dirección</label>
                                         <textarea class="form-control" formControlName="address" rows="3" cols="30"></textarea>
                                     </div>
+                                </div> -->
+
+                                <!-- SECCIÓN DE CONSULTORIOS MÚLTIPLES (Reemplazo del textarea único) -->
+                                <div class="col-12 mt-3 mb-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5 class="mb-0 text-dark fw-bold">Sedes y Consultorios de Atención</h5>
+                                        <!-- Botón que dispara la función para inyectar una fila vacía en el FormArray -->
+                                        <button type="button" class="btn btn-primary btn-sm px-3" (click)="addAddress()"
+                                            data-bs-toggle="modal" data-bs-target="#modal-add-address">
+                                            <i class="fa fa-plus me-1"></i> Añadir Sede
+                                        </button>
+                                    </div>
+
+                                    <!-- Contenedor del FormArray registrado en tu FormBuilder -->
+                                    <div>
+                                        <!-- Si la lista está vacía -->
+                                        <div *ngIf="!addresss "
+                                            class="alert alert-light text-center p-3 text-muted small">
+                                            El doctor no tiene consultorios registrados.
+                                        </div>
+
+                                        <!-- Tabla simple que lee tu variable directa -->
+                                        <table *ngIf="addresss " class="table table-striped small">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Nombre del Consultorio</th>
+                                                    <th>Dirección Exacta</th>
+                                                    <th class="text-end">Acción</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let addr of addresss; let i = index"
+                                                (click)="selectAddress(addr.id)"
+                                                [class.table-primary]="selected_address_id === addr.id" 
+                                                style="cursor: pointer;">
+                                                    <td>
+                                                        <input type="radio" [checked]="selected_address_id === addr.id" name="active_address" >
+                                                        {{ i + 1 }}
+                                                    </td>
+                                                    <td>{{ addr.name_consultorio }}</td>
+                                                    <td>{{ addr.address }}</td>
+                                                    <td class="text-end" (click)="$event.stopPropagation()">
+                                                        <button type="button" class="btn btn-danger btn-sm"
+                                                            (click)="removeAddress(addr)">x</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <!-- Mensaje recordatorio debajo de la tabla -->
+                                        <div *ngIf="selected_address_id" class="alert alert-info py-2 small mt-2">
+                                            <i class="fa fa-info-circle me-1"></i> Configurando horarios para el consultorio seleccionado en azul.
+                                        </div>
+                                    </div>
+
+
                                 </div>
-                                
+
+
                                 <div class="col-12 col-sm-6 col-md-6 col-xl-6">
                                     <div class="form-group local-top-form">
                                         <label class="local-top">Avatar</label>
                                         <div class="settings-btn upload-files-avator">
-                                            <input type="file" accept="image/*" id="file" (change)="loadFile($event)" class="hide-input">
+                                            <input type="file" accept="image/*" id="file" (change)="loadFile($event)"
+                                                class="hide-input">
                                             <label for="file" class="upload">Seleccione Foto</label>
                                         </div>
                                     </div>
-                                    <img *ngIf="IMAGE_PREVISUALIZA" [src]="IMAGE_PREVISUALIZA" style="width: 250px;" alt="">
+                                    <img *ngIf="IMAGE_PREVISUALIZA" [src]="IMAGE_PREVISUALIZA" style="width: 250px;"
+                                        alt="">
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
+            <!-- Disponibilidad de Horario< -->
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
@@ -158,30 +226,41 @@
                                 <tbody>
                                     <ng-container *ngFor="let hours_day of hours_days">
                                         <tr>
+                                            <!-- 1. Checkbox principal de la fila (Afecta a toda la semana) -->
                                             <td>
                                                 <div class="checkbox">
                                                     <label>
-                                                    <input type="checkbox" 
-                                                        [checked]="isHourRowFullySelected(hours_day)" 
-                                                        (change)="addHourAllDay($event, hours_day)">
-                                                        {{hours_day.format_hour}}
+                                                        <input type="checkbox" [disabled]="!selected_address_id"
+                                                            [checked]="isHourRowFullySelected(hours_day)"
+                                                            (change)="addHourAllDay($event, hours_day)">
+                                                        <span class="fw-bold text-dark">{{ hours_day.format_hour
+                                                            }}</span>
                                                     </label>
                                                 </div>
                                             </td>
+
+                                            <!-- 2. Bucle por cada día de la semana -->
                                             <ng-container *ngFor="let day of days_week">
                                                 <td>
-                                                    <div class="checkbox">
-                                                        <label>
-                                                            <input type="checkbox" 
-                                                            [checked]="isCheckedHourAll(hours_day, day)" 
-                                                            (click)="addHourAll(hours_day, day)"> {{hours_day.hour}}:TODOS
+                                                    <!-- Botón de check para marcar "TODOS" los segmentos de este día y hora -->
+                                                    <div class="checkbox mb-2">
+                                                        <label class="text-primary small fw-bold">
+                                                            <input type="checkbox" [disabled]="!selected_address_id"
+                                                                [checked]="isCheckedHourAll(hours_day, day)"
+                                                                (click)="addHourAll(hours_day, day)">
+                                                            {{ hours_day.hour }}:TODOS
                                                         </label>
                                                     </div>
-                                                    <br>
+
+                                                    <!-- 3. Bucle dinámico por cada sub-segmento de tiempo (ej: 08:00 - 08:15) -->
                                                     <ng-container *ngFor="let item of hours_day.items">
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox" [checked]="isCheckedHour(hours_day, day, item)" (click)="addHourItem(hours_day, day, item)"> {{item.format_hour_start}} - {{item.format_hour_end}}
+                                                        <div class="checkbox my-1 ps-2">
+                                                            <label class="small text-muted">
+                                                                <input type="checkbox" [disabled]="!selected_address_id"
+                                                                    [checked]="isCheckedHour(hours_day, day, item)"
+                                                                    (click)="addHourItem(hours_day, day, item)">
+                                                                {{ item.format_hour_start }} - {{ item.format_hour_end
+                                                                }}
                                                             </label>
                                                         </div>
                                                     </ng-container>
@@ -189,6 +268,7 @@
                                             </ng-container>
                                         </tr>
                                     </ng-container>
+
                                 </tbody>
                             </table>
                         </div>
@@ -202,6 +282,51 @@
                 <div class="doctor-submit text-end">
                     <button type="button" class="btn btn-primary submit-form me-2" (click)="save()">Guardar</button>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- MODAL FLOTANTE DE BOOTSTRAP PARA REGISTRAR CONSULTORIO -->
+<div class="modal fade" id="modal-add-address" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header py-3">
+                <h5 class="modal-title fs-6 fw-bold text-dark">🏥 Registrar Nuevo Consultorio</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeBtn></button>
+            </div>
+
+            <div class="modal-body bg-light">
+                <div class="row">
+                    <!-- 1. Nombre del Consultorio -->
+                    <div class="col-12 mb-3">
+                        <div class="form-group local-forms mb-0">
+                            <label>Nombre del Consultorio <span class="login-danger">*</span></label>
+                            <input type="text" class="form-control" #nameConsultorio
+                                placeholder="Ej: Clínica Metropolitana - Consultorio 5B">
+                        </div>
+                    </div>
+
+                    <!-- 2. Dirección Física Detallada -->
+                    <div class="col-12 mb-2">
+                        <div class="form-group local-forms mb-0">
+                            <label>Dirección Exacta <span class="login-danger">*</span></label>
+                            <input type="text" class="form-control" #addressTexto
+                                placeholder="Ej: Av. Principal, Piso 3, Oficina 32">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer py-2">
+                <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                <!-- Al hacer clic, pasa los valores directos al TypeScript y limpia los inputs -->
+                <button type="button" class="btn btn-primary btn-sm"
+                    (click)="saveNewAddressFromSchedule(nameConsultorio.value, addressTexto.value); nameConsultorio.value=''; addressTexto.value=''"
+                    data-bs-dismiss="modal">
+                    Guardar Sede
+                </button>
             </div>
         </div>
     </div>
