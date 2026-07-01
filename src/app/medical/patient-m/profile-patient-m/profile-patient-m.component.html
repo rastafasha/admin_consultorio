@@ -43,7 +43,7 @@
                                                 </div>
                                                 <div class="names-profiles">
                                                     <h4>{{patient_selected.full_name}}</h4>
-                                                    <h5>Paciente</h5>
+                                                    <h5 *ngIf="patient_selected.n_doc">Ci.: {{patient_selected.n_doc}}</h5>
                                                 </div>
                                             </div>
                                         </div>
@@ -120,10 +120,6 @@
                                             <li>
                                                 <h4>Teléfono</h4>
                                                 <span>{{patient_selected.phone}}</span>
-                                            </li>
-                                            <li>
-                                                <h4>N.Documento</h4>
-                                                <span>{{patient_selected.n_doc}}</span>
                                             </li>
                                         </ul>
                                     </div>

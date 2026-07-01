@@ -77,7 +77,8 @@
 
                     <!-- <th mat-sort-header="name">Doctor</th> -->
                     <th mat-sort-header="email">Paciente</th>
-                    <th mat-sort-header="especializacion">Fecha</th>
+                    <th mat-sort-header="Consultorio">Consultorio</th>
+                    <th mat-sort-header="fecha">Fecha</th>
                     <th mat-sort-header="telefono">Hora</th>
                     <!-- <th mat-sort-header="n_doc">Especialidad</th> -->
                     <th mat-sort-header="status">Status</th>
@@ -100,6 +101,7 @@
                         {{data.patient.full_name}}
                       </span>
                     </td>
+                    <td>{{data.consultorio.name_consultorio}}</td>
                     <td>{{data.date_appointment_format}}</td>
                     <td>
                       <span *ngIf="data.segment_hour">

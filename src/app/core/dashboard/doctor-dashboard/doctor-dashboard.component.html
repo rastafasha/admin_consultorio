@@ -207,6 +207,7 @@
                                 <thead>
                                     <tr>
                                         
+                                        <!-- <th mat-sort-header="consultorio">Consultorio</th> -->
                                         <th mat-sort-header="date">Fecha</th>
                                         <th mat-sort-header="doctor">Paciente</th>
                                         <th mat-sort-header="status">Status</th>
@@ -218,6 +219,7 @@
                                 <tbody>
                                     <tr *ngFor="let data of appointments| slice:0:10">
                                         
+                                        <!-- <td >{{data.consultorio.name_consultorio|slice:0:30}}...</td> -->
                                         <td >{{data.date_appointment_format}}</td>
                                         <td >{{data.patient.full_name}}</td>
                                         <td>

@@ -211,7 +211,7 @@ export class PatientFormMComponent implements OnInit {
         email: this.patient_selected.email || '',
         birth_date: this.patient_selected.birth_date ? new Date(this.patient_selected.birth_date).toISOString().slice(0, 10) : '',
         education: this.patient_selected.education || '',
-        gender: this.patient_selected.gender || 0,
+        gender: this.patient_selected.gender,
         address: this.patient_selected.address || '',
         n_doc: this.patient_selected.n_doc || '',
         antecedent_personal: this.patient_selected.antecedent_personal || '',
