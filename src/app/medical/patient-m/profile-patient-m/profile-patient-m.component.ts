@@ -5,6 +5,8 @@ import { DoctorService } from '../../../services/doctor.service';
 import { environment } from '../../../../environments/environment';
 import { routes } from '../../../shared/routes/routes';
 import { StaffService } from '../../../services/staff.service';
+import { RLaboratoryService } from '../../../services/rlaboratory.service';
+import { DomSanitizer } from '@angular/platform-browser';
 @Component({
     selector: 'app-profile-patient-m',
     templateUrl: './profile-patient-m.component.html',
@@ -34,11 +36,16 @@ export class ProfilePatientMComponent {
   public text_success = '';
   public text_validation = '';
 
+  public rlaboratories_list: any[] = [];
+  public file_selected: any;
+
   constructor(
     public patientService: PatientMService,
     public activatedRoute: ActivatedRoute,
     public doctorService: DoctorService,
     private staffService: StaffService,
+    public rlaboratoryService: RLaboratoryService,
+    private _sanitizer: DomSanitizer,
   ) {
   }
   ngOnInit(): void {
@@ -53,6 +60,7 @@ export class ProfilePatientMComponent {
     this.roles = this.user.roles[0];
     this.getPatient();
     this.getUserRemoto();
+    
   }
 
   getUserRemoto(): void {
@@ -62,6 +70,7 @@ export class ProfilePatientMComponent {
     });
   }
 
+ 
   isPermission(permission: string) {
     if (this.user.roles.includes('SUPERADMIN')) {
       return true;
@@ -86,7 +95,48 @@ export class ProfilePatientMComponent {
       this.isLoading = false;
 
     })
+    this.getResportes();
   }
+
+   getResportes() {
+    this.isLoading = true;
+    this.rlaboratoryService.getRLaboratoryByPatient(this.patient_id).subscribe((resp: any) => {
+      this.rlaboratories_list = resp.laboratories.data;
+      this.isLoading = false;
+    });
+  }
+
+  selectDoc(FILE: any) {
+    this.file_selected = FILE;
+  }
+
+  getDocumentIframe(url: any) {
+  if (url === null || url === undefined) {
+    return '';
+  }
+
+  // 1. SI ES UN ARCHIVO BINARIO LOCAL (En cola para subirse por primera vez)
+  if (url instanceof File) {
+    const localBlobUrl = URL.createObjectURL(url);
+    // Envolvemos obligatoriamente la URL temporal en bypassSecurityTrustResourceUrl
+    return this._sanitizer.bypassSecurityTrustResourceUrl(localBlobUrl);
+  }
+
+  // 2. SI ES UNA URL EN STRING (Historial de Cloudinary que viene de Laravel)
+  if (typeof url === 'string') {
+    let documentUrl = url;
+    let results = url.match('[\\?&]v=([^&#]*)');
+    if (results !== null) {
+      documentUrl = results[1];
+    }
+    
+    // Forzamos a Angular a confiar en la URL externa de Cloudinary para el visor embed
+    return this._sanitizer.bypassSecurityTrustResourceUrl(documentUrl);
+  }
+
+  return '';
+}
+
 
 
   optionSelected(value: number) {

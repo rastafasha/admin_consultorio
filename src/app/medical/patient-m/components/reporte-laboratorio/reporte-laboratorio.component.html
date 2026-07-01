@@ -88,7 +88,8 @@
                                                             class="modal fade add-modal" role="dialog">
                                                             <div class="modal-dialog modal-dialog-centered modal-lg">
                                                                 <div class="modal-content">
-                                                                    <div class="modal-header">
+                                                                    <div
+                                                                        class="modal-header d-flex justify-content-between">
                                                                         <h5 class="modal-title" id="exampleModalLabel">
                                                                             {{FILE.name}}</h5>
                                                                         <a href="javascript:void(0);"
@@ -99,9 +100,9 @@
                                                                     <div class="modal-body text-center bg-light">
                                                                         <!-- CASO 1: Si el archivo es una IMAGEN (jpeg, jpg, png, webp, etc.) -->
                                                                         <ng-container *ngIf="FILE.type && (
-        FILE.type.toLowerCase().includes('image') || 
-        ['jpg', 'jpeg', 'png', 'webp', 'bmp'].includes(FILE.type.toLowerCase())
-    )">
+                                                                                FILE.type.toLowerCase().includes('image') || 
+                                                                                ['jpg', 'jpeg', 'png', 'webp', 'bmp'].includes(FILE.type.toLowerCase())
+                                                                            )">
                                                                             <img [src]="getDocumentIframe(FILE.file)"
                                                                                 class="img-fluid rounded shadow-sm"
                                                                                 alt="Reporte de Laboratorio"
@@ -110,9 +111,9 @@
 
                                                                         <!-- CASO 2: Si el archivo es un PDF -->
                                                                         <ng-container *ngIf="FILE.type && (
-        FILE.type.toLowerCase().includes('pdf') || 
-        FILE.type.toLowerCase() === 'pdf'
-    )">
+                                                                                FILE.type.toLowerCase().includes('pdf') || 
+                                                                                FILE.type.toLowerCase() === 'pdf'
+                                                                            )">
                                                                             <embed [src]="getDocumentIframe(FILE.file)"
                                                                                 type="application/pdf" class="w-100"
                                                                                 style="height: 65vh;" />
@@ -176,7 +177,7 @@
                                                 </div>
                                                 <div class="d-flex flex-stack flex-column">
                                                     <a href="#" onclick="return false;"
-                                                        class="text-gray-800 text-hover-primary fw-bolder">{{FILE.name}}</a>
+                                                        class="text-gray-800 text-hover-primary fw-bolder">{{FILE.name_file}}</a>
                                                     <span class="text-gray-400 fw-bolder">Size:
                                                         <a href="#" onclick="return false;"
                                                             class="text-gray-800 text-hover-primary fw-bolder">{{FILE.size}}Kb.</a></span>
@@ -196,9 +197,9 @@
                                         <div [attr.id]="'view-doc-'+FILE.id" class="modal fade add-modal" role="dialog">
                                             <div class="modal-dialog modal-dialog-centered modal-lg">
                                                 <div class="modal-content">
-                                                    <div class="modal-header">
+                                                    <div class="modal-header d-flex justify-content-between">
                                                         <h5 class="modal-title" id="exampleModalLabel">
-                                                            {{FILE.name}}</h5>
+                                                            {{FILE.name_file}}</h5>
                                                         <a href="javascript:void(0);" (click)="closeReload()"
                                                             class="btn btn-white me-1" data-bs-dismiss="modal">Close</a>
                                                     </div>
@@ -207,7 +208,7 @@
                                                         <ng-container
                                                             *ngIf="FILE.type && ['jpg', 'jpeg', 'png', 'webp', 'bmp'].includes(FILE.type.toLowerCase())">
                                                             <!-- Prioriza preview_url para archivos locales; si no existe, llama a la función para el servidor -->
-                                                            <img [src]="FILE.preview_url || getDocumentIframe(FILE.raw_file)"
+                                                            <img [src]="FILE.preview_url || getDocumentIframe(FILE.file)"
                                                                 class="img-fluid rounded shadow"
                                                                 alt="Reporte de Laboratorio"
                                                                 style="max-height: 60vh; object-fit: contain;">
@@ -217,7 +218,7 @@
                                                         <ng-container
                                                             *ngIf="FILE.type && FILE.type.toLowerCase().includes('pdf')">
                                                             <embed
-                                                                [src]="FILE.preview_url || getDocumentIframe(FILE.raw_file)"
+                                                                [src]="FILE.preview_url || getDocumentIframe(FILE.file)"
                                                                 type="application/pdf" class="w-100"
                                                                 style="height: 60vh;" />
                                                         </ng-container>
@@ -310,7 +311,7 @@
                                             role="dialog" tabindex="-1">
                                             <div class="modal-dialog modal-dialog-centered modal-lg">
                                                 <div class="modal-content">
-                                                    <div class="modal-header">
+                                                    <div class="modal-header d-flex justify-content-between">
                                                         <h5 class="modal-title" id="exampleModalLabel2">
                                                             {{ rlaboratori.name_file }}
                                                         </h5>
@@ -322,7 +323,7 @@
                                                         <!-- CASO 1: Si el recurso es una IMAGEN (Validación segura con ? y verificación de existencia) -->
                                                         <ng-container
                                                             *ngIf="rlaboratori && rlaboratori.type && ['jpg', 'jpeg', 'png', 'webp', 'bmp'].includes(rlaboratori.type.toLowerCase())">
-                                                            <img [src]="getDocumentIframe(rlaboratori.raw_file)"
+                                                            <img [src]="getDocumentIframe(rlaboratori.file)"
                                                                 class="img-fluid rounded shadow"
                                                                 alt="Reporte de Laboratorio"
                                                                 style="max-height: 60vh; object-fit: contain;">
@@ -331,7 +332,7 @@
                                                         <!-- CASO 2: Si el recurso es un PDF -->
                                                         <ng-container
                                                             *ngIf="rlaboratori && rlaboratori.type && rlaboratori.type.toLowerCase().includes('pdf')">
-                                                            <embed [src]="getDocumentIframe(rlaboratori.raw_file)"
+                                                            <embed [src]="getDocumentIframe(rlaboratori.file)"
                                                                 type="application/pdf" class="w-100"
                                                                 style="height: 60vh;" />
                                                         </ng-container>

@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RolesService } from '../../../services/roles.service';
 import { AuthService } from '../../../shared/auth/auth.service';
 import { routes } from '../../../shared/routes/routes';
+import { DoctorAddress } from '../../../models/DoctorAddress.model';
 
 @Component({
     selector: 'app-profile-doctor',
@@ -35,6 +36,8 @@ password_repeat='';
 public text_success = '';
 public text_validation = '';
 
+public addresss: DoctorAddress;
+
 doctor:any;
 constructor(
   public doctorService: DoctorService,
@@ -54,6 +57,7 @@ ngOnInit(): void {
     
   });
   this.getDoctor();
+  this.getAddress();
   this.user = this.roleService.authService.user;
 }
 
@@ -89,6 +93,11 @@ getDoctor(){
 
   })
 }
+getAddress() {
+    this.doctorService.getAddressesByDoctor(this.doctor_id).subscribe((resp: any) => {
+      this.addresss = resp.addresses;
+    });
+  }
 
   optionSelected(value:number){
     this.option_selected = value;

@@ -557,65 +557,85 @@
                                     <h4 class="card-title ">Reporte Laboratorio</h4>
                                 </div>
                                 <div class="card-body p-0 table-dash">
-                                    <div class="table-responsive scrooldiv2">
-                                        <table matSort
-                                            class="table mb-0 border-0 datatable custom-table patient-profile-table">
-                                            <thead>
-                                                <tr>
+                                    <div class="table-responsive" *ngIf="!isLoading">
+                        <table class="table mb-0 table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Descripción</th>
+                                    <th>Archivos</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- TABLA DE HISTORIAL -->
+                                <tr *ngFor="let rlaboratori of rlaboratories_list; let i = index">
+                                    <td>{{ rlaboratori.comentario }}</td>
+                                    <td>
+                                        <span
+                                            *ngIf="rlaboratori.name_file === 'Nota de texto (Sin archivo)' || rlaboratori.type === 'text'">
+                                            {{ rlaboratori.name_file }}
+                                        </span>
 
-                                                    <th mat-sort-header="date">Date</th>
-                                                    <th mat-sort-header="doctor">Doctor</th>
-                                                    <th mat-sort-header="status">Status</th>
-                                                    <th mat-sort-header="statuspayment">Status Pago</th>
-                                                    <th *ngIf="roles ==='SUPERADMIN'" mat-sort-header="charges">Monto
-                                                        ($)</th>
-                                                    <th *ngIf="roles ==='SUPERADMIN'"></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr *ngFor="let data of appointment_pendings">
+                                        <span
+                                            *ngIf="rlaboratori.name_file !== 'Nota de texto (Sin archivo)' && rlaboratori.type !== 'text'">
+                                            <a href="javascript:void(0);" (click)="selectDoc(rlaboratori)"
+                                                data-bs-toggle="modal"
+                                                [attr.data-bs-target]="'#view-doc-'+rlaboratori.id">
+                                                <img src="assets/svg/doc.svg" class="w-50px ms-n1 me-1 filesvg" alt="">
+                                                {{ rlaboratori.name_file }}
+                                            </a>
+                                        </span>
+                                    </td>
+                                    <!-- EL MODAL SE QUEDA AQUÍ ADENTRO DE UNA CELDA PARA EVITAR ROMPER EL STRING DEL TR -->
+                                    <div [attr.id]="'view-doc-'+rlaboratori.id" class="modal fade add-modal"
+                                        role="dialog" tabindex="-1">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header d-flex justify-content-between">
+                                                    <h5 class="modal-title" id="exampleModalLabel2">
+                                                        {{ rlaboratori.name_file }}
+                                                    </h5>
+                                                    <a href="javascript:void(0);" (click)="closeReload()"
+                                                        class="btn btn-white me-1" data-bs-dismiss="modal">Close</a>
+                                                </div>
 
-                                                    <td>{{data.date_appointment_format}}</td>
-                                                    <td>{{data.doctor.full_name}}</td>
-                                                    <td>
-                                                        <button
-                                                            [ngClass]="{'status-green' : data.status === 2, 'status-pink' : data.status === 1}"
-                                                            class="custom-badge">{{data.status === 1 ? 'Pendiente' :
-                                                            'Atendido'}}</button>
-                                                    </td>
-                                                    <td>
-                                                        <button
-                                                            [ngClass]="{'status-green' : data.status_pay === 1, 'status-pink' : data.status_pay === 2}"
-                                                            class="custom-badge">{{data.status_pay === 1 ? 'Pagado' :
-                                                            'Deuda'}}</button>
-                                                    </td>
-                                                    <td *ngIf="roles ==='SUPERADMIN'">{{data.amount }}</td>
-                                                    <td class="text-end" *ngIf="roles ==='SUPERADMIN'">
-                                                        <div class="dropdown dropdown-action">
-                                                            <a href="javascript:void(0);"
-                                                                class="action-icon dropdown-toggle"
-                                                                data-bs-toggle="dropdown" aria-expanded="false"><i
-                                                                    class="fa fa-ellipsis-v"></i></a>
-                                                            <div class="dropdown-menu dropdown-menu-end">
-                                                                <a class="dropdown-item"
-                                                                    [routerLink]="['/appointments/list/edit/', data.id]"
-                                                                    *ngIf="isPermission('edit_appointment')"><i
-                                                                        class="fa-solid fa-pen-to-square m-r-5"></i>
-                                                                    Edit</a>
-                                                            </div>
-                                                            <div class="dropdown-menu dropdown-menu-end">
-                                                                <a class="dropdown-item"
-                                                                    [routerLink]="['/appointments/cita-medica/', data.id]"
-                                                                    *ngIf="isPermission('view_appointment')"><i
-                                                                        class="fa-solid fa-pen-to-square m-r-5"></i>
-                                                                    Atender</a>
-                                                            </div>
+                                                <div class="modal-body text-center bg-light">
+                                                    <!-- CASO 1: Si el recurso es una IMAGEN (Validación segura con ? y verificación de existencia) -->
+                                                    <ng-container
+                                                        *ngIf="rlaboratori && rlaboratori.type && ['jpg', 'jpeg', 'png', 'webp', 'bmp'].includes(rlaboratori.type.toLowerCase())">
+                                                        <img [src]="getDocumentIframe(rlaboratori.file)"
+                                                            class="img-fluid rounded shadow"
+                                                            alt="Reporte de Laboratorio"
+                                                            style="max-height: 60vh; object-fit: contain;">
+                                                    </ng-container>
+
+                                                    <!-- CASO 2: Si el recurso es un PDF -->
+                                                    <ng-container
+                                                        *ngIf="rlaboratori && rlaboratori.type && rlaboratori.type.toLowerCase().includes('pdf')">
+                                                        <embed [src]="getDocumentIframe(rlaboratori.file)"
+                                                            type="application/pdf" class="w-100"
+                                                            style="height: 60vh;" />
+                                                    </ng-container>
+
+                                                    <!-- CASO 3: Si es una nota de texto, si el tipo es text o si el tipo/archivo vienen vacíos -->
+                                                    <ng-container
+                                                        *ngIf="!rlaboratori || !rlaboratori.type || rlaboratori.type === 'text' || !rlaboratori.file">
+                                                        <div class="p-4 text-muted">
+                                                            <i class="fa fa-file-alt fs-1 mb-2 text-primary"></i>
+                                                            <p class="mb-0 fw-bold">Este registro es una nota de
+                                                                texto sin archivo adjunto.</p>
                                                         </div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                                    </ng-container>
+                                                </div>
+
+                                            </div>
+                                        </div>
                                     </div>
+                                    <!-- FIN MODAL -->
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
                                 </div>
                             </div>
                             <!-- Diagnóstico -->

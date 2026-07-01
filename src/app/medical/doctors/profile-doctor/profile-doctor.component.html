@@ -1,6 +1,6 @@
 <div class="page-wrapper">
     <div class="content">
-    
+
         <!-- Page Header -->
         <div class="page-header">
             <div class="row">
@@ -8,7 +8,7 @@
                 <div class="col-sm-10">
                     <ul class="breadcrumb">
                         <!-- <li class="breadcrumb-item"><a routerLink="/dashboard/doctor-dashboard">Dashboard</a></li> -->
-                        
+
                         <!-- <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li> -->
                         <li class="breadcrumb-item active">Perfil del Doctor</li>
                     </ul>
@@ -23,7 +23,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="about-info">
-                                    <h4>Doctor Profile  </h4>
+                                    <h4>Doctor Profile </h4>
                                 </div>
                                 <div class="doctor-profile-head">
                                     <div class="row">
@@ -31,12 +31,13 @@
                                             <div class="profile-user-box">
                                                 <div class="profile-user-img">
                                                     <div *ngIf="!doctor_selected?.avatar">
-                                                        <img src="./assets/img/no-image.jpg" >
+                                                        <img src="./assets/img/no-image.jpg">
                                                     </div>
                                                     <div *ngIf="doctor_selected?.avatar">
-                                                        <img  [src]="doctor_selected?.avatar | imagenPipe:'staffs'"  [alt]="doctor_selected?.name">
+                                                        <img [src]="doctor_selected?.avatar | imagenPipe:'staffs'"
+                                                            [alt]="doctor_selected?.name">
                                                     </div>
-                                                    
+
                                                 </div>
                                                 <div class="names-profiles">
                                                     <h4>{{doctor_selected?.full_name}}</h4>
@@ -62,20 +63,28 @@
                                         </div>
                                         <div class="col-lg-4 col-md-4 d-flex align-items-center">
                                             <div class="follow-btn-group">
-                                                <a [routerLink]="['/doctors/list/edit/', doctor_id]" *ngIf="isPermission('edit_doctor') && user.roles[0]  === 'SUPERADMIN' && doctor.roles[0] === 'DOCTOR' && doctor.status === 2"  class="btn btn-info follow-btns">Edit</a>
-                                                <a [routerLink]="['/doctors/list/edit/', doctor_id]" *ngIf="isPermission('edit_staff')  && user.roles[0] === 'DOCTOR' && doctor.status === 2" class="btn btn-info follow-btns">Edit doctor profile</a>
-                                                <a [routerLink]="['/doctors/list/edit/', doctor_id]" *ngIf="isPermission('edit_staff')  && user.roles[0] === 'DOCTOR' && doctor.status === 1" class="btn btn-info follow-btns">Edit staffDoctor profile</a>
-                                                <a [routerLink]="['/staffs/staff-n/', doctor_id]" *ngIf="isPermission('edit_staff')  && user.roles[0] !== 'DOCTOR' && doctor.status === 1" class="btn btn-info follow-btns">Edit staff profile</a>
+                                                <a [routerLink]="['/doctors/list/edit/', doctor_id]"
+                                                    *ngIf="isPermission('edit_doctor') && user.roles[0]  === 'SUPERADMIN' && doctor.roles[0] === 'DOCTOR' && doctor.status === 2"
+                                                    class="btn btn-info follow-btns">Edit</a>
+                                                <a [routerLink]="['/doctors/list/edit/', doctor_id]"
+                                                    *ngIf="isPermission('edit_staff')  && user.roles[0] === 'DOCTOR' && doctor.status === 2"
+                                                    class="btn btn-info follow-btns">Edit doctor profile</a>
+                                                <a [routerLink]="['/doctors/list/edit/', doctor_id]"
+                                                    *ngIf="isPermission('edit_staff')  && user.roles[0] === 'DOCTOR' && doctor.status === 1"
+                                                    class="btn btn-info follow-btns">Edit staffDoctor profile</a>
+                                                <a [routerLink]="['/staffs/staff-n/', doctor_id]"
+                                                    *ngIf="isPermission('edit_staff')  && user.roles[0] !== 'DOCTOR' && doctor.status === 1"
+                                                    class="btn btn-info follow-btns">Edit staff profile</a>
                                                 <!-- <button type="submit" class="btn btn-info message-btns">Message</button> -->
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>								
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="row" >
+                <div class="row">
                     <div class="col-lg-4" *ngIf="user.roles[0] !=='GUEST'">
                         <div class="doctor-personals-grp" *ngIf="user.roles[0] !=='GUEST'">
                             <div class="card">
@@ -87,17 +96,9 @@
                                     <div class="about-me-list">
                                         <ul class="list-space">
                                             <li>
-                                                <h4>Género</h4>
+                                                <h4>Sexo</h4>
                                                 <span *ngIf="doctor_selected?.gender === 2">Femenino</span>
                                                 <span *ngIf="doctor_selected?.gender === 1">Masculino</span>
-                                            </li>
-                                            <li>
-                                                <h4>Educación</h4>
-                                                <span>{{doctor_selected?.education}}</span>
-                                            </li>
-                                            <li>
-                                                <h4>Designación</h4>
-                                                <span>{{doctor_selected?.designation}}</span>
                                             </li>
                                         </ul>
                                     </div>
@@ -121,10 +122,10 @@
                                                 <h4>Teléfono</h4>
                                                 <span>{{doctor_selected?.mobile}}</span>
                                             </li>
-                                            <li>
+                                            <!-- <li>
                                                 <h4>Role</h4>
                                                 <span>{{doctor_selected?.roles[0]}}</span>
-                                            </li>
+                                            </li> -->
                                             <li>
                                                 <h4>Dias de Trabajo</h4>
                                                 <span>{{doctor_selected?.days_name}}</span>
@@ -138,6 +139,9 @@
                                 </div>
                             </div>
                         </div>
+
+
+                        
                     </div>
                     <div class="col-lg-8">
                         <div class="doctor-personals-grp">
@@ -146,23 +150,29 @@
                                     <div class="tab-content-set">
                                         <ul class="nav">
                                             <li *ngIf="user.roles[0] ==='GUEST'">
-                                                <a href="#" onclick="return false;" [ngClass]="{'active': option_selected === 1}" (click)="optionSelected(1)">
-                                                    <span class="set-about-icon me-2">
-                                                    <img src="assets/img/icons/menu-icon-02.svg" alt="" >
-                                                </span>
-                                                    Bienvenido, Edita tu perfil Aquí 
-                                            </a>
-                                            </li>
-                                            <li *ngIf="user.roles[0] !=='GUEST'">
-                                                <a href="#" onclick="return false;" [ngClass]="{'active': option_selected === 2}" (click)="optionSelected(2)">
+                                                <a href="#" onclick="return false;"
+                                                    [ngClass]="{'active': option_selected === 1}"
+                                                    (click)="optionSelected(1)">
                                                     <span class="set-about-icon me-2">
                                                         <img src="assets/img/icons/menu-icon-02.svg" alt="">
                                                     </span>
-                                                    Citas Realizadas 
+                                                    Bienvenido, Edita tu perfil Aquí
                                                 </a>
                                             </li>
                                             <li *ngIf="user.roles[0] !=='GUEST'">
-                                                <a href="#" onclick="return false;" [ngClass]="{'active': option_selected === 3}" (click)="optionSelected(3)">
+                                                <a href="#" onclick="return false;"
+                                                    [ngClass]="{'active': option_selected === 2}"
+                                                    (click)="optionSelected(2)">
+                                                    <span class="set-about-icon me-2">
+                                                        <img src="assets/img/icons/menu-icon-02.svg" alt="">
+                                                    </span>
+                                                    Citas Realizadas
+                                                </a>
+                                            </li>
+                                            <li *ngIf="user.roles[0] !=='GUEST'">
+                                                <a href="#" onclick="return false;"
+                                                    [ngClass]="{'active': option_selected === 3}"
+                                                    (click)="optionSelected(3)">
                                                     <span class="set-about-icon me-2">
                                                         <img src="assets/img/icons/menu-icon-16.svg" alt="">
                                                     </span>
@@ -171,16 +181,18 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    <ng-container  *ngIf="user.roles[0] ==='GUEST' && option_selected === 1 ">
+                                    <ng-container *ngIf="user.roles[0] ==='GUEST' && option_selected === 1 ">
                                         <div class="bienvenido">
-                                            <h1 *ngIf="doctor.gender === null" >Bienvenido!</h1>
-                                            <h1 *ngIf="doctor.gender !== null" >Gracias!</h1>
+                                            <h1 *ngIf="doctor.gender === null">Bienvenido!</h1>
+                                            <h1 *ngIf="doctor.gender !== null">Gracias!</h1>
                                             <p *ngIf="doctor.gender === null ">Favor, finalice su registo de perfil</p>
-                                            <p *ngIf="doctor.gender !== null && doctor.status === 1" class="text-center">
+                                            <p *ngIf="doctor.gender !== null && doctor.status === 1"
+                                                class="text-center">
                                                 Favor, Espere el correo electrónico de Activación de Cuenta.
-                                                 Nos pondremos en contacto para verificar sus datos</p>
-                                            <button *ngIf="doctor.gender === null " [routerLink]="['/staffs/staff-n/',user.id]"
-                                             type="button" class="btn btn-outline-success mb-3">
+                                                Nos pondremos en contacto para verificar sus datos</p>
+                                            <button *ngIf="doctor.gender === null "
+                                                [routerLink]="['/staffs/staff-n/',user.id]" type="button"
+                                                class="btn btn-outline-success mb-3">
                                                 Continuar con el registro
                                             </button>
                                             <button type="button" class="btn btn-warning mb-3" (click)="onLogout()">
@@ -195,28 +207,40 @@
                                                     <ng-container *ngFor="let appointment of appointments">
                                                         <li>
                                                             <div class="activity-user">
-                                                                <a [routerLink]="routes.profile" [attr.title]="appointment.patient.full_name" data-bs-toggle="tooltip" class="avatar">
-                                                                    <img [attr.alt]="appointment.patient.full_name" [src]="appointment.patient.avatar" class="img-fluid rounded-circle">
+                                                                <a [routerLink]="routes.profile"
+                                                                    [attr.title]="appointment.patient.full_name"
+                                                                    data-bs-toggle="tooltip" class="avatar">
+                                                                    <img [attr.alt]="appointment.patient.full_name"
+                                                                        [src]="appointment.patient.avatar"
+                                                                        class="img-fluid rounded-circle">
                                                                 </a>
                                                             </div>
                                                             <div class="activity-content timeline-group-blk">
                                                                 <div class="timeline-group flex-shrink-0">
                                                                     <h4>{{appointment.date_appointment_format}}</h4>
-                                                                    <span class="time">{{appointment.format_hour_start+' - '+appointment.format_hour_end}}</span>
+                                                                    <span class="time">{{appointment.format_hour_start+'
+                                                                        - '+appointment.format_hour_end}}</span>
                                                                 </div>
                                                                 <div class="comman-activitys flex-grow-1">
                                                                     <h3>{{appointment.patient.full_name}} <span> <br>
-                                                                        Monto de la Cita: {{appointment.amount | currency}}  </span></h3>
-                                                                    <p *ngIf="appointment.appointment_attention">Diagnostico: {{appointment.appointment_attention.description}}</p>
-                                                                    <ng-container *ngIf="!appointment.appointment_attention">
-                                                                        <button class="custom-badge status-pink">Diagnostico: Pendiente</button>
+                                                                            Monto de la Cita: {{appointment.amount |
+                                                                            currency}} </span></h3>
+                                                                    <p *ngIf="appointment.appointment_attention">
+                                                                        Diagnostico:
+                                                                        {{appointment.appointment_attention.description}}
+                                                                    </p>
+                                                                    <ng-container
+                                                                        *ngIf="!appointment.appointment_attention">
+                                                                        <button
+                                                                            class="custom-badge status-pink">Diagnostico:
+                                                                            Pendiente</button>
                                                                     </ng-container>
-                                                                    
+
                                                                 </div>
                                                             </div>
                                                         </li>
                                                     </ng-container>
-                                                    
+
                                                 </ul>
                                             </div>
                                         </div>
@@ -230,34 +254,39 @@
                                                             <h4>Configuración de Cuenta</h4>
                                                         </div>
                                                     </div>
-                                                    <div class="col-12 col-sm-12">  
+                                                    <div class="col-12 col-sm-12">
                                                         <div class="form-group local-forms">
-                                                            <label >Nombre </label>
-                                                            <input class="form-control" type="text" name="name" [(ngModel)]="name" >
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12 col-sm-12">  
-                                                        <div class="form-group local-forms">
-                                                            <label >Apellido </label>
-                                                            <input class="form-control" type="text" name="surname" [(ngModel)]="surname" >
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12 col-sm-12">  
-                                                        <div class="form-group local-forms">
-                                                            <label >Teléfono móvil </label>
-                                                            <input class="form-control" type="text" name="mobile" [(ngModel)]="mobile" >
+                                                            <label>Nombre </label>
+                                                            <input class="form-control" type="text" name="name"
+                                                                [(ngModel)]="name">
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-sm-12">
                                                         <div class="form-group local-forms">
-                                                            <label >Email </label>
-                                                            <input class="form-control" type="email" name="email" [(ngModel)]="email" >
+                                                            <label>Apellido </label>
+                                                            <input class="form-control" type="text" name="surname"
+                                                                [(ngModel)]="surname">
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-sm-12">
                                                         <div class="form-group local-forms">
-                                                            <label>Dirección  <span class="login-danger">*</span></label>
-                                                            <textarea class="form-control" rows="3" cols="30" [(ngModel)]="address" name="address"></textarea>
+                                                            <label>Teléfono móvil </label>
+                                                            <input class="form-control" type="text" name="mobile"
+                                                                [(ngModel)]="mobile">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-sm-12">
+                                                        <div class="form-group local-forms">
+                                                            <label>Email </label>
+                                                            <input class="form-control" type="email" name="email"
+                                                                [(ngModel)]="email">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-sm-12">
+                                                        <div class="form-group local-forms">
+                                                            <label>Dirección <span class="login-danger">*</span></label>
+                                                            <textarea class="form-control" rows="3" cols="30"
+                                                                [(ngModel)]="address" name="address"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -268,34 +297,40 @@
                                                 </div>
                                                 <div class="col-12 col-sm-12">
                                                     <div class="form-group local-forms">
-                                                        <label >Nueva Contraseña </label>
-                                                        <input class="form-control" type="password" name="password" [(ngModel)]="password" >
+                                                        <label>Nueva Contraseña </label>
+                                                        <input class="form-control" type="password" name="password"
+                                                            [(ngModel)]="password">
                                                     </div>
                                                 </div>
                                                 <div class="col-12 col-sm-12">
                                                     <div class="form-group local-forms">
-                                                        <label >Confirme Contraseña </label>
-                                                        <input class="form-control" type="password"  name="password_repeat" [(ngModel)]="password_repeat" >
+                                                        <label>Confirme Contraseña </label>
+                                                        <input class="form-control" type="password"
+                                                            name="password_repeat" [(ngModel)]="password_repeat">
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
                                                     <!-- validaciones -->
                                                     <div class="form-group row" *ngIf="text_success">
                                                         <div class="col-12">
-                                                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                            <div class="alert alert-success alert-dismissible fade show"
+                                                                role="alert">
                                                                 <strong>Exito!</strong>{{text_success}}.
-                                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                                <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="alert" aria-label="Close">
                                                                     <span aria-hidden="true"> </span>
                                                                 </button>
                                                             </div>
                                                         </div>
                                                     </div>
-                            
+
                                                     <div class="form-group row" *ngIf="text_validation">
                                                         <div class="col-12">
-                                                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                                            <div class="alert alert-warning alert-dismissible fade show"
+                                                                role="alert">
                                                                 <strong>!</strong> {{ text_validation }}.
-                                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                                <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="alert" aria-label="Close">
                                                                     <span aria-hidden="true"> </span>
                                                                 </button>
                                                             </div>
@@ -303,26 +338,30 @@
                                                     </div>
                                                     <!-- validaciones -->
                                                     <div class="doctor-submit">
-                                                        <button type="button" (click)="update()" class="btn btn-primary submit-form me-2">Editar</button>
+                                                        <button type="button" (click)="update()"
+                                                            class="btn btn-primary submit-form me-2">Editar</button>
                                                     </div>
                                                 </div>
                                             </form>
-                                            </div>
+                                        </div>
                                     </ng-container>
-                                    
-                                    
+
+
                                 </div>
                             </div>
                             <div class="card" *ngIf="user.roles[0] !=='GUEST'">
                                 <div class="card-header">
-                                    <h4 class="card-title ">Citas Pendientes</h4> <a [routerLink]="['/appointments/list/doctor/', doctor_id]" class="patient-views float-end">Todo</a>
+                                    <h4 class="card-title ">Citas Pendientes</h4> <a
+                                        [routerLink]="['/appointments/list/doctor/', doctor_id]"
+                                        class="patient-views float-end">Todo</a>
                                 </div>
                                 <div class="card-body p-0 table-dash">
                                     <div class="table-responsive scrooldiv2">
-                                        <table matSort  class="table mb-0 border-0 datatable custom-table patient-profile-table">
+                                        <table matSort
+                                            class="table mb-0 border-0 datatable custom-table patient-profile-table">
                                             <thead>
                                                 <tr>
-                                                    
+
                                                     <th mat-sort-header="date">Fecha</th>
                                                     <th mat-sort-header="doctor">Paciente</th>
                                                     <th mat-sort-header="status">Status</th>
@@ -333,21 +372,33 @@
                                             </thead>
                                             <tbody>
                                                 <tr *ngFor="let data of appointment_pendings">
-                                                    
-                                                    <td >{{data.date_appointment_format}}</td>
-                                                    <td >{{data.patient.full_name}}</td>
+
+                                                    <td>{{data.date_appointment_format}}</td>
+                                                    <td>{{data.patient.full_name}}</td>
                                                     <td>
-                                                        <button [ngClass]="{'status-green' : data.status === 2, 'status-pink' : data.status === 1}" class="custom-badge">{{data.status === 1 ? 'Pendiente' : 'Atendido'}}</button>
+                                                        <button
+                                                            [ngClass]="{'status-green' : data.status === 2, 'status-pink' : data.status === 1}"
+                                                            class="custom-badge">{{data.status === 1 ? 'Pendiente' :
+                                                            'Atendido'}}</button>
                                                     </td>
                                                     <td>
-                                                        <button [ngClass]="{'status-green' : data.status_pay === 1, 'status-pink' : data.status_pay === 2}" class="custom-badge">{{data.status_pay === 1 ? 'Pagado' : 'Deuda'}}</button>
+                                                        <button
+                                                            [ngClass]="{'status-green' : data.status_pay === 1, 'status-pink' : data.status_pay === 2}"
+                                                            class="custom-badge">{{data.status_pay === 1 ? 'Pagado' :
+                                                            'Deuda'}}</button>
                                                     </td>
                                                     <td>{{data.amount }}</td>
                                                     <td class="text-end">
                                                         <div class="dropdown dropdown-action">
-                                                            <a href="javascript:void(0);" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                            <a href="javascript:void(0);"
+                                                                class="action-icon dropdown-toggle"
+                                                                data-bs-toggle="dropdown" aria-expanded="false"><i
+                                                                    class="fa fa-ellipsis-v"></i></a>
                                                             <div class="dropdown-menu dropdown-menu-end">
-                                                                <a class="dropdown-item" [routerLink]="['/appointments/cita-medica/', data.id]"><i class="fa-solid fa-pen-to-square m-r-5"></i> Edit</a>
+                                                                <a class="dropdown-item"
+                                                                    [routerLink]="['/appointments/cita-medica/', data.id]"><i
+                                                                        class="fa-solid fa-pen-to-square m-r-5"></i>
+                                                                    Edit</a>
                                                                 <!-- <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete_appointment"><i class="fa fa-trash-alt m-r-5"></i> Delete</a> -->
                                                             </div>
                                                         </div>
@@ -358,6 +409,32 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="card" *ngIf="user.roles[0] !=='GUEST'">
+                                <div class="card-header">
+                                    <h4 class="card-title ">Dirección de Consultorio</h4> <a
+                                        [routerLink]="['/doctors/list/edit/', doctor_id]"
+                                        class="patient-views float-end">Editar</a>
+                                </div>
+                                <div class="card-body p-0 table-dash">
+                                    <div class="table-responsive scrooldiv2">
+                                          <table *ngIf="addresss " class="table table-striped small">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Nombre del Consultorio</th>
+                                                            <th>Dirección Exacta</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let addr of addresss; let i = index">
+
+                                                            <td>{{ addr.name_consultorio }}</td>
+                                                            <td>{{ addr.address }}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -365,4 +442,3 @@
         </div>
     </div>
 </div>
- 

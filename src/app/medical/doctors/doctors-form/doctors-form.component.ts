@@ -196,10 +196,6 @@ export class DoctorsFormComponent implements OnInit {
   getAddress() {
     this.doctorService.getAddressesByDoctor(this.doctor_selected.id).subscribe((resp: any) => {
       this.addresss = resp.addresses;
-      console.log(resp);
-
-      // ✨ EL TRUCO: Forzamos el mapeo de horarios en cuanto las direcciones tocan la pantalla
-      // this.mapExistingSchedulesFromBackend();
     });
   }
 
@@ -415,47 +411,47 @@ export class DoctorsFormComponent implements OnInit {
 
   // 2. Función para marcar/desmarcar toda la fila
   addHourAllDay(event: any, hours_day: any) {
-  if (!this.selected_address_id) {
-    event.target.checked = false;
-    alert('Por favor, seleccione un consultorio antes de asignar horarios.');
-    return;
-  }
+    if (!this.selected_address_id) {
+      event.target.checked = false;
+      alert('Por favor, seleccione un consultorio antes de asignar horarios.');
+      return;
+    }
 
-  const isChecked = event.target.checked;
-  const rowItemIds = hours_day.items.map((i: any) => i.id);
-  const currentAddressId = Number(this.selected_address_id);
+    const isChecked = event.target.checked;
+    const rowItemIds = hours_day.items.map((i: any) => i.id);
+    const currentAddressId = Number(this.selected_address_id);
 
-  if (!isChecked) {
-    // Desmarcar: Quitamos la hora de esta fila exclusivamente para este consultorio
-    this.hours_selecteds = this.hours_selecteds.filter((hour: any) => {
-      const isThisRow = rowItemIds.includes(hour.item.id);
-      const isThisAddress = Number(hour.doctor_address_id) === currentAddressId;
-      return !(isThisRow && isThisAddress);
-    });
-  } else {
-    // Marcar: Limpiamos duplicados locales previos de esta sede antes de insertar
-    this.hours_selecteds = this.hours_selecteds.filter((hour: any) => {
-      const isThisRow = rowItemIds.includes(hour.item.id);
-      const isThisAddress = Number(hour.doctor_address_id) === currentAddressId;
-      return !(isThisRow && isThisAddress);
-    });
+    if (!isChecked) {
+      // Desmarcar: Quitamos la hora de esta fila exclusivamente para este consultorio
+      this.hours_selecteds = this.hours_selecteds.filter((hour: any) => {
+        const isThisRow = rowItemIds.includes(hour.item.id);
+        const isThisAddress = Number(hour.doctor_address_id) === currentAddressId;
+        return !(isThisRow && isThisAddress);
+      });
+    } else {
+      // Marcar: Limpiamos duplicados locales previos de esta sede antes de insertar
+      this.hours_selecteds = this.hours_selecteds.filter((hour: any) => {
+        const isThisRow = rowItemIds.includes(hour.item.id);
+        const isThisAddress = Number(hour.doctor_address_id) === currentAddressId;
+        return !(isThisRow && isThisAddress);
+      });
 
-    // 🗓️ Recorremos cada día de la semana (Lunes a Viernes/Sábado)
-    this.days_week.forEach((day: any) => {
-      hours_day.items.forEach((item: any) => {
-        // 🚀 INYECTAMOS LA ESTRUCTURA UNIFICADA COMPLETA
-        this.hours_selecteds.push({
-          day: day,              // Objeto día base
-          day_name: day.day,     // String del nombre (ej: "Martes") -> ¡Crucial para tu filtro del save!
-          hour: hours_day.hour, 
-          grupo: 'all-day',
-          item: item,
-          doctor_address_id: currentAddressId
+      // 🗓️ Recorremos cada día de la semana (Lunes a Viernes/Sábado)
+      this.days_week.forEach((day: any) => {
+        hours_day.items.forEach((item: any) => {
+          // 🚀 INYECTAMOS LA ESTRUCTURA UNIFICADA COMPLETA
+          this.hours_selecteds.push({
+            day: day,              // Objeto día base
+            day_name: day.day,     // String del nombre (ej: "Martes") -> ¡Crucial para tu filtro del save!
+            hour: hours_day.hour,
+            grupo: 'all-day',
+            item: item,
+            doctor_address_id: currentAddressId
+          });
         });
       });
-    });
+    }
   }
-}
 
 
 
@@ -482,27 +478,27 @@ export class DoctorsFormComponent implements OnInit {
 
 
   isCheckedHourAll(hours_day: any, day: any) {
-  // 🛡️ Validación previa de seguridad tradicional
-  if (!this.selected_address_id || !this.hours_selecteds || this.hours_selecteds.length === 0) {
-    return false;
+    // 🛡️ Validación previa de seguridad tradicional
+    if (!this.selected_address_id || !this.hours_selecteds || this.hours_selecteds.length === 0) {
+      return false;
+    }
+
+    const currentAddressId = Number(this.selected_address_id);
+
+    // Filtramos los ítems de esta hora que ya están seleccionados para ESTA SEDE
+    const selectedInThisHour = hours_day.items.filter((item: any) =>
+      this.hours_selecteds.some((hour: any) =>
+        hour.day_name === day.day &&
+        Number(hour.doctor_address_id) === currentAddressId &&
+        // ✨ SOLUCIÓN: Hacemos la comparación robusta por los tiempos del catálogo base
+        hour.item.hour_start === item.hour_start &&
+        hour.item.hour_end === item.hour_end
+      )
+    );
+
+    // Se marca "TODOS" solo si todos los segmentos de esa hora están presentes en este consultorio
+    return selectedInThisHour.length === hours_day.items.length && hours_day.items.length > 0;
   }
-
-  const currentAddressId = Number(this.selected_address_id);
-
-  // Filtramos los ítems de esta hora que ya están seleccionados para ESTA SEDE
-  const selectedInThisHour = hours_day.items.filter((item: any) =>
-    this.hours_selecteds.some((hour: any) =>
-      hour.day_name === day.day &&
-      Number(hour.doctor_address_id) === currentAddressId &&
-      // ✨ SOLUCIÓN: Hacemos la comparación robusta por los tiempos del catálogo base
-      hour.item.hour_start === item.hour_start &&
-      hour.item.hour_end === item.hour_end
-    )
-  );
-
-  // Se marca "TODOS" solo si todos los segmentos de esa hora están presentes en este consultorio
-  return selectedInThisHour.length === hours_day.items.length && hours_day.items.length > 0;
-}
 
 
 
@@ -580,21 +576,21 @@ export class DoctorsFormComponent implements OnInit {
 
     // 🗓️ 2. AGRUPAMOS LA AGENDA MULTI-CONSULTORIO POR DÍAS
     const HOUR_SCHEDULES: any = [];
-this.days_week.forEach((day: any) => {
-  // ✨ SOLUCIÓN DE FILTRADO: Comparamos strings puros (ej: "Martes" === "Martes")
-  // Forzamos el mapeo numérico del consultorio si deseas que viaje limpio por sucursal
-  const DAYS_HOURS = this.hours_selecteds.filter((hour_select: any) => 
-    hour_select.day_name === day.day
-  );
-  
-  HOUR_SCHEDULES.push({
-    day_name: day.day,
-    children: DAYS_HOURS
-  });
-});
+    this.days_week.forEach((day: any) => {
+      // ✨ SOLUCIÓN DE FILTRADO: Comparamos strings puros (ej: "Martes" === "Martes")
+      // Forzamos el mapeo numérico del consultorio si deseas que viaje limpio por sucursal
+      const DAYS_HOURS = this.hours_selecteds.filter((hour_select: any) =>
+        hour_select.day_name === day.day
+      );
 
-// Adjuntamos al FormData el array estructurado agrupado que Laravel espera recibir con sus hijos
-formData.append('schedule_hours', JSON.stringify(HOUR_SCHEDULES));
+      HOUR_SCHEDULES.push({
+        day_name: day.day,
+        children: DAYS_HOURS
+      });
+    });
+
+    // Adjuntamos al FormData el array estructurado agrupado que Laravel espera recibir con sus hijos
+    formData.append('schedule_hours', JSON.stringify(HOUR_SCHEDULES));
 
 
     this.text_validation = '';

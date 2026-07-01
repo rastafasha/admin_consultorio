@@ -48,40 +48,6 @@ export class ReporteLaboratorioComponent implements OnInit, OnChanges {
       this.getResportes();
     }
   }
-
-  processFile($event: any) {
-    if (!$event.target.files) return;
-    this.files_to_upload = Array.from($event.target.files);
-    console.log('Archivos leídos del input:', this.files_to_upload);
-  }
-
-
-
-
-
-  deleteFile(rlaboratori: any) {
-
-    Swal.fire({
-      title: 'Estas Seguro?',
-      text: 'No podras recuperarlo!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, Borrar!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.cargando = true;
-        this.rlaboratoryService.deleteRLaboratory(rlaboratori.id).subscribe((resp: any) => {
-          this.getResportes();
-        });
-        Swal.fire('Borrado!', 'El Archivo fue borrado.', 'success');
-      }
-    });
-
-
-  }
-
   getResportes() {
     this.cargando = true;
     this.rlaboratoryService.getRLaboratoryByPatient(this.patient_selected.id).subscribe((resp: any) => {
@@ -90,6 +56,13 @@ export class ReporteLaboratorioComponent implements OnInit, OnChanges {
     });
   }
 
+  processFile($event: any) {
+    if (!$event.target.files) return;
+    this.files_to_upload = Array.from($event.target.files);
+    console.log('Archivos leídos del input:', this.files_to_upload);
+  }
+
+  
   deleteDocument(index: number) {
     this.FilesAdded.splice(index, 1);
   }
@@ -173,6 +146,29 @@ export class ReporteLaboratorioComponent implements OnInit, OnChanges {
   this.comentario = ''; 
   this.text_validation = '';
 }
+
+deleteFile(rlaboratori: any) {
+
+    Swal.fire({
+      title: 'Estas Seguro?',
+      text: 'No podras recuperarlo!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, Borrar!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.cargando = true;
+        this.rlaboratoryService.deleteRLaboratory(rlaboratori.id).subscribe((resp: any) => {
+          this.getResportes();
+        });
+        Swal.fire('Borrado!', 'El Archivo fue borrado.', 'success');
+      }
+    });
+
+
+  }
 
 save() {
   this.text_validation = '';
