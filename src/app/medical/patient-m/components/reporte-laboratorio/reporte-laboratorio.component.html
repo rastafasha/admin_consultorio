@@ -23,124 +23,116 @@
                                     <div class="col-xl-12">
                                         <label class="form-label">Suibir Archivos: *</label>
                                     </div>
-                                    <div class="col-5">
-                                        <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="customFile" multiple="true"
-                                                (change)="processFile($event)">
-                                            <label class="custom-file-label" for="customFile">Seleccione
-                                                archivo(s)</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="doctor-submit text-end">
-                                            <button type="button" class="btn btn-primary submit-form me-2"
-                                                (click)="agregarArchivo()">Agregar</button>
-
-                                        </div>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="customFile" multiple="true"
+                                            (change)="processFile($event)">
+                                        <label class="custom-file-label" for="customFile">Seleccione archivo</label>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-6">
                                     <div class="card card-flush">
                                         <div class="card-header pt-7">
                                             <h3 class="card-title align-items-start flex-column">
-                                                <span class="card-label fw-bolder text-dark">Lista de Archivos
-                                                    Agregados</span>
+                                                <span class="card-label fw-bolder text-dark">Lista de Archivos Agregados</span>
                                             </h3>
                                             <div class="card-toolbar">
                                             </div>
                                         </div>
                                         <div class="card-body">
                                             <div class="hover-scroll-overlay-y pe-6 me-n6">
-                                                <div class="col-xs-6">
-                                                    <ng-container *ngFor="let FILE of files_to_upload; let i = index">
-                                                        <div class="filesAdded">
-                                                            <div class="files">
-                                                                <button class="btn btn-danger btn-sm"
-                                                                    (click)="deleteFile(FILE)">x</button>
-                                                                <a href="javascript:void(0);" (click)="selectDoc(FILE)"
-                                                                    data-bs-toggle="modal"
+                                                <ng-container *ngFor="let FILE of files_to_upload; let i = index">
+                                                    <div class="filesAdded">
+                                                        <div class="files">
+                                                            <button class="btn btn-danger btn-sm"
+                                                                (click)="deleteFile(FILE)">x</button>
+                                                            <a href="javascript:void(0);" (click)="selectDoc(FILE)"
+                                                                data-bs-toggle="modal"
+                                                                [attr.data-bs-target]="'#view-doc-'+FILE.id">
+                                                                <img src="assets/svg/doc.svg"
+                                                                    class="w-50px ms-n1 me-1 filesvg" alt="">
+                                                            </a>
+                                                            <div class="infofile">
+                                                                <a href="javascript:void(0);"
+                                                                    (click)="selectDoc(FILE)" data-bs-toggle="modal"
                                                                     [attr.data-bs-target]="'#view-doc-'+FILE.id">
-                                                                    <img src="assets/svg/doc.svg"
-                                                                        class="w-50px ms-n1 me-1 filesvg" alt="">
+                                                                    {{FILE.name}}
                                                                 </a>
-                                                                <div class="infofile">
+                                                                <br>
+                                                                <span class="text-gray-400 fw-bolder sizeee">Size:
+                                                                    <a href="#" onclick="return false;"
+                                                                        class="text-gray-800 text-hover-primary fw-bolder">{{FILE.size}}Kb.</a>
+                                                                </span>
+                                                                <small *ngIf="FILE.comentario_individual"
+                                                                    class="text-muted d-block text-truncate"
+                                                                    style="max-width: 150px; font-style: italic;">
+                                                                    Nota: {{FILE.comentario_individual}}
+                                                                </small>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <!-- modal -->
+                                                    <div [attr.id]="'view-doc-'+FILE.id"
+                                                        class="modal fade add-modal" role="dialog">
+                                                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                            <div class="modal-content">
+                                                                <div
+                                                                    class="modal-header d-flex justify-content-between">
+                                                                    <h5 class="modal-title" id="exampleModalLabel">
+                                                                        {{FILE.name}}</h5>
                                                                     <a href="javascript:void(0);"
-                                                                        (click)="selectDoc(FILE)" data-bs-toggle="modal"
-                                                                        [attr.data-bs-target]="'#view-doc-'+FILE.id">
-                                                                        {{FILE.name}}
-                                                                    </a>
-                                                                    <br>
-                                                                    <span class="text-gray-400 fw-bolder sizeee">Size:
-                                                                        <a href="#" onclick="return false;"
-                                                                            class="text-gray-800 text-hover-primary fw-bolder">{{FILE.size}}Kb.</a>
-                                                                    </span>
-                                                                    <small *ngIf="FILE.comentario_individual"
-                                                                        class="text-muted d-block text-truncate"
-                                                                        style="max-width: 150px; font-style: italic;">
-                                                                        Nota: {{FILE.comentario_individual}}
-                                                                    </small>
+                                                                        (click)="closeReload()"
+                                                                        class="btn btn-white me-1"
+                                                                        data-bs-dismiss="modal">Close</a>
                                                                 </div>
+                                                                <div class="modal-body text-center bg-light">
+                                                                    <!-- CASO 1: Si el archivo es una IMAGEN (jpeg, jpg, png, webp, etc.) -->
+                                                                    <ng-container *ngIf="FILE.type && (
+                                                                            FILE.type.toLowerCase().includes('image') || 
+                                                                            ['jpg', 'jpeg', 'png', 'webp', 'bmp'].includes(FILE.type.toLowerCase())
+                                                                        )">
+                                                                        <img [src]="getDocumentIframe(FILE.file)"
+                                                                            class="img-fluid rounded shadow-sm"
+                                                                            alt="Reporte de Laboratorio"
+                                                                            style="max-height: 65vh; object-fit: contain;">
+                                                                    </ng-container>
 
-                                                            </div>
-                                                        </div>
-                                                        <!-- modal -->
-                                                        <div [attr.id]="'view-doc-'+FILE.id"
-                                                            class="modal fade add-modal" role="dialog">
-                                                            <div class="modal-dialog modal-dialog-centered modal-lg">
-                                                                <div class="modal-content">
-                                                                    <div
-                                                                        class="modal-header d-flex justify-content-between">
-                                                                        <h5 class="modal-title" id="exampleModalLabel">
-                                                                            {{FILE.name}}</h5>
-                                                                        <a href="javascript:void(0);"
-                                                                            (click)="closeReload()"
-                                                                            class="btn btn-white me-1"
-                                                                            data-bs-dismiss="modal">Close</a>
-                                                                    </div>
-                                                                    <div class="modal-body text-center bg-light">
-                                                                        <!-- CASO 1: Si el archivo es una IMAGEN (jpeg, jpg, png, webp, etc.) -->
-                                                                        <ng-container *ngIf="FILE.type && (
-                                                                                FILE.type.toLowerCase().includes('image') || 
-                                                                                ['jpg', 'jpeg', 'png', 'webp', 'bmp'].includes(FILE.type.toLowerCase())
-                                                                            )">
-                                                                            <img [src]="getDocumentIframe(FILE.file)"
-                                                                                class="img-fluid rounded shadow-sm"
-                                                                                alt="Reporte de Laboratorio"
-                                                                                style="max-height: 65vh; object-fit: contain;">
-                                                                        </ng-container>
+                                                                    <!-- CASO 2: Si el archivo es un PDF -->
+                                                                    <ng-container *ngIf="FILE.type && (
+                                                                            FILE.type.toLowerCase().includes('pdf') || 
+                                                                            FILE.type.toLowerCase() === 'pdf'
+                                                                        )">
+                                                                        <embed [src]="getDocumentIframe(FILE.file)"
+                                                                            type="application/pdf" class="w-100"
+                                                                            style="height: 65vh;" />
+                                                                    </ng-container>
 
-                                                                        <!-- CASO 2: Si el archivo es un PDF -->
-                                                                        <ng-container *ngIf="FILE.type && (
-                                                                                FILE.type.toLowerCase().includes('pdf') || 
-                                                                                FILE.type.toLowerCase() === 'pdf'
-                                                                            )">
-                                                                            <embed [src]="getDocumentIframe(FILE.file)"
-                                                                                type="application/pdf" class="w-100"
-                                                                                style="height: 65vh;" />
-                                                                        </ng-container>
-
-                                                                        <!-- CASO 3: Si es solo una nota de texto sin archivo adjunto -->
-                                                                        <ng-container
-                                                                            *ngIf="!FILE.file || FILE.type === 'text'">
-                                                                            <div class="p-4 text-muted">
-                                                                                <i
-                                                                                    class="fa fa-file-alt fs-1 mb-2 text-primary"></i>
-                                                                                <p class="mb-0 fw-bold">Este
-                                                                                    registro no contiene ningún
-                                                                                    archivo adjunto.</p>
-                                                                                <small>Consulte el comentario
-                                                                                    individual en la ficha del
-                                                                                    historial.</small>
-                                                                            </div>
-                                                                        </ng-container>
-                                                                    </div>
+                                                                    <!-- CASO 3: Si es solo una nota de texto sin archivo adjunto -->
+                                                                    <ng-container
+                                                                        *ngIf="!FILE.file || FILE.type === 'text'">
+                                                                        <div class="p-4 text-muted">
+                                                                            <i
+                                                                                class="fa fa-file-alt fs-1 mb-2 text-primary"></i>
+                                                                            <p class="mb-0 fw-bold">Este
+                                                                                registro no contiene ningún
+                                                                                archivo adjunto.</p>
+                                                                            <small>Consulte el comentario
+                                                                                individual en la ficha del
+                                                                                historial.</small>
+                                                                        </div>
+                                                                    </ng-container>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <!-- modal -->
+                                                    </div>
+                                                    <!-- modal -->
 
-                                                    </ng-container>
+                                                </ng-container>
+                                                <div class="col-12">
+                                                <div class="doctor-submit text-end">
+                                                    <button type="button" class="btn btn-primary submit-form me-2" (click)="agregarArchivo()">Agregar</button>
                                                 </div>
+                                            </div>
                                             </div>
                                         </div>
                                     </div>
