@@ -69,7 +69,7 @@
                                                     class="btn btn-info follow-btns">Edit</a>
                                                 <a [routerLink]="['/appointments/atender/', patient_id ]"
                                                     class="btn btn-info follow-btns">Crear Cita</a>
-                                                <a (click)="imprimirHistorial()" class="btn btn-info follow-btns"><i
+                                                <a (click)="imprimirHistoria()" class="btn btn-info follow-btns"><i
                                                         class="fa fa-print"></i></a>
                                                 <!-- <button type="submit" class="btn btn-info message-btns">Message</button> -->
                                             </div>
@@ -92,6 +92,14 @@
                                     </div>
                                     <div class="about-me-list">
                                         <ul class="list-space">
+                                            <li *ngIf="patient_selected.email">
+                                                <h4>Email</h4>
+                                                <span>{{patient_selected.email}}</span>
+                                            </li>
+                                            <li>
+                                                <h4>Teléfono</h4>
+                                                <span>{{patient_selected.phone}}</span>
+                                            </li>
                                             <li>
                                                 <h4>Sexo</h4>
                                                 <span *ngIf="patient_selected.gender === 2">Femenino</span>
@@ -105,10 +113,7 @@
                                                 <h4>Birth Day</h4>
                                                 <span>{{patient_selected.birth_date}}</span>
                                             </li>
-                                            <li *ngIf="patient_selected.email">
-                                                <h4>Email</h4>
-                                                <span>{{patient_selected.email}}</span>
-                                            </li>
+                                            
                                             <li *ngIf="patient_selected.peso_al_nacer">
                                                 <h4>Peso al nacer</h4>
                                                 <span>{{patient_selected.peso_al_nacer}}</span>
@@ -117,10 +122,7 @@
                                                 <h4>Talla al nacer</h4>
                                                 <span>{{patient_selected.talla_al_nacer}}</span>
                                             </li>
-                                            <li>
-                                                <h4>Teléfono</h4>
-                                                <span>{{patient_selected.phone}}</span>
-                                            </li>
+                                            
                                         </ul>
                                     </div>
                                 </div>
