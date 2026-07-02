@@ -44,6 +44,7 @@
                                     <option value="Transferencia Dólares">Transferencia Dólares</option>
                                     <option value="Transferencia Bolivares">Transferencia Bolívares</option>
                                     <option value="pagomovil">Pago Móvil</option>
+                                    <option value="Efectivo">Efectivo</option>
                                 </select>
         
                             </div>
@@ -141,6 +142,32 @@
                                         <input [(ngModel)]="telefono" name="telefono" type="text" class="form-control">
                                     </div>
                                 </div>
+                                
+                                <!-- <input type="hidden" [(ngModel)]="id"> -->
+                                    <button (click)="save()" class="btn btn-primary">Guardar</button>
+                            </div>    
+                        </div>
+                        <!-- pagomovil  -->
+                         <!-- pagomovil -->
+                        <div *ngIf="pagoSeleccionado == 'efectivo'" class="card p-3">
+                            <div class="card-body">
+                                <h4>Efectivo</h4>
+                                <div class="row">
+                                    <div class="form-group col-xs-12 ">
+                                        <label for="exampleInputEmail1">Nombre del Banco</label>
+                                        <input [(ngModel)]="bankName" name="bankName" placeholder="Colocar Efectivo" type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <!-- <div class="row">
+                                    <div class="form-group col-xs-12 col-sm-6">
+                                        <label for="exampleInputEmail1">Ci o RIF</label>
+                                        <input [(ngModel)]="ciorif" name="ciorif" type="text" class="form-control">
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-6">
+                                        <label for="exampleInputEmail1">Télefono</label>
+                                        <input [(ngModel)]="telefono" name="telefono" type="text" class="form-control">
+                                    </div>
+                                </div> -->
                                 
                                 <!-- <input type="hidden" [(ngModel)]="id"> -->
                                     <button (click)="save()" class="btn btn-primary">Guardar</button>

@@ -572,11 +572,13 @@
                                         </span>
 
                                         <span
-                                            *ngIf="rlaboratori.name_file !== 'Nota de texto (Sin archivo)' && rlaboratori.type !== 'text'">
+                                            *ngIf="rlaboratori.name_file !== 'Nota de texto (Sin archivo)' && rlaboratori.type !== 'text'" 
+                                            class="d-flex flex-column">
                                             <a href="javascript:void(0);" (click)="selectDoc(rlaboratori)"
-                                                data-bs-toggle="modal"
-                                                [attr.data-bs-target]="'#view-doc-'+rlaboratori.id">
-                                                <img src="assets/svg/doc.svg" class="w-50px ms-n1 me-1 filesvg" alt="">
+                                                data-bs-toggle="modal" [attr.data-bs-target]="'#view-doc-'+rlaboratori.id">
+                                                <img src="assets/svg/doc.svg" *ngIf="rlaboratori.type === 'pdf'" class=" iconsvg" alt="">
+                                                <img src="assets/svg/jpg.svg" *ngIf="rlaboratori.type === 'jpg' || rlaboratori.type === 'jpeg'" class=" iconsvg" alt="">
+                                                <img src="assets/svg/png.svg" *ngIf="rlaboratori.type === 'png'" class=" iconsvg" alt="">
                                                 {{ rlaboratori.name_file }}
                                             </a>
                                         </span>
@@ -656,7 +658,7 @@
                             <!-- evolucion -->
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title ">Evolucion</h4>
+                                    <h4 class="card-title ">Evolución</h4>
                                 </div>
                                 <div class="card-body p-0 table-dash">
                                     <div class="table-responsive scrooldiv2">

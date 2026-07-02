@@ -48,8 +48,9 @@
                                                             <a href="javascript:void(0);" (click)="selectDoc(FILE)"
                                                                 data-bs-toggle="modal"
                                                                 [attr.data-bs-target]="'#view-doc-'+FILE.id">
-                                                                <img src="assets/svg/doc.svg"
-                                                                    class="w-50px ms-n1 me-1 filesvg" alt="">
+                                                                <img src="assets/svg/pdf.svg" *ngIf="FILE.type === 'pdf'"  class="iconsvg">
+                                                                <img src="assets/svg/jpg.svg" *ngIf="FILE.type === 'jpg' || FILE.type === 'jpeg'"  class="iconsvg">
+                                                                <img src="assets/svg/png.svg" *ngIf="FILE.type === 'png'"  class="iconsvg">
                                                             </a>
                                                             <div class="infofile">
                                                                 <a href="javascript:void(0);"
@@ -162,8 +163,9 @@
                                                         <a href="javascript:void(0);" (click)="selectDoc(FILE)"
                                                             data-bs-toggle="modal"
                                                             [attr.data-bs-target]="'#view-doc-'+FILE.id">
-                                                            <img src="assets/svg/doc.svg"
-                                                                class="w-50px ms-n1 me-1 filesvg" alt="">
+                                                            <img src="assets/svg/pdf.svg" *ngIf="FILE.type === 'pdf'"  class="iconsvg">
+                                                <img src="assets/svg/jpg.svg" *ngIf="FILE.type === 'jpg' || FILE.type === 'jpeg'"  class="iconsvg">
+                                                <img src="assets/svg/png.svg" *ngIf="FILE.type === 'png'"  class="iconsvg">
                                                         </a>
                                                     </div>
                                                 </div>
@@ -289,7 +291,10 @@
                                             <a href="javascript:void(0);" (click)="selectDoc(rlaboratori)"
                                                 data-bs-toggle="modal"
                                                 [attr.data-bs-target]="'#view-doc-'+rlaboratori.id">
-                                                <img src="assets/svg/doc.svg" class="w-50px ms-n1 me-1 filesvg" alt="">
+                                                <!-- <img src="assets/svg/doc.svg" class="w-50px ms-n1 me-1 filesvg" alt=""> -->
+                                                <img src="assets/svg/pdf.svg" *ngIf="rlaboratori.type === 'pdf'"  class="iconsvg">
+                                                <img src="assets/svg/jpg.svg" *ngIf="rlaboratori.type === 'jpg' || rlaboratori.type === 'jpeg'"  class="iconsvg">
+                                                <img src="assets/svg/png.svg" *ngIf="rlaboratori.type === 'png'"  class="iconsvg">
                                                 {{ rlaboratori.name_file }}
                                             </a>
                                         </span>

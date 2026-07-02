@@ -132,8 +132,7 @@
                                 <tr *ngFor="let payment of data.payments; let i = index" style="border-bottom: solid 1px #513081;">
                                     <td></td>
                                     <td>
-                                      <button class="btn btn-success" data-bs-toggle="modal" 
-                                      [attr.data-bs-target]="'#add_payment-'+data.id" *ngIf="i === 0" (click)="clearData()">Nuevo Pago</button>
+                                      <button class="btn btn-success" data-bs-toggle="modal"  [attr.data-bs-target]="'#add_payment-'+data.id" *ngIf="i === 0" (click)="clearData()">Nuevo Pago</button>
                                     </td>
                                     <td></td>
                                     <td>#{{payment.id}}</td>
@@ -180,15 +179,6 @@
                                                 <div class="col-12 col-md-6">
                                                     <div class="form-group local-forms">
                                                         <label >Metodo de Pago <span class="login-danger">*</span></label>
-                                                        <!-- <mat-select [(ngModel)]="method_payment" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Select Payment Method">
-                                                            <mat-option value="Efectivo">Efectivo</mat-option>
-                                                            <mat-option value="Transferencia">Transferencia</mat-option>
-                                                            <mat-option value="Zelle">Zelle</mat-option>
-                                                            <mat-option value="Square">Square</mat-option>
-                                                            <mat-option value="Pago Movil">Pago Movil</mat-option>
-                                                            <mat-option value="T.Debito">T.Debito</mat-option>
-                                                            <mat-option value="T.Credito">T.Credito</mat-option>
-                                                        </mat-select> -->
                                                         <mat-select [(ngModel)]="method_payment" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Seleccione Metodo de pago">
                                                           <mat-option *ngFor="let tipop of tiposdepagos" [value]="tipop.tipo">
                                                           {{tipop.bankName}} 
@@ -251,15 +241,11 @@
                                                 <div class="col-12 col-md-6">
                                                     <div class="form-group local-forms">
                                                         <label >Metodo de Pago <span class="login-danger">*</span></label>
-                                                        <mat-select [(ngModel)]="method_payment" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Select Payment Method">
-                                                            <mat-option value="Efectivo">Efectivo</mat-option>
-                                                            <mat-option value="Transferencia">Transferencia</mat-option>
-                                                            <mat-option value="Zelle">Zelle</mat-option>
-                                                            <mat-option value="Square">Square</mat-option>
-                                                            <mat-option value="Pago Movil">Pago Movil</mat-option>
-                                                            <mat-option value="T.Debito">T.Debito</mat-option>
-                                                            <mat-option value="T.Credito">T.Credito</mat-option>
-                                                        </mat-select>
+                                                        <mat-select [(ngModel)]="method_payment" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Seleccione Metodo de pago">
+                                                          <mat-option *ngFor="let tipop of tiposdepagos" [value]="tipop.tipo">
+                                                          {{tipop.bankName}} 
+                                                          </mat-option>
+                                                      </mat-select>
                                                     </div>
                                                 </div>
                                                 <div class="col-12 col-md-6">  
