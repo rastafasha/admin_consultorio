@@ -40,6 +40,7 @@ export class ProfilePatientMComponent {
 
   public rlaboratories_list: any[] = [];
   public file_selected: any;
+  public is_vacuna= 1;
 
   constructor(
     public patientService: PatientMService,
@@ -94,6 +95,7 @@ export class ProfilePatientMComponent {
       this.patient_selected = resp.patient;
       this.appointment_pendings = resp.appointment_pendings.data;
       this.vacunas = resp.patient.vacunas;
+      this.is_vacuna = resp.patient.is_vacuna;
       this.evolucion = resp.patient.evolucion;
       this.isLoading = false;
 
@@ -157,9 +159,9 @@ export class ProfilePatientMComponent {
   // PARTE 1: PROCESAR LOGICA DE ARREGLOS ARRIBA
   // ==========================================
 
-  // A. Procesar Vacunas (Solo Pediatría)
+  // A. Procesar Vacunas (Solo Pediatría) o cuando este activo
   let bloqueVacunas = '';
-  if (this.doctor && this.doctor.speciality?.name === 'Pediatría') {
+  if (this.doctor && this.doctor.speciality?.name === 'Pediatría' || this.is_vacuna === 2) {
     let filasVacunas = '';
     if (this.vacunas && this.vacunas.length > 0) {
       filasVacunas = this.vacunas.map(item => `
@@ -171,7 +173,7 @@ export class ProfilePatientMComponent {
       `).join('');
     }
     bloqueVacunas = `
-      <div class="section-title">4. Esquema de Vacunación (Pediatría)</div>
+      <div class="section-title">4. Esquema de Vacunación</div>
       ${filasVacunas === '' ? '<div class="text-block" style="color: #666; font-style: italic;">No se registran vacunas.</div>' : `
         <table class="clinical-table">
           <thead><tr><th>Descripción</th><th style="width:80px;text-align:center">Cantidad</th><th style="width:120px;text-align:center">Fecha</th></tr></thead>

@@ -504,7 +504,7 @@
                             </div>
                             
                             <!-- Vacunas -->
-                            <div class="card" *ngIf="doctor && doctor.speciality.name === 'Pediatría'">
+                            <div class="card" *ngIf="doctor && doctor.speciality.name === 'Pediatría' || is_vacuna === 2">
                                 <div class="card-header">
                                     <h4 class="card-title ">Vacunas</h4>
                                 </div>
