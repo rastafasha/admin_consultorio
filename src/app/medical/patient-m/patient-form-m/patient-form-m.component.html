@@ -140,18 +140,14 @@
                                 <div class="col-12 col-sm-6 col-md-6 col-xl-4" *ngIf="doctor && doctor.speciality?.name !== 'Pediatría'">
                                     <div class="form-group select-gender">
                                         <label class="gen-label">Requiere Vacuna?<span class="login-danger">*</span></label>
-                                        <div class="form-check-inline">
-                                            <label class="form-check-label">
-                                                <input type="radio" formControlName="is_vacuna" value="1"
-                                                    class="form-check-input">No
+                                        <div class="switch-wrapper">
+                                            <div class="mini-spinner" *ngIf="isListening"></div>
+                                            <label class="switch">
+                                                <input type="checkbox" (change)="toggleVacuna($event)">
+                                                <span class="slider round"></span>
                                             </label>
                                         </div>
-                                        <div class="form-check-inline">
-                                            <label class="form-check-label">
-                                                <input type="radio" formControlName="is_vacuna" value="2"
-                                                    class="form-check-input">Si
-                                            </label>
-                                        </div>
+                                        
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6 col-md-6 col-xl-4"
@@ -214,7 +210,7 @@
                 <app-signos-vitales [patientForm]="patientForm"></app-signos-vitales>
                 <!-- fin signos vitales -->
                 <!-- Vacunas -->
-                <app-vacunas #componenteVacunas [patientForm]="patientForm" [doctor]="doctor" *ngIf="patient_selected" [patient_selected]="patient_selected"></app-vacunas>
+                <app-vacunas #componenteVacunas [patientForm]="patientForm" [doctor]="doctor" *ngIf="patient_selected"  [is_vacuna]="is_vacuna"></app-vacunas>
                 <!-- Examen fisico -->
                 <app-examen-fisico [patientForm]="patientForm"></app-examen-fisico>
                 <!-- Reporte Laboratorio -->

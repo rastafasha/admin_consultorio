@@ -40,6 +40,8 @@ export class PatientFormMComponent implements OnInit {
   public patient_selected: any;
   public isLoading = false;
   public isSaving = false;
+  public is_vacuna= 1;
+
   doctor: string;
 
   public mvacunas: any = []; // Ensure medical is initialized as an array
@@ -278,6 +280,14 @@ export class PatientFormMComponent implements OnInit {
     reader.readAsDataURL(file);
     reader.onloadend = () => this.IMAGE_PREVISUALIZA = reader.result;
   }
+
+
+  toggleVacuna(event: any) {
+  // event.target.checked nos dice si el switch quedó encendido (true) o apagado (false)
+  this.is_vacuna = event.target.checked ? 2 : 1;
+  
+  console.log('Estado de vacuna actualizado:', this.is_vacuna);
+}
 
   // eslint-disable-next-line no-debugger
   save(): void {

@@ -38,6 +38,7 @@
                                             <div class="card-toolbar">
                                             </div>
                                         </div>
+                                        <!-- files_to_upload -->
                                         <div class="card-body">
                                             <div class="hover-scroll-overlay-y pe-6 me-n6">
                                                 <ng-container *ngFor="let FILE of files_to_upload; let i = index">
@@ -48,9 +49,7 @@
                                                             <a href="javascript:void(0);" (click)="selectDoc(FILE)"
                                                                 data-bs-toggle="modal"
                                                                 [attr.data-bs-target]="'#view-doc-'+FILE.id">
-                                                                <img src="assets/svg/pdf.svg" *ngIf="FILE.type === 'pdf'"  class="iconsvg">
-                                                                <img src="assets/svg/jpg.svg" *ngIf="FILE.type === 'jpg' || FILE.type === 'jpeg'"  class="iconsvg">
-                                                                <img src="assets/svg/png.svg" *ngIf="FILE.type === 'png'"  class="iconsvg">
+                                                                <img src="assets/svg/doc.svg" class="iconsvg">
                                                             </a>
                                                             <div class="infofile">
                                                                 <a href="javascript:void(0);"
@@ -144,7 +143,8 @@
                     </div>
 
                 </div>
-                <div class="col-12" *ngIf="FilesAdded">
+                <!-- FilesAdded -->
+                <div class="col-12" *ngIf="FilesAdded || FilesAdded.length > 0">
                     <div class="row align-items-center">
                         <div class="card card-flush">
                             <div class="card-header pt-7">
@@ -265,7 +265,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12">
+
+                <!-- rlaboratories_list -->
+                <div class="col-12" *ngIf="rlaboratories_list || rlaboratories_list.length > 0">
                     <app-loading *ngIf="cargando"></app-loading>
                     <div class="table-responsive" *ngIf="!cargando">
                         <table class="table mb-0 table-striped">
