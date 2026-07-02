@@ -27,6 +27,7 @@ export class Patient {
     talla_al_nacer: number;
     //solo pediatria
     current_desease: string;
+    is_vacuna: number;
     historia_enfermedad: string;
     location_id: number;
     doctor_id: number;

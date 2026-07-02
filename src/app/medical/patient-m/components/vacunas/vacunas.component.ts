@@ -10,6 +10,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 export class VacunasComponent implements OnInit {
   @Input() patientForm!: FormGroup;
   @Input() doctor: any;
+  @Input() patient_selected: any;
   
   isLoading = false;
   isSaving = false;

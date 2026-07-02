@@ -144,7 +144,7 @@
                     </div>
 
                 </div>
-                <div class="col-12">
+                <div class="col-12" *ngIf="FilesAdded">
                     <div class="row align-items-center">
                         <div class="card card-flush">
                             <div class="card-header pt-7">
@@ -258,7 +258,7 @@
                         </div>
                         <!-- validaciones -->
                         <div class="col-12">
-                            <div class="doctor-submit text-end">
+                            <div class="doctor-submit text-end mb-3">
                                 <button type="button" class="btn btn-primary submit-form me-2"
                                     (click)="save()">Actualizar Todo</button>
                             </div>
