@@ -224,7 +224,7 @@ export class PatientFormMComponent implements OnInit {
         temperature: this.patient_selected.temperature || 0,
         peso: this.patient_selected.peso || 0,
         talla: this.patient_selected.talla || 0,
-        is_vacuna: this.patient_selected.is_vacuna || 0,
+        is_vacuna: this.patient_selected.is_vacuna || 1,
         talla_al_nacer: this.patient_selected.talla_al_nacer || 0,
         peso_al_nacer: this.patient_selected.peso_al_nacer || 0,
         tratamiento: this.patient_selected.tratamiento || '',
