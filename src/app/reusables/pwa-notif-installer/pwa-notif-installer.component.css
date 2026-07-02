@@ -1,27 +1,42 @@
-
 .ios-menu {
-    width: 12px;
-  }
+  width: 12px;
+}
 
-
-  .pwanotif {
-    display: flex;
-    align-items: center; /* Centra el contenido verticalmente */
-    position: fixed;     /* Fixed en lugar de absolute para que flote sobre todo */
-    top: 0;
-    left: 0;
-    z-index: 9999;       /* Un valor alto para que esté por encima de modales y botones */
-    height: auto;        /* Quitamos los 200px; que sea dinámico según el texto */
-    min-height: 60px;
-    width: 100vw;
-    background: rgba(29, 28, 26, 0.95); /* Un fondo oscuro con ligera transparencia */
-    backdrop-filter: blur(4px);         /* Efecto de desenfoque moderno */
-    border-bottom: 2px solid #ffc107;   /* Una línea dorada/amarilla para llamar la atención */
-    padding: 10px 20px;
-    animation: fadeInDown 0.5s ease;    /* Animación de entrada */
+.pwanotif {
+  display: flex;
+  align-items: center; /* Centra el contenido verticalmente */
+  position: fixed;     /* Fixed para que flote sobre todo */
+  top: 0;
+  left: 0;
+  z-index: 99999;      /* Subimos un nivel más para superar barras de navegación pesadas */
+  height: auto;        /* Dinámico según el texto */
+  min-height: 60px;
+  
+  /* 🟢 CORRECCIÓN: Usar 100% evita que el banner rompa el ancho total por la barra de scroll */
+  width: 100%; 
+  
+  background: rgba(29, 28, 26, 0.95); /* Fondo oscuro con ligera transparencia */
+  backdrop-filter: blur(4px);         /* Efecto de desenfoque moderno */
+  border-bottom: 2px solid #ffc107;   /* Línea dorada/amarilla de acento */
+  padding: 10px 20px;
+  
+  /* 🟢 ANIMACIÓN: Aseguramos la animación nativa directamente aquí */
+  animation: fadeInDown 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Ajuste para el botón de cerrar en la barra */
 .pwanotif .btn-close {
-    filter: invert(1); /* Lo hace blanco para que resalte en el fondo oscuro */
+  filter: invert(1); /* Lo hace blanco para que resalte en el fondo oscuro */
+}
+
+/* 🟢 Estructura de la animación por si no está declarada globalmente */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

@@ -12,6 +12,7 @@ import { PermisionInterceptorInterceptor } from './http-interceptors/permision-i
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { PipesModule } from './pipes/pipes.module';
 import { ToastrModule } from 'ngx-toastr';
+import { ReusablesModule } from './reusables/reusables.module';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { ToastrModule } from 'ngx-toastr';
     CoreModule,
     FileSaverModule,
     PipesModule,
+    ReusablesModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
       // Register the ServiceWorker as soon as the application is stable

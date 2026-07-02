@@ -13,15 +13,32 @@ export class AppComponent {
   constructor(private swUpdate: SwUpdate){}
 
   ngOnInit() {
+   // =========================================================================
+    // 🟢 LOGS DE SEGUIMIENTO PARA EL SERVICE WORKER EN EL RAÍZ
+    // =========================================================================
     if (this.swUpdate.isEnabled) {
-      this.swUpdate.versionUpdates.pipe(
-        // Filtramos para que SOLO responda cuando la versión esté lista
-        filter((evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY')
-      ).subscribe(() => {
-        if (confirm('Nueva versión disponible. ¿Cargar nueva versión?')) {
-          // Recarga la página para activar la nueva versión
-          window.location.reload();
+      this.swUpdate.versionUpdates.subscribe((evt) => {
+        switch (evt.type) {
+          case 'VERSION_DETECTED':
+            console.log('SW: Se está descargando una nueva versión...', evt.version.hash);
+            break;
+            
+          case 'VERSION_READY':
+            // 🟢 SOLUCIÓN: Eliminamos el alert confirm() molesto. 
+            // Ahora dejamos que tu componente 'pwa-notif-installer' maneje el modal estético de forma exclusiva.
+            console.log('SW: Nueva versión lista en el servidor:', evt.latestVersion.hash);
+            break;
+
+          case 'VERSION_INSTALLATION_FAILED':
+            console.error('SW: Falló la instalación:', evt.error);
+            break;
         }
+      });
+
+      this.swUpdate.checkForUpdate().then(hasUpdate => {
+        if (hasUpdate) console.log('SW: Cambios detectados en el servidor.');
+      }).catch(err => {
+        console.error('SW: Error al verificar actualizaciones:', err);
       });
     }
   }
