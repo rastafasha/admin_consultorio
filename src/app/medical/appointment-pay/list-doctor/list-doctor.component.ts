@@ -3,7 +3,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { AppoitmentPayService } from '../../../services/appoitment-pay.service';
 import { FileSaverService } from 'ngx-filesaver';
 import * as XLSX from 'xlsx';
-import jspdf from 'jspdf';
+import { jsPDF } from 'jspdf';
 import { DoctorService } from '../../../services/doctor.service';
 import { ActivatedRoute } from '@angular/router';
 import { SettignService } from '../../../core/settings/settigs.service';

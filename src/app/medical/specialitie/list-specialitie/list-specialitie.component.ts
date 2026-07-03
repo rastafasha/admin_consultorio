@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { SpecialitieService } from '../../../services/specialitie.service';
 import { MatTableDataSource } from '@angular/material/table';
 import * as XLSX from 'xlsx';
-import jspdf from 'jspdf';
+import { jsPDF } from 'jspdf';
 import { FileSaverService } from 'ngx-filesaver';
 import { DoctorService } from '../../../services/doctor.service';
 import { RolesService } from '../../../services/roles.service';

@@ -4,7 +4,7 @@ import { PatientMService } from '../../../services/patient-m.service';
 import { FileSaverService } from 'ngx-filesaver';
 import { DoctorService } from '../../../services/doctor.service';
 import * as XLSX from 'xlsx';
-import jspdf from 'jspdf';
+import { jsPDF } from 'jspdf';
 import { RolesService } from '../../../services/roles.service';
 import { ActivatedRoute } from '@angular/router';
 import { routes } from '../../../shared/routes/routes';
