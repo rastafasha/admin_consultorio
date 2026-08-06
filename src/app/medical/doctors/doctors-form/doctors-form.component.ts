@@ -535,15 +535,15 @@ export class DoctorsFormComponent implements OnInit {
     }
 
     // 🛡️ Validación adaptada: El doctor necesita al menos una dirección cargada en la tabla
-    if (!this.addresss) {
-      this.text_validation = 'El médico necesita registrar al menos un consultorio/sede';
-      return;
-    }
+    // if (!this.addresss) {
+    //   this.text_validation = 'El médico necesita registrar al menos un consultorio/sede';
+    //   return;
+    // }
 
-    if (this.hours_selecteds.length === 0) {
-      this.text_validation = 'Se requiere un horario';
-      return;
-    }
+    // if (this.hours_selecteds.length === 0) {
+    //   this.text_validation = 'Se requiere un horario';
+    //   return;
+    // }
 
     const formData = new FormData();
     const formValue = this.doctorForm.value;
@@ -557,6 +557,7 @@ export class DoctorsFormComponent implements OnInit {
     formData.append('speciality_id', this.speciality_id?.toString() || '');
 
     if (this.selectedValue) formData.append('role_id', this.selectedValue);
+    if (this.selectedValueLocation) formData.append('pais_id', this.selectedValueLocation);
     if (formValue.education) formData.append('education', formValue.education);
     if (formValue.designation) formData.append('designation', formValue.designation);
     if (formValue.address) formData.append('address', formValue.address);
