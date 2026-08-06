@@ -173,7 +173,7 @@ export class DoctorsFormComponent implements OnInit {
       user_id: this.doctor_selected.id,
       name_consultorio: name,
       address: addressText,
-      is_active: true
+      // is_active: 1
     };
 
     this.doctorService.storeDoctorAddress(newAddressData).subscribe((resp: any) => {
