@@ -607,19 +607,31 @@ export class DoctorsFormComponent implements OnInit {
         // 🔔 DISPARADOR DE ÉXITO DE KLYNTIC
         Swal.fire('Éxito!', `Doctor ${this.isEditMode ? 'actualizado' : 'creado'} correctamente`, 'success');
 
-        // ✨ EL TRUCO DEFINITIVO: Volvemos a disparar la carga del perfil del médico
-        // Esto obligará a Angular a ir a Laravel, bajarse el JSON nuevo con las IDs reales de MAMP 
-        // y ejecutar tu mapeador de horarios para refrescar los checkboxes en pantalla al instante.
         if (this.isEditMode) {
-          this.loadDoctor(); // 🚀 Reemplaza 'getDoctor' por el nombre de tu función que inicializa el perfil
-          this.getAddress(); // Recargamos tu lista simplificada de consultorios
+          // --- FLUJO DE EDICIÓN EXISTENTE ---
+          this.loadDoctor();
+          this.getAddress();
         } else {
-          // Si estás creando un doctor nuevo desde cero, lo ideal es redirigir a la lista general
-          // o limpiar el panel borrando la selección activa
-          this.hours_selecteds = [];
-          // this.addressss = [];
-          this.selected_address_id = null;
-          this.doctorForm.reset();
+          // --- 🚀 FLUJO DE CREACIÓN OPTIMIZADO ---
+
+          // 1. CAPTURAMOS EL ID: Extraemos el ID del doctor que Laravel acaba de registrar.
+          // (Asegúrate de que coincida con la estructura de tu JSON, ej: resp.doctor.id o resp.id)
+          this.doctorId = resp.doctor ? resp.doctor.id : resp.id;
+
+          if (this.doctorId) {
+            // 2. CAMBIO DE MODO: Activamos el modo edición automáticamente.
+            // Esto hará que tus condicionales de HTML (*ngIf) muestren los paneles de direcciones y horarios.
+            this.isEditMode = true;
+
+            // 3. RECARGAMOS LOS DATOS: Inicializamos el componente con el nuevo ID sin salir de la vista.
+            this.loadDoctor();
+            this.getAddress();
+          } else {
+            // Fallback de seguridad: Si por alguna razón no llegó el ID, limpiamos el formulario.
+            this.hours_selecteds = [];
+            this.selected_address_id = null;
+            this.doctorForm.reset();
+          }
         }
       }
     });

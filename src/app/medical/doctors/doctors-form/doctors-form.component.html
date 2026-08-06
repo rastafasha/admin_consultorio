@@ -133,9 +133,21 @@
                                         <textarea class="form-control" formControlName="address" rows="3" cols="30"></textarea>
                                     </div>
                                 </div> -->
+                                <div class="col-12 col-sm-6 col-md-6 col-xl-6">
+                                    <div class="form-group local-top-form">
+                                        <label class="local-top">Avatar</label>
+                                        <div class="settings-btn upload-files-avator">
+                                            <input type="file" accept="image/*" id="file" (change)="loadFile($event)"
+                                                class="hide-input">
+                                            <label for="file" class="upload">Seleccione Foto</label>
+                                        </div>
+                                    </div>
+                                    <img *ngIf="IMAGE_PREVISUALIZA" [src]="IMAGE_PREVISUALIZA" style="width: 250px;"
+                                        alt="">
+                                </div>
 
                                 <!-- SECCIÓN DE CONSULTORIOS MÚLTIPLES (Reemplazo del textarea único) -->
-                                <div class="col-12 mt-3 mb-4">
+                                <div class="col-12 mt-3 mb-4" *ngIf="doctorId">
                                     <div class="d-flex justify-content-between align-items-center mb-3">
                                         <h5 class="mb-0 text-dark fw-bold">Sedes y Consultorios de Atención</h5>
                                         <!-- Botón que dispara la función para inyectar una fila vacía en el FormArray -->
@@ -191,25 +203,14 @@
                                 </div>
 
 
-                                <div class="col-12 col-sm-6 col-md-6 col-xl-6">
-                                    <div class="form-group local-top-form">
-                                        <label class="local-top">Avatar</label>
-                                        <div class="settings-btn upload-files-avator">
-                                            <input type="file" accept="image/*" id="file" (change)="loadFile($event)"
-                                                class="hide-input">
-                                            <label for="file" class="upload">Seleccione Foto</label>
-                                        </div>
-                                    </div>
-                                    <img *ngIf="IMAGE_PREVISUALIZA" [src]="IMAGE_PREVISUALIZA" style="width: 250px;"
-                                        alt="">
-                                </div>
+                                
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
             <!-- Disponibilidad de Horario< -->
-            <div class="col-sm-12">
+            <div class="col-sm-12" *ngIf="doctorId">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Disponibilidad de Horario</h4>
