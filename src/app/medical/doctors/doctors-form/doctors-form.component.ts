@@ -267,10 +267,6 @@ export class DoctorsFormComponent implements OnInit {
   }
 
 
-
-
-
-
   loadFile(event: any): void {
     const file = event.target.files[0];
     if (file && !file.type.startsWith('image/')) {
@@ -283,8 +279,6 @@ export class DoctorsFormComponent implements OnInit {
     reader.readAsDataURL(file);
     reader.onloadend = () => this.IMAGE_PREVISUALIZA = reader.result as string;
   }
-
-
 
 
   // Hour selection methods (exact copy from original)
@@ -454,8 +448,6 @@ export class DoctorsFormComponent implements OnInit {
   }
 
 
-
-
   // Función auxiliar para que el checkbox principal se marque/desmarque solo
   isRowFull(hours_day: any): boolean {
     // 🛡️ Validación previa: Si no hay consultorio seleccionado o la cola está vacía, no está lleno
@@ -605,8 +597,9 @@ export class DoctorsFormComponent implements OnInit {
         this.text_validation = resp.message_text;
       } else {
         // 🔔 DISPARADOR DE ÉXITO DE KLYNTIC
+        
         Swal.fire('Éxito!', `Doctor ${this.isEditMode ? 'actualizado' : 'creado'} correctamente`, 'success');
-
+        
         if (this.isEditMode) {
           // --- FLUJO DE EDICIÓN EXISTENTE ---
           this.loadDoctor();
@@ -616,7 +609,7 @@ export class DoctorsFormComponent implements OnInit {
 
           // 1. CAPTURAMOS EL ID: Extraemos el ID del doctor que Laravel acaba de registrar.
           // (Asegúrate de que coincida con la estructura de tu JSON, ej: resp.doctor.id o resp.id)
-          this.doctorId = resp.doctor ? resp.doctor.id : resp.id;
+          this.doctorId = resp.user.id ;
 
           if (this.doctorId) {
             // 2. CAMBIO DE MODO: Activamos el modo edición automáticamente.
@@ -630,7 +623,8 @@ export class DoctorsFormComponent implements OnInit {
             // Fallback de seguridad: Si por alguna razón no llegó el ID, limpiamos el formulario.
             this.hours_selecteds = [];
             this.selected_address_id = null;
-            this.doctorForm.reset();
+            // this.doctorForm.reset();
+            
           }
         }
       }
