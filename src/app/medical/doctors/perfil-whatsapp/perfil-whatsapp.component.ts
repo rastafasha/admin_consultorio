@@ -13,12 +13,11 @@ import * as QRCode from 'qrcode';
 export class PerfilWhatsappComponent implements OnInit, OnDestroy {
 
   doctorId: string;
-  whatsappStatus: string = 'DESCONECTADO';
-  whatsappQR: string = ''; // 👈 Debe llamarse exactamente igual que en tu HTML
-
-  public whatsappQRString: string = '';
+  whatsappStatus: string = 'DESCONECTADO'; // DESCONECTADO, CARGANDO, ESPERANDO_QR, CONECTADO
+  whatsappQR: string = ''; // 🚀 Variable ÚNICA para el [src] del <img> de tu HTML
   cargando: boolean = false;
   user: any;
+  public whatsappQRString: string = '';
 
   constructor(
     private consultorioService: ConsultorioService,
@@ -38,26 +37,29 @@ export class PerfilWhatsappComponent implements OnInit, OnDestroy {
   }
 
   verificarEstadoActual() {
-    this.consultorioService.obtenerEstadoWhatsApp(this.doctorId).subscribe(res => {
-      if (res) {
-        this.whatsappStatus = res.whatsappStatus;
-        if (this.whatsappStatus === 'ESPERANDO_QR' && res.whatsappQR) {
-          this.whatsappQRString = res.whatsappQR;
-          this.dibujarCodigoQR();
+    this.consultorioService.obtenerEstadoWhatsApp(this.doctorId).subscribe({
+      next: (res) => {
+        if (res) {
+          this.whatsappStatus = res.whatsappStatus;
+          // Si el servidor ya tenía un QR listo, lo asignamos directamente
+          if (this.whatsappStatus === 'ESPERANDO_QR' && res.whatsappQR) {
+            this.whatsappQR = res.whatsappQR;
+          }
         }
-      }
+      },
+      error: (err) => console.error('Error obteniendo estado inicial:', err)
     });
   }
 
   solicitarConexion() {
     this.cargando = true;
     this.whatsappStatus = 'CARGANDO';
+    this.whatsappQR = '';
 
-    // Le avisa a Node: "Arranca Puppeteer únicamente porque presioné el botón"
     this.consultorioService.conectarWhatsApp(this.doctorId).subscribe({
       next: () => {
         this.cargando = false;
-        // No iniciamos polling. El socket se encargará de pintar el QR cuando Node lo emita.
+        // Mantenemos el estado en CARGANDO. El socket se encargará de cambiarlo a ESPERANDO_QR
       },
       error: (err) => {
         this.cargando = false;
@@ -71,38 +73,39 @@ export class PerfilWhatsappComponent implements OnInit, OnDestroy {
    * 🔥 REEMPLAZO DEL POLLING: Escucha pasiva desde el socket centralizado
    */
   activarEscuchaSocket() {
-    const socket = this.notificacionService['socket'];
-    if (!socket) return;
+  const socket = this.notificacionService['socket'];
+  if (!socket) return;
 
-    socket.on('whatsapp-status-changed', (data: { doctorId: string, whatsappStatus: string, whatsappQR?: string }) => {
-      if (data.doctorId.toString() !== this.doctorId.toString()) return;
+  socket.on('whatsapp-status-changed', (data: { doctorId: string, whatsappStatus: string, whatsappQR?: string }) => {
+    if (data.doctorId.toString() !== this.doctorId.toString()) return;
 
-      this.whatsappStatus = data.whatsappStatus;
+    this.whatsappStatus = data.whatsappStatus;
 
-      // 🖼️ Sockets actualiza directamente la variable que lee el [src] de tu HTML
-      if (this.whatsappStatus === 'ESPERANDO_QR' && data.whatsappQR) {
-        this.whatsappQR = data.whatsappQR;
-      }
+    // Inyectamos la imagen Base64 directo a la variable que lee el [src] del HTML
+    if (this.whatsappStatus === 'ESPERANDO_QR' && data.whatsappQR) {
+      this.whatsappQR = data.whatsappQR; 
+    }
+    
+    if (this.whatsappStatus === 'CONECTADO') {
+      this.whatsappQR = '';
+    }
+  });
+}
 
-      if (this.whatsappStatus === 'CONECTADO') {
-        this.whatsappQR = '';
-      }
-    });
-  }
 
-  dibujarCodigoQR() {
-    setTimeout(() => {
-      const canvas = document.getElementById('canvas-qr') as HTMLCanvasElement;
-      if (canvas && this.whatsappQRString) {
-        QRCode.toCanvas(canvas, this.whatsappQRString, { width: 250 }, (error) => {
-          if (error) console.error('Error generando el canvas QR:', error);
-        });
-      }
-    }, 100);
-  }
+  // dibujarCodigoQR() {
+  //   setTimeout(() => {
+  //     const canvas = document.getElementById('canvas-qr') as HTMLCanvasElement;
+  //     if (canvas && this.whatsappQRString) {
+  //       QRCode.toCanvas(canvas, this.whatsappQRString, { width: 250 }, (error) => {
+  //         if (error) console.error('Error generando el canvas QR:', error);
+  //       });
+  //     }
+  //   }, 100);
+  // }
 
   ngOnDestroy() {
-    // 🧹 LIMPIEZA DE SEGURIDAD: Apagamos el canal del socket si el médico sale de esta pantalla
+    // 🧹 Apagamos el canal del socket para evitar duplicaciones si el médico navega a otra pantalla
     const socket = this.notificacionService['socket'];
     if (socket) {
       socket.off('whatsapp-status-changed');
