@@ -216,3 +216,16 @@
     }
 }
 
+
+.btn-outline-primary.rounded-circle {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  border-width: 2px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+

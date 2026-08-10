@@ -18,6 +18,10 @@
     </div> -->
     <!-- [darkMode]="darkMode" -->
     <div class="header-right">
+        <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm" (click)="openModal()" data-bs-toggle="modal" data-bs-target="#viewQRPaciente"
+                            title="Ayuda de la sección">
+                            <i class="fas fa-qrcode"></i>
+                        </button>
         <app-tasabcv></app-tasabcv>
         <div class="setting-row" *ngIf="!isLoadingSwitch" [class.loading]="pushService.isProcessing$ | async">
             <div class="setting-info">
@@ -40,3 +44,4 @@
     </div>
 
 </div>
+<app-qracceso  #viewQRPaciente ></app-qracceso>

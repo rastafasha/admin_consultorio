@@ -4,6 +4,7 @@ import { ModalInicialComponent } from './modal-inicial/modal-inicial.component';
 import { ModalInstruccionesComponent } from './modal-instrucciones/modal-instrucciones.component';
 import { ModalImagenpagoComponent } from './modal-imagenpago/modal-imagenpago.component';
 import { PipesModule } from '../pipes/pipes.module';
+import { QraccesoComponent } from './qracceso/qracceso.component';
 
 
 
@@ -11,12 +12,14 @@ import { PipesModule } from '../pipes/pipes.module';
   declarations: [
     ModalInicialComponent,
     ModalInstruccionesComponent,
-    ModalImagenpagoComponent
+    ModalImagenpagoComponent,
+    QraccesoComponent
   ],
   exports: [
     ModalInicialComponent,
     ModalInstruccionesComponent,
-    ModalImagenpagoComponent
+    ModalImagenpagoComponent,
+    QraccesoComponent
   ],
   imports: [
     CommonModule,

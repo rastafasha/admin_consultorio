@@ -25,5 +25,6 @@ import { SharedModule } from '../../shared/shared.module';
         SharedModule,
         ReusablesModule,
         PipesModule,
-        ModalInstruccionesModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
+        ModalInstruccionesModule], 
+        providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class TasabcvModule { }

@@ -224,4 +224,16 @@ public isLoadingSwitch: boolean = false;
     }
   }
 
+  // Método público para abrir el modal manualmente (ignorando el bloqueo)
+  public openModal() {
+  setTimeout(() => {
+    // Buscamos por el sectionId dinámico
+    const modalElement = document.getElementById('viewQRPaciente') as HTMLElement;
+    if (modalElement) {
+      const bootstrapModal = (window as any).bootstrap?.Modal?.getInstance(modalElement) || 
+                             new (window as any).bootstrap.Modal(modalElement);
+      bootstrapModal.show();
+    }
+  }, 100);
+}
   }

@@ -72,6 +72,7 @@ const routes: Routes = [
       loadChildren: () =>
         import('./tasabcv/tasabcv.module').then((m) => m.TasabcvModule),
     },
+    
   ]  
 }
 ];

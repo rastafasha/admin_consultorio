@@ -126,9 +126,7 @@ export class routes {
   public static get calendar(): string {
     return this.baseUrl + '/appointment-calendar/show';
   }
-  public static get tasabcv(): string {
-    return this.baseUrl + '/tasabcv/edit';
-  }
+  
   public static get incomingCall(): string {
     return this.baseUrl + '/calls/incoming-call';
   }
@@ -186,6 +184,7 @@ export class routes {
   public static get conectarWhatsapp(): string {
     return this.baseUrl + '/doctors/profile-whatsapp';
   }
+ 
   // public static get doctorProfile(): string {
   //   return this.baseUrl + '/doctor/doctor-profile/';
   // }
@@ -210,6 +209,10 @@ export class routes {
   public static get schedule(): string {
     return this.baseUrl + '/doctor-schedule/schedule';
   }
+   public static get tasabcv(): string {
+    return this.baseUrl + '/tasabcv/edit';
+  }
+
   public static get email(): string {
     return this.baseUrl + '/email';
   }
