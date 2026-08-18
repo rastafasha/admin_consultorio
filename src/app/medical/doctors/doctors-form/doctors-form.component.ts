@@ -18,6 +18,7 @@ export class DoctorsFormComponent implements OnInit {
   public doctorForm: FormGroup;
   public isEditMode = false;
   public cargando = false;
+  public cargandoAdd = false;
   public doctorId: string | null = null;
 
   public selectedValue = '';
@@ -48,6 +49,7 @@ export class DoctorsFormComponent implements OnInit {
   public text_validation = '';
 
   public doctor_selected: any;
+  public addresSelected: any;
 
   constructor(
     private fb: FormBuilder,
@@ -161,41 +163,95 @@ export class DoctorsFormComponent implements OnInit {
   }
 
   addAddress() {
+    this.addresSelected = null;
     this.show_modal_address = true;
-    console.log('DEBUG: Levantando modal flotante para registrar consultorio');
+  }
+
+  editAddres(addr: any) {
+    this.addresSelected = { ...addr };
+    this.show_modal_address = true;
+
   }
 
   // 3. Método para cuando el doctor guarde la sede en el modal
-  saveNewAddressFromSchedule(name: string, addressText: string) {
+  saveAddress(name: string, addressText: string) {
+    this.cargandoAdd = true;
     if (!name || !addressText) return;
 
-    const newAddressData = {
-      user_id: this.doctor_selected.id,
-      name_consultorio: name,
-      address: addressText,
-      // is_active: 1
-    };
+    if (this.addresSelected && this.addresSelected.id) {
+      // =========================================================================
+      // 🔄 MODO: EDICIÓN DE DIRECCIÓN
+      // =========================================================================
+      const updatedData = {
+        id: this.addresSelected.id,
+        user_id: this.doctor_selected.id,
+        name_consultorio: name,
+        address: addressText
+      };
 
-    this.doctorService.storeDoctorAddress(newAddressData).subscribe((resp: any) => {
-      // ✨ Garantizamos que la propiedad exista antes de hacer el push para evitar el error
-      if (!this.doctor_selected.addresses) {
-        this.doctor_selected.addresses = [];
-      }
-      this.doctor_selected.addresses.push(resp.address);
+      // ⚠️ Asegúrate de tener el método updateDoctorAddress creado en tu doctorService
+      this.doctorService.updateDoctorAddress(this.addresSelected.id, updatedData).subscribe({
+        next: (resp: any) => {
 
-      // La seleccionamos automáticamente en pantalla
-      this.selected_address_id = resp.address.id;
+          // 🚀 PROTECCIÓN: Validamos que doctor_selected exista y aseguramos su arreglo
+          if (this.doctor_selected) {
+            if (!this.doctor_selected.addresses) {
+              this.doctor_selected.addresses = [];
+            }
 
-      // Recargamos el flujo completo del doctor para actualizar tu tabla e historial
-      // this.loadDoctor();
-      this.getAddress(); // Opcional: Llama a tu función de direcciones si la usas por separado
-    });
+            // Ahora sí podemos hacer el findIndex de forma 100% segura
+            const index = this.doctor_selected.addresses.findIndex((a: any) => a.id === this.addresSelected.id);
+            if (index !== -1) {
+              this.doctor_selected.addresses[index] = resp.address;
+            } else {
+              // Si por alguna razón la dirección no estaba en el arreglo visual, la agregamos
+              this.doctor_selected.addresses.push(resp.address);
+            }
+          }
+          this.cargandoAdd = false;
+          this.addresSelected = null; // Limpiamos la memoria del componente
+          this.getAddress();          // Refrescamos listados en pantalla
+          console.log('✅ Dirección actualizada con éxito en Laravel');
+        },
+        error: (err) => console.error('Error al actualizar la dirección:', err)
+      });
+
+    } else {
+      const newAddressData = {
+        user_id: this.doctor_selected.id,
+        name_consultorio: name,
+        address: addressText,
+        // is_active: 1
+      };
+      this.cargandoAdd = true;
+      this.doctorService.storeDoctorAddress(newAddressData).subscribe((resp: any) => {
+        // ✨ Garantizamos que la propiedad exista antes de hacer el push para evitar el error
+        if (!this.doctor_selected.addresses) {
+          this.doctor_selected.addresses = [];
+        }
+        this.doctor_selected.addresses.push(resp.address);
+
+        // La seleccionamos automáticamente en pantalla
+        this.selected_address_id = resp.address.id;
+        this.cargandoAdd = false;
+        // Recargamos el flujo completo del doctor para actualizar tu tabla e historial
+        // this.loadDoctor();
+        this.getAddress(); // Opcional: Llama a tu función de direcciones si la usas por separado
+      });
+    }
+
+
   }
 
 
+
+
+
   getAddress() {
+    this.cargandoAdd = true;
     this.doctorService.getAddressesByDoctor(this.doctor_selected.id).subscribe((resp: any) => {
       this.addresss = resp.addresses;
+      this.cargandoAdd = false
     });
   }
 
@@ -210,7 +266,7 @@ export class DoctorsFormComponent implements OnInit {
       confirmButtonText: 'Si, Borrar!',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.cargando = true;
+        this.cargandoAdd = true;
         this.doctorService.deleteDoctorAddress(addr.id).subscribe((resp: any) => {
           this.getAddress();
         });
@@ -229,6 +285,7 @@ export class DoctorsFormComponent implements OnInit {
 
     // Forzamos a Angular a recalcular el estado visual de la cuadrícula
   }
+
 
   // 🗓️ 2. LLAMA A ESTA FUNCIÓN JUSTO CUANDO RECIBAS LA RESPUESTA DEL DOCTOR DESDE EL BACKEND
   // (Normalmente dentro del método donde obtienes el perfil del doctor seleccionado)
@@ -597,9 +654,9 @@ export class DoctorsFormComponent implements OnInit {
         this.text_validation = resp.message_text;
       } else {
         // 🔔 DISPARADOR DE ÉXITO DE KLYNTIC
-        
+
         Swal.fire('Éxito!', `Doctor ${this.isEditMode ? 'actualizado' : 'creado'} correctamente`, 'success');
-        
+
         if (this.isEditMode) {
           // --- FLUJO DE EDICIÓN EXISTENTE ---
           this.loadDoctor();
@@ -609,7 +666,7 @@ export class DoctorsFormComponent implements OnInit {
 
           // 1. CAPTURAMOS EL ID: Extraemos el ID del doctor que Laravel acaba de registrar.
           // (Asegúrate de que coincida con la estructura de tu JSON, ej: resp.doctor.id o resp.id)
-          this.doctorId = resp.user.id ;
+          this.doctorId = resp.user.id;
 
           if (this.doctorId) {
             // 2. CAMBIO DE MODO: Activamos el modo edición automáticamente.
@@ -624,7 +681,7 @@ export class DoctorsFormComponent implements OnInit {
             this.hours_selecteds = [];
             this.selected_address_id = null;
             // this.doctorForm.reset();
-            
+
           }
         }
       }

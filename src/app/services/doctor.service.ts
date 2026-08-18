@@ -118,7 +118,7 @@ export class DoctorService {
   // 3. Actualizar un consultorio de forma aislada
   updateDoctorAddress(addressId: number, data: Partial<DoctorAddress>): Observable<any> {
     const url = `${url_servicios}/doctor-addresses/update/${addressId}`;
-    return this.http.put<any>(url, data);
+    return this.http.post<any>(url, data);
   }
 
   // 4. Eliminar físicamente o dar de baja lógica a un consultorio

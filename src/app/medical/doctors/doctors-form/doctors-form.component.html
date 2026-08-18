@@ -147,11 +147,11 @@
                                 </div>
 
                                 <!-- SECCIÓN DE CONSULTORIOS MÚLTIPLES (Reemplazo del textarea único) -->
-                                <div class="col-12 mt-3 mb-4" *ngIf="doctorId">
+                                <div class="col-12 mt-3 mb-4" *ngIf="doctorId ">
                                     <div class="d-flex justify-content-between align-items-center mb-3">
                                         <h5 class="mb-0 text-dark fw-bold">Sedes y Consultorios de Atención</h5>
                                         <!-- Botón que dispara la función para inyectar una fila vacía en el FormArray -->
-                                        <button type="button" class="btn btn-primary btn-sm px-3" (click)="addAddress()"
+                                        <button type="button" *ngIf="!cargandoAdd" class="btn btn-primary btn-sm px-3" (click)="addAddress()"
                                             data-bs-toggle="modal" data-bs-target="#modal-add-address">
                                             <i class="fa fa-plus me-1"></i> Añadir Sede
                                         </button>
@@ -159,14 +159,15 @@
 
                                     <!-- Contenedor del FormArray registrado en tu FormBuilder -->
                                     <div>
+                                        <app-loading *ngIf="cargandoAdd"></app-loading>
                                         <!-- Si la lista está vacía -->
-                                        <div *ngIf="!addresss "
+                                        <div *ngIf="!addresss && !cargandoAdd"
                                             class="alert alert-light text-center p-3 text-muted small">
                                             El doctor no tiene consultorios registrados.
                                         </div>
-
+                                        
                                         <!-- Tabla simple que lee tu variable directa -->
-                                        <table *ngIf="addresss " class="table table-striped small">
+                                        <table *ngIf="addresss && !cargandoAdd" class="table table-striped small">
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
@@ -187,6 +188,9 @@
                                                     <td>{{ addr.name_consultorio }}</td>
                                                     <td>{{ addr.address }}</td>
                                                     <td class="text-end" (click)="$event.stopPropagation()">
+                                                        <button type="button" class="btn btn-warning btn-sm"
+                                                        data-bs-toggle="modal" data-bs-target="#modal-add-address"
+                                                            (click)="editAddres(addr)"><i class="fa fa-pencil"></i></button>
                                                         <button type="button" class="btn btn-danger btn-sm"
                                                             (click)="removeAddress(addr)">x</button>
                                                     </td>
@@ -289,12 +293,15 @@
 </div>
 
 
-<!-- MODAL FLOTANTE DE BOOTSTRAP PARA REGISTRAR CONSULTORIO -->
+<!-- MODAL FLOTANTE DE BOOTSTRAP PARA REGISTRAR/EDITAR CONSULTORIO -->
 <div class="modal fade" id="modal-add-address" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header py-3">
-                <h5 class="modal-title fs-6 fw-bold text-dark">🏥 Registrar Nuevo Consultorio</h5>
+                <!-- 🚀 Título Dinámico -->
+                <h5 class="modal-title fs-6 fw-bold text-dark">
+                    🏥 {{ addresSelected ? 'Editar Consultorio' : 'Registrar Nuevo Consultorio' }}
+                </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeBtn></button>
             </div>
 
@@ -304,7 +311,9 @@
                     <div class="col-12 mb-3">
                         <div class="form-group local-forms mb-0">
                             <label>Nombre del Consultorio <span class="login-danger">*</span></label>
+                            <!-- 🚀 [value] precarga la info si estamos editando -->
                             <input type="text" class="form-control" #nameConsultorio
+                                [value]="addresSelected ? addresSelected.name_consultorio : ''"
                                 placeholder="Ej: Clínica Metropolitana - Consultorio 5B">
                         </div>
                     </div>
@@ -313,7 +322,9 @@
                     <div class="col-12 mb-2">
                         <div class="form-group local-forms mb-0">
                             <label>Dirección Exacta <span class="login-danger">*</span></label>
+                            <!-- 🚀 [value] precarga la info si estamos editando -->
                             <input type="text" class="form-control" #addressTexto
+                                [value]="addresSelected ? addresSelected.address : ''"
                                 placeholder="Ej: Av. Principal, Piso 3, Oficina 32">
                         </div>
                     </div>
@@ -322,11 +333,12 @@
 
             <div class="modal-footer py-2 mt-3 mb-5">
                 <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancelar</button>
-                <!-- Al hacer clic, pasa los valores directos al TypeScript y limpia los inputs -->
+                
+                <!-- 🚀 Botón Unificado: Llama a la nueva función saveAddress y limpia los elementos -->
                 <button type="button" class="btn btn-primary btn-sm"
-                    (click)="saveNewAddressFromSchedule(nameConsultorio.value, addressTexto.value); nameConsultorio.value=''; addressTexto.value=''"
+                    (click)="saveAddress(nameConsultorio.value, addressTexto.value); nameConsultorio.value=''; addressTexto.value=''"
                     data-bs-dismiss="modal">
-                    Guardar Sede
+                    {{ addresSelected ? 'Guardar Cambios' : 'Guardar Sede' }}
                 </button>
             </div>
         </div>
