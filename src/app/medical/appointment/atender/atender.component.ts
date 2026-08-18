@@ -27,6 +27,7 @@ export class AtenderComponent implements OnInit {
   public routes = routes;
 
   isfiltered = false;
+  isLoading = false;
   valid_form_success = false;
   public text_validation = '';
   public text_success = '';
@@ -190,6 +191,7 @@ export class AtenderComponent implements OnInit {
 
 
   getDoctor() {
+    this.isLoading = true
     this.doctorService.showDoctor(this.doctor_id).subscribe((resp: any) => {
       this.DOCTOR_SELECTED = resp.user;
       // console.log(this.DOCTOR_SELECTED);
@@ -199,6 +201,7 @@ export class AtenderComponent implements OnInit {
       this.specialitiService.showSpeciality(this.speciality_id).subscribe((resp: any) => {
         console.log(resp);
         this.specialityName= resp.name
+        this.isLoading = false
 
       })
 

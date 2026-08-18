@@ -19,6 +19,7 @@ export class DoctorsFormComponent implements OnInit {
   public isEditMode = false;
   public cargando = false;
   public cargandoAdd = false;
+  isLoading = false
   public doctorId: string | null = null;
 
   public selectedValue = '';
@@ -92,11 +93,13 @@ export class DoctorsFormComponent implements OnInit {
   }
 
   loadConfig(): void {
+    this.isLoading = true
     this.doctorService.listConfig().subscribe((resp: any) => {
       this.roles = resp.roles;
       this.specialities = resp.specialities;
       this.countries = resp.countries;
       this.hours_days = resp.hours_days;
+      this.isLoading = false
       if (this.isEditMode) {
         this.loadDoctor();
       }
@@ -104,8 +107,11 @@ export class DoctorsFormComponent implements OnInit {
   }
 
   loadDoctor(): void {
+    this.isLoading = true
     this.doctorService.showDoctor(+this.doctorId!).subscribe((resp: any) => {
+
       this.doctor_selected = resp.user;
+      this.isLoading = false
       this.getAddress();
       // 🏥 TRUCO DE ORO: Si el médico ya tiene direcciones creadas,
       // pre-seleccionamos la primera automáticamente para encender los checkboxes de golpe
@@ -117,7 +123,7 @@ export class DoctorsFormComponent implements OnInit {
       }
 
       this.mapExistingSchedulesFromBackend(this.doctor_selected);
-      console.log(resp)
+      // console.log(resp)
       this.selectedValue = this.doctor_selected.roles.id;
       this.selectedValueLocation = this.doctor_selected.pais_id;
       this.speciality_id = this.doctor_selected.speciality?.id || null;
@@ -320,7 +326,7 @@ export class DoctorsFormComponent implements OnInit {
       }
     });
 
-    console.log('📊 Matriz de horarios Klyntic sincronizada con éxito:', this.hours_selecteds);
+    // console.log('📊 Matriz de horarios Klyntic sincronizada con éxito:', this.hours_selecteds);
   }
 
 

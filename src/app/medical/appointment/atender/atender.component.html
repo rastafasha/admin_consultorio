@@ -23,7 +23,8 @@
                     <div class="card-body">
                         <form #form>
                             <!-- consulta -->
-                            <div class="row align-items-center">
+                             <app-loading *ngIf="isLoading"></app-loading>
+                            <div class="row align-items-center" *ngIf="!isLoading">
                                 <div class="col-12">
                                     <div class="form-heading">
                                         <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm"

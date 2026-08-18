@@ -12,7 +12,7 @@ const SocketUrl = environment.socket_url;
 export interface Notificacion {
   _id: string;
   usuario: string;
-  rolDestinatario: 'DOCTOR' | 'GUEST';
+  rolDestinatario: 'DOCTOR' ;
   titulo: string;
   mensaje: string;
   leido: boolean;
@@ -43,11 +43,11 @@ export class NotificacionService {
     this.inicializarEcosistemaAlertas();
   }
 
-  get currentRole(): 'DOCTOR' | 'GUEST' {
+  get currentRole(): 'DOCTOR'  {
     const userString = localStorage.getItem('user');
     const userObj = userString ? JSON.parse(userString) : null;
     // Retorna 'MEDICO' si tiene la propiedad de doctor o rol médico, si no, 'GUEST'
-    return userObj && (userObj.doctor_id || userObj.role === 'DOCTOR') ? 'DOCTOR' : 'GUEST';
+    return userObj && (userObj.doctor_id || userObj.roles[0] === 'DOCTOR')
   }
 
   private getOptions() {
