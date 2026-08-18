@@ -3,6 +3,7 @@ import { ConsultorioService } from '../../../services/consultorio.service';
 import { AuthService } from '../../../shared/auth/auth.service';
 import { NotificacionService } from '../../../services/notificacion.service'; // 👈 IMPORTA TU SERVICIO DE SOCKETS
 import * as QRCode from 'qrcode';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-perfil-whatsapp',
@@ -20,14 +21,20 @@ export class PerfilWhatsappComponent implements OnInit, OnDestroy {
   public whatsappQRString: string = '';
 
   constructor(
+    private sanitizer: DomSanitizer,
     private consultorioService: ConsultorioService,
     private authService: AuthService,
     private notificacionService: NotificacionService // 👈 INYECTA EL SERVICIO DE SOCKETS
   ) { }
 
+  sanitizarQR(base64String: string): SafeUrl {
+  if (!base64String) return '';
+  return this.sanitizer.bypassSecurityTrustUrl(base64String);
+}
+
   ngOnInit() {
     this.user = this.authService.getLocalStorage();
-    this.doctorId = this.user.id;
+    this.doctorId = String(this.user.id);
 
     // 1. Al cargar la pantalla, revisamos el estado actual guardado en base de datos
     this.verificarEstadoActual();
@@ -93,16 +100,6 @@ export class PerfilWhatsappComponent implements OnInit, OnDestroy {
 }
 
 
-  // dibujarCodigoQR() {
-  //   setTimeout(() => {
-  //     const canvas = document.getElementById('canvas-qr') as HTMLCanvasElement;
-  //     if (canvas && this.whatsappQRString) {
-  //       QRCode.toCanvas(canvas, this.whatsappQRString, { width: 250 }, (error) => {
-  //         if (error) console.error('Error generando el canvas QR:', error);
-  //       });
-  //     }
-  //   }, 100);
-  // }
 
   ngOnDestroy() {
     // 🧹 Apagamos el canal del socket para evitar duplicaciones si el médico navega a otra pantalla

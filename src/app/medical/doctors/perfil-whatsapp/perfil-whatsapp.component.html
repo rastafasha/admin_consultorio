@@ -38,8 +38,9 @@
                 <p class="text-warning">⏳ Código QR listo para vincular</p>
 
                 <!-- Reemplazamos el canvas por una etiqueta img directa mucho más rápida -->
-                <div class="my-3 d-flex justify-content-center">
-                  <img [src]="whatsappQR" alt="Escanear Código QR WhatsApp"
+                <div *ngIf="whatsappQR" class="my-3 d-flex justify-content-center">
+                  <!-- 🚀 CORRECCIÓN CRÍTICA: Se añade el método sanitizarQR -->
+                  <img [src]="sanitizarQR(whatsappQR)" alt="Escanear Código QR WhatsApp"
                     style="border: 1px solid #ccc; padding: 10px; background: white; width: 250px; height: 250px;" />
                 </div>
 
