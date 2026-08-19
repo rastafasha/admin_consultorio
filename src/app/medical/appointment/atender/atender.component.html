@@ -23,7 +23,7 @@
                     <div class="card-body">
                         <form #form>
                             <!-- consulta -->
-                             <app-loading *ngIf="isLoading"></app-loading>
+                            <app-loading *ngIf="isLoading"></app-loading>
                             <div class="row align-items-center" *ngIf="!isLoading">
                                 <div class="col-12">
                                     <div class="form-heading">
@@ -87,60 +87,63 @@
 
                             <div class="row">
                                 <!-- disponibilidad -->
-                            <div class="col-4" *ngIf="isfiltered">
-                                <div class="table-responsive">
-                                    <table class="table mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th>Hora</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <ng-container *ngFor="let SEGMENT of segments">
-                                                        <div class="radio">
-                                                            <label>
-                                                                <input type="radio" *ngIf="!SEGMENT.is_appointment"
-                                                                    name="radio" (click)="selecSegment(SEGMENT)">
-                                                                {{SEGMENT.format_segment.format_hour_start}} a
-                                                                {{SEGMENT.format_segment.format_hour_end}}
-                                                            </label>
-                                                        </div>
-                                                        <br>
-                                                    </ng-container>
+                                <div class="col-xs-12 col-sm-4" *ngIf="isfiltered">
+                                    <div class="table-responsive">
+                                        <table class="table mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Hora</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <ng-container *ngFor="let SEGMENT of segments">
+                                                            <div class="radio">
+                                                                <label>
+                                                                    <input type="radio" *ngIf="!SEGMENT.is_appointment"
+                                                                        name="radio" (click)="selecSegment(SEGMENT)">
+                                                                    {{SEGMENT.format_segment.format_hour_start}} a
+                                                                    {{SEGMENT.format_segment.format_hour_end}}
+                                                                </label>
+                                                            </div>
+                                                            <br>
+                                                        </ng-container>
 
-                                                </td>
-                                            </tr>
+                                                    </td>
+                                                </tr>
 
-                                        </tbody>
-                                    </table>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
-                            <!-- disponibilidad -->
-                            <div class="col-4" *ngIf="isfiltered">
-                                <div class="table-responsive">
-                                    <table class="table mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th>Consultorio</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let addr of addresses; let i = index">
+                                <!-- disponibilidad -->
+                                <div class="col-xs-12 col-sm-8" *ngIf="isfiltered">
+                                    <div class="table-responsive">
+                                        <table class="table mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Consultorio</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let addr of addresses; let i = index">
 
-                                                <td>{{ addr.name_consultorio }}</td>
-                                                <td>{{ addr.address }}</td>
-                                            </tr>
+                                                    <td>{{ addr.name_consultorio }}</td>
+                                                    <td>{{ addr.address }}</td>
+                                                </tr>
 
-                                        </tbody>
-                                    </table>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
                             </div>
                             <!-- pago -->
-
-                            <div class="row align-items-center py-4" *ngIf="isfiltered">
+                            <div *ngIf="isfiltered && !tiposdepagos" class="alert alert-warning py-2 small mt-2">
+                                <i class="fa fa-info-circle me-1"></i> No puedes proceder hasta que configures tus <a
+                                    [routerLink]="['settings/payment-settings/doctor/', doctor_id ]">metodos de pago</a>
+                            </div>
+                            <div class="row align-items-center py-4" *ngIf="isfiltered && tiposdepagos">
                                 <div class="col-12 py-4">
                                     <h4>Datos de Pago</h4>
                                 </div>
@@ -175,7 +178,7 @@
                             </div>
                             <!-- pago -->
                             <!-- paciente -->
-                            <div class="row align-items-center py-4" *ngIf="isfiltered">
+                            <div class="row align-items-center py-4" *ngIf="isfiltered && tiposdepagos">
                                 <div class="col-12 py-4">
                                     <h4>Datos del Paciente</h4>
                                     <button type="button" class="btn btn-light btn-sm"
@@ -216,7 +219,7 @@
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-3">
                                     <div class="form-group local-forms">
-                                        <label>Nombre Acompañante <span class="login-danger">*</span></label>
+                                        <label>Nombre Acompañante </label>
                                         <input class="form-control" name="name_companion"
                                             [ngModelOptions]="{standalone: true}" [(ngModel)]="name_companion"
                                             type="text">
@@ -224,7 +227,7 @@
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-3">
                                     <div class="form-group local-forms">
-                                        <label>Apellido Acompañante <span class="login-danger">*</span></label>
+                                        <label>Apellido Acompañante </label>
                                         <input class="form-control" name="surname_companion"
                                             [ngModelOptions]="{standalone: true}" [(ngModel)]="surname_companion"
                                             type="text">
@@ -246,7 +249,7 @@
                             <!-- fin paciente -->
 
 
-                            <div class="row align-items-center" *ngIf="isfiltered">
+                            <div class="row align-items-center" *ngIf="isfiltered && tiposdepagos">
                                 <!-- validaciones -->
                                 <!-- <div class="form-group row" *ngIf="text_success">
                                     <div class="col-12">

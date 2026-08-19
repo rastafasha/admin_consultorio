@@ -199,7 +199,7 @@ export class AtenderComponent implements OnInit {
 
       this.speciality_id = this.DOCTOR_SELECTED.speciality_id;
       this.specialitiService.showSpeciality(this.speciality_id).subscribe((resp: any) => {
-        console.log(resp);
+        
         this.specialityName= resp.name
         this.isLoading = false
 
