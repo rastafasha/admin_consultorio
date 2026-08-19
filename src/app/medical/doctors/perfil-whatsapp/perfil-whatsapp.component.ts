@@ -19,6 +19,8 @@ export class PerfilWhatsappComponent implements OnInit, OnDestroy {
   cargando: boolean = false;
   user: any;
   public whatsappQRString: string = '';
+  // 🚀 NUEVO: Referencia para el temporizador de respaldo en la nube de Render
+  private respaldoInterval: any;
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -43,7 +45,7 @@ export class PerfilWhatsappComponent implements OnInit, OnDestroy {
     this.activarEscuchaSocket();
   }
 
-  verificarEstadoActual() {
+ verificarEstadoActual() {
     this.consultorioService.obtenerEstadoWhatsApp(this.doctorId).subscribe({
       next: (res) => {
         if (res) {
@@ -66,7 +68,9 @@ export class PerfilWhatsappComponent implements OnInit, OnDestroy {
     this.consultorioService.conectarWhatsApp(this.doctorId).subscribe({
       next: () => {
         this.cargando = false;
-        // Mantenemos el estado en CARGANDO. El socket se encargará de cambiarlo a ESPERANDO_QR
+        
+        // 🚀 SOLUCIÓN: Activamos un Polling de respaldo por si el Socket de Render se durmió o desconectó
+        this.activarPollingRespaldo();
       },
       error: (err) => {
         this.cargando = false;
@@ -77,35 +81,68 @@ export class PerfilWhatsappComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * 🔥 REEMPLAZO DEL POLLING: Escucha pasiva desde el socket centralizado
+   * ⏳ NUEVO: Mecanismo de seguridad que rescata el estado por HTTP ordinario si el Socket falla
+   */
+  activarPollingRespaldo() {
+    if (this.respaldoInterval) clearInterval(this.respaldoInterval);
+
+    // Pregunta a Render mediante HTTP común cada 3 segundos
+    this.respaldoInterval = setInterval(() => {
+      this.consultorioService.obtenerEstadoWhatsApp(this.doctorId).subscribe({
+        next: (res) => {
+          if (res) {
+            // Si la base de datos o la RAM en Render ya cambiaron de estado, actualizamos Angular
+            if (res.whatsappStatus === 'ESPERANDO_QR' || res.whatsappStatus === 'CONECTADO') {
+              console.log(`🎯 Respaldo HTTP rescató el estado: ${res.whatsappStatus}`);
+              
+              this.whatsappStatus = res.whatsappStatus;
+              this.whatsappQR = res.whatsappQR || '';
+              
+              // Si ya se conectó, podemos apagar con seguridad el temporizador
+              if (res.whatsappStatus === 'CONECTADO') {
+                clearInterval(this.respaldoInterval);
+              }
+            }
+          }
+        },
+        error: (err) => console.error('Error en ciclo de polling de respaldo:', err)
+      });
+    }, 3500);
+  }
+
+  /**
+   * 🔥 ESCUCHA PASIVA DESDE EL SOCKET CENTRALIZADO
    */
   activarEscuchaSocket() {
-  const socket = this.notificacionService['socket'];
-  if (!socket) return;
+    const socket = this.notificacionService['socket'];
+    if (!socket) return;
 
-  socket.on('whatsapp-status-changed', (data: { doctorId: string, whatsappStatus: string, whatsappQR?: string }) => {
-    if (data.doctorId.toString() !== this.doctorId.toString()) return;
+    socket.on('whatsapp-status-changed', (data: { doctorId: string, whatsappStatus: string, whatsappQR?: string }) => {
+      if (data.doctorId.toString() !== this.doctorId.toString()) return;
 
-    this.whatsappStatus = data.whatsappStatus;
+      console.log('📡 Evento recibido por Sockets:', data.whatsappStatus);
+      this.whatsappStatus = data.whatsappStatus;
 
-    // Inyectamos la imagen Base64 directo a la variable que lee el [src] del HTML
-    if (this.whatsappStatus === 'ESPERANDO_QR' && data.whatsappQR) {
-      this.whatsappQR = data.whatsappQR; 
-    }
-    
-    if (this.whatsappStatus === 'CONECTADO') {
-      this.whatsappQR = '';
-    }
-  });
-}
-
-
+      if (this.whatsappStatus === 'ESPERANDO_QR' && data.whatsappQR) {
+        this.whatsappQR = data.whatsappQR; 
+      }
+      
+      if (this.whatsappStatus === 'CONECTADO') {
+        this.whatsappQR = '';
+        if (this.respaldoInterval) clearInterval(this.respaldoInterval); // Apaga el respaldo
+      }
+    });
+  }
 
   ngOnDestroy() {
-    // 🧹 Apagamos el canal del socket para evitar duplicaciones si el médico navega a otra pantalla
+    // 🧹 Limpieza absoluta de Sockets e Intervals al salir de la pantalla
+    if (this.respaldoInterval) {
+      clearInterval(this.respaldoInterval);
+    }
+    
     const socket = this.notificacionService['socket'];
     if (socket) {
       socket.off('whatsapp-status-changed');
     }
-  }
+    }
 }
