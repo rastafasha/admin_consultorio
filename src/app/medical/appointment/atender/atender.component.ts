@@ -51,7 +51,7 @@ export class AtenderComponent implements OnInit {
   DOCTOR_SELECTED: any;
   DOCTOR: any = [];
 
-  tiposdepagos: any;
+  tiposdepagos: any = [];
   amount: number;
   amount_add: number;
   method_payment = '';
@@ -154,7 +154,6 @@ export class AtenderComponent implements OnInit {
           });
           this.patientSeleccionado = resp.patient;
           this.n_doc = this.patientSeleccionado.n_doc;
-          console.log(this.patientSeleccionado);
           this.filterPatientDirecto();
         }
       );
@@ -183,9 +182,7 @@ export class AtenderComponent implements OnInit {
 
   getTiposdePagoByDoctor() {
     this.settigService.getActivoPagoByDoctor(this.doctor_id).subscribe((resp: any) => {
-      // console.log(resp);
       this.tiposdepagos = resp.tiposdepagos;
-      // console.log(this.tiposdepagos);
     })
   }
 

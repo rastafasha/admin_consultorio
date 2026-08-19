@@ -139,11 +139,12 @@
                                 </div>
                             </div>
                             <!-- pago -->
-                            <div *ngIf="isfiltered && !tiposdepagos" class="alert alert-warning py-2 small mt-2">
-                                <i class="fa fa-info-circle me-1"></i> No puedes proceder hasta que configures tus <a
-                                    [routerLink]="['settings/payment-settings/doctor/', doctor_id ]">metodos de pago</a>
+                            <div *ngIf="isfiltered && (!tiposdepagos || tiposdepagos.length === 0)" class="alert alert-warning py-2 small mt-2">
+                                <i class="fa fa-info-circle me-1"></i> No puedes proceder hasta que configures tus 
+                                <a [routerLink]="['/settings/payment-settings/doctor/', doctor_id]" >métodos de pago</a>
+                                
                             </div>
-                            <div class="row align-items-center py-4" *ngIf="isfiltered && tiposdepagos">
+                            <div class="row align-items-center py-4" *ngIf="isfiltered  && (!tiposdepagos || tiposdepagos.length > 0) ">
                                 <div class="col-12 py-4">
                                     <h4>Datos de Pago</h4>
                                 </div>
@@ -178,7 +179,7 @@
                             </div>
                             <!-- pago -->
                             <!-- paciente -->
-                            <div class="row align-items-center py-4" *ngIf="isfiltered && tiposdepagos">
+                            <div class="row align-items-center py-4" *ngIf="isfiltered  && (!tiposdepagos || tiposdepagos.length > 0) ">
                                 <div class="col-12 py-4">
                                     <h4>Datos del Paciente</h4>
                                     <button type="button" class="btn btn-light btn-sm"
@@ -249,7 +250,7 @@
                             <!-- fin paciente -->
 
 
-                            <div class="row align-items-center" *ngIf="isfiltered && tiposdepagos">
+                            <div class="row align-items-center" *ngIf="isfiltered && (!tiposdepagos || tiposdepagos.length > 0)">
                                 <!-- validaciones -->
                                 <!-- <div class="form-group row" *ngIf="text_success">
                                     <div class="col-12">
