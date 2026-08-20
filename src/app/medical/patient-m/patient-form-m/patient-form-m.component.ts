@@ -133,7 +133,8 @@ export class PatientFormMComponent implements OnInit {
       fc: [0],
       fr: [0],
       peso: [0],
-      current_desease: ['']
+      current_desease: [''],
+      doctorId: [this.doctor_id]
     });
   }
 
