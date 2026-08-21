@@ -62,13 +62,26 @@ export class TasabcvEditComponent {
       });
   }
 
-  deleteTasa(tasa: any) {
+ deleteTasa(tasa: any) {
+    // 🧪 Imprime en consola para verificar qué datos tiene el objeto real
+    console.log('Objeto tasa recibido:', tasa);
+
+    // 🎯 CORRECCIÓN: Validamos si tu backend usa id o _id
+    const idParaEliminar = tasa.id || tasa._id;
+
+    if (!idParaEliminar) {
+        console.error('❌ No se encontró un ID válido en el objeto:', tasa);
+        return;
+    }
+
     this.tasaBcvService
-      .deleteTasaBcv(tasa.id)
-      .subscribe((resp: any) => {
-        this.getTasas();
-      });
-  }
+        .deleteTasaBcv(idParaEliminar)
+        .subscribe((resp: any) => {
+            console.log('✅ Tasa eliminada con éxito del servidor');
+            this.getTasas(); // Recarga la tabla de inmediato
+        });
+}
+
 
 
 }
