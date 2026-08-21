@@ -24,7 +24,7 @@ export class PatientFormMComponent implements OnInit {
   @ViewChild('componenteEvolucion') evolucionHijo!: EvolucionComponent;
   @ViewChild('reporteLaboratory') reporteHijo!: ReporteLaboratorioComponent;
 
-  
+
   public routes = routes;
   public patientForm: FormGroup;
   public isEditMode = false;
@@ -40,7 +40,7 @@ export class PatientFormMComponent implements OnInit {
   public patient_selected: any;
   public isLoading = false;
   public isSaving = false;
-  public is_vacuna= 1;
+  public is_vacuna = 1;
 
   doctor: string;
 
@@ -133,6 +133,7 @@ export class PatientFormMComponent implements OnInit {
       fc: [0],
       fr: [0],
       peso: [0],
+      is_vacuna: [1],
       current_desease: [''],
       doctorId: [this.doctor_id]
     });
@@ -194,7 +195,7 @@ export class PatientFormMComponent implements OnInit {
   }
 
   loadPatient(): void {
-    console.log('DEBUG patient-form loadPatient: calling getPatient(', +this.patientId!, ')');
+    // console.log('DEBUG patient-form loadPatient: calling getPatient(', +this.patientId!, ')');
     this.isLoading = true;
     this.patientService.getPatient(+this.patientId!).pipe(
       catchError(err => {
@@ -227,11 +228,11 @@ export class PatientFormMComponent implements OnInit {
         temperature: this.patient_selected.temperature || 0,
         peso: this.patient_selected.peso || 0,
         talla: this.patient_selected.talla || 0,
-        is_vacuna: this.patient_selected.is_vacuna || 1,
+        is_vacuna: this.patient_selected.is_vacuna,
         talla_al_nacer: this.patient_selected.talla_al_nacer || 0,
         peso_al_nacer: this.patient_selected.peso_al_nacer || 0,
         tratamiento: this.patient_selected.tratamiento || '',
-        historia_enfermedad: this.patient_selected.historia_enfermedad ||'',
+        historia_enfermedad: this.patient_selected.historia_enfermedad || '',
         examen_fisico: this.patient_selected.examen_fisico || '',
         enfermedad_actual: this.patient_selected.enfermedad_actual || '',
         // Sincronizamos las llaves del formulario reactivo con los datos del backend
@@ -240,19 +241,19 @@ export class PatientFormMComponent implements OnInit {
         reporte_laboratorio: this.patient_selected.reporte_laboratorio || []
       });
       // 2. 💥 LA MAGIA: Le llenamos el array local a los hijos y forzamos el redibujado de sus tablas
-    // Usamos setTimeout para darle un milisegundo a Angular de procesar el renderizado
-    setTimeout(() => {
-      if (this.vacunasHijo && this.patient_selected.vacunas) {
-        this.vacunasHijo.mvacunas = [...this.patient_selected.vacunas];
-      }
-      
-      if (this.evolucionHijo && this.patient_selected.evolucion) {
-        this.evolucionHijo.mevolucion = [...this.patient_selected.evolucion];
-      }
-      if (this.reporteHijo && this.patient_selected.reporte_laboratorio) {
-        this.evolucionHijo.mevolucion = [...this.patient_selected.reporte_laboratorio];
-      }
-    }, 50);
+      // Usamos setTimeout para darle un milisegundo a Angular de procesar el renderizado
+      setTimeout(() => {
+        if (this.vacunasHijo && this.patient_selected.vacunas) {
+          this.vacunasHijo.mvacunas = [...this.patient_selected.vacunas];
+        }
+
+        if (this.evolucionHijo && this.patient_selected.evolucion) {
+          this.evolucionHijo.mevolucion = [...this.patient_selected.evolucion];
+        }
+        if (this.reporteHijo && this.patient_selected.reporte_laboratorio) {
+          this.evolucionHijo.mevolucion = [...this.patient_selected.reporte_laboratorio];
+        }
+      }, 50);
       // Companions from person
       this.patientForm.patchValue({
         name_companion: this.patient_selected.person?.name_companion || '',
@@ -284,11 +285,15 @@ export class PatientFormMComponent implements OnInit {
 
 
   toggleVacuna(event: any) {
-  // event.target.checked nos dice si el switch quedó encendido (true) o apagado (false)
-  this.is_vacuna = event.target.checked ? 2 : 1;
-  
-  console.log('Estado de vacuna actualizado:', this.is_vacuna);
-}
+    // 1. Capturamos si el switch quedó encendido (true) o apagado (false)
+    const isChecked = event.target.checked;
+
+    // 2. 🎯 ACTUALIZACIÓN DIRECTA: Guardamos el booleano en el FormGroup de Angular
+    // (Reemplaza 'this.form' por el nombre exacto de tu FormGroup, ej: this.patientForm)
+    this.patientForm.get('is_vacuna')?.setValue(isChecked);
+
+    console.log('Control de Angular actualizado a booleano:', this.patientForm.get('is_vacuna')?.value);
+  }
 
   // eslint-disable-next-line no-debugger
   save(): void {
@@ -314,17 +319,31 @@ export class PatientFormMComponent implements OnInit {
 
     const formData = new FormData();
     const formValue = this.patientForm.value;
+    // 1. Extraemos el valor actual del formulario (puede ser true, false, 1 o 2)
+    const estadoVacunaForm = this.patientForm.get('is_vacuna')?.value;
+
+
+
+    // =========================================================================
+    // 🎯 TRADUCCIÓN EXPLICITA PARA EL TIPO SMALLINT DE POSTGRESQL
+    // =========================================================================
+    // Evaluamos el booleano real del formulario e inyectamos manualmente el número correcto
+    const estadoVacuna = this.patientForm.get('is_vacuna')?.value;
+    const valorSmallint = (estadoVacuna === true || estadoVacuna === 2) ? '2' : '1';
+
+    formData.append('is_vacuna', valorSmallint);
+
+    console.log('🚀 Envío blindado a PostgreSQL - is_vacuna:', valorSmallint); 5
 
     // Append all fields (optional skipped if empty as per original)
     formData.append('name', formValue.name);
     formData.append('surname', formValue.surname);
     formData.append('phone', formValue.phone || '');
     formData.append('gender', formValue.gender.toString());
-    formData.append('is_vacuna', formValue.gender.toString());
     formData.append('address', formValue.address || '');
     formData.append('n_doc', formValue.n_doc);
     formData.append('talla', formValue.talla);
-    formData.append('historia_enfermedad', formValue.historia_enfermedad);
+    // formData.append('historia_enfermedad', formValue.historia_enfermedad);
     formData.append('enfermedad_actual', formValue.enfermedad_actual);
     formData.append('tratamiento', formValue.tratamiento);
     formData.append('examen_fisico', formValue.examen_fisico);
@@ -343,8 +362,8 @@ export class PatientFormMComponent implements OnInit {
     // 3. Adjuntar el resto de campos normales de tu formulario
     // Recorremos todos los controles del formulario para meterlos al FormData de un solo golpe
     Object.keys(this.patientForm.controls).forEach(key => {
-      // Evitamos duplicar vacunas y evoluciones en texto plano
-      if (key !== 'vacunas' && key !== 'evolucion') {
+      // 🎯 CORRECCIÓN: Agregamos 'is_vacuna' a las excepciones para que no se meta como "false"
+      if (key !== 'vacunas' && key !== 'evolucion' && key !== 'is_vacuna') {
         const value = this.patientForm.get(key)?.value;
         if (value !== null && value !== undefined) {
           formData.append(key, value);

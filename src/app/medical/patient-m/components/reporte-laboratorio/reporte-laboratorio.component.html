@@ -267,9 +267,10 @@
                 </div>
 
                 <!-- rlaboratories_list -->
-                <div class="col-12" *ngIf="rlaboratories_list || rlaboratories_list.length > 0">
-                    <app-loading *ngIf="cargando"></app-loading>
-                    <div class="table-responsive" *ngIf="!cargando">
+                 <app-loading *ngIf="cargando"></app-loading>
+                <div class="col-12" *ngIf="!cargando && rlaboratories_list || rlaboratories_list.length > 0">
+                    
+                    <div class="table-responsive" >
                         <table class="table mb-0 table-striped">
                             <thead>
                                 <tr>

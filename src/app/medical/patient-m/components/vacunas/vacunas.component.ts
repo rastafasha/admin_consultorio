@@ -17,7 +17,7 @@ export class VacunasComponent implements OnInit {
   text_validation: string = '';
   
   public mvacunas: any = []; 
-  description: any;
+  description: any;5
   name_medical: any;
   cantidad: number = 0;
   fecha_vacuna: any;

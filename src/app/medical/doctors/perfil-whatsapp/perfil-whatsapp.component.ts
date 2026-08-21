@@ -126,7 +126,7 @@ export class PerfilWhatsappComponent implements OnInit, OnDestroy {
       if (this.whatsappStatus === 'ESPERANDO_QR' && data.whatsappQR) {
         this.whatsappQR = data.whatsappQR; 
       }
-      
+      55
       if (this.whatsappStatus === 'CONECTADO') {
         this.whatsappQR = '';
         if (this.respaldoInterval) clearInterval(this.respaldoInterval); // Apaga el respaldo
@@ -144,5 +144,5 @@ export class PerfilWhatsappComponent implements OnInit, OnDestroy {
     if (socket) {
       socket.off('whatsapp-status-changed');
     }
-    }
+    }5555555
 }

@@ -307,7 +307,6 @@ export class ProfilePatientMComponent {
 
         <div class="section-title">3. Estado Clínico Actual</div>
         <div class="text-block"><strong>Enfermedad Actual:</strong> ${this.patient_selected.enfermedad_actual || ''}</div>
-        <div class="text-block"><strong>Historia de la Enfermedad:</strong> ${this.patient_selected.historia_enfermedad || ''}</div>
         <div class="text-block"><strong>Examen Físico Segmentario:</strong> ${this.patient_selected.examen_fisico || ''}</div>
 
         <!-- INYECCIÓN SEGURA DE LOS STRING DINÁMICOS -->

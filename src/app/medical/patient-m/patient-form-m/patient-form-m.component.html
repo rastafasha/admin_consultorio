@@ -143,11 +143,14 @@
                                         <div class="switch-wrapper">
                                             <div class="mini-spinner" *ngIf="isListening"></div>
                                             <label class="switch">
-                                                <input type="checkbox" (change)="toggleVacuna($event)">
+                                                <!-- 🎯 CONEXIÓN PURA: Sin amarres de variables externas -->
+                                                <input 
+                                                    type="checkbox" 
+                                                    formControlName="is_vacuna" 
+                                                    (change)="toggleVacuna($event)">
                                                 <span class="slider round"></span>
                                             </label>
                                         </div>
-                                        
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6 col-md-6 col-xl-4"
@@ -205,12 +208,18 @@
                 <!-- fin antecedentes -->
                 <app-enfermedad-actual [patientForm]="patientForm"></app-enfermedad-actual>
                 <!-- Historial enfermedad -->
-                <app-historial-enfermedad [patientForm]="patientForm"></app-historial-enfermedad>
+                <!-- <app-historial-enfermedad [patientForm]="patientForm"></app-historial-enfermedad> -->
                 <!-- signos vitales -->
                 <app-signos-vitales [patientForm]="patientForm"></app-signos-vitales>
                 <!-- fin signos vitales -->
                 <!-- Vacunas -->
-                <app-vacunas #componenteVacunas [patientForm]="patientForm" [doctor]="doctor" *ngIf="patient_selected"  [is_vacuna]="is_vacuna"></app-vacunas>
+                <app-vacunas 
+                    #componenteVacunas 
+                    [patientForm]="patientForm" 
+                    [doctor]="doctor" 
+                    *ngIf="patient_selected"  
+                    [is_vacuna]="patientForm.get('is_vacuna')?.value ? 2 : 1">
+                </app-vacunas>
                 <!-- Examen fisico -->
                 <app-examen-fisico [patientForm]="patientForm"></app-examen-fisico>
                 <!-- Reporte Laboratorio -->

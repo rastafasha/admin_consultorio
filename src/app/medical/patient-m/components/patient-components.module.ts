@@ -13,6 +13,8 @@ import { TratamientoComponent } from './tratamiento/tratamiento.component';
 import { EvolucionComponent } from './evolucion/evolucion.component';
 import { MotivoConsultaComponent } from './motivo-consulta/motivo-consulta.component';
 import { EnfermedadActualComponent } from './enfermedad-actual/enfermedad-actual.component';
+import { SharedModule } from '../../../shared/shared.module';
+import { ReusablesModule } from '../../../reusables/reusables.module';
 
 
 
@@ -49,7 +51,8 @@ import { EnfermedadActualComponent } from './enfermedad-actual/enfermedad-actual
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    CommonModule
+    CommonModule,
+    ReusablesModule
   ]
 })
 export class PatientComponentsModule { }

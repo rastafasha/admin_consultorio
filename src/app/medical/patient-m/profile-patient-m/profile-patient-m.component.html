@@ -43,7 +43,8 @@
                                                 </div>
                                                 <div class="names-profiles">
                                                     <h4>{{patient_selected.full_name}}</h4>
-                                                    <h5 *ngIf="patient_selected.n_doc">Ci.: {{patient_selected.n_doc}}</h5>
+                                                    <h5 *ngIf="patient_selected.n_doc">Ci.: {{patient_selected.n_doc}}
+                                                    </h5>
                                                 </div>
                                             </div>
                                         </div>
@@ -113,7 +114,7 @@
                                                 <h4>Birth Day</h4>
                                                 <span>{{patient_selected.birth_date}}</span>
                                             </li>
-                                            
+
                                             <li *ngIf="patient_selected.peso_al_nacer">
                                                 <h4>Peso al nacer</h4>
                                                 <span>{{patient_selected.peso_al_nacer}}</span>
@@ -122,7 +123,7 @@
                                                 <h4>Talla al nacer</h4>
                                                 <span>{{patient_selected.talla_al_nacer}}</span>
                                             </li>
-                                            
+
                                         </ul>
                                     </div>
                                 </div>
@@ -494,17 +495,18 @@
                                 </div>
                             </div>
                             <!-- Historia Enfermedad -->
-                            <div class="card">
+                            <!-- <div class="card">
                                 <div class="card-header">
                                     <h4 class="card-title ">Historia Enfermedad</h4>
                                 </div>
                                 <div class="card-body  ">
                                     <p>{{patient_selected.historia_enfermedad}}</p>
                                 </div>
-                            </div>
-                            
+                            </div> -->
+
                             <!-- Vacunas -->
-                            <div class="card" *ngIf="doctor && doctor.speciality.name === 'Pediatría' || is_vacuna === 2">
+                            <div class="card"
+                                *ngIf="doctor && doctor.speciality.name === 'Pediatría' || is_vacuna === 2">
                                 <div class="card-header">
                                     <h4 class="card-title ">Vacunas</h4>
                                 </div>
@@ -548,94 +550,108 @@
                                     <p>{{patient_selected.examen_fisico}}</p>
                                 </div>
                             </div>
-                            
+
                             <!-- Reporte Laboratorio -->
                             <div class="card">
                                 <div class="card-header">
                                     <h4 class="card-title ">Reporte Laboratorio</h4>
                                 </div>
                                 <div class="card-body p-0 table-dash">
+                                    <app-loading *ngIf="isLoading"></app-loading>
                                     <div class="table-responsive" *ngIf="!isLoading">
-                        <table class="table mb-0 table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Descripción</th>
-                                    <th>Archivos</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- TABLA DE HISTORIAL -->
-                                <tr *ngFor="let rlaboratori of rlaboratories_list; let i = index">
-                                    <td>{{ rlaboratori.comentario }}</td>
-                                    <td>
-                                        <span
-                                            *ngIf="rlaboratori.name_file === 'Nota de texto (Sin archivo)' || rlaboratori.type === 'text'">
-                                            {{ rlaboratori.name_file }}
-                                        </span>
+                                        <table class="table mb-0 table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Descripción</th>
+                                                    <th>Archivos</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- TABLA DE HISTORIAL -->
+                                                <tr *ngFor="let rlaboratori of rlaboratories_list; let i = index">
+                                                    <td>{{ rlaboratori.comentario }}</td>
+                                                    <td>
+                                                        <span
+                                                            *ngIf="rlaboratori.name_file === 'Nota de texto (Sin archivo)' || rlaboratori.type === 'text'">
+                                                            {{ rlaboratori.name_file }}
+                                                        </span>
 
-                                        <span
-                                            *ngIf="rlaboratori.name_file !== 'Nota de texto (Sin archivo)' && rlaboratori.type !== 'text'" 
-                                            class="d-flex flex-column">
-                                            <a href="javascript:void(0);" (click)="selectDoc(rlaboratori)"
-                                                data-bs-toggle="modal" [attr.data-bs-target]="'#view-doc-'+rlaboratori.id">
-                                                <img src="assets/svg/doc.svg" *ngIf="rlaboratori.type === 'pdf'" class=" iconsvg" alt="">
-                                                <img src="assets/svg/jpg.svg" *ngIf="rlaboratori.type === 'jpg' || rlaboratori.type === 'jpeg'" class=" iconsvg" alt="">
-                                                <img src="assets/svg/png.svg" *ngIf="rlaboratori.type === 'png'" class=" iconsvg" alt="">
-                                                {{ rlaboratori.name_file }}
-                                            </a>
-                                        </span>
-                                    </td>
-                                    <!-- EL MODAL SE QUEDA AQUÍ ADENTRO DE UNA CELDA PARA EVITAR ROMPER EL STRING DEL TR -->
-                                    <div [attr.id]="'view-doc-'+rlaboratori.id" class="modal fade add-modal"
-                                        role="dialog" tabindex="-1">
-                                        <div class="modal-dialog modal-dialog-centered modal-lg">
-                                            <div class="modal-content">
-                                                <div class="modal-header d-flex justify-content-between">
-                                                    <h5 class="modal-title" id="exampleModalLabel2">
-                                                        {{ rlaboratori.name_file }}
-                                                    </h5>
-                                                    <a href="javascript:void(0);" (click)="closeReload()"
-                                                        class="btn btn-white me-1" data-bs-dismiss="modal">Close</a>
-                                                </div>
+                                                        <span
+                                                            *ngIf="rlaboratori.name_file !== 'Nota de texto (Sin archivo)' && rlaboratori.type !== 'text'"
+                                                            class="d-flex flex-column">
+                                                            <a href="javascript:void(0);"
+                                                                (click)="selectDoc(rlaboratori)" data-bs-toggle="modal"
+                                                                [attr.data-bs-target]="'#view-doc-'+rlaboratori.id">
+                                                                <img src="assets/svg/doc.svg"
+                                                                    *ngIf="rlaboratori.type === 'pdf'" class=" iconsvg"
+                                                                    alt="">
+                                                                <img src="assets/svg/jpg.svg"
+                                                                    *ngIf="rlaboratori.type === 'jpg' || rlaboratori.type === 'jpeg'"
+                                                                    class=" iconsvg" alt="">
+                                                                <img src="assets/svg/png.svg"
+                                                                    *ngIf="rlaboratori.type === 'png'" class=" iconsvg"
+                                                                    alt="">
+                                                                {{ rlaboratori.name_file }}
+                                                            </a>
+                                                        </span>
+                                                    </td>
+                                                    <!-- EL MODAL SE QUEDA AQUÍ ADENTRO DE UNA CELDA PARA EVITAR ROMPER EL STRING DEL TR -->
+                                                    <div [attr.id]="'view-doc-'+rlaboratori.id"
+                                                        class="modal fade add-modal" role="dialog" tabindex="-1">
+                                                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                            <div class="modal-content">
+                                                                <div
+                                                                    class="modal-header d-flex justify-content-between">
+                                                                    <h5 class="modal-title" id="exampleModalLabel2">
+                                                                        {{ rlaboratori.name_file }}
+                                                                    </h5>
+                                                                    <a href="javascript:void(0);"
+                                                                        (click)="closeReload()"
+                                                                        class="btn btn-white me-1"
+                                                                        data-bs-dismiss="modal">Close</a>
+                                                                </div>
 
-                                                <div class="modal-body text-center bg-light">
-                                                    <!-- CASO 1: Si el recurso es una IMAGEN (Validación segura con ? y verificación de existencia) -->
-                                                    <ng-container
-                                                        *ngIf="rlaboratori && rlaboratori.type && ['jpg', 'jpeg', 'png', 'webp', 'bmp'].includes(rlaboratori.type.toLowerCase())">
-                                                        <img [src]="getDocumentIframe(rlaboratori.file)"
-                                                            class="img-fluid rounded shadow"
-                                                            alt="Reporte de Laboratorio"
-                                                            style="max-height: 60vh; object-fit: contain;">
-                                                    </ng-container>
+                                                                <div class="modal-body text-center bg-light">
+                                                                    <!-- CASO 1: Si el recurso es una IMAGEN (Validación segura con ? y verificación de existencia) -->
+                                                                    <ng-container
+                                                                        *ngIf="rlaboratori && rlaboratori.type && ['jpg', 'jpeg', 'png', 'webp', 'bmp'].includes(rlaboratori.type.toLowerCase())">
+                                                                        <img [src]="getDocumentIframe(rlaboratori.file)"
+                                                                            class="img-fluid rounded shadow"
+                                                                            alt="Reporte de Laboratorio"
+                                                                            style="max-height: 60vh; object-fit: contain;">
+                                                                    </ng-container>
 
-                                                    <!-- CASO 2: Si el recurso es un PDF -->
-                                                    <ng-container
-                                                        *ngIf="rlaboratori && rlaboratori.type && rlaboratori.type.toLowerCase().includes('pdf')">
-                                                        <embed [src]="getDocumentIframe(rlaboratori.file)"
-                                                            type="application/pdf" class="w-100"
-                                                            style="height: 60vh;" />
-                                                    </ng-container>
+                                                                    <!-- CASO 2: Si el recurso es un PDF -->
+                                                                    <ng-container
+                                                                        *ngIf="rlaboratori && rlaboratori.type && rlaboratori.type.toLowerCase().includes('pdf')">
+                                                                        <embed
+                                                                            [src]="getDocumentIframe(rlaboratori.file)"
+                                                                            type="application/pdf" class="w-100"
+                                                                            style="height: 60vh;" />
+                                                                    </ng-container>
 
-                                                    <!-- CASO 3: Si es una nota de texto, si el tipo es text o si el tipo/archivo vienen vacíos -->
-                                                    <ng-container
-                                                        *ngIf="!rlaboratori || !rlaboratori.type || rlaboratori.type === 'text' || !rlaboratori.file">
-                                                        <div class="p-4 text-muted">
-                                                            <i class="fa fa-file-alt fs-1 mb-2 text-primary"></i>
-                                                            <p class="mb-0 fw-bold">Este registro es una nota de
-                                                                texto sin archivo adjunto.</p>
+                                                                    <!-- CASO 3: Si es una nota de texto, si el tipo es text o si el tipo/archivo vienen vacíos -->
+                                                                    <ng-container
+                                                                        *ngIf="!rlaboratori || !rlaboratori.type || rlaboratori.type === 'text' || !rlaboratori.file">
+                                                                        <div class="p-4 text-muted">
+                                                                            <i
+                                                                                class="fa fa-file-alt fs-1 mb-2 text-primary"></i>
+                                                                            <p class="mb-0 fw-bold">Este registro es una
+                                                                                nota de
+                                                                                texto sin archivo adjunto.</p>
+                                                                        </div>
+                                                                    </ng-container>
+                                                                </div>
+
+                                                            </div>
                                                         </div>
-                                                    </ng-container>
-                                                </div>
+                                                    </div>
+                                                    <!-- FIN MODAL -->
+                                                </tr>
 
-                                            </div>
-                                        </div>
+                                            </tbody>
+                                        </table>
                                     </div>
-                                    <!-- FIN MODAL -->
-                                </tr>
-
-                            </tbody>
-                        </table>
-                    </div>
                                 </div>
                             </div>
                             <!-- Diagnóstico -->
@@ -647,7 +663,7 @@
                                     <p>{{patient_selected.examen_fisico}}</p>
                                 </div>
                             </div>
-                            
+
                             <!-- Tratamiento -->
                             <div class="card">
                                 <div class="card-header">
