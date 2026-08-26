@@ -68,8 +68,9 @@
                 </div>
               </form>
             </div>
-
-            <div class="table-responsive">
+            <!-- <app-skeleton-loader *ngIf="isLoading" [rows]="8" [columns]="4"></app-skeleton-loader> -->
+            <app-loading *ngIf="isLoading"></app-loading>
+            <div class="table-responsive" *ngIf="!isLoading">
               <table matSort (matSortChange)="sortData($event)"
                 class="table border-0 custom-table comman-table datatable mb-0">
                 <thead>
@@ -88,6 +89,7 @@
                     <th></th> <!--acciones -->
                   </tr>
                 </thead>
+                
                 <tbody>
                   <tr *ngFor="let data of appointmentList">
 

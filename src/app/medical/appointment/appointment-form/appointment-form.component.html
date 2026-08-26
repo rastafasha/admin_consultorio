@@ -5,7 +5,8 @@
                 <app-back-bottn style="width: 50px;"></app-back-bottn>
                 <div class="col-sm-10">
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a [routerLink]="['/appointments/list/doctor/', doctor_id]">Citas</a></li>
+                        <li class="breadcrumb-item"><a
+                                [routerLink]="['/appointments/list/doctor/', doctor_id]">Citas</a></li>
                         <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
                         <li class="breadcrumb-item active">{{ title }}</li>
                     </ul>
@@ -28,34 +29,51 @@
                                     </div>
                                 </div>
                                 <!-- Filter -->
-                                <div class="col-12 col-md-6 col-xl-3">
-                                    <div class="form-group">
-                                        <label>Fecha <span class="login-danger">*</span></label>
-                                        <input class="form-control" formControlName="date_appointment" type="date" (dateChange)="onDateChange()">
+                                <app-loading *ngIf="isLoading"></app-loading>
+                                <div *ngIf="!isLoading" class=" row">
+                                    <div class="col-12 col-md-6 col-xl-3">
+                                        <div class="form-group">
+                                            <label>Fecha <span class="login-danger">*</span></label>
+                                            <input class="form-control" formControlName="date_appointment" type="date"
+                                                (dateChange)="onDateChange()">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-xl-3">
+                                        <div class="form-group">
+                                            <label>Hora <span class="login-danger">*</span></label>
+                                            <mat-select formControlName="hour" class="form-control">
+                                                <mat-option *ngFor="let data of hours"
+                                                    [value]="data.id">{{data.name}}</mat-option>
+                                            </mat-select>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-xl-3" *ngIf="roles === 'SUPERADMIN'">
+                                        <div class="form-group">
+                                            <label>Especialidad <span class="login-danger">*</span></label>
+                                            <mat-select [(ngModel)]="speciality_id"
+                                                [ngModelOptions]="{standalone: true}" class="form-control">
+                                                <mat-option *ngFor="let data of specialities"
+                                                    [value]="data.id">{{data.name}}</mat-option>
+                                            </mat-select>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-xl-3">
+                                        <div class="form-group local-forms">
+                                            <label>Especialidad <span class="login-danger">*</span></label>
+                                            {{specialityName}}
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-xl-3">
+                                        <button type="button" class="btn btn-primary"
+                                            (click)="filtroDoctor()">Filtro</button>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6 col-xl-3">
-                                    <div class="form-group">
-                                        <label>Hora <span class="login-danger">*</span></label>
-                                        <mat-select formControlName="hour" class="form-control">
-                                            <mat-option *ngFor="let data of hours" [value]="data.id">{{data.name}}</mat-option>
-                                        </mat-select>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-6 col-xl-3">
-                                    <div class="form-group">
-                                        <label>Especialidad <span class="login-danger">*</span></label>
-                                        <mat-select [(ngModel)]="speciality_id" [ngModelOptions]="{standalone: true}" class="form-control">
-                                            <mat-option *ngFor="let data of specialities" [value]="data.id">{{data.name}}</mat-option>
-                                        </mat-select>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-6 col-xl-3">
+                                <!-- <div class="col-12 col-md-6 col-xl-3">
                                     <button type="button" class="btn btn-primary" (click)="filtro()">Filtro</button>
-                                </div>
+                                </div> -->
                             </div>
                             <!-- Doctors table -->
-                            <div class="row">
+                            <!-- <div class="row">
                                 <div class="col-8">
                                     <table class="table">
                                         <thead>
@@ -86,9 +104,77 @@
                                         </tbody>
                                     </table>
                                 </div>
+                            </div> -->
+
+                            <div class="row">
+                                <!-- disponibilidad -->
+                                <!-- SPINNER: Se muestra SOLO mientras se está buscando (cuando isfiltered es FALSE) -->
+                                <div class="col-xs-12 col-sm-4 text-center" *ngIf="!isfiltered && !isLoading">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="sr-only">Cargando horarios...</span>
+                                    </div>
+                                    <p class="text-muted mt-2">Buscando agenda del doctor...</p>
+                                </div>
+
+                                <!-- TABLA DE HORARIOS: Se muestra SOLO cuando ya terminó de filtrar (cuando isfiltered es TRUE) -->
+                                <div class="col-xs-12 col-sm-4" *ngIf="isfiltered">
+                                    <div class="table-responsive">
+                                        <table class="table mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Hora</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <div *ngIf="segments?.length === 0"
+                                                            class="text-muted text-center py-2">
+                                                            No hay horarios disponibles para este día.
+                                                        </div>
+
+                                                        <ng-container *ngFor="let SEGMENT of segments">
+                                                            <div class="radio">
+                                                                <label>
+                                                                    <input type="radio" *ngIf="!SEGMENT.is_appointment"
+                                                                        name="radio" (click)="selecSegment(SEGMENT)">
+                                                                    {{SEGMENT.format_segment?.format_hour_start}} a
+                                                                    {{SEGMENT.format_segment?.format_hour_end}}
+                                                                </label>
+                                                            </div>
+                                                            <br>
+                                                        </ng-container>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- TABLA DE CONSULTORIOS: Se muestra SOLO cuando ya terminó de filtrar (cuando isfiltered es TRUE) -->
+                                <div class="col-xs-12 col-sm-8" *ngIf="isfiltered">
+                                    <div class="table-responsive">
+                                        <table class="table mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Consultorio</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let addr of addresses; let i = index">
+                                                    <td>{{ addr?.name_consultorio }}</td>
+                                                    <td>{{ addr?.address }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
                             </div>
+
                             <!-- Patient -->
-                            <div class="row py-4">
+                            <app-loading *ngIf="isLoading"></app-loading>
+                            <div class="row py-4" *ngIf="!isLoading">
                                 <div class="col-12">
                                     <h4>Datos del Paciente</h4>
                                     <button class="btn btn-dark btn-sm" (click)="resetPatientForm()">Reset</button>
@@ -96,8 +182,10 @@
                                 <div class="col-12 col-md-6 col-xl-4">
                                     <div class="form-group">
                                         <label>N.Documento <span class="login-danger">*</span></label>
-                                        <input class="form-control" formControlName="n_doc" (keyup.enter)="filterPatient()">
-                                        <button class="btn btn-sm btn-secondary" (click)="filterPatient()">Buscar</button>
+                                        <input class="form-control" formControlName="n_doc"
+                                            (keyup.enter)="filterPatient()">
+                                        <button class="btn btn-sm btn-secondary"
+                                            (click)="filterPatient()">Buscar</button>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-4">
@@ -132,7 +220,8 @@
                                 </div>
                             </div>
                             <!-- Payment -->
-                            <div class="row py-4">
+                            <app-loading *ngIf="isLoading"></app-loading>
+                            <div class="row py-4" *ngIf="!isLoading">
                                 <div class="col-12">
                                     <h4>Datos de Pago</h4>
                                 </div>
@@ -152,7 +241,8 @@
                                     <div class="form-group">
                                         <label>Método Pago <span class="login-danger">*</span></label>
                                         <mat-select formControlName="method_payment" class="form-control">
-                                            <mat-option *ngFor="let tipop of tiposdepagos" [value]="tipop.tipo">{{tipop.bankName}}</mat-option>
+                                            <mat-option *ngFor="let tipop of tiposdepagos"
+                                                [value]="tipop.tipo">{{tipop.bankName}}</mat-option>
                                         </mat-select>
                                     </div>
                                 </div>
@@ -160,7 +250,7 @@
                             <div *ngIf="text_validation" class="alert alert-danger">
                                 {{text_validation}}
                             </div>
-                            <div class="text-end">
+                            <div class="text-end" *ngIf="!isLoading">
                                 <button class="btn btn-primary" (click)="save()">Guardar</button>
                             </div>
                         </form>

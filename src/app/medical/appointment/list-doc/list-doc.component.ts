@@ -20,6 +20,7 @@ declare var $:any;
 export class ListDocComponent {
   public routes = routes;
   titlePage = 'Mis Citas';
+  isLoading =false;
 
   public appointmentList: any = [];
   dataSource!: MatTableDataSource<any>;
@@ -87,7 +88,6 @@ export class ListDocComponent {
 
     this.ativatedRoute.params.subscribe((resp:any)=>{
       this.doctor_id = resp.doctor_id;
-      console.log(this.doctor_id);
     });
 
     this.getTableData();
@@ -113,6 +113,7 @@ export class ListDocComponent {
   
 
   private getTableData(page=1): void {
+    this.isLoading = true;
     this.appointmentList = [];
     this.serialNumberArray = [];
 
@@ -123,7 +124,7 @@ export class ListDocComponent {
       this.totalDataPatient = resp.total;
       this.appointmentList = resp.appointments.data;
       this.appointment_id = resp.appointments.id;
-      console.log(this.appointmentList);
+      this.isLoading = false;
       // this.getTableDataGeneral();
       this.dataSource = new MatTableDataSource<any>(this.appointmentList);
       this.calculateTotalPages(this.totalDataPatient, this.pageSize);

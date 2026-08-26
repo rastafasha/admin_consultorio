@@ -8,12 +8,13 @@ import Swal from 'sweetalert2';
 import { SettignService } from '../../../core/settings/settigs.service';
 import { RolesService } from '../../../services/roles.service';
 import { routes } from '../../../shared/routes/routes';
+import { DoctorAddress } from '../../../models/DoctorAddress.model';
 
 @Component({
-    selector: 'app-appointment-form',
-    templateUrl: './appointment-form.component.html',
-    styleUrls: ['./appointment-form.component.scss'],
-    standalone: false
+  selector: 'app-appointment-form',
+  templateUrl: './appointment-form.component.html',
+  styleUrls: ['./appointment-form.component.scss'],
+  standalone: false
 })
 export class AppointmentFormComponent implements OnInit {
   public routes = routes;
@@ -47,8 +48,15 @@ export class AppointmentFormComponent implements OnInit {
   public method_payment = '';
 
   public text_validation = '';
+  specialityName: string;
+  schedule_selecteds: any;
+  isLoading = false;
+  isfiltered = false;
+  DOCTOR: any = [];
+  addresses: DoctorAddress[];
+  segments: any[] = [];
 
-   info_editar_cita = `
+  info_editar_cita = `
   <p>En esta sección :</p>
           <ul>
             <li>Podrás Editar una cita ya creada</li>
@@ -89,6 +97,7 @@ export class AppointmentFormComponent implements OnInit {
     this.doctor_id = this.user.id;
     this.roles = this.roleService.authService.user.roles[0];
 
+
     this.appointmentId = this.activatedRoute.snapshot.paramMap.get('id');
     if (this.appointmentId) {
       this.isEditMode = true;
@@ -108,29 +117,52 @@ export class AppointmentFormComponent implements OnInit {
       this.loadAppointment();
     }
   }
-
   loadAppointment(): void {
+    this.isLoading = true;
     this.appointmentService.showAppointment(+this.appointmentId!).subscribe((resp: any) => {
       const app = resp.appointment;
-      this.appointmentForm.patchValue({
-        name: app.patient.name,
-        surname: app.patient.surname,
-        phone: app.patient.phone,
-        n_doc: app.patient.n_doc,
-        name_companion: app.patient.name_companion || '',
-        surname_companion: app.patient.surname_companion || '',
-        amount: app.amount,
-        date_appointment: new Date(app.date_appointment).toISOString(),
-        hour: app.segment_hour.id // adjust
-      });
+      // console.log('Datos iniciales de la cita:', app);
+
+      const fechaFormateada = app.date_appointment_format; // "2026-08-27"
+
+      // Extraemos el ID de la hora general del bloque (el 10 de las 10 AM)
+      const horaGeneralId = app.segment_hour ? +app.segment_hour.doctor_schedule_hour_id : +app.doctor_schedule_hour_id;
+
+      // Guardamos en las variables globales del componente
       this.method_payment = app.method_payment || '';
-      this.date_appointment = new Date(app.date_appointment).toISOString();
-      this.hour = app.segment_hour.id;
-      this.speciality_id = app.speciality_id;
-      this.amount_add = app.amount_add || 0; // if present
-      this.filtro();
+      this.date_appointment = fechaFormateada;
+      this.hour = horaGeneralId; // Guardamos el ID numérico fijo
+      this.amount_add = app.amount_add || 0;
+
+      if (app.doctor?.speciality) {
+        this.specialityName = app.doctor.speciality.name;
+        this.speciality_id = app.doctor.speciality.id;
+      }
+      this.DOCTOR_SELECTED = app.doctor_id;
+
+      // Seteamos el formulario reactivo
+      this.appointmentForm.patchValue({
+        name: app.patient?.name,
+        surname: app.patient?.surname,
+        phone: app.patient?.phone,
+        n_doc: app.patient?.n_doc,
+        name_companion: app.patient?.name_companion || '',
+        surname_companion: app.patient?.surname_companion || '',
+        amount: app.amount,
+        date_appointment: fechaFormateada,
+        hour: horaGeneralId // Esto forzará al <mat-select> a seleccionar las 10 AM
+      });
+
+      this.isLoading = false;
+
+      // Ejecutamos el filtro pasándole directamente este ID
+      setTimeout(() => {
+        this.filtroDoctor();
+      }, 1000);
     });
   }
+
+
 
   filterPatient(): void {
     if (!this.appointmentForm.get('n_doc')!.value) return;
@@ -164,30 +196,94 @@ export class AppointmentFormComponent implements OnInit {
     this.selected_segment_hour = null;
   }
 
-  filtro(): void {
+  // filtro(): void {
+  //   const data = {
+  //     date_appointment: this.appointmentForm.get('date_appointment')!.value,
+  //     hour: this.hour,
+  //     speciality_id: this.speciality_id
+  //   };
+  //   this.appointmentService.lisFiter(data).subscribe((resp: any) => {
+  //     if (resp.message === 403 || resp.doctors.length === 0) {
+  //       this.text_validation = resp.message_text;
+  //       Swal.fire({
+  //         position: 'top-end',
+  //         icon: 'warning',
+  //         title: this.text_validation,
+  //         showConfirmButton: false,
+  //         timer: 1500
+  //       });
+  //     } else {
+  //       this.DOCTORS = resp.doctors;
+  //       if (this.isEditMode) {
+  //         this.highlightCurrentDoctor();
+  //       }
+  //     }
+  //   });
+  // }
+
+  filtroDoctor() {
+    this.isfiltered = false;
+
+    // 1. Obtener el ID de la hora seleccionada (ej: 10)
+    const horaSeleccionadaId = +this.appointmentForm.get('hour')?.value || +this.hour;
+
+    // 2. Buscar el nombre de la hora en tu arreglo "hours" (ej: "10:00 AM" o "10 AM")
+    const horaObjeto = this.hours.find((h: any) => +h.id === horaSeleccionadaId);
+    const nombreHora = horaObjeto ? horaObjeto.name : ''; // Esto tendrá el texto ej: "10:00 AM"
+
     const data = {
-      date_appointment: this.appointmentForm.get('date_appointment')!.value,
-      hour: this.hour,
+      date_appointment: this.date_appointment,
+      hour: horaSeleccionadaId,
       speciality_id: this.speciality_id
     };
-    this.appointmentService.lisFiter(data).subscribe((resp: any) => {
-      if (resp.message === 403 || resp.doctors.length === 0) {
-        this.text_validation = resp.message_text;
-        Swal.fire({
-          position: 'top-end',
-          icon: 'warning',
-          title: this.text_validation,
-          showConfirmButton: false,
-          timer: 1500
+
+    // console.log('Filtrando para la hora ID:', horaSeleccionadaId, 'Texto:', nombreHora);
+
+    this.appointmentService.lisFiterByDoctor(data, this.DOCTOR_SELECTED).subscribe((resp: any) => {
+      // console.log('Respuesta del backend (32 segmentos):', resp);
+
+      if (resp.message === 403 || !resp.doctor) {
+        this.text_validation = resp.message_text || 'Error en la consulta';
+        Swal.fire({ position: "top-end", icon: "warning", title: this.text_validation, showConfirmButton: false, timer: 1500 });
+        this.segments = [];
+        this.addresses = [];
+        return;
+      }
+
+      this.DOCTOR = resp.doctor;
+      this.addresses = resp.doctor.addresses ?? [];
+
+      // 3. ¡EL FILTRO MANUAL AQUÍ! 
+      // Si el backend te devuelve los 32, filtramos para quedarnos SOLO con los 4 de esa hora general
+      if (resp.segments && Array.isArray(resp.segments)) {
+        this.segments = resp.segments.filter((seg: any) => {
+          // Obtenemos el ID de la hora que viene dentro del segmento
+          const segHourId = seg.doctor_schedule_hour_id || seg.format_segment?.doctor_schedule_hour_id;
+
+          // También podemos validar por texto de hora si el ID fallara en el backend
+          const inicioHoraTexto = seg.format_segment?.format_hour_start || ''; // ej: "10:15 AM"
+
+          // Condición: Que coincida el ID de la hora general (10) 
+          // O que el texto del segmento empiece por el número de la hora (ej: "10:")
+          return +segHourId === horaSeleccionadaId || inicioHoraTexto.startsWith(nombreHora.substring(0, 3));
         });
       } else {
-        this.DOCTORS = resp.doctors;
-        if (this.isEditMode) {
-          this.highlightCurrentDoctor();
-        }
+        this.segments = [];
+      }
+
+      // console.log('Segmentos filtrados mostrados al usuario (Deberían ser 4):', this.segments);
+
+      // 4. Mostramos las tablas en el HTML
+      this.isfiltered = true;
+
+      if (this.isEditMode) {
+        this.highlightCurrentDoctor();
       }
     });
   }
+
+
+
 
   highlightCurrentDoctor(): void { this.DOCTORS.forEach((doctor: any) => { if (doctor.doctor.id === this.DOCTOR_SELECTED.doctor_id) { const INDEX = doctor.segments.findIndex((item: any) => item.id === this.DOCTOR_SELECTED.doctor_schedule_join_hour_id); if (INDEX !== -1) { this.DOCTOR_SELECTED = doctor; } } }); }
 
