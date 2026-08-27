@@ -1,6 +1,5 @@
 <ul class="nav user-menu float-end">
-    <li class="nav-item dropdown d-none d-sm-block"
-        *ngIf="isPermission('view_notification') && user.roles[0] === 'DOCTOR'">
+    <li class="nav-item dropdown d-block" *ngIf="isPermission('view_notification') && user.roles[0] === 'DOCTOR'">
 
         <!-- Botón del Dropdown -->
         <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
@@ -12,15 +11,13 @@
         <!-- Menú Desplegable -->
         <div class="dropdown-menu notifications">
             <div class="topnav-dropdown-header d-flex justify-content-between align-items-center">
-            <span>Notifications</span>
-            <!-- Botón para limpiar todas -->
-            <a href="javascript:void(0);" 
-               class="clear-noti" 
-               *ngIf="payments_doctors?.length > 0 || appointments_doctors?.length > 0"
-               (click)="markAllAsRead()"> 
-               Mark all as read 
-            </a>
-        </div>
+                <span>Notifications</span>
+                <!-- Botón para limpiar todas -->
+                <a href="javascript:void(0);" class="clear-noti"
+                    *ngIf="payments_doctors?.length > 0 || appointments_doctors?.length > 0" (click)="markAllAsRead()">
+                    Mark all as read
+                </a>
+            </div>
 
             <div class="drop-scroll">
                 <ul class="notification-list">
@@ -80,15 +77,22 @@
 
     <li class="nav-item dropdown has-arrow user-profile-list">
         <a href="javascript:void(0);" class="dropdown-toggle nav-link user-link" data-bs-toggle="dropdown">
+
             <div class="user-names">
-                <h5>{{user.name}} </h5>
-                <span>{{user.roles}}</span>
+                <!-- 🖥️ VERSION ESCRITORIO: Nombre completo (Se oculta en pantallas pequeñas) -->
+                <h5 class="d-none d-md-block">{{user.name}}</h5>
+
+                <!-- 📱 VERSION MÓVIL: Solo la Inicial (Se muestra en celulares y se oculta en PC) -->
+                <h5 class="d-block d-md-none">{{ (user.name | slice:0:1) }}</h5>
+
+                <!-- El Rol común para ambos tamaños -->
+                <span class="vermovil">{{user.roles}}</span>
             </div>
-            <span class="user-img">
-                <div *ngIf="userremoto">
-                    <div *ngIf="userremoto.avatar">
-                        <img [src]="userremoto.avatar | imagenPipe:'staffs'">
-                    </div>
+
+            <!-- Avatar del usuario -->
+            <span class="user-img d-block d-sm-none d-md-none">
+                <div *ngIf="userremoto?.avatar">
+                    <img [src]="userremoto.avatar | imagenPipe:'staffs'">
                 </div>
             </span>
         </a>

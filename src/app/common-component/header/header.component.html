@@ -1,49 +1,92 @@
-<div class="header">
+<!-- 🖥️ BLOQUE DESKTOP -->
+<div class="header-escritorio-completo">
     <div class="header-left pt-3 header-left-modif">
         <a routerLink="/">
-            <img class="logoav" src="assets/svg/logoklintic.svg" width="35"  alt="">
+            <img class="logoav" src="assets/svg/logoklintic.svg" width="35" alt="logo">
         </a>
-
         <span class="nmclin">Klyntic | {{name_setting}} <br> Dr.{{user.name}} {{user.surname}}</span>
-
     </div>
+    
     <a (click)="toggleSideBar()" id="toggle_btn" href="javascript:void(0);">
-        <img src="assets/img/icons/bar-icon.svg"
-            alt=""></a>
-    <a (click)="toggleMobileSideBar()" id="mobile_btn" class="mobile_btn float-start"><img
-            src="assets/img/icons/bar-icon.svg" alt=""></a>
-    <!-- <div class="top-nav-search mob-view">
-        <form>
-            <input type="text" class="form-control" placeholder="Search here">
-            <a class="btn" ><img src="assets/img/icons/search-normal.svg" alt=""></a>
-        </form>
-    </div> -->
-    <!-- [darkMode]="darkMode" -->
+        <img src="assets/img/icons/bar-icon.svg" alt="menu">
+    </a>
+
     <div class="header-right">
-        <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm" (click)="openModal()" data-bs-toggle="modal" data-bs-target="#viewQRPaciente"
-                            title="Ayuda de la sección">
-                            <i class="fas fa-qrcode"></i>
-                        </button>
+        <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm" (click)="openModal()" data-bs-toggle="modal" data-bs-target="#viewQRPaciente" title="Ayuda de la sección">
+            <i class="fas fa-qrcode"></i>
+        </button>
         <app-tasabcv></app-tasabcv>
         <div class="setting-row" *ngIf="!isLoadingSwitch" [class.loading]="pushService.isProcessing$ | async">
-            <div class="setting-info">
-                <i class="fa fa-bell"></i>
-            </div>
-
+            <div class="setting-info"><i class="fa fa-bell"></i></div>
             <div class="switch-wrapper">
                 <div *ngIf="pushService.isProcessing$ | async" class="mini-spinner"></div>
                 <label class="switch">
-                    <input type="checkbox" [disabled]="pushService.isProcessing$ | async"
-                        [checked]="pushService.isSubscribed$ | async" (change)="togglePush()">
+                    <input type="checkbox" [disabled]="pushService.isProcessing$ | async" [checked]="pushService.isSubscribed$ | async" (change)="togglePush()">
                     <span class="slider round"></span>
                 </label>
             </div>
         </div>
-        <!-- configurar notificaciones push -->
-        <app-notificacionesupdate [routes]="routes" [user]="user" [usuario]="usuario" [imagenSerUrl]="imagenSerUrl"
-            [logout]="logout"></app-notificacionesupdate>
+        <app-notificacionesupdate [routes]="routes" [user]="user" [usuario]="usuario" [imagenSerUrl]="imagenSerUrl" [logout]="logout"></app-notificacionesupdate>
+    </div>
+</div>
 
+<!-- ========================================================================= -->
+
+<!-- =========================================================================
+   📱 2. HEADER EXCLUSIVO PARA CELULARES (¡Estructura Blindada!)
+   ========================================================================= -->
+<div class="header-movil-custom d-flex d-md-none">
+    
+    <!-- Bloque Izquierdo: Menú Hamburguesa y Logo ordenados en línea -->
+    <div class="bloque-izq">
+        <a (click)="toggleMobileSideBar()" class="trigger-menu-movil">
+            <img src="assets/img/icons/bar-icon.svg" width="24" alt="menu">
+        </a>
+        <a routerLink="/" class="enlace-logo-movil">
+            <img src="assets/svg/logoklintic.svg" width="28" alt="logo">
+        </a>
     </div>
 
+    <!-- Bloque Derecho: Elementos individuales alineados fluidamente -->
+    <div class="bloque-der">
+        <!-- 1. Botón QR -->
+        <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm boton-qr-movil" (click)="openModal()" data-bs-toggle="modal" data-bs-target="#viewQRPaciente">
+            <i class="fas fa-qrcode"></i>
+        </button>
+        
+        <!-- 2. Tasa Cambiaria -->
+        <div class="tasa-movil-contenedor">
+            <app-tasabcv></app-tasabcv>
+        </div>
+        
+        <!-- 3. Campana de Sockets y Switch -->
+        <div class="setting-row switch-movil-compacto" *ngIf="!isLoadingSwitch" [class.loading]="pushService.isProcessing$ | async">
+            <div class="setting-info">
+                <i class="fa fa-bell" style="font-size: 16px; color: #513081;"></i>
+            </div>
+            <div class="switch-wrapper">
+                <label class="switch">
+                    <input type="checkbox" [disabled]="pushService.isProcessing$ | async" [checked]="pushService.isSubscribed$ | async" (change)="togglePush()">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- 4. 🚀 AJUSTE: El componente de notificaciones se maneja de forma aislada -->
+        <div class="notif-movil-wrapper">
+            <app-notificacionesupdate 
+                [routes]="routes" 
+                [user]="user" 
+                [usuario]="usuario" 
+                [imagenSerUrl]="imagenSerUrl" 
+                [logout]="logout">
+            </app-notificacionesupdate>
+        </div>
+    </div>
 </div>
+
+
+
+
+
 <app-qracceso  #viewQRPaciente ></app-qracceso>
