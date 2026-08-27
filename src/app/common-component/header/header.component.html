@@ -1,16 +1,29 @@
-<!-- 🖥️ BLOQUE DESKTOP -->
+<!-- =========================================================================
+   🖥️ 1. HEADER EXCLUSIVO PARA COMPUTADORAS Y TABLETS (¡Estructura Final!)
+   ========================================================================= -->
 <div class="header-escritorio-completo">
-    <div class="header-left pt-3 header-left-modif">
-        <a routerLink="/">
-            <img class="logoav" src="assets/svg/logoklintic.svg" width="35" alt="logo">
-        </a>
-        <span class="nmclin">Klyntic | {{name_setting}} <br> Dr.{{user.name}} {{user.surname}}</span>
-    </div>
     
-    <a (click)="toggleSideBar()" id="toggle_btn" href="javascript:void(0);">
-        <img src="assets/img/icons/bar-icon.svg" alt="menu">
-    </a>
+    <!-- 🚀 CARRIEL IZQUIERDO: Reordenamos los elementos para que el botón sea el primero -->
+    <div class="header-left pt-3 header-left-modif">
+        
+        <!-- 🎯 1. El botón de menú ahora abre la fila a la extrema izquierda -->
+        <a (click)="toggleSideBar()" id="toggle_btn" href="javascript:void(0);">
+            <img src="assets/img/icons/bar-icon.svg" alt="menu">
+        </a>
 
+        <!-- 🎯 2. El Logo se posiciona en el medio -->
+        <a routerLink="/">
+            <img class="logoav" src="assets/svg/logoklintic.svg"  alt="logo">
+        </a>
+        
+        <!-- 🎯 3. El Texto cierra el carril izquierdo -->
+        <span class="nmclin">
+            Klyntic | {{name_setting}} <br> 
+            Dr.{{user.name}} {{user.surname}}
+        </span>
+    </div>
+
+    <!-- 🚀 LADO DERECHO: Totalmente estático, limpio y sin variaciones -->
     <div class="header-right">
         <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm" (click)="openModal()" data-bs-toggle="modal" data-bs-target="#viewQRPaciente" title="Ayuda de la sección">
             <i class="fas fa-qrcode"></i>
@@ -29,6 +42,8 @@
         <app-notificacionesupdate [routes]="routes" [user]="user" [usuario]="usuario" [imagenSerUrl]="imagenSerUrl" [logout]="logout"></app-notificacionesupdate>
     </div>
 </div>
+
+
 
 <!-- ========================================================================= -->
 

@@ -1,220 +1,53 @@
 /* =========================================================================
-   📱 ESTILOS DE CONTROL DE FLUJO PARA EL HEADER MÓVIL NUEVO
-   ========================================================================= */
-.header-movil-custom {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    height: 60px !important;
-    background-color: #ffffff !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    padding: 0 10px !important;
-    z-index: 2500 !important; /* Nos paramos encima de las herencias globales */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
-    box-sizing: border-box !important;
-
-    .bloque-izq {
-        display: flex !important;
-        align-items: center !important;
-        gap: 10px !important;
-    }
-
-    .trigger-menu-movil {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        width: 32px;
-        height: 32px;
-        cursor: pointer;
-    }
-
-    .enlace-logo-movil {
-        display: flex !important;
-        align-items: center !important;
-    }
-
-    .bloque-der {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: flex-end !important;
-        gap: 8px !important;
-        height: 100% !important;
-    }
-
-    .boton-qr-movil {
-        width: 30px !important;
-        height: 30px !important;
-        padding: 0 !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        font-size: 12px !important;
-    }
-
-    .tasa-movil-contenedor {
-        display: inline-block !important;
-        white-space: nowrap !important;
-    }
-
-    .switch-movil-compacto {
-        transform: scale(0.85) !important;
-        transform-origin: right center !important;
-        margin: 0 !important;
-        gap: 4px !important;
-    }
-
-    /* 🚀 EL ANTÍDOTO: Reseteo atómico para limpiar el "cuadrito aplastado" */
-    /* 🚀 REPARACIÓN ATÓMICA DE ALINEACIÓN PARA EL PERFIL E ICONO EN MÓVILES */
-    .notif-movil-wrapper {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        height: 100% !important;
-        position: relative !important;
-        margin: 0 !important;
-        padding: 0 !important;
-
-        // 1. Neutralizamos por completo la lista original de la plantilla para que no flote
-        & ul.user-menu,
-        & li.nav-item {
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            float: none !important; /* Rompe el float-end que lo mandaba arriba */
-            position: relative !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            height: 100% !important;
-            width: auto !important;
-        }
-
-        // 2. Alineamos el bloque que contiene la 'J' y 'DOCTOR'
-        & .user-link {
-            display: flex !important;
-            align-items: center !important; /* Centra verticalmente el texto y la flecha 'v' */
-            gap: 4px !important;
-            padding: 0 !important;
-            height: 100% !important;
-            text-decoration: none !important;
-        }
-
-        // 3. Forzamos a que el texto de la 'J' y 'DOCTOR' se quede centrado en su carril
-        & .user-names {
-            display: flex !important;
-            flex-direction: column !important; /* Mantiene la J arriba y DOCTOR abajo */
-            align-items: flex-end !important; /* Los alinea limpiamente a la derecha */
-            justify-content: center !important;
-            margin-right: 4px !important;
-            transform: none !important;
-
-            h5 {
-                font-size: 11px !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                color: #513081 !important; /* Color morado institucional */
-                line-height: 1 !important;
-            }
-            span {
-                font-size: 9px !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                color: #777 !important;
-                line-height: 1 !important;
-                text-transform: uppercase;
-            }
-        }
-
-        // 4. Si el icono de la flecha hacia abajo ('v') se desalineaba, lo corregimos aquí
-        & .dropdown-toggle::after {
-            display: inline-block !important;
-            vertical-align: middle !important;
-            margin-left: 2px !important;
-            margin-top: 0 !important; /* Evita que salte hacia arriba */
-        }
-    }
-}
-
-/* =========================================================================
-   👁️ CONTROL DE VISIBILIDAD INMUTABLE (Sintaxis nativa CSS)
+   🖥️ 1. ESTILOS PARA COMPUTADORAS Y PANTALLAS GRANDES (Desktop por defecto)
    ========================================================================= */
 
-/* 1. Computadoras y Pantallas Grandes (Por defecto) */
 .header-escritorio-completo {
-    display: flex !important; /* Muestra el header de PC original */
-}
-.header-movil-custom {
-    display: none !important; /* Apaga por completo el header de celular en PC */
-}
-
-/* 2. Celulares y Pantallas Pequeñas (Punto de quiebre en 767px) */
-@media (max-width: 767.98px) {
-    .header-escritorio-completo {
-        display: none !important; /* Desactiva el header de PC para evitar duplicaciones */
-    }
-    .header-movil-custom {
-        display: flex !important; /* Activa única y exclusivamente el de celular */
-    }
-
-    /* 🚀 CORRECCIÓN CRÍTICA PARA EL ICONO DE NOTIFICACIONES EN MÓVILES */
-    app-notificacionesupdate {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        min-width: 32px !important; /* Le garantiza un ancho mínimo para que no se comprima */
-        height: 32px !important;
-        position: relative !important;
-
-        // Forzamos a que cualquier enlace o imagen interna se estire correctamente
-        & a,
-        & img,
-        & i {
-            display: inline-block !important;
-            transform: none !important; /* Eliminamos traslaciones raras de la plantilla */
-            max-width: 100% !important;
-            height: auto !important;
-        }
-
-        // Si la plantilla le inyectó un menú flotante tipo dropdown, lo alineamos al borde
-        & .dropdown-menu {
-            position: absolute !important;
-            right: 0 !important;
-            left: auto !important;
-            width: 290px !important; /* Ancho seguro para la pantalla del iPhone 6 */
-        }
-    }
-}
-
-.header {
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
-    height: 70px !important;
+    height: 60px !important;
     padding: 0 15px !important;
     background-color: #ffffff !important;
-    position: fixed !important; /* Mantiene la barra fija arriba de forma segura */
-    top: 0;
-    left: 0;
-    right: 0;
+    position: fixed !important;
+    top: 0; left: 0; right: 0;
     z-index: 1001;
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
 
-    // Contenedor General Izquierdo
-    & .header-left {
-        display: flex !important;
+    /* 🚀 ANTÍDOTO ATÓMICO: Capturamos el botón directamente desde nuestra clase
+       para ganarle la prioridad al framework CSS global de la plantilla */
+     & #toggle_btn {
+        position: relative !important;
+        left: auto !important;
+        right: auto !important;
+        float: left !important;
+        display: inline-flex !important;
         align-items: center !important;
-        gap: 12px !important;
-        height: 70px !important;
-        width: auto !important;
-        float: none !important;
+        justify-content: center !important;
+        margin-left: 0px !important;    /* 🚀 Quitamos el margen izquierdo */
+        transform: none !important;
     }
 }
 
-/* Control estricto de los botones de menú */
+.header-movil-custom {
+    display: none !important;
+}
+
+.header-left-modif {
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px !important; 
+    height: 70px !important;
+    width: auto !important;
+    float: none !important;
+    flex-grow: 1; /* Expande el bloque para empujar las utilidades a la derecha */
+}
+
+
+
+
 #mobile_btn {
-    display: none !important; /* Por defecto oculto en PC */
+    display: none !important;
 }
 
 .logo-link {
@@ -223,8 +56,8 @@
 }
 
 .logoav {
-    width: 32px !important;
-    height: 32px !important;
+    width: 40px !important;
+    height: 40px !important;
     object-fit: contain;
     flex-shrink: 0;
 }
@@ -235,10 +68,13 @@
     line-height: 1.3;
     font-weight: 500;
     white-space: nowrap;
-    transform: none !important; /* Eliminamos cualquier rastro de herencia */
+    display: inline-block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    transform: none !important;
 }
 
-/* Contenedor General Derecho */
+/* Contenedor General Derecho en PC */
 .header-right {
     display: flex !important;
     align-items: center !important;
@@ -246,80 +82,214 @@
     gap: 12px !important;
     width: auto !important;
     float: none !important;
+    /* Al tener flex-grow en la izquierda, este bloque se queda perfectamente clavado a la derecha */
 }
 
-/* Componente de la Tasa */
 app-tasabcv {
     display: inline-block !important;
     min-width: 80px !important;
     white-space: nowrap !important;
 }
 
+
+
 /* =========================================================================
-   📱 MEDIA QUERY DISPOSITIVOS MÓVILES (Celulares y Tablets compactas)
+   📱 2. MEDIA QUERY: AJUSTES GENERALES PARA MÓVILES (Hasta 767.98px)
    ========================================================================= */
-@media (max-width: 780px) {
-    .header {
-        height: 70px !important; /* 🚀 Ajustamos la altura a una sola fila limpia para móviles */
-        & .header-left {
-            width: auto; /* Dejamos que se adapte de forma fluida */
+@media (max-width: 767.98px) {
+    
+    .header-escritorio-completo {
+        display: none !important; /* Apaga el de PC en celulares */
+    }
+    
+    .header-movil-custom {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        height: 60px !important;
+        background-color: #ffffff !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding: 0 10px !important;
+        z-index: 2500 !important; /* Se para encima del layout global */
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+        box-sizing: border-box !important;
+
+        .bloque-izq {
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            height: 100% !important;
+            margin-right: 10px;
+        }
+
+        .trigger-menu-movil {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+        }
+
+        .enlace-logo-movil {
+            display: flex !important;
+            align-items: center !important;
+            & img { object-fit: contain; }
+        }
+
+        .bloque-der {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: flex-end !important;
+            gap: 8px !important;
+            height: 100% !important;
+        }
+
+        .boton-qr-movil {
+            width: 30px !important;
+            height: 30px !important;
+            padding: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 12px !important;
+            margin: 0 !important;
+        }
+
+        .tasa-movil-contenedor {
+            display: inline-block !important;
+            white-space: nowrap !important;
+            font-size: 12px !important;
+        }
+
+        .switch-movil-compacto {
+            transform: scale(0.85) !important;
+            transform-origin: right center !important;
+            margin: 0 !important;
+            gap: 4px !important;
+        }
+
+        /* 🚀 CONTROL DE FLUJO AISLADO PARA EL PERFIL MÓVIL */
+        .notif-movil-wrapper {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            height: 100% !important;
+            position: relative !important;
+            margin: 0 !important;
+            padding: 0 !important;
+
+            & ul.user-menu, & li.nav-item {
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                float: none !important;
+                position: relative !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                height: 100% !important;
+                width: auto !important;
+            }
+
+            & .user-link {
+                display: flex !important;
+                align-items: center !important;
+                gap: 4px !important;
+                padding: 0 !important;
+                height: 100% !important;
+                text-decoration: none !important;
+            }
+
+            & .user-names {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: flex-end !important;
+                justify-content: center !important;
+                margin-right: 4px !important;
+                transform: none !important;
+
+                h5 {
+                    font-size: 11px !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                    color: #513081 !important;
+                    line-height: 1 !important;
+                }
+                span { display: none !important; } /* Ocultamos el rol DOCTOR en móvil */
+            }
+
+            & .dropdown-toggle::after {
+                display: inline-block !important;
+                vertical-align: middle !important;
+                margin-left: 2px !important;
+                margin-top: 0 !important;
+            }
         }
     }
 
-    /* 🚀 Forzamos la desaparición del texto en móviles y tablets pequeñas */
-    .nmclin {
-        display: none !important;
-    }
+    /* COMPONENTE DE NOTIFICACIONES CORREGIDO */
+    app-notificacionesupdate {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-width: 32px !important;
+        height: 32px !important;
+        position: relative !important;
 
-    .header-left-modif {
-        display: flex;
-        align-items: center;
-        gap: 10px;
+        & a, & img, & i {
+            display: inline-block !important;
+            transform: none !important;
+            max-width: 100% !important;
+            height: auto !important;
+        }
+
+        & .dropdown-menu {
+            position: absolute !important;
+            right: 0 !important;
+            left: auto !important;
+            width: 290px !important;
+        }
     }
 
     .logoav {
-        width: 32px;
-        height: 32px;
-        margin: 0;
-    }
-
-    /* 🚀 Acomodamos el lado derecho para que no sufra desbordes ni traslaciones locas */
-    .header-right {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        gap: 10px;
-        transform: none !important; /* Eliminamos el translate3d que rompía la alineación */
-    }
-
-    app-tasabcv {
-        display: inline-block !important;
-        min-width: 80px !important;
-        white-space: nowrap !important;
-    }
+    width: 32px !important;
+    height: 32px !important;
+    object-fit: contain;
+    flex-shrink: 0;
 }
+}
+
 
 /* =========================================================================
-   📱 MEDIA QUERY CELULARES ULTRA COMPACTOS (iPhone 6 / pantallas de 375px o menos)
+   📱 3. MEDIA QUERY: CELULARES ULTRA COMPACTOS (iPhone 6 / hasta 375px)
    ========================================================================= */
 @media (max-width: 375px) {
-    .header-right {
-        gap: 4px !important;
-    }
+    .header-movil-custom {
+        padding: 0 6px !important; /* Aprovechamos más los bordes del iPhone 6 */
+        
+        .bloque-der {
+            gap: 4px !important; /* Ajuste milimétrico para que no colisionen */
+        }
 
-    .setting-row {
-        transform: scale(0.85);
-    }
+        .switch-movil-compacto {
+            transform: scale(0.8) !important; /* Encogemos sutilmente el switch verde */
+        }
 
-    .btn-outline-primary.rounded-circle {
-        margin-right: 0px !important;
-        width: 28px !important;
-        height: 28px !important;
-        font-size: 11px !important;
+        .boton-qr-movil {
+            width: 26px !important;
+            height: 26px !important;
+            font-size: 10px !important;
+        }
     }
 }
 
-/* --- ESTILOS DE TU SWITCH (Mantenlos intactos abajo) --- */
+
+/* =========================================================================
+   ⚙️ 4. COMPONENTES GLOBALES REUTILIZABLES (Switch, Spinners y Animaciones)
+   ========================================================================= */
 .setting-row {
     display: flex;
     align-items: center;
@@ -351,10 +321,7 @@ app-tasabcv {
 .switch .slider {
     position: absolute;
     cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    top: 0; left: 0; right: 0; bottom: 0;
     width: 50px;
     height: 28px;
     background-color: #ccc;
@@ -388,86 +355,6 @@ app-tasabcv {
     animation: spin 0.8s linear infinite;
 }
 @keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-/* 👑 CLASES EXCLUSIVAS PARA EL HEADER MÓVIL NUEVO */
-.header-movil-custom {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    height: 60px !important;
-    background-color: #ffffff !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    padding: 0 10px !important;
-    z-index: 1999 !important; /* Por encima de todo */
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
-    box-sizing: border-box !important;
-
-    // Subcontenedor izquierdo
-    .bloque-izq {
-        display: flex !important;
-        align-items: center !important;
-        gap: 10px !important;
-        height: 100% !important;
-        margin-right: 10px;
-    }
-
-    .trigger-menu-movil {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        width: 32px;
-        height: 32px;
-        cursor: pointer;
-    }
-
-    .enlace-logo-movil {
-        display: flex !important;
-        align-items: center !important;
-        & img {
-            object-fit: contain;
-        }
-    }
-
-    // Subcontenedor derecho
-    .bloque-der {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: flex-end !important;
-        gap: 6px !important;
-        height: 100% !important;
-    }
-
-    .boton-qr-movil {
-        width: 28px !important;
-        height: 28px !important;
-        padding: 0 !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        font-size: 11px !important;
-        margin: 0 !important;
-    }
-
-    .tasa-movil-contenedor {
-        display: inline-block !important;
-        white-space: nowrap !important;
-        font-size: 12px !important;
-    }
-
-    .switch-movil-compacto {
-        transform: scale(0.85) !important;
-        transform-origin: right center !important;
-        margin: 0 !important;
-        gap: 3px !important;
-    }
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
