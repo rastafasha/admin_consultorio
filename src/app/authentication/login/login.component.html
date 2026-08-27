@@ -117,7 +117,7 @@
                 </form>
                 <!-- /Form -->
 
-                <div class="next-sign">
+                <div class="next-sign" *ngIf="!isLoading">
                   <p class="account-subtitle">
                     Eres Doctor y Quieres una cuenta?
                     <a [routerLink]="routes.register">Registrarme</a>

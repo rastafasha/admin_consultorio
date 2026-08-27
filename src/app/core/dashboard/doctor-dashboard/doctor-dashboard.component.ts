@@ -71,7 +71,7 @@ export class DoctorDashboardComponent {
   public chartOptionsOne: Partial<ChartOptions>;
   public chartOptionsTwo: Partial<ChartOptions>;
   public chartOptionsThree: Partial<ChartOptions>;
-  public selectedValue = "2025"  ;
+  public selectedValue = "2026"  ;
 
   public doctors:any = [];
   public doctor_id:any;
@@ -320,7 +320,6 @@ export class DoctorDashboardComponent {
   ngOnInit(): void {
     this.doctorService.closeMenuSidebar();
     window.scrollTo(0, 0);
-    this.getDoctors();
 
     const USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER: '');
@@ -328,13 +327,11 @@ export class DoctorDashboardComponent {
 
     if(this.user.roles[0]==='DOCTOR'){
 
-      this.dashboardDoctorProfile();
       this.getDoctor();
+      
+    }else{
+      this.getDoctors();
     }
-    // this.activatedRoute.params.subscribe((resp:any)=>{
-    //   console.log(resp);
-    //   this.doctor_id = resp.id;
-    // });
   }
 
 
@@ -347,7 +344,8 @@ export class DoctorDashboardComponent {
       this.appointments= resp.appointments;
       this.schedule_selecteds= resp.schedule_selecteds;
       this.isLoading=false;
-
+      this.dashboardDoctorProfile();
+      this.dashboardDoctorProfileYear();
   
     })
   }
@@ -375,7 +373,7 @@ export class DoctorDashboardComponent {
 
   dashboardDoctorProfile(){
     this.isLoading=true;
-    this.doctor_id = this.user.id;
+    this.doctor_id = this.doctor.id;
     const data ={
       doctor_id:this.doctor_id
     }
@@ -405,368 +403,330 @@ export class DoctorDashboardComponent {
       this.isLoading=false;
     });
   }
-  dashboardDoctorProfileYear(){
-    this.isLoading=true;
-    this.doctor_id = this.user.id;
-    const data ={
-      year: this.selectedValue,
-      doctor_id:this.doctor_id
+
+ dashboardDoctorProfileYear() {
+  this.isLoading = true;
+  this.doctor_id = this.user.id;
+  
+  const data = {
+    year: this.selectedValue,
+    doctor_id: this.doctor_id
+  };
+
+  this.query_income_year = null;
+  this.query_n_appointment_year = null;
+  this.query_n_appointment_year_before = null;
+
+  this.dashboardService.dashboardDoctorYear(data).subscribe((resp: any) => {
+    
+    // =========================================================================
+    // 📈 1. GRÁFICA DE INGRESOS (LINE CHART)
+    // =========================================================================
+    this.query_income_year = resp.query_income_year;
+    const data_income = this.query_income_year.map((element: any) => element.income);
+
+    this.chartOptionsOne = {
+      chart: { height: 200, type: 'line', toolbar: { show: false } },
+      grid: { show: true, xaxis: { lines: { show: false } }, yaxis: { lines: { show: true } } },
+      dataLabels: { enabled: false },
+      stroke: { curve: 'smooth' },
+      series: [
+        {
+          name: 'Income',
+          color: '#513081',
+          data: data_income,
+        },
+      ],
+      xaxis: { categories: resp.months_name },
+    };
+
+    console.log("DATOS REALES DEL SERVIDOR:", resp.query_patients_by_gender);
+
+
+       // =========================================================================
+    // 🍕 2. GRÁFICA DE GÉNEROS (DONUT CHART) - ¡EXTRACCIÓN SEGURA SOLUCIONADA!
+    // =========================================================================
+    this.query_patient_by_genders = resp.query_patients_by_gender;
+    const data_by_gender: number[] = [];
+
+    // Validamos si viene como Array o como Objeto directo del servidor
+    let report: any = null;
+    if (Array.isArray(this.query_patient_by_genders) && this.query_patient_by_genders.length > 0) {
+      report = this.query_patient_by_genders[0];
+    } else {
+      report = this.query_patient_by_genders; // Si viene como objeto directo
     }
-    this.query_income_year = null;
-    this.query_n_appointment_year= null;
-    this.query_n_appointment_year_before= null;
-    this.dashboardService.dashboardDoctorYear(data).subscribe((resp:any)=>{
-      // console.log(resp);
 
-      //start
-      this.query_income_year = resp.query_income_year;
-      const data_income:any = [];
-      this.query_income_year.forEach((element:any) => {
-        data_income.push(element.income);
-      });
+    // Extraemos los valores garantizando que si no existen use 0
+    const hombres = report ? (parseInt(report.hombre) || 0) : 0;
+    const mujeres = report ? (parseInt(report.mujer) || 0) : 0;
 
-      this.chartOptionsOne = {
-        chart: {
-          height: 200,
-          type: 'line',
-          toolbar: {
-            show: false,
-          },
-        },
-        grid: {
-          show: true, 
-          xaxis: {
-            lines: {
-              show: false
-             }
-           },  
-          yaxis: {
-            lines: { 
-              show: true 
-             }
-           },   
-          },
-        dataLabels: {
-          enabled: false,
-        },
-        stroke: {
-          curve: 'smooth',
-        },
-        series: [
-            {
-              name: 'Income',
-              color: '#513081',
-              data: data_income,
-            },
-          ],
-        xaxis: {
-          categories: resp.months_name,
-        },
-      };
-      
-      // this.chartOptionsOne.xaxis.categories = resp.months_name
-      // this.chartOptionsOne.series = [
-      //   {
-      //     name: 'Income',
-      //     color: '#513081',
-      //     data: data_income,
-      //   },
-      // ]
-      //end
-      
-      //start
-      this.query_patient_by_genders = resp.query_patients_by_gender;
-      const data_by_gender:any = [];
+    data_by_gender.push(hombres);
+    data_by_gender.push(mujeres);
 
-      this.query_patient_by_genders.forEach((item:any) => {
-        data_by_gender.push(parseInt(item.hombre));
-        data_by_gender.push(parseInt(item.mujer));
-      });
+    console.log("Valores procesados para la Dona (Hombres, Mujeres):", data_by_gender);
 
-      this.chartOptionsTwo.series = data_by_gender;
-      //end
-      //start
-      this.query_n_appointment_year= resp.query_n_appointment_year;
-      this.query_n_appointment_year_before= resp.query_n_appointment_year_before;
+    // Reconfiguración limpia y asignación directa obligatoria
+    this.chartOptionsTwo = {
+      chart: {
+        height: 200,
+        type: 'donut',
+      },
+      series: data_by_gender, 
+      labels: ['Hombres', 'Mujeres'],
+      fill: {
+        colors: ['#D5D7ED', '#513081']
+      },
+      responsive: [{
+        breakpoint: 480,
+        options: {
+          chart: { width: 200 },
+          legend: { position: 'bottom' }
+        }
+      }]
+    };
+
+
+    // =========================================================================
+    // 📊 3. GRÁFICA DE CITAS (BAR CHART)
+    // =========================================================================
+    this.query_n_appointment_year = resp.query_n_appointment_year;
+    this.query_n_appointment_year_before = resp.query_n_appointment_year_before;
+    
+    const n_appointment_year = this.query_n_appointment_year.map((item: any) => item.count_appointments);
+    const n_appointment_year_before = this.query_n_appointment_year_before.map((item: any) => item.count_appointments);
+    
+    this.chartOptionsThree = {
+      chart: { height: 230, type: 'bar', stacked: false, toolbar: { show: false } },
+      grid: { show: true, xaxis: { lines: { show: false } }, yaxis: { lines: { show: true } } },
+      responsive: [
+        {
+          breakpoint: 480,
+          options: { legend: { position: 'bottom', offsetX: -10, offsetY: 0 } },
+        },
+      ],
+      plotOptions: { bar: { horizontal: false, columnWidth: '55%' } },
+      dataLabels: { enabled: false },
+      stroke: { show: true, width: 6, colors: ['transparent'] },
+      series: [
+        {
+          name: String(parseInt(this.selectedValue)),
+          color: '#513081',
+          data: n_appointment_year,
+        },
+        {
+          name: String(parseInt(this.selectedValue) - 1),
+          color: '#D5D7ED',
+          data: n_appointment_year_before,
+        },
+      ],
+      xaxis: { categories: resp.months_name },
+    };
+
+    this.isLoading = false;
+  });
+}
+
+
+  // dashboardDoctor(){
+  //   this.isLoading=true;
+  //   const data ={
+  //     doctor_id:this.doctor_id
+  //   }
+  //   this.dashboardService.dashboardDoctor(data).subscribe((resp:any)=>{
+  //     // console.log(resp);
+
+  //     this.appointments= resp.appointments.data;
+
+  //     this.num_appointments_current= resp.num_appointments_current;
+  //     this.num_appointments_before= resp.num_appointments_before;
+  //     this.porcentaje_d= resp.porcentaje_d;
+
+  //     this.num_appointments_attention_current= resp.num_appointments_attention_current;
+  //     this.num_appointments_attention_before= resp.num_appointments_attention_before;
+  //     this.porcentaje_da= resp.porcentaje_da;
+
+  //     this.num_appointments_total_pay_current= resp.num_appointments_total_pay_current;
+  //     this.num_appointments_total_pay_before= resp.num_appointments_total_pay_before;
+  //     this.porcentaje_dtp= resp.porcentaje_dtp;
+
+  //     this.num_appointments_total_pending_current= resp.num_appointments_total_pending_current;
+  //     this.num_appointments_total_pending_before= resp.num_appointments_total_pending_before;
+  //     this.porcentaje_dtpn= resp.porcentaje_dtpn;
+  //     this.isLoading=false;
+  //   })
+  // }
+  // dashboardDoctorYear(){
+  //   this.isLoading=true;
+  //   const data ={
+  //     year: this.selectedValue,
+  //     doctor_id:this.doctor_id
+  //   }
+  //   this.query_income_year = null;
+  //   this.query_n_appointment_year= null;
+  //   this.query_n_appointment_year_before= null;
+  //   this.dashboardService.dashboardDoctorYear(data).subscribe((resp:any)=>{
+  //     // console.log(resp);
+
+  //     //start
+  //     this.query_income_year = resp.query_income_year;
+  //     const data_income:any = [];
+  //     this.query_income_year.forEach((element:any) => {
+  //       data_income.push(element.income);
+  //     });
+
+  //     this.chartOptionsOne = {
+  //       chart: {
+  //         height: 200,
+  //         type: 'line',
+  //         toolbar: {
+  //           show: false,
+  //         },
+  //       },
+  //       grid: {
+  //         show: true, 
+  //         xaxis: {
+  //           lines: {
+  //             show: false
+  //            }
+  //          },  
+  //         yaxis: {
+  //           lines: { 
+  //             show: true 
+  //            }
+  //          },   
+  //         },
+  //       dataLabels: {
+  //         enabled: false,
+  //       },
+  //       stroke: {
+  //         curve: 'smooth',
+  //       },
+  //       series: [
+  //           {
+  //             name: 'Income',
+  //             color: '#513081',
+  //             data: data_income,
+  //           },
+  //         ],
+  //       xaxis: {
+  //         categories: resp.months_name,
+  //       },
+  //     };
       
-      const n_appointment_year:any =[]
-      this.query_n_appointment_year.forEach((item:any)=>{
-        n_appointment_year.push(item.count_appointments);
-      })
-      const n_appointment_year_before:any =[];
-      this.query_n_appointment_year_before.forEach((item:any)=>{
-        n_appointment_year_before.push(item.count_appointments);
-      })
+  //     // this.chartOptionsOne.xaxis.categories = resp.months_name
+  //     // this.chartOptionsOne.series = [
+  //     //   {
+  //     //     name: 'Income',
+  //     //     color: '#513081',
+  //     //     data: data_income,
+  //     //   },
+  //     // ]
+  //     //end
       
-      this.chartOptionsThree = {
-        chart: {
-          height: 230,
-          type: 'bar',
-          stacked: false,
-          toolbar: {
-            show: false,
-          },
-        },
-        grid: {
-          show: true, 
-          xaxis: {
-            lines: {
-              show: false
-             }
-           },  
-          yaxis: {
-            lines: { 
-              show: true 
-             }
-           },   
-          },
-        responsive: [
-          {
-            breakpoint: 480,
-            options: {
-              legend: {
-                position: 'bottom',
-                offsetX: -10,
-                offsetY: 0,
-              },
-            },
-          },
-        ],
-        plotOptions: {
-          bar: {
-            horizontal: false,
-            columnWidth: '55%',
-          },
-        },
-        dataLabels: {
-          enabled: false,
-        },
-        stroke: {
-          show: true,
-          width: 6,
-          colors: ['transparent'],
-        },
-        series: [
-          {
-            name: (parseInt(this.selectedValue))+"",
-            color: '#513081',
-            data: n_appointment_year,
-          },
-          {
-            name: (parseInt(this.selectedValue) - 1)+"",
+  //     //start
+  //     this.query_patient_by_genders = resp.query_patients_by_gender;
+  //     const data_by_gender:any = [];
+
+  //     this.query_patient_by_genders.forEach((item:any) => {
+  //       data_by_gender.push(parseInt(item.hombre));
+  //       data_by_gender.push(parseInt(item.mujer));
+  //     });
+
+  //     this.chartOptionsTwo.series = data_by_gender;
+  //     //end
+  //     //start
+  //     this.query_n_appointment_year= resp.query_n_appointment_year;
+  //     this.query_n_appointment_year_before= resp.query_n_appointment_year_before;
+      
+  //     const n_appointment_year:any =[]
+  //     this.query_n_appointment_year.forEach((item:any)=>{
+  //       n_appointment_year.push(item.count_appointments);
+  //     })
+  //     const n_appointment_year_before:any =[];
+  //     this.query_n_appointment_year_before.forEach((item:any)=>{
+  //       n_appointment_year_before.push(item.count_appointments);
+  //     })
+      
+  //     this.chartOptionsThree = {
+  //       chart: {
+  //         height: 230,
+  //         type: 'bar',
+  //         stacked: false,
+  //         toolbar: {
+  //           show: false,
+  //         },
+  //       },
+  //       grid: {
+  //         show: true, 
+  //         xaxis: {
+  //           lines: {
+  //             show: false
+  //            }
+  //          },  
+  //         yaxis: {
+  //           lines: { 
+  //             show: true 
+  //            }
+  //          },   
+  //         },
+  //       responsive: [
+  //         {
+  //           breakpoint: 480,
+  //           options: {
+  //             legend: {
+  //               position: 'bottom',
+  //               offsetX: -10,
+  //               offsetY: 0,
+  //             },
+  //           },
+  //         },
+  //       ],
+  //       plotOptions: {
+  //         bar: {
+  //           horizontal: false,
+  //           columnWidth: '55%',
+  //         },
+  //       },
+  //       dataLabels: {
+  //         enabled: false,
+  //       },
+  //       stroke: {
+  //         show: true,
+  //         width: 6,
+  //         colors: ['transparent'],
+  //       },
+  //       series: [
+  //         {
+  //           name: (parseInt(this.selectedValue))+"",
+  //           color: '#513081',
+  //           data: n_appointment_year,
+  //         },
+  //         {
+  //           name: (parseInt(this.selectedValue) - 1)+"",
             
-            color: '#D5D7ED',
-            data: n_appointment_year_before,
-          },
-        ],
-        xaxis: {
-          categories: resp.months_name,
-        },
-      };
-      //end
-      this.isLoading=false;
-    })
-  }
-
-  dashboardDoctor(){
-    this.isLoading=true;
-    const data ={
-      doctor_id:this.doctor_id
-    }
-    this.dashboardService.dashboardDoctor(data).subscribe((resp:any)=>{
-      // console.log(resp);
-
-      this.appointments= resp.appointments.data;
-
-      this.num_appointments_current= resp.num_appointments_current;
-      this.num_appointments_before= resp.num_appointments_before;
-      this.porcentaje_d= resp.porcentaje_d;
-
-      this.num_appointments_attention_current= resp.num_appointments_attention_current;
-      this.num_appointments_attention_before= resp.num_appointments_attention_before;
-      this.porcentaje_da= resp.porcentaje_da;
-
-      this.num_appointments_total_pay_current= resp.num_appointments_total_pay_current;
-      this.num_appointments_total_pay_before= resp.num_appointments_total_pay_before;
-      this.porcentaje_dtp= resp.porcentaje_dtp;
-
-      this.num_appointments_total_pending_current= resp.num_appointments_total_pending_current;
-      this.num_appointments_total_pending_before= resp.num_appointments_total_pending_before;
-      this.porcentaje_dtpn= resp.porcentaje_dtpn;
-      this.isLoading=false;
-    })
-  }
-  dashboardDoctorYear(){
-    this.isLoading=true;
-    const data ={
-      year: this.selectedValue,
-      doctor_id:this.doctor_id
-    }
-    this.query_income_year = null;
-    this.query_n_appointment_year= null;
-    this.query_n_appointment_year_before= null;
-    this.dashboardService.dashboardDoctorYear(data).subscribe((resp:any)=>{
-      // console.log(resp);
-
-      //start
-      this.query_income_year = resp.query_income_year;
-      const data_income:any = [];
-      this.query_income_year.forEach((element:any) => {
-        data_income.push(element.income);
-      });
-
-      this.chartOptionsOne = {
-        chart: {
-          height: 200,
-          type: 'line',
-          toolbar: {
-            show: false,
-          },
-        },
-        grid: {
-          show: true, 
-          xaxis: {
-            lines: {
-              show: false
-             }
-           },  
-          yaxis: {
-            lines: { 
-              show: true 
-             }
-           },   
-          },
-        dataLabels: {
-          enabled: false,
-        },
-        stroke: {
-          curve: 'smooth',
-        },
-        series: [
-            {
-              name: 'Income',
-              color: '#513081',
-              data: data_income,
-            },
-          ],
-        xaxis: {
-          categories: resp.months_name,
-        },
-      };
-      
-      // this.chartOptionsOne.xaxis.categories = resp.months_name
-      // this.chartOptionsOne.series = [
-      //   {
-      //     name: 'Income',
-      //     color: '#513081',
-      //     data: data_income,
-      //   },
-      // ]
-      //end
-      
-      //start
-      this.query_patient_by_genders = resp.query_patients_by_gender;
-      const data_by_gender:any = [];
-
-      this.query_patient_by_genders.forEach((item:any) => {
-        data_by_gender.push(parseInt(item.hombre));
-        data_by_gender.push(parseInt(item.mujer));
-      });
-
-      this.chartOptionsTwo.series = data_by_gender;
-      //end
-      //start
-      this.query_n_appointment_year= resp.query_n_appointment_year;
-      this.query_n_appointment_year_before= resp.query_n_appointment_year_before;
-      
-      const n_appointment_year:any =[]
-      this.query_n_appointment_year.forEach((item:any)=>{
-        n_appointment_year.push(item.count_appointments);
-      })
-      const n_appointment_year_before:any =[];
-      this.query_n_appointment_year_before.forEach((item:any)=>{
-        n_appointment_year_before.push(item.count_appointments);
-      })
-      
-      this.chartOptionsThree = {
-        chart: {
-          height: 230,
-          type: 'bar',
-          stacked: false,
-          toolbar: {
-            show: false,
-          },
-        },
-        grid: {
-          show: true, 
-          xaxis: {
-            lines: {
-              show: false
-             }
-           },  
-          yaxis: {
-            lines: { 
-              show: true 
-             }
-           },   
-          },
-        responsive: [
-          {
-            breakpoint: 480,
-            options: {
-              legend: {
-                position: 'bottom',
-                offsetX: -10,
-                offsetY: 0,
-              },
-            },
-          },
-        ],
-        plotOptions: {
-          bar: {
-            horizontal: false,
-            columnWidth: '55%',
-          },
-        },
-        dataLabels: {
-          enabled: false,
-        },
-        stroke: {
-          show: true,
-          width: 6,
-          colors: ['transparent'],
-        },
-        series: [
-          {
-            name: (parseInt(this.selectedValue))+"",
-            color: '#513081',
-            data: n_appointment_year,
-          },
-          {
-            name: (parseInt(this.selectedValue) - 1)+"",
-            
-            color: '#D5D7ED',
-            data: n_appointment_year_before,
-          },
-        ],
-        xaxis: {
-          categories: resp.months_name,
-        },
-      };
-      //end
-      this.isLoading=false;
-    })
-  }
+  //           color: '#D5D7ED',
+  //           data: n_appointment_year_before,
+  //         },
+  //       ],
+  //       xaxis: {
+  //         categories: resp.months_name,
+  //       },
+  //     };
+  //     //end
+  //     this.isLoading=false;
+  //   })
+  // }
 
   selectDoctor(){
-    this.dashboardDoctor();
+    // this.dashboardDoctor();
     // this.getDoctor();
-    // this.dashboardDoctorProfile();
+    this.dashboardDoctorProfile();
   }
   
   selectedYear(){
-    this.dashboardDoctorYear();
-    // this.dashboardDoctorProfileYear();
+    // this.dashboardDoctorYear();
+    this.dashboardDoctorProfileYear();
     
   }
 
