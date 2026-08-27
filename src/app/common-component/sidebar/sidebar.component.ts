@@ -46,64 +46,94 @@ export class SidebarComponent implements OnInit {
       this.loadSidebarData();
     });
   }
-
-  private loadSidebarData(): void {
+  
+private loadSidebarData(): void {
     if (!this.user) {
       this.sidebarData = [];
       return;
     }
 
-    // 1. Si es SUPERADMIN, cargamos el menú completo directo de DataService
-    if (Array.isArray(this.user.roles) && this.user.roles.some((r: any) => r === "SUPERADMIN" || r.name === "SUPERADMIN")) {
+    // Verificación de SUPERADMIN con bucle tradicional compatible
+    let isSuperAdmin = false;
+    if (this.user.roles && Array.isArray(this.user.roles)) {
+      for (let i = 0; i < this.user.roles.length; i++) {
+        const rol = this.user.roles[i];
+        if (rol === "SUPERADMIN" || (rol && rol.name === "SUPERADMIN")) {
+          isSuperAdmin = true;
+          break;
+        }
+      }
+    }
+
+    if (isSuperAdmin) {
       this.sidebarData = this.data.sideBar;
       return;
     }
 
-    // 2. Filtrado seguro de permisos para el Médico / Staff
+    // Filtrado de permisos con bucles FOR tradicionales (100% compatible con iOS viejo)
     const permissions = Array.isArray(this.user.permissions) ? this.user.permissions : [];
     const SIDE_BAR_G: any[] = [];
 
-    this.data.sideBar.forEach((side: any) => {
-      const SIDE_B: any[] = [];
+    if (this.data && Array.isArray(this.data.sideBar)) {
+      for (let i = 0; i < this.data.sideBar.length; i++) {
+        const side = this.data.sideBar[i];
+        const SIDE_B: any[] = [];
 
-      side.menu.forEach((menu_s: any) => {
-        // Filtramos submenús si existen
-        const SUB_MENUS = (menu_s.subMenus || []).filter((submenu: any) => 
-          permissions.includes(submenu.permision) && submenu.show_nav
-        );
+        if (side && Array.isArray(side.menu)) {
+          for (let j = 0; j < side.menu.length; j++) {
+            const menu_s = side.menu[j];
+            
+            // Filtrar submenús manualmente (reemplaza a .filter e .includes)
+            const SUB_MENUS: any[] = [];
+            if (menu_s.subMenus && Array.isArray(menu_s.subMenus)) {
+              for (let k = 0; k < menu_s.subMenus.length; k++) {
+                const submenu = menu_s.subMenus[k];
+                if (permissions.indexOf(submenu.permision) !== -1 && submenu.show_nav) {
+                  SUB_MENUS.push(submenu);
+                }
+              }
+            }
 
-        // Si tiene submenús aprobados, añadimos el menú con sus hijos
-        if (SUB_MENUS.length > 0) {
-          SIDE_B.push({ ...menu_s, subMenus: SUB_MENUS });
-        } 
-        // Si no tiene submenús pero el menú principal está aprobado, lo agregamos plano
-        else if (permissions.includes(menu_s.permision)) {
-          SIDE_B.push({ ...menu_s, subMenus: [] });
+            if (SUB_MENUS.length > 0) {
+              const menuCopy = Object.assign({}, menu_s, { subMenus: SUB_MENUS });
+              SIDE_B.push(menuCopy);
+            } else if (permissions.indexOf(menu_s.permision) !== -1) {
+              const menuCopy = Object.assign({}, menu_s, { subMenus: [] });
+              SIDE_B.push(menuCopy);
+            }
+          }
         }
-      });
 
-      if (SIDE_B.length > 0) {
-        SIDE_BAR_G.push({ ...side, menu: SIDE_B });
+        if (SIDE_B.length > 0) {
+          const sideCopy = Object.assign({}, side, { menu: SIDE_B });
+          SIDE_BAR_G.push(sideCopy);
+        }
       }
-    });
+    }
 
     this.sidebarData = SIDE_BAR_G;
   }
 
   public expandSubMenus(menu: any): void {
+    if (!this.sidebarData) return;
     sessionStorage.setItem('menuValue', menu.menuValue);
-    this.sidebarData.forEach((mainMenus: any) => {
-      mainMenus.menu.forEach((resMenu: any) => {
-        if (resMenu.menuValue === menu.menuValue) {
-          resMenu.showSubRoute = !resMenu.showSubRoute;
-        } else {
-          resMenu.showSubRoute = false;
+    
+    for (let i = 0; i < this.sidebarData.length; i++) {
+      const mainMenus = this.sidebarData[i];
+      if (mainMenus && mainMenus.menu) {
+        for (let j = 0; j < mainMenus.menu.length; j++) {
+          const resMenu = mainMenus.menu[j];
+          if (resMenu.menuValue === menu.menuValue) {
+            resMenu.showSubRoute = !resMenu.showSubRoute;
+          } else {
+            resMenu.showSubRoute = false;
+          }
         }
-      });
-    });
+      }
+    }
   }
 
-  private getRoutes(route: { url: string }): void {
+  private getRoutes(route: any): void {
     if (!route || !route.url) return;
 
     this.currentUrl = route.url;
@@ -112,12 +142,13 @@ export class SidebarComponent implements OnInit {
     this.base = splitVal[1] || '';
     this.page = splitVal[2] || '';
 
-    // 🚀 CORRECCIÓN CRÍTICA: Solo removemos las clases de control si la pantalla NO es móvil,
-    // evitando que el script de AdminLTE se rompa al abrir la hamburguesa en el iPhone 6s
-    if (window.innerWidth > 768) {
+    // No tocamos las clases del body en el constructor para evitar que el trigger muera en Safari móvil
+    if (window && window.innerWidth > 768) {
       const bodyTag = document.body;
-      bodyTag.classList.remove('slide-nav');
-      bodyTag.classList.remove('opened');
+      if (bodyTag) {
+        bodyTag.classList.remove('slide-nav');
+        bodyTag.classList.remove('opened');
+      }
     }
   }
 
