@@ -304,47 +304,59 @@ export class AppointmentFormComponent implements OnInit {
   isSegmentSelected(SEGMENT: any): boolean { if (this.isEditMode) { return SEGMENT.id === this.DOCTOR_SELECTED.doctor_schedule_join_hour_id; } return false; }
 
   save(): void {
-    if (this.appointmentForm.invalid) {
-      this.text_validation = 'Los campos requeridos son obligatorios';
-      return;
-    }
-
-    if (this.amount < this.amount_add) {
-      this.text_validation = 'El adelanto no puede ser mayor al total';
-      return;
-    }
-
-    if (!this.name || !this.surname || !this.n_doc || !this.phone || !this.date_appointment || !this.speciality_id || !this.selected_segment_hour || !this.amount || !this.amount_add || !this.method_payment) {
-      this.text_validation = 'Todos los campos son necesarios (incluyendo segmento)';
-      return;
-    }
-
-    const data = {
-      doctor_id: this.DOCTOR_SELECTED.doctor.id,
-      user_id: this.patient.id,
-      name: this.name,
-      surname: this.surname,
-      n_doc: this.n_doc,
-      phone: this.phone,
-      name_companion: this.name_companion,
-      surname_companion: this.surname_companion,
-      date_appointment: this.date_appointment,
-      speciality_id: this.speciality_id,
-      doctor_schedule_join_hour_id: this.selected_segment_hour.id,
-      amount: this.amount,
-      amount_add: this.amount_add,
-      method_payment: this.method_payment
-    };
-
-    const observable = this.isEditMode
-      ? this.appointmentService.editAppointment(data, +this.appointmentId!)
-      : this.appointmentService.storeAppointment(data);
-
-    observable.subscribe((resp: any) => {
-      Swal.fire('Éxito!', 'Cita ' + (this.isEditMode ? 'actualizada' : 'creada'), 'success');
-      this.router.navigate(['/appointments/list/doctor/', this.doctor_id]);
-    });
+  // 1. Validar el formulario de Angular
+  if (this.appointmentForm.invalid) {
+    this.text_validation = 'Los campos requeridos son obligatorios';
+    return;
   }
+
+  // 2. Extraer todos los valores actuales del formulario
+  const formValues = this.appointmentForm.value;
+
+  // 3. Validar la lógica de montos usando los datos del formulario
+  if (formValues.amount < formValues.amount_add) {
+    this.text_validation = 'El adelanto no puede ser mayor al total';
+    return;
+  }
+
+  // 4. Validar el segmento de hora que está por fuera del formulario
+  if (!this.selected_segment_hour) {
+    this.text_validation = 'Todos los campos son necesarios (incluyendo segmento)';
+    return;
+  }
+
+  this.text_validation = '';
+
+  // 5. Construir el objeto DATA combinando el formulario y las variables externas
+  const data = {
+    doctor_id: this.DOCTOR_SELECTED,
+    user_id: this.patient?.id, // ID del paciente obtenido en filterPatient()
+    name: formValues.name,
+    surname: formValues.surname,
+    n_doc: formValues.n_doc,
+    phone: formValues.phone,
+    name_companion: formValues.name_companion,
+    surname_companion: formValues.surname_companion,
+    date_appointment: formValues.date_appointment,
+    speciality_id: formValues.speciality_id,
+    doctor_schedule_join_hour_id: this.selected_segment_hour.id,
+    amount: formValues.amount,
+    amount_add: formValues.amount_add,
+    method_payment: formValues.method_payment
+  };
+
+  // 6. Determinar si es Edición o Creación
+  const observable = this.isEditMode
+    ? this.appointmentService.editAppointment(data, +this.appointmentId!)
+    : this.appointmentService.storeAppointment(data);
+
+  // 7. Enviar al servidor
+  observable.subscribe((resp: any) => {
+    Swal.fire('Éxito!', 'Cita ' + (this.isEditMode ? 'actualizada' : 'creada'), 'success');
+    this.router.navigate(['/appointments/list/doctor/', this.doctor_id]);
+  });
+}
+
 
   get title(): string {
     return this.isEditMode ? 'Editar Cita' : 'Agregar Cita';
