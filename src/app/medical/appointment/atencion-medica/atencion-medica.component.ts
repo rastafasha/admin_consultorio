@@ -55,7 +55,7 @@ export class AtencionMedicaComponent {
             <li>Crear El Diagnostico u observación </li>
             <li>Opción de dictado: para una mejor experiencia, hemos habilitado el boton de dictado</li>
             <li>Como funciona?: Activa el switch. comienza a dictar, el sistema recibe, el diagnostico, las medicinas, el uso, y puede imprimir </li>
-            <li>Comandos: limpiar todo, punto y aparte, punto y seguido, pasar a medicamentos, pasar a uso, agregar medicamento, imprimir receta </li>
+            <li>Comandos: limpiar todo, punto y aparte, punto y seguido, pasar a medicamentos, pasar a uso, ó siguiente campo agregar medicamento, imprimir receta, imprimir récipe ó guardar e imprimir</li>
             <li>Crear el Recipe de Medicinas</li>
             <li>Coloca el nombre del medicamento, su uso o aplicación y la lista se ira creando</li>
             <li>Al Pulsar Actualizar se compartirá esta información en la App Versión Paciente</li>
