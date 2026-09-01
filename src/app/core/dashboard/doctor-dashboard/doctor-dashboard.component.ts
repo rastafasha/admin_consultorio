@@ -343,9 +343,9 @@ export class DoctorDashboardComponent {
       this.appointment_pendings = resp.appointment_pendings.data;
       this.appointments = resp.appointments;
       this.schedule_selecteds = resp.schedule_selecteds;
-      this.isLoading = false;
       this.dashboardDoctorProfile();
       this.dashboardDoctorProfileYear();
+      this.isLoading = false;
 
     })
   }

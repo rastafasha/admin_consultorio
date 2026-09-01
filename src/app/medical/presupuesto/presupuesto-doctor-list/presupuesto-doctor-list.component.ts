@@ -94,22 +94,34 @@ export class PresupuestoDoctorListComponent implements OnInit {
 
   
 
-  private getTableData(page = 1): void {
+private getTableData(page = 1): void {
     this.isLoading = true;
     this.serialNumberArray = [];
     
     this.presupuestoService.listPresupuestoDocts(this.doctor_id, page, 
       this.searchDataValue, this.searchDataPatient, this.date || '').subscribe({
       next: (resp: any) => {
-        this.totalDataPatient = resp.meta.total;
-        this.presupuestoList = resp.presupuestos.data || [];
+        
+        // 🚨 CORRECCIÓN CRÍTICA: Control seguro si meta viene undefined momentáneamente
+        this.totalDataPatient = resp.meta?.total || 0;
+        
+        // 🛡️ FILTRO DE SEGURIDAD ANTIFALLAS PARA EL LISTADO
+        this.presupuestoList = Array.isArray(resp.presupuestos) 
+          ? resp.presupuestos 
+          : (resp.presupuestos?.data || []);
+          
         this.dataSource.data = this.presupuestoList;
+        
         this.calculateTotalPages(this.totalDataPatient, this.pageSize);
         this.isLoading = false;
       },
-      error: (err) => Swal.fire('Error', 'Failed to load budgets', 'error')
+      error: (err) => {
+        this.isLoading = false;
+        Swal.fire('Error', 'Failed to load budgets', 'error');
+      }
     });
-  }
+}
+
 
 
   deletePresupuesto(id: number) {
