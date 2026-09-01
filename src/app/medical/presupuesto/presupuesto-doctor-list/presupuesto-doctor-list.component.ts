@@ -92,8 +92,6 @@ export class PresupuestoDoctorListComponent implements OnInit {
   }
 
 
-  
-
 private getTableData(page = 1): void {
     this.isLoading = true;
     this.serialNumberArray = [];
@@ -102,15 +100,22 @@ private getTableData(page = 1): void {
       this.searchDataValue, this.searchDataPatient, this.date || '').subscribe({
       next: (resp: any) => {
         
-        // 🚨 CORRECCIÓN CRÍTICA: Control seguro si meta viene undefined momentáneamente
+        // 1. Control seguro de meta
         this.totalDataPatient = resp.meta?.total || 0;
         
-        // 🛡️ FILTRO DE SEGURIDAD ANTIFALLAS PARA EL LISTADO
+        // 2. Filtro seguro de la lista
         this.presupuestoList = Array.isArray(resp.presupuestos) 
           ? resp.presupuestos 
           : (resp.presupuestos?.data || []);
           
-        this.dataSource.data = this.presupuestoList;
+        // 🚨 CORRECCIÓN COMPATIBLE CON ANGULAR MATERIAL:
+        // Si no está inicializado, creamos la instancia real de MatTableDataSource
+        if (!this.dataSource) {
+          this.dataSource = new MatTableDataSource<any>(this.presupuestoList);
+        } else {
+          // Si ya existe, simplemente le asignamos la data limpia
+          this.dataSource.data = this.presupuestoList;
+        }
         
         this.calculateTotalPages(this.totalDataPatient, this.pageSize);
         this.isLoading = false;
