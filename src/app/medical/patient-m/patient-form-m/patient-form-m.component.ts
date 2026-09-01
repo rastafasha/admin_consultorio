@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, NgZone, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PatientMService } from '../../../services/patient-m.service';
 import { DoctorService } from '../../../services/doctor.service';
 import { catchError, Subscription, throwError } from 'rxjs';
@@ -41,7 +41,7 @@ export class PatientFormMComponent implements OnInit {
   public patient_selected: any;
   public isLoading = false;
   public isSaving = false;
-  public is_vacuna = false;
+  public is_vacuna = false || 1;
 
   doctor: string;
 
@@ -380,7 +380,7 @@ export class PatientFormMComponent implements OnInit {
       examen_fisico: [''],
       reporte_laboratorio: [''],
       evolucion: [''],
-      vacunas: [''],
+      
       peso_al_nacer: [''],
       talla_al_nacer: [''],
       n_doc: ['', [Validators.required, Validators.minLength(3)]],
@@ -403,11 +403,14 @@ export class PatientFormMComponent implements OnInit {
       is_vacuna: [],
       current_desease: [''],
       diagnostico: [''],
+      vacunas: this.fb.array([]),
       doctorId: [this.doctor_id]
     });
   }
 
-
+get vacunasFormArray(): FormArray {
+  return this.patientForm.get('vacunas') as FormArray;
+}
 
   verificarPaciente(event: any): void {
     const documento = event.target.value?.trim();
@@ -505,7 +508,7 @@ export class PatientFormMComponent implements OnInit {
         examen_fisico: this.patient_selected.examen_fisico || '',
         enfermedad_actual: this.patient_selected.enfermedad_actual || '',
         // Sincronizamos las llaves del formulario reactivo con los datos del backend
-        vacunas: this.patient_selected.vacunas || [],
+        
         evolucion: this.patient_selected.evolucion || [],
         reporte_laboratorio: this.patient_selected.reporte_laboratorio || []
       });
@@ -534,6 +537,19 @@ export class PatientFormMComponent implements OnInit {
         mobile_responsable: this.patient_selected.person?.mobile_responsable || '',
         relationship_responsable: this.patient_selected.person?.relationship_responsable || ''
       });
+     // Limpiar el FormArray por si había datos de otro paciente cargado antes
+      this.vacunasFormArray.clear();
+
+      // Recorrer el array de vacunas que viene de la API e insertarlas
+      if (this.patient_selected.vacunas && this.patient_selected.vacunas.length > 0) {
+        this.patient_selected.vacunas.forEach((vacuna: any) => {
+          this.vacunasFormArray.push(this.fb.group({
+            cantidad: [vacuna.cantidad || ''],
+            fecha_vacuna: [vacuna.fecha_vacuna || ''],
+            name_medical: [vacuna.name_medical || '']
+          }));
+        });
+      }
       this.IMAGE_PREVISUALIZA = this.patient_selected.avatar || 'assets/img/user-06.jpg';
       this.isLoading = false;
     });
