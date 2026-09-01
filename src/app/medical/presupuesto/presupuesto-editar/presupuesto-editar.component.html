@@ -29,10 +29,10 @@
                             <!-- paciente -->
                             <div class="row align-items-center py-4">
                                 <div class="col-12 py-4">
-                                     <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm" (click)="modalCrearPresupuesto.open()"
-                            title="Ayuda de la sección">
-                            <i class="fas fa-question"></i>
-                        </button>
+                                    <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm"
+                                        (click)="modalCrearPresupuesto.open()" title="Ayuda de la sección">
+                                        <i class="fas fa-question"></i>
+                                    </button>
                                     <h4>Datos del Paciente</h4>
                                     <button type="button" class="btn btn-light btn-sm" *ngIf="!isediting"
                                         (click)="resetPatient()">Reset</button>
@@ -77,8 +77,14 @@
                                             [ngModelOptions]="{standalone: true}" type="text">
                                     </div>
                                 </div>
+                                <div class="col-12 col-md-6 col-xl-3">
+                                    <div class="form-group local-forms">
+                                        <label>Especialidad <span class="login-danger">*</span></label>
+                                        {{specialityName}}
+                                    </div>
+                                </div>
 
-                                <div class="col-12 col-md-6 col-xl-4" *ngIf="!isdoctor">
+                                <!-- <div class="col-12 col-md-6 col-xl-4" *ngIf="!isdoctor">
                                     <div class="form-group local-forms">
                                         <label>Especialidad<span class="login-danger">*</span></label>
                                         <mat-select [(ngModel)]="speciality_id" [ngModelOptions]="{standalone: true}"
@@ -88,7 +94,7 @@
                                             </mat-option>
                                         </mat-select>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="col-12 col-md-6 col-xl-4" *ngIf="isdoctor">
                                     <div class="form-group local-forms">
                                         <label>Especialidad<span class="login-danger">*</span></label>
@@ -241,4 +247,5 @@
 
             </div>
 
-            <app-modal-instrucciones [info]="info_crear_presupuesto" sectionId="mis_presupuesto" #modalCrearPresupuesto ></app-modal-instrucciones>
+            <app-modal-instrucciones [info]="info_crear_presupuesto" sectionId="mis_presupuesto"
+                #modalCrearPresupuesto></app-modal-instrucciones>
