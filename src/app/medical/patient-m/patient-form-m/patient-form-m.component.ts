@@ -400,9 +400,9 @@ export class PatientFormMComponent implements OnInit {
       fc: [0],
       fr: [0],
       peso: [0],
-      is_vacuna: [1],
+      is_vacuna: [],
       current_desease: [''],
-      diganostico: [''],
+      diagnostico: [''],
       doctorId: [this.doctor_id]
     });
   }

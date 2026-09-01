@@ -154,14 +154,14 @@
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6 col-md-6 col-xl-4"
-                                    *ngIf="doctor && doctor.speciality?.name === 'Pediatría'">
+                                    *ngIf="doctor && doctor.speciality?.name === 'Pediatría' || doctor.speciality?.name === 'Endocrinología pediátrica y adulto'">
                                     <div class="form-group local-forms">
                                         <label>Peso al nacer</label>
                                         <input class="form-control" formControlName="peso_al_nacer" type="number">
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6 col-md-6 col-xl-4"
-                                    *ngIf="doctor && doctor.speciality?.name === 'Pediatría'">
+                                    *ngIf="doctor && doctor.speciality?.name === 'Pediatría' || doctor.speciality?.name === 'Endocrinología pediátrica y adulto'">
                                     <div class="form-group local-forms">
                                         <label>Talla al nacer</label>
                                         <input class="form-control" formControlName="talla_al_nacer" type="number">
