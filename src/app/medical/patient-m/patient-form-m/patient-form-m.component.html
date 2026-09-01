@@ -226,7 +226,7 @@
                 <!-- fin signos vitales -->
                 <!-- Vacunas -->
                 <app-vacunas #componenteVacunas [patientForm]="patientForm" [doctor]="doctor"
-                    [vacunasIniciales]="patient_selected.vacunas" 👈 Agrega esta línea
+                    [vacunasIniciales]="patient_selected.vacunas"
                     [is_vacuna]="patientForm.get('is_vacuna')?.value ? 2 : 1" *ngIf="patient_selected">
                 </app-vacunas>
                 <!-- Examen fisico -->

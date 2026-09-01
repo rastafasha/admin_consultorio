@@ -637,6 +637,7 @@ get vacunasFormArray(): FormArray {
     formData.append('talla_al_nacer', formValue.talla_al_nacer);
     formData.append('diagnostico', formValue.diagnostico);
     formData.append('doctor_id', this.doctor_id.toString());
+    
     // (Usamos un fallback de arreglo vacío [] por si el componente no se renderizó)
     const listaVacunas = this.patientForm.get('vacunas')?.value || [];
     const listaEvoluciones = this.patientForm.get('evolucion')?.value || [];
