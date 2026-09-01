@@ -24,7 +24,8 @@
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                        <form enctype="multipart/form-data" #form>
+                         <app-loading *ngIf="isLoading"></app-loading>
+                        <form enctype="multipart/form-data" #form *ngIf="!isLoading">
 
                             <!-- paciente -->
                             <div class="row align-items-center py-4">

@@ -21,7 +21,9 @@
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                        <form>
+
+                        <app-loading *ngIf="isLoading"></app-loading>
+                        <form *ngIf="!isLoading" > 
 
                             <div class="row align-items-center">
                                 <div class="col-xs-12 col-sm-6">

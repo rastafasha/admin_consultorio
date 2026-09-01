@@ -144,6 +144,7 @@ export class PresupuestoEditarComponent {
   }
 
   getPresupuesto() {
+    this.isLoading = true;
     this.presupuestoService.getPresupuesto(this.presupuesto_id).subscribe((resp: any) => {
       this.presupuesto_selected = resp;
       // console.log(this.presupuesto_selected);
@@ -161,6 +162,7 @@ export class PresupuestoEditarComponent {
       this.speciality_id = this.presupuesto_selected.speciality_id;
       this.amount = this.presupuesto_selected.amount;
       this.medical = this.presupuesto_selected.medical;
+      this.isLoading = false;
 
     });
   }

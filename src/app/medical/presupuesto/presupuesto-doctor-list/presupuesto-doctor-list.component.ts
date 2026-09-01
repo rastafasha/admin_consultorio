@@ -95,6 +95,7 @@ export class PresupuestoDoctorListComponent implements OnInit {
   
 
   private getTableData(page = 1): void {
+    this.isLoading = true;
     this.serialNumberArray = [];
     
     this.presupuestoService.listPresupuestoDocts(this.doctor_id, page, 
@@ -104,6 +105,7 @@ export class PresupuestoDoctorListComponent implements OnInit {
         this.presupuestoList = resp.presupuestos.data || [];
         this.dataSource.data = this.presupuestoList;
         this.calculateTotalPages(this.totalDataPatient, this.pageSize);
+        this.isLoading = false;
       },
       error: (err) => Swal.fire('Error', 'Failed to load budgets', 'error')
     });

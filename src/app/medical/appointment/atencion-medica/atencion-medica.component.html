@@ -19,15 +19,16 @@
                 <app-back-bottn></app-back-bottn>
             </div>
         </div>
-        <app-skeleton-loader *ngIf="isLoading" [rows]="5" [columns]="4"></app-skeleton-loader>
-        <!-- <app-loader-anim *ngIf="isLoading"></app-loader-anim> -->
+        <!-- <app-skeleton-loader *ngIf="isLoading" [rows]="5" [columns]="4"></app-skeleton-loader> -->
+       
         <!-- /Page Header -->
         <div class="row">
             <!-- paciente -->
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                        <form>
+                         <app-loading *ngIf="isLoading"></app-loading>
+                        <form *ngIf="!isLoading">
 
                             <!-- paciente -->
                             <div class="row align-items-center py-2">

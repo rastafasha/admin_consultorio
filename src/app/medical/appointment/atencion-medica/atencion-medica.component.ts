@@ -96,6 +96,7 @@ export class AtencionMedicaComponent {
   }
 
   getAppointment() {
+    this.isLoading = true
     this.appointmentService.showAppointment(this.appointment_id).subscribe((resp: any) => {
       // console.log(resp);
       this.appointment_selected = resp.appointment;
@@ -107,7 +108,7 @@ export class AtencionMedicaComponent {
       this.name_companion = this.appointment_selected.patient.name_companion;
       this.surname_companion = this.appointment_selected.patient.surname_companion;
       this.antecedent_alerg = this.appointment_selected.patient.antecedent_alerg;
-
+      this.isLoading = false
     });
     // cita medica
 
