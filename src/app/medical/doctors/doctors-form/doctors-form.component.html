@@ -88,7 +88,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-12 col-sm-6 col-md-6 col-xl-4">
+                                <div class="col-12 col-sm-6 col-md-6 col-xl-4" *ngIf="roles === 'SUPERADMIN'">
                                     <div class="form-group local-forms">
                                         <label>Roles</label>
                                         <mat-select [(ngModel)]="selectedValue" [ngModelOptions]="{standalone: true}"
