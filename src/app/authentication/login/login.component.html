@@ -28,7 +28,7 @@
                   <p style="text-align:center;">Consultorio.</p>
                 </div>
                 <h2 *ngIf="!isLoading">Ingresar</h2>
-                <h2 *ngIf="isLoading">Cargando ingreso</h2>
+                <h4 *ngIf="isLoading">Cargando ingreso ...</h4>
                 <!-- Form -->
                 <form *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="loginFormSubmit()">
                   <div class="form-group">
