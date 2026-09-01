@@ -501,7 +501,7 @@ export class PatientFormMComponent implements OnInit {
         peso_al_nacer: this.patient_selected.peso_al_nacer || 0,
         tratamiento: this.patient_selected.tratamiento || '',
         historia_enfermedad: this.patient_selected.historia_enfermedad || '',
-        diganostico: this.patient_selected.diganostico || '',
+        diagnostico: this.patient_selected.diagnostico || '',
         examen_fisico: this.patient_selected.examen_fisico || '',
         enfermedad_actual: this.patient_selected.enfermedad_actual || '',
         // Sincronizamos las llaves del formulario reactivo con los datos del backend
@@ -619,7 +619,7 @@ export class PatientFormMComponent implements OnInit {
     formData.append('reporte_laboratorio', formValue.reporte_laboratorio);
     formData.append('peso_al_nacer', formValue.peso_al_nacer);
     formData.append('talla_al_nacer', formValue.talla_al_nacer);
-    formData.append('diganostico', formValue.diganostico);
+    formData.append('diagnostico', formValue.diagnostico);
     formData.append('doctor_id', this.doctor_id.toString());
     // (Usamos un fallback de arreglo vacío [] por si el componente no se renderizó)
     const listaVacunas = this.patientForm.get('vacunas')?.value || [];
