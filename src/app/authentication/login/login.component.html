@@ -27,8 +27,8 @@
                   <p style="text-align:center;">Admin Citas Médicas.</p>
                   <p style="text-align:center;">Consultorio.</p>
                 </div>
-                <h2>Ingresar</h2>
-                <app-loading *ngIf="isLoading"></app-loading>
+                <h2 *ngIf="!isLoading">Ingresar</h2>
+                <h2 *ngIf="isLoading">Cargando ingreso</h2>
                 <!-- Form -->
                 <form *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="loginFormSubmit()">
                   <div class="form-group">
