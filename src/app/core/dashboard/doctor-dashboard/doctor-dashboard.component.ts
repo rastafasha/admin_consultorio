@@ -380,8 +380,7 @@ export class DoctorDashboardComponent {
 
     this.dashboardService.dashboardDoctor(data).subscribe((resp: any) => {
 
-      // 🚨 Eliminados todos los .data porque el backend ya los resuelve en bruto
-      // 1. Estadísticas numéricas y porcentajes (Están perfectos)
+     // 1. Estadísticas numéricas y porcentajes (Siempre estables)
       this.num_appointments_current = resp.num_appointments_current;
       this.num_appointments_before = resp.num_appointments_before;
       this.porcentaje_d = resp.porcentaje_d;
@@ -398,15 +397,18 @@ export class DoctorDashboardComponent {
       this.num_appointments_total_pending_before = resp.num_appointments_total_pending_before;
       this.porcentaje_dtpn = resp.porcentaje_dtpn;
 
-      // 2. PACIENTES: Este viene directo como array plano (SIN .data)
-      this.doctorPatientList = resp.patientsbydoc;
-
-      // 3. CITAS Y PAGOS: Estos vienen envueltos en un objeto .data según tu consola
-      this.appointments = resp.appointments ? resp.appointments.data : [];
-      this.paymentsbydoc = resp.paymentsbydoc ? resp.paymentsbydoc.data : [];
+      // =========================================================================
+      // 🛡️ FILTRO DE SEGURIDAD ANTIFALLAS (KLYNTIC)
+      // =========================================================================
+      // Si resp.appointments es un array directo, lo usa. Si es un objeto con .data, entra a .data.
       
-      // 4. PAGOS PENDIENTES DEL DOCTOR: Viene envuelto en .data con los datos del ID 10
-      this.appointmentpaysbydoc = resp.appointmentpaysbydoc ? resp.appointmentpaysbydoc.data : [];
+      this.appointments = Array.isArray(resp.appointments) ? resp.appointments : (resp.appointments?.data || []);
+      
+      this.doctorPatientList = Array.isArray(resp.patientsbydoc) ? resp.patientsbydoc : (resp.patientsbydoc?.data || []);
+      
+      this.paymentsbydoc = Array.isArray(resp.paymentsbydoc) ? resp.paymentsbydoc : (resp.paymentsbydoc?.data || []);
+      
+      this.appointmentpaysbydoc = Array.isArray(resp.appointmentpaysbydoc) ? resp.appointmentpaysbydoc : (resp.appointmentpaysbydoc?.data || []);
 
       this.isLoading = false;
     });
