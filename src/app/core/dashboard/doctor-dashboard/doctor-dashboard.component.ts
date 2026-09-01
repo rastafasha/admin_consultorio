@@ -341,7 +341,7 @@ export class DoctorDashboardComponent {
     this.doctorService.showDoctorProfile(this.doctor_id).subscribe((resp: any) => {
       this.doctor = resp.doctor;
       this.appointment_pendings = resp.appointment_pendings.data;
-      // this.appointments = resp.appointments;
+      this.appointments = resp.appointments;
       this.schedule_selecteds = resp.schedule_selecteds;
       this.isLoading = false;
       this.dashboardDoctorProfile();
@@ -401,8 +401,6 @@ export class DoctorDashboardComponent {
       // 🛡️ FILTRO DE SEGURIDAD ANTIFALLAS (KLYNTIC)
       // =========================================================================
       // Si resp.appointments es un array directo, lo usa. Si es un objeto con .data, entra a .data.
-      
-      this.appointments = Array.isArray(resp.appointments) ? resp.appointments : (resp.appointments?.data || []);
       
       this.doctorPatientList = Array.isArray(resp.patientsbydoc) ? resp.patientsbydoc : (resp.patientsbydoc?.data || []);
       
