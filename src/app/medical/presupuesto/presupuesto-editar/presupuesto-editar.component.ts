@@ -96,7 +96,7 @@ export class PresupuestoEditarComponent {
             <li>En los campos: Item, Cantidad y Precio, podras colocar los costos de cada valor para sumarlos a la lista</li>
             <li>El sistema te mostrará una tabla con la información recibida costos y cantidades</li>
             <li>El sistema se encargará de hacer la suma total</li>
-            <li>Comandos: limpiar todo, punto y aparte, punto y seguido, pasar a descripción, pasar a diagnóstico, pasar a item, pasar a cantidad, pasar a precio, agregar item , guardar</li>
+            <li>Comandos: limpiar todo, punto y aparte, punto y seguido, pasar a descripción, pasar a diagnóstico, pasar a ítem ó ítem, pasar a cantidad ó cantidad, pasar a precio ó precio, agregar item , guardar</li>
             <li>Al Pulsar Guardar se compartirá esta información en la App Versión Paciente, así tendran un archivo para poder consultarlo a futuro</li>
           </ul>`;
 
@@ -241,26 +241,26 @@ export class PresupuestoEditarComponent {
         return;
       }
       //item
-      if (textoEvaluar.includes('pasar a item')) {
+      if (textoEvaluar.includes('pasar a item') || textoEvaluar.includes('ítem')) {
         this.zone.run(() => {
           this.campoActual = 'name_medical';
         });
         return;
       }
-      if (textoEvaluar.includes('pasar a cantidad') ) {
+      if (textoEvaluar.includes('pasar a cantidad') || textoEvaluar.includes('cantidad')) {
         this.zone.run(() => {
           this.campoActual = 'cantidad';
         });
         return;
       }
-      if (textoEvaluar.includes('pasar a precio') ) {
+      if (textoEvaluar.includes('pasar a precio') || textoEvaluar.includes('precio')) {
         this.zone.run(() => {
           this.campoActual = 'precio';
         });
         return;
       }
 
-      if (textoEvaluar.includes('agregar item')) {
+      if (textoEvaluar.includes('agregar item') ) {
         this.zone.run(() => {
           this.addMedicamento(); // Llama a tu función original del botón
           this.name_medical = ''; // Limpia el input
