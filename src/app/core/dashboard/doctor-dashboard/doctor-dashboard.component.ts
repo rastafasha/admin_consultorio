@@ -341,7 +341,7 @@ export class DoctorDashboardComponent {
     this.doctorService.showDoctorProfile(this.doctor_id).subscribe((resp: any) => {
       this.doctor = resp.doctor;
       this.appointment_pendings = resp.appointment_pendings.data;
-      this.appointments = resp.appointments;
+      // this.appointments = resp.appointments;
       this.schedule_selecteds = resp.schedule_selecteds;
       this.isLoading = false;
       this.dashboardDoctorProfile();
