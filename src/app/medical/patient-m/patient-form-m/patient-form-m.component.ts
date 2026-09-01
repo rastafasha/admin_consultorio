@@ -1,15 +1,16 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PatientMService } from '../../../services/patient-m.service';
 import { DoctorService } from '../../../services/doctor.service';
-import { catchError, throwError } from 'rxjs';
+import { catchError, Subscription, throwError } from 'rxjs';
 import Swal from 'sweetalert2';
 import { routes } from '../../../shared/routes/routes';
 import { StaffService } from '../../../services/staff.service';
 import { EvolucionComponent } from '../components/evolucion/evolucion.component';
 import { VacunasComponent } from '../components/vacunas/vacunas.component';
 import { ReporteLaboratorioComponent } from '../components/reporte-laboratorio/reporte-laboratorio.component';
+import { SpeechRecognitionService } from '../../../services/speech-recognition.service';
 
 @Component({
   selector: 'app-patient-form-m',
@@ -40,12 +41,25 @@ export class PatientFormMComponent implements OnInit {
   public patient_selected: any;
   public isLoading = false;
   public isSaving = false;
-  public is_vacuna = 1;
+  public is_vacuna = false;
 
   doctor: string;
 
   public mvacunas: any = []; // Ensure medical is initialized as an array
   public mevolucion: any = []; // Ensure medical is initialized as an array
+
+
+  // dictado
+  recognition: any;
+  isListening: boolean = false;
+  campoActual: 'current_desease' | 'antecedent_personal' | 'antecedent_family' | 'antecedent_alerg' |'examen_fisico'|'tratamiento' |'diagnostico' = 'current_desease';
+  current_desease: string = '';
+  antecedent_personal: string = '';
+  antecedent_family: string = '';
+  antecedent_alerg: string = '';
+  examen_fisico: string = '';
+  diagnostico: string = '';
+  tratamiento: string = '';
 
   info_form_paciente = `
   <p>En esta sección :</p>
@@ -54,6 +68,7 @@ export class PatientFormMComponent implements OnInit {
             <li>Información Básica, de contacto, persona de contacto o familiar</li>
             <li>Es Recomendable llenar la sección de Signos Vitales para tener un control del estado de salud</li>
             <li>Con Signos Vitales esto podrá ayudar a la aplicación a futuro para mostrar un comportamiento y reportes presentados en la App  </li>
+            <li> Comandos de voz: pasar a ó ir a motivo consulta, pasar a ó ir a personales, pasar a ó ir a familiares , pasar a ó ir a alergias, pasar a ó ir a examen, pasar a ó ir a historia, pasar a ó ir a diagnostico, pasar a ó ir a tratamiento, guardar  </li>
           </ul>`;
 
   constructor(
@@ -63,7 +78,9 @@ export class PatientFormMComponent implements OnInit {
     public router: Router,
     private activatedRoute: ActivatedRoute,
     private staffService: StaffService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private speechService: SpeechRecognitionService,
+    private zone: NgZone
   ) {
 
   }
@@ -87,7 +104,257 @@ export class PatientFormMComponent implements OnInit {
     } else {
       console.log('DEBUG patient-form ngOnInit: create mode');
     }
+
+    this.initSpeechRecognition();
   }
+
+  toggleDictadoGlobal(event: any) {
+    this.isListening = event.target.checked;
+  if (!this.recognition) {
+    alert('Tu navegador no soporta dictado por voz.');
+    return;
+  }
+  if (this.isListening) {
+    this.recognition.start();
+    console.log('🎤 Micrófono encendido globalmente...');
+  } else {
+    this.recognition.stop();
+    console.log('🛑 Micrófono apagado.');
+  }
+  }
+
+
+  initSpeechRecognition() {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      console.error('El dictado por voz no es soportado.');
+      return;
+    }
+
+    this.recognition = new SpeechRecognition();
+    this.recognition.continuous = true;
+    this.recognition.interimResults = false;
+    this.recognition.lang = 'es-VE';
+
+    this.recognition.onresult = (event: any) => {
+      if (!event || !event.results) return;
+
+      const currentResultIndex = event.resultIndex;
+      const result = event.results[currentResultIndex];
+
+      if (!result || !result[0] || !result[0].transcript) return;
+
+      const rawText = result[0].transcript;
+      console.log('🎙️ KLYNTIC VOICE RECEIVER:', rawText);
+
+      let textoEvaluar = rawText.toLowerCase().trim();
+      if (textoEvaluar.endsWith('.')) {
+        textoEvaluar = textoEvaluar.slice(0, -1).trim();
+      }
+
+      // =========================================================================
+      // 🚀 1. SECCIÓN DE COMANDOS DE NAVEGACIÓN EN EL HISTORIAL
+      // =========================================================================
+
+      if (textoEvaluar.includes('pasar a motivo consulta') || textoEvaluar.includes('ir a motivo consulta')) {
+        this.zone.run(() => {
+          this.campoActual = 'current_desease';
+        });
+        return;
+      }
+
+      if (textoEvaluar.includes('pasar a personales') || textoEvaluar.includes('ir a personales')) {
+        this.zone.run(() => {
+          this.campoActual = 'antecedent_personal';
+          console.log('📍 Campo cambiado a: antecedent_personal');
+        });
+        return;
+      }
+
+      if (textoEvaluar.includes('pasar a familiares') || textoEvaluar.includes('ir a familiares')) {
+        this.zone.run(() => {
+          this.campoActual = 'antecedent_family';
+        });
+        return;
+      }
+
+      if (textoEvaluar.includes('pasar a alergias') || textoEvaluar.includes('ir a alergias')) {
+        this.zone.run(() => {
+          this.campoActual = 'antecedent_alerg';
+        });
+        return;
+      }
+      if (textoEvaluar.includes('pasar a examen') || textoEvaluar.includes('ir a examen')) {
+        this.zone.run(() => {
+          this.campoActual = 'examen_fisico';
+        });
+        return;
+      }
+      if (textoEvaluar.includes('pasar a diagnostico') || textoEvaluar.includes('ir a diagnostico')) {
+        this.zone.run(() => {
+          this.campoActual = 'diagnostico';
+        });
+        return;
+      }
+      if (textoEvaluar.includes('pasar a tratamiento') || textoEvaluar.includes('ir a tratamiento')) {
+        this.zone.run(() => {
+          this.campoActual = 'tratamiento';
+        });
+        return;
+      }
+      // Comando unificado: GUARDA
+        if (textoEvaluar.includes('guardar')) {
+          this.zone.run(() => {
+            this.save(); // Pasamos 'true' para indicar que queremos imprimir después de guardar
+          });
+          return;
+        }
+
+      // =========================================================================
+      // ✍️ 2. SECCIÓN DE ESCRITURA CON NGZONE (Campos del Historial)
+      // =========================================================================
+      this.zone.run(() => {
+
+        // --- ENFERMEDAD ACTUAL ---
+        if (this.campoActual === 'current_desease') {
+          if (textoEvaluar.includes('limpiar todo') || textoEvaluar.includes('borrar todo')) {
+            this.current_desease = '';
+            this.actualizarTexto('', 'current_desease');
+            return;
+          }
+          if (textoEvaluar.includes('punto y aparte')) {
+            this.current_desease = this.current_desease ? `${this.current_desease.trim()}.\n\n` : '';
+            this.actualizarTexto(this.current_desease, 'current_desease');
+            return;
+          }
+          if (textoEvaluar.includes('punto y seguido')) {
+            this.current_desease = this.current_desease ? `${this.current_desease.trim()}. ` : '';
+            this.actualizarTexto(this.current_desease, 'current_desease');
+            return;
+          }
+
+          let textoFinal = rawText.trim();
+          if (!this.current_desease || this.current_desease.endsWith('\n') || this.current_desease.endsWith('. ')) {
+            textoFinal = textoFinal.charAt(0).toUpperCase() + textoFinal.slice(1);
+          }
+
+          this.current_desease = this.current_desease
+            ? (this.current_desease.endsWith('\n') || this.current_desease.endsWith(' ') ? this.current_desease + textoFinal : this.current_desease + ' ' + textoFinal)
+            : textoFinal;
+
+          this.actualizarTexto(this.current_desease, 'current_desease');
+        }
+
+        // --- ANTECEDENTES PERSONALES ---
+        else if (this.campoActual === 'antecedent_personal') {
+          if (textoEvaluar.includes('limpiar todo') || textoEvaluar.includes('borrar todo')) {
+            this.antecedent_personal = '';
+            this.actualizarTexto('', 'antecedent_personal');
+            return;
+          }
+          let textoFinal = rawText.trim();
+          if (!this.antecedent_personal || this.antecedent_personal.endsWith('\n') || this.antecedent_personal.endsWith('. ')) {
+            textoFinal = textoFinal.charAt(0).toUpperCase() + textoFinal.slice(1);
+          }
+          this.antecedent_personal = this.antecedent_personal ? `${this.antecedent_personal.trim()} ${textoFinal}` : textoFinal;
+          this.actualizarTexto(this.antecedent_personal, 'antecedent_personal');
+        }
+
+        // --- ANTECEDENTES FAMILIARES ---
+        else if (this.campoActual === 'antecedent_family') {
+          if (textoEvaluar.includes('limpiar todo') || textoEvaluar.includes('borrar todo')) {
+            this.antecedent_family = '';
+            this.actualizarTexto('', 'antecedent_family');
+            return;
+          }
+          let textoFinal = rawText.trim();
+          if (!this.antecedent_family || this.antecedent_family.endsWith('\n') || this.antecedent_family.endsWith('. ')) {
+            textoFinal = textoFinal.charAt(0).toUpperCase() + textoFinal.slice(1);
+          }
+          this.antecedent_family = this.antecedent_family ? `${this.antecedent_family.trim()} ${textoFinal}` : textoFinal;
+          this.actualizarTexto(this.antecedent_family, 'antecedent_family');
+        }
+
+        // --- ALERGIAS ---
+        else if (this.campoActual === 'antecedent_alerg') {
+          if (textoEvaluar.includes('limpiar todo') || textoEvaluar.includes('borrar todo')) {
+            this.antecedent_alerg = '';
+            this.actualizarTexto('', 'antecedent_alerg');
+            return;
+          }
+          let textoFinal = rawText.trim();
+          if (!this.antecedent_alerg || this.antecedent_alerg.endsWith('\n') || this.antecedent_alerg.endsWith('. ')) {
+            textoFinal = textoFinal.charAt(0).toUpperCase() + textoFinal.slice(1);
+          }
+          this.antecedent_alerg = this.antecedent_alerg ? `${this.antecedent_alerg.trim()} ${textoFinal}` : textoFinal;
+          this.actualizarTexto(this.antecedent_alerg, 'antecedent_alerg');
+        }
+
+        // --- examen_fisico ---
+        else if (this.campoActual === 'examen_fisico') {
+          if (textoEvaluar.includes('limpiar todo') || textoEvaluar.includes('borrar todo')) {
+            this.examen_fisico = '';
+            this.actualizarTexto('', 'examen_fisico');
+            return;
+          }
+          let textoFinal = rawText.trim();
+          if (!this.examen_fisico || this.examen_fisico.endsWith('\n') || this.examen_fisico.endsWith('. ')) {
+            textoFinal = textoFinal.charAt(0).toUpperCase() + textoFinal.slice(1);
+          }
+          this.examen_fisico = this.examen_fisico ? `${this.examen_fisico.trim()} ${textoFinal}` : textoFinal;
+          this.actualizarTexto(this.examen_fisico, 'examen_fisico');
+        }
+        
+
+        // --- diagnostico ---
+        else if (this.campoActual === 'diagnostico') {
+          if (textoEvaluar.includes('limpiar todo') || textoEvaluar.includes('borrar todo')) {
+            this.diagnostico = '';
+            this.actualizarTexto('', 'diagnostico');
+            return;
+          }
+          let textoFinal = rawText.trim();
+          if (!this.diagnostico || this.diagnostico.endsWith('\n') || this.diagnostico.endsWith('. ')) {
+            textoFinal = textoFinal.charAt(0).toUpperCase() + textoFinal.slice(1);
+          }
+          this.diagnostico = this.diagnostico ? `${this.diagnostico.trim()} ${textoFinal}` : textoFinal;
+          this.actualizarTexto(this.diagnostico, 'diagnostico');
+        }
+        // --- tratamiento ---
+        else if (this.campoActual === 'tratamiento') {
+          if (textoEvaluar.includes('limpiar todo') || textoEvaluar.includes('borrar todo')) {
+            this.tratamiento = '';
+            this.actualizarTexto('', 'tratamiento');
+            return;
+          }
+          let textoFinal = rawText.trim();
+          if (!this.tratamiento || this.tratamiento.endsWith('\n') || this.tratamiento.endsWith('. ')) {
+            textoFinal = textoFinal.charAt(0).toUpperCase() + textoFinal.slice(1);
+          }
+          this.tratamiento = this.tratamiento ? `${this.tratamiento.trim()} ${textoFinal}` : textoFinal;
+          this.actualizarTexto(this.tratamiento, 'tratamiento');
+        }
+      });
+    };
+
+    this.recognition.onerror = (event: any) => {
+      console.error('Error en el dictado:', event.error);
+    };
+  }
+
+  actualizarTexto(valor: string, campo: string) {
+    this.zone.run(() => {
+      // patchValue actualiza dinámicamente el formControlName que le pases por parámetro
+      // Ej: campo = 'enfermedad_actual', 'examen_fisico', etc.
+      this.patientForm.patchValue({
+        [campo]: valor
+      });
+    });
+  }
+
+
+
 
   getUserRemoto(): void {
     if (!this.user?.id) return;
@@ -98,7 +365,7 @@ export class PatientFormMComponent implements OnInit {
 
   validarFormulario() {
     this.patientForm = this.fb.group({
-      name: ['', Validators.required],
+       name: ['', Validators.required],
       surname: ['', Validators.required],
       phone: ['', Validators.required],
       email: [''],
@@ -135,6 +402,7 @@ export class PatientFormMComponent implements OnInit {
       peso: [0],
       is_vacuna: [1],
       current_desease: [''],
+      diganostico: [''],
       doctorId: [this.doctor_id]
     });
   }
@@ -233,6 +501,7 @@ export class PatientFormMComponent implements OnInit {
         peso_al_nacer: this.patient_selected.peso_al_nacer || 0,
         tratamiento: this.patient_selected.tratamiento || '',
         historia_enfermedad: this.patient_selected.historia_enfermedad || '',
+        diganostico: this.patient_selected.diganostico || '',
         examen_fisico: this.patient_selected.examen_fisico || '',
         enfermedad_actual: this.patient_selected.enfermedad_actual || '',
         // Sincronizamos las llaves del formulario reactivo con los datos del backend
@@ -350,6 +619,7 @@ export class PatientFormMComponent implements OnInit {
     formData.append('reporte_laboratorio', formValue.reporte_laboratorio);
     formData.append('peso_al_nacer', formValue.peso_al_nacer);
     formData.append('talla_al_nacer', formValue.talla_al_nacer);
+    formData.append('diganostico', formValue.diganostico);
     formData.append('doctor_id', this.doctor_id.toString());
     // (Usamos un fallback de arreglo vacío [] por si el componente no se renderizó)
     const listaVacunas = this.patientForm.get('vacunas')?.value || [];

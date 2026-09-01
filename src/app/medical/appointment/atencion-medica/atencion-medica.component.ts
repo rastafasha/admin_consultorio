@@ -88,6 +88,7 @@ export class AtencionMedicaComponent {
     this.getAppointment();
     this.initSpeechRecognition();
   }
+  
   getUserRemoto(): void {
     if (!this.user?.id) return;
     this.staffService.getUser(this.user.id).subscribe((resp: any) => {

@@ -16,6 +16,7 @@ export class Patient {
     avatar: string;
     antecedent_family: string;
     antecedent_personal: string;
+    diganostico: string;
     ta: number;
     temperature: number;
     fc: number;

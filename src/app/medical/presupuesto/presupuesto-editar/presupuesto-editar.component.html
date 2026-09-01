@@ -96,7 +96,7 @@
                                         </mat-select>
                                     </div>
                                 </div> -->
-                                <div class="col-12 col-md-6 col-xl-4" *ngIf="isdoctor">
+                                <!-- <div class="col-12 col-md-6 col-xl-4" *ngIf="isdoctor">
                                     <div class="form-group local-forms">
                                         <label>Especialidad<span class="login-danger">*</span></label>
                                         <mat-select [(ngModel)]="speciality_id" [disabled]="[isdisabled]"
@@ -108,7 +108,7 @@
                                             </mat-option>
                                         </mat-select>
                                     </div>
-                                </div>
+                                </div> -->
                                 <!-- <div class="col-xs-12 col-sm-3">
 
                                     <div class="form-group ">
@@ -124,6 +124,16 @@
 
                             </div>
                             <!-- paciente -->
+                             <!-- activar dictado -->
+                                <div class="switch-wrapper">
+                                    <div class="mini-spinner" *ngIf="isListening"></div>
+                                    <label class="switch">
+                                        <input type="checkbox" (change)="toggleDictado($event)">
+                                        <span class="slider round"></span>
+                                    </label>
+                                    <p *ngIf="!isListening">Activar dictado</p>
+                                    <p *ngIf="isListening">Escuchando dictado</p>
+                                </div>
                             <div class="row align-items-center">
                                 <div class="col-xs-12">
                                     <div class="form-group local-forms">
@@ -136,7 +146,7 @@
                             </div>
 
                             <div class="col-12 py-4">
-                                <h4>Diagnostico</h4>
+                                <h4>Diagnóstico</h4>
                             </div>
                             <div class="row align-items-center">
                                 <div class="col-12">

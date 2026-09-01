@@ -137,16 +137,16 @@
                                         <input class="form-control" formControlName="education" type="text">
                                     </div>
                                 </div>
-                                <div class="col-12 col-sm-6 col-md-6 col-xl-4" *ngIf="doctor && doctor.speciality?.name !== 'Pediatría'">
+                                <div class="col-12 col-sm-6 col-md-6 col-xl-4"
+                                    *ngIf="doctor && doctor.speciality?.name !== 'Pediatría'">
                                     <div class="form-group select-gender">
-                                        <label class="gen-label">Requiere Vacuna?<span class="login-danger">*</span></label>
+                                        <label class="gen-label">Requiere Vacuna?<span
+                                                class="login-danger">*</span></label>
                                         <div class="switch-wrapper">
                                             <div class="mini-spinner" *ngIf="isListening"></div>
                                             <label class="switch">
                                                 <!-- 🎯 CONEXIÓN PURA: Sin amarres de variables externas -->
-                                                <input 
-                                                    type="checkbox" 
-                                                    formControlName="is_vacuna" 
+                                                <input type="checkbox" formControlName="is_vacuna"
                                                     (change)="toggleVacuna($event)">
                                                 <span class="slider round"></span>
                                             </label>
@@ -167,7 +167,7 @@
                                         <input class="form-control" formControlName="talla_al_nacer" type="number">
                                     </div>
                                 </div>
-                                
+
 
                                 <div class="col-12 col-sm-12">
                                     <div class="form-group local-forms">
@@ -198,10 +198,22 @@
 
                 </div>
                 <!-- fin paciente -->
+
                 <!-- acompañante -->
                 <app-acompanantes [patientForm]="patientForm"></app-acompanantes>
+
+                <!-- activar dictado -->
+                <div class="switch-wrapper">
+                    <div class="mini-spinner" *ngIf="isListening"></div>
+                    <label class="switch-listen">
+                        <input type="checkbox" (change)="toggleDictadoGlobal($event)">
+                        <span class="slider round"></span>
+                    </label>
+                    <p *ngIf="!isListening">Activar dictado</p>
+                    <p *ngIf="isListening">Escuchando dictado</p>
+                </div>
                 <!-- motivo Consulta -->
-                 <app-motivo-consulta [patientForm]="patientForm"></app-motivo-consulta>
+                <app-motivo-consulta [patientForm]="patientForm"></app-motivo-consulta>
 
                 <!-- antecedentes -->
                 <app-antecedentes [patientForm]="patientForm"></app-antecedentes>
@@ -213,17 +225,14 @@
                 <app-signos-vitales [patientForm]="patientForm"></app-signos-vitales>
                 <!-- fin signos vitales -->
                 <!-- Vacunas -->
-                <app-vacunas 
-                    #componenteVacunas 
-                    [patientForm]="patientForm" 
-                    [doctor]="doctor" 
-                    *ngIf="patient_selected"  
+                <app-vacunas #componenteVacunas [patientForm]="patientForm" [doctor]="doctor" *ngIf="patient_selected"
                     [is_vacuna]="patientForm.get('is_vacuna')?.value ? 2 : 1">
                 </app-vacunas>
                 <!-- Examen fisico -->
                 <app-examen-fisico [patientForm]="patientForm"></app-examen-fisico>
                 <!-- Reporte Laboratorio -->
-                <app-reporte-laboratorio #reporteLaboratory  *ngIf="patient_selected" [patient_selected]="patient_selected" ></app-reporte-laboratorio>
+                <app-reporte-laboratorio #reporteLaboratory *ngIf="patient_selected"
+                    [patient_selected]="patient_selected"></app-reporte-laboratorio>
                 <!-- Diagnostico -->
                 <app-diagnostico [patientForm]="patientForm"></app-diagnostico>
                 <!-- tratamiento -->

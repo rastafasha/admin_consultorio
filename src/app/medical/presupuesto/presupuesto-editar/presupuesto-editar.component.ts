@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router, ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -48,8 +48,8 @@ export class PresupuestoEditarComponent {
   public medical: any = []; // Ensure medical is initialized as an array
   description: any;
   name_medical: any;
-  precio: number;
-  cantidad: number;
+  precio: number = 0;
+  cantidad: number = 0;
   amount = 0;
 
   presupuesto_id: number;
@@ -75,6 +75,14 @@ export class PresupuestoEditarComponent {
   DOCTOR_SELECTED: any;
   presupuestoSeleccionado: any;
 
+   // dictado
+  recognition: any;
+  isListening: boolean = false;
+  campoActual: 'description' | 'name_medical'  |'cantidad' |'precio' |'diagnostico' = 'description';
+ 
+  
+
+
   id = 0;
 
   info_crear_presupuesto = `
@@ -88,6 +96,7 @@ export class PresupuestoEditarComponent {
             <li>En los campos: Item, Cantidad y Precio, podras colocar los costos de cada valor para sumarlos a la lista</li>
             <li>El sistema te mostrará una tabla con la información recibida costos y cantidades</li>
             <li>El sistema se encargará de hacer la suma total</li>
+            <li>Comandos: limpiar todo, punto y aparte, punto y seguido, pasar a descripción, pasar a diagnóstico, pasar a item, pasar a cantidad, pasar a precio, agregar item , guardar</li>
             <li>Al Pulsar Guardar se compartirá esta información en la App Versión Paciente, así tendran un archivo para poder consultarlo a futuro</li>
           </ul>`;
 
@@ -102,6 +111,7 @@ export class PresupuestoEditarComponent {
     public roleService: RolesService,
     public appointmentService: AppointmentService,
     public fb: FormBuilder,
+     private zone: NgZone
   ) {
     this.user = this.authService.user;
   }
@@ -139,7 +149,7 @@ export class PresupuestoEditarComponent {
     })
     this.getDoctor();
     this.getSpecialities();
-
+    this.initSpeechRecognition();
 
   }
 
@@ -182,6 +192,202 @@ export class PresupuestoEditarComponent {
       patient_id: [''],
       doctor_id: [''],
     })
+  }
+
+   initSpeechRecognition() {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      console.error('El dictado por voz no es soportado.');
+      return;
+    }
+
+    this.recognition = new SpeechRecognition();
+    this.recognition.continuous = true;
+    this.recognition.interimResults = false;
+    this.recognition.lang = 'es-VE';
+
+    this.recognition.onresult = (event: any) => {
+      if (!event || !event.results) return;
+
+      const currentResultIndex = event.resultIndex;
+      const result = event.results[currentResultIndex];
+
+      if (!result || !result[0] || !result[0].transcript) return;
+
+      const rawText = result[0].transcript;
+      console.log('Texto crudo recibido:', rawText);
+
+      let textoEvaluar = rawText.toLowerCase().trim();
+      if (textoEvaluar.endsWith('.')) {
+        textoEvaluar = textoEvaluar.slice(0, -1).trim();
+      }
+
+      // ==========================================
+      // 1. SECCIÓN DE COMANDOS DE NAVEGACIÓN
+      // ==========================================
+
+      if (textoEvaluar.includes('pasar a descripción') ) {
+        this.zone.run(() => {
+          this.campoActual = 'description';
+        });
+        return;
+      }
+
+      if (textoEvaluar.includes('pasar a diagnóstico') ) {
+        this.zone.run(() => {
+          this.campoActual = 'diagnostico';
+        });
+        return;
+      }
+      //item
+      if (textoEvaluar.includes('pasar a item')) {
+        this.zone.run(() => {
+          this.campoActual = 'name_medical';
+        });
+        return;
+      }
+      if (textoEvaluar.includes('pasar a cantidad') ) {
+        this.zone.run(() => {
+          this.campoActual = 'cantidad';
+        });
+        return;
+      }
+      if (textoEvaluar.includes('pasar a precio') ) {
+        this.zone.run(() => {
+          this.campoActual = 'precio';
+        });
+        return;
+      }
+
+      if (textoEvaluar.includes('agregar item')) {
+        this.zone.run(() => {
+          this.addMedicamento(); // Llama a tu función original del botón
+          this.name_medical = ''; // Limpia el input
+          this.cantidad = 0;          // Limpia el input
+          this.precio = 0;          // Limpia el input
+          this.campoActual = 'name_medical'; // Regresa al nombre del medicamento
+        });
+        return;
+      }
+
+      // ==========================================
+      // 2. SECCIÓN DE ESCRITURA CON NGZONE
+      // ==========================================
+      this.zone.run(() => {
+
+        // SI ESTÁ EN EL CAMPO description
+        if (this.campoActual === 'description') {
+          if (textoEvaluar.includes('limpiar todo') || textoEvaluar.includes('borrar todo')) {
+            this.description = '';
+            return;
+          }
+          if (textoEvaluar.includes('punto y aparte')) {
+            this.description = this.description ? `${this.description.trim()}.\n\n` : '';
+            return;
+          }
+          if (textoEvaluar.includes('punto y seguido')) {
+            this.description = this.description ? `${this.description.trim()}. ` : '';
+            return;
+          }
+
+          let textoFinal = rawText.trim();
+          if (!this.description || this.description.endsWith('\n') || this.description.endsWith('. ')) {
+            textoFinal = textoFinal.charAt(0).toUpperCase() + textoFinal.slice(1);
+          }
+
+          this.description = this.description
+            ? (this.description.endsWith('\n') || this.description.endsWith(' ') ? this.description + textoFinal : this.description + ' ' + textoFinal)
+            : textoFinal;
+        }
+        // SI ESTÁ EN EL CAMPO DIAGNÓSTICO
+        if (this.campoActual === 'diagnostico') {
+          if (textoEvaluar.includes('limpiar todo') || textoEvaluar.includes('borrar todo')) {
+            this.diagnostico = '';
+            return;
+          }
+          if (textoEvaluar.includes('punto y aparte')) {
+            this.diagnostico = this.diagnostico ? `${this.diagnostico.trim()}.\n\n` : '';
+            return;
+          }
+          if (textoEvaluar.includes('punto y seguido')) {
+            this.diagnostico = this.diagnostico ? `${this.diagnostico.trim()}. ` : '';
+            return;
+          }
+
+          let textoFinal = rawText.trim();
+          if (!this.diagnostico || this.diagnostico.endsWith('\n') || this.diagnostico.endsWith('. ')) {
+            textoFinal = textoFinal.charAt(0).toUpperCase() + textoFinal.slice(1);
+          }
+
+          this.diagnostico = this.diagnostico
+            ? (this.diagnostico.endsWith('\n') || this.diagnostico.endsWith(' ') ? this.diagnostico + textoFinal : this.diagnostico + ' ' + textoFinal)
+            : textoFinal;
+        }
+
+        // SI ESTÁ EN EL NOMBRE DEL MEDICAMENTO
+        else if (this.campoActual === 'name_medical') {
+          let textoFinal = rawText.trim();
+          // Capitaliza el nombre del medicamento (Ej: "Ibuprofeno")
+          textoFinal = textoFinal.charAt(0).toUpperCase() + textoFinal.slice(1);
+
+          this.name_medical = this.name_medical ? `${this.name_medical.trim()} ${textoFinal}` : textoFinal;
+        }
+
+        // SI ESTÁ EN EL precio DEL MEDICAMENTO
+        else if (this.campoActual === 'precio') {
+          this.precio = this.precio ? `${this.precio} ${rawText.trim()}` : rawText.trim();
+        }
+
+        else if (this.campoActual === 'cantidad') {
+          this.cantidad = this.cantidad ? `${this.cantidad} ${rawText.trim()}` : rawText.trim();
+        }
+        // Comando unificado: GUARDA E IMPRIME
+        if (textoEvaluar.includes('guardar ')) {
+          this.zone.run(() => {
+            this.save(); // Pasamos 'true' para indicar que queremos imprimir después de guardar
+          });
+          return;
+        }
+
+      });
+    };
+
+    this.recognition.onerror = (event: any) => {
+      console.error('Error en el dictado:', event.error);
+    };
+  }
+
+  // Mantenemos la función de ayuda para el diagnóstico
+  actualizarTexto(valor: string, campo: string, monto: number) {
+    this.zone.run(() => {
+      if (campo === 'description') {
+        this.description = valor;
+      } else if (campo === 'diagnostico') {
+        this.diagnostico = valor;
+      } else if (campo === 'name_medical') {
+        this.name_medical = valor;
+      }else if (campo === 'cantidad') {
+        this.cantidad = monto;
+      }else if (campo === 'precio') {
+        this.precio = monto;
+      }
+    });
+  }
+
+  toggleDictado(event: any) {
+    this.isListening = event.target.checked;
+
+    if (!this.recognition) {
+      alert('Tu navegador no soporta dictado por voz.');
+      return;
+    }
+
+    if (this.isListening) {
+      this.recognition.start();
+    } else {
+      this.recognition.stop();
+    }
   }
 
 
