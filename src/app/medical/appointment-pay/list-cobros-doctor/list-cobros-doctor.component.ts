@@ -47,6 +47,7 @@ export class ListCobrosDoctorComponent {
   public doctor_id:any;
   data:any;
   pagoSeleccionado:Payment
+  isLoading = false
 
   public date_start:any;
   public date_end:any;
@@ -106,6 +107,7 @@ export class ListCobrosDoctorComponent {
 }
 
   private getTableData(page=1): void {
+    this.isLoading = true
     this.paymentList = [];
     this.serialNumberArray = [];
 
@@ -122,6 +124,7 @@ export class ListCobrosDoctorComponent {
       this.getTableDataGeneral();
       this.dataSource = new MatTableDataSource<any>(this.paymentList);
       this.calculateTotalPages(this.totalDataPayment, this.pageSize);
+       this.isLoading = false;
     })
   }
 

@@ -101,7 +101,7 @@ export class PresupuestoDoctorListComponent implements OnInit {
     this.presupuestoService.listPresupuestoDocts(this.doctor_id, page, 
       this.searchDataValue, this.searchDataPatient, this.date || '').subscribe({
       next: (resp: any) => {
-        this.totalDataPatient = resp.presupuestos.total;
+        this.totalDataPatient = resp.meta.total;
         this.presupuestoList = resp.presupuestos.data || [];
         this.dataSource.data = this.presupuestoList;
         this.calculateTotalPages(this.totalDataPatient, this.pageSize);
