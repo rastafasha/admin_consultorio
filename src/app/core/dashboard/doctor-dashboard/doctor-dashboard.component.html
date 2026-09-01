@@ -51,7 +51,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="chart-title patient-visit" style="display: flex; align-items: center; justify-content: center;">
-                        <h4>Favor Espere La Activación de su perfil para comenzar a usar la applicación</h4>
+                        <h4>Favor Complete la información de su perfil (en el boton arriba a la derecha) para comenzar a usar la applicación.</h4>
                         
                     </div>	
                 </div>
@@ -145,8 +145,9 @@
             </div>
         </div>
         <app-loading *ngIf="isLoading"></app-loading>
-        <!-- pacientes recientes -->
+        <!-- pacientes y Citas -->
         <div class="row" *ngIf=" !isLoading && doctor.status === 2 && schedule_selecteds !== null">
+            <!-- pacientes recientes -->
             <div class="col-12 col-md-12 col-lg-12 col-xl-6 ">
                 <div class="card flex-fill comman-shadow">
                     
@@ -169,7 +170,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let data of doctorPatientList| slice:0:15">
+                                    <tr *ngFor="let data of doctorPatientList">
                                         
                                         <td >{{data.created_at|date}}</td>
                                         <td >{{data.full_name}}</td>
@@ -217,7 +218,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let data of appointments| slice:0:10">
+                                    <tr *ngFor="let data of appointments">
                                         <td >{{data.date_appointment_format}}</td>
                                         <td >{{data.patient.full_name}}</td>
                                         <td>
