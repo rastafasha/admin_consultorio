@@ -52,7 +52,7 @@ export class PatientFormMComponent implements OnInit {
   // dictado
   recognition: any;
   isListening: boolean = false;
-  campoActual: 'current_desease' | 'antecedent_personal' | 'antecedent_family' | 'antecedent_alerg' |'examen_fisico'|'tratamiento' |'diagnostico' = 'current_desease';
+  campoActual: 'current_desease' | 'antecedent_personal' | 'antecedent_family' | 'antecedent_alerg' | 'examen_fisico' | 'tratamiento' | 'diagnostico' = 'current_desease';
   current_desease: string = '';
   antecedent_personal: string = '';
   antecedent_family: string = '';
@@ -110,17 +110,17 @@ export class PatientFormMComponent implements OnInit {
 
   toggleDictadoGlobal(event: any) {
     this.isListening = event.target.checked;
-  if (!this.recognition) {
-    alert('Tu navegador no soporta dictado por voz.');
-    return;
-  }
-  if (this.isListening) {
-    this.recognition.start();
-    console.log('🎤 Micrófono encendido globalmente...');
-  } else {
-    this.recognition.stop();
-    console.log('🛑 Micrófono apagado.');
-  }
+    if (!this.recognition) {
+      alert('Tu navegador no soporta dictado por voz.');
+      return;
+    }
+    if (this.isListening) {
+      this.recognition.start();
+      console.log('🎤 Micrófono encendido globalmente...');
+    } else {
+      this.recognition.stop();
+      console.log('🛑 Micrófono apagado.');
+    }
   }
 
 
@@ -204,12 +204,12 @@ export class PatientFormMComponent implements OnInit {
         return;
       }
       // Comando unificado: GUARDA
-        if (textoEvaluar.includes('guardar')) {
-          this.zone.run(() => {
-            this.save(); // Pasamos 'true' para indicar que queremos imprimir después de guardar
-          });
-          return;
-        }
+      if (textoEvaluar.includes('guardar')) {
+        this.zone.run(() => {
+          this.save(); // Pasamos 'true' para indicar que queremos imprimir después de guardar
+        });
+        return;
+      }
 
       // =========================================================================
       // ✍️ 2. SECCIÓN DE ESCRITURA CON NGZONE (Campos del Historial)
@@ -305,7 +305,7 @@ export class PatientFormMComponent implements OnInit {
           this.examen_fisico = this.examen_fisico ? `${this.examen_fisico.trim()} ${textoFinal}` : textoFinal;
           this.actualizarTexto(this.examen_fisico, 'examen_fisico');
         }
-        
+
 
         // --- diagnostico ---
         else if (this.campoActual === 'diagnostico') {
@@ -365,7 +365,7 @@ export class PatientFormMComponent implements OnInit {
 
   validarFormulario() {
     this.patientForm = this.fb.group({
-       name: ['', Validators.required],
+      name: ['', Validators.required],
       surname: ['', Validators.required],
       phone: ['', Validators.required],
       email: [''],
@@ -379,8 +379,6 @@ export class PatientFormMComponent implements OnInit {
       tratamiento: [''],
       examen_fisico: [''],
       reporte_laboratorio: [''],
-      evolucion: [''],
-      
       peso_al_nacer: [''],
       talla_al_nacer: [''],
       n_doc: ['', [Validators.required, Validators.minLength(3)]],
@@ -400,17 +398,15 @@ export class PatientFormMComponent implements OnInit {
       fc: [0],
       fr: [0],
       peso: [0],
-      is_vacuna: [],
+      is_vacuna: [''],
       current_desease: [''],
       diagnostico: [''],
-      vacunas: this.fb.array([]),
+      vacunas: [[]], // Inicialízalo explícitamente como un array vacío desde el Padre
+      evolucion: [[]],
       doctorId: [this.doctor_id]
     });
   }
 
-get vacunasFormArray(): FormArray {
-  return this.patientForm.get('vacunas') as FormArray;
-}
 
   verificarPaciente(event: any): void {
     const documento = event.target.value?.trim();
@@ -508,7 +504,7 @@ get vacunasFormArray(): FormArray {
         examen_fisico: this.patient_selected.examen_fisico || '',
         enfermedad_actual: this.patient_selected.enfermedad_actual || '',
         // Sincronizamos las llaves del formulario reactivo con los datos del backend
-        
+
         evolucion: this.patient_selected.evolucion || [],
         reporte_laboratorio: this.patient_selected.reporte_laboratorio || []
       });
@@ -537,19 +533,13 @@ get vacunasFormArray(): FormArray {
         mobile_responsable: this.patient_selected.person?.mobile_responsable || '',
         relationship_responsable: this.patient_selected.person?.relationship_responsable || ''
       });
-     // Limpiar el FormArray por si había datos de otro paciente cargado antes
-      this.vacunasFormArray.clear();
 
-      // Recorrer el array de vacunas que viene de la API e insertarlas
-      if (this.patient_selected.vacunas && this.patient_selected.vacunas.length > 0) {
-        this.patient_selected.vacunas.forEach((vacuna: any) => {
-          this.vacunasFormArray.push(this.fb.group({
-            cantidad: [vacuna.cantidad || ''],
-            fecha_vacuna: [vacuna.fecha_vacuna || ''],
-            name_medical: [vacuna.name_medical || '']
-          }));
-        });
-      }
+      // 2. Le pasamos el array plano de vacunas directamente al control del formulario
+      this.patientForm.patchValue({
+        // ... tus otros campos (name, surname, etc) ...
+        vacunas: this.patient_selected.vacunas || [],   // 👈 Array plano directo
+        evolucion: this.patient_selected.evolucion || [] // 👈 Array plano directo
+      });
       this.IMAGE_PREVISUALIZA = this.patient_selected.avatar || 'assets/img/user-06.jpg';
       this.isLoading = false;
     });
@@ -579,6 +569,9 @@ get vacunasFormArray(): FormArray {
 
     console.log('Control de Angular actualizado a booleano:', this.patientForm.get('is_vacuna')?.value);
   }
+
+ 
+
 
   // eslint-disable-next-line no-debugger
   save(): void {
@@ -635,9 +628,9 @@ get vacunasFormArray(): FormArray {
     formData.append('reporte_laboratorio', formValue.reporte_laboratorio);
     formData.append('peso_al_nacer', formValue.peso_al_nacer);
     formData.append('talla_al_nacer', formValue.talla_al_nacer);
-    formData.append('diagnostico', formValue.diagnostico);
+    formData.append('diganostico', formValue.diagnostico || formValue.diganostico || '');
     formData.append('doctor_id', this.doctor_id.toString());
-    
+
     // (Usamos un fallback de arreglo vacío [] por si el componente no se renderizó)
     const listaVacunas = this.patientForm.get('vacunas')?.value || [];
     const listaEvoluciones = this.patientForm.get('evolucion')?.value || [];
