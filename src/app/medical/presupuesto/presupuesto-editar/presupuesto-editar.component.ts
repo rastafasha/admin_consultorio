@@ -50,6 +50,7 @@ export class PresupuestoEditarComponent {
   name_medical: any;
   precio: number = 0;
   cantidad: number = 0;
+  total: number = 0;
   amount = 0;
 
   presupuesto_id: number;
@@ -262,7 +263,7 @@ export class PresupuestoEditarComponent {
 
       if (textoEvaluar.includes('agregar item') ) {
         this.zone.run(() => {
-          this.addMedicamento(); // Llama a tu función original del botón
+          this.addItemPresupuesto(); // Llama a tu función original del botón
           this.name_medical = ''; // Limpia el input
           this.cantidad = 0;          // Limpia el input
           this.precio = 0;          // Limpia el input
@@ -343,7 +344,7 @@ export class PresupuestoEditarComponent {
           this.cantidad = this.cantidad ? `${this.cantidad} ${rawText.trim()}` : rawText.trim();
         }
         // Comando unificado: GUARDA E IMPRIME
-        if (textoEvaluar.includes('guardar ')) {
+        if (textoEvaluar.includes('guardar')) {
           this.zone.run(() => {
             this.save(); // Pasamos 'true' para indicar que queremos imprimir después de guardar
           });
@@ -440,7 +441,7 @@ export class PresupuestoEditarComponent {
     this.n_doc = 0;
   }
 
-  addMedicamento() {
+  addItemPresupuesto() {
     if (this.name_medical && this.precio > 0) {
       this.medical.push({
         name_medical: this.name_medical,
@@ -459,21 +460,31 @@ export class PresupuestoEditarComponent {
     }
   }
 
-  deleteMedical(i: any) {
-    this.medical.splice(i, 1);
-    this.name_medical = '';
-    this.precio = 0;
-    this.amount = 0;
-    this.cantidad = 0;
+  deleteItemPresupuesto(i: any) {
+  // 1. Eliminamos el ítem seleccionado del array
+  this.medical.splice(i, 1);
+  
+  // 2. Limpiamos los campos de texto del formulario temporal
+  this.name_medical = '';
+  this.precio = 0;
+  this.amount = 0;
+  this.cantidad = 0;
 
+  // 3. 🔥 ¡LA CLAVE! Recalcular el total general con lo que quedó en el arreglo
+  this.recalcularTotalPresupuesto();
+}
 
-    if (this.medical.length === 0) {
-      this.name_medical = '';
-      this.precio = 0;
-      this.cantidad = 0;
-      this.amount = 0;
-    }
-  }
+// Crea esta función ayudante para mantener limpio tu código
+private recalcularTotalPresupuesto() {
+  // Recorremos el array multiplicando precio por cantidad de cada ítem restante
+  this.total = this.medical.reduce((acumulado: number, item: any) => {
+    return acumulado + (Number(item.precio) * Number(item.cantidad));
+  }, 0);
+  
+  // Si usas un formulario reactivo padre, recuerda sincronizarlo aquí también:
+  // this.patientForm.get('total_presupuesto')?.setValue(this.total);
+}
+
 
 
 

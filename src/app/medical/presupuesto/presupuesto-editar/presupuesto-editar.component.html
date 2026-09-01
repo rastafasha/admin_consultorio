@@ -24,7 +24,7 @@
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                         <app-loading *ngIf="isLoading"></app-loading>
+                        <app-loading *ngIf="isLoading"></app-loading>
                         <form enctype="multipart/form-data" #form *ngIf="!isLoading">
 
                             <!-- paciente -->
@@ -124,16 +124,16 @@
 
                             </div>
                             <!-- paciente -->
-                             <!-- activar dictado -->
-                                <div class="switch-wrapper">
-                                    <div class="mini-spinner" *ngIf="isListening"></div>
-                                    <label class="switch">
-                                        <input type="checkbox" (change)="toggleDictado($event)">
-                                        <span class="slider round"></span>
-                                    </label>
-                                    <p *ngIf="!isListening">Activar dictado</p>
-                                    <p *ngIf="isListening">Escuchando dictado</p>
-                                </div>
+                            <!-- activar dictado -->
+                            <div class="switch-wrapper">
+                                <div class="mini-spinner" *ngIf="isListening"></div>
+                                <label class="switch">
+                                    <input type="checkbox" (change)="toggleDictado($event)">
+                                    <span class="slider round"></span>
+                                </label>
+                                <p *ngIf="!isListening">Activar dictado</p>
+                                <p *ngIf="isListening">Escuchando dictado</p>
+                            </div>
                             <div class="row align-items-center">
                                 <div class="col-xs-12">
                                     <div class="form-group local-forms">
@@ -189,7 +189,7 @@
                                         </div>
                                         <div class="col-12 mb-3">
                                             <button class="btn btn-primary btn-sm text-end "
-                                                (click)="addMedicamento()">+ Agregar</button>
+                                                (click)="addItemPresupuesto()">+ Agregar</button>
                                             <!-- <button class="btn btn-danger btn-sm">x</button> -->
                                         </div>
                                     </div>
@@ -224,11 +224,20 @@
                                                     </td>
                                                     <td>
                                                         <button class="btn btn-danger btn-sm text-end"
-                                                            (click)="deleteMedical(i)">x</button>
+                                                            (click)="deleteItemPresupuesto(i)">x</button>
                                                     </td>
                                                 </tr>
 
                                             </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="3" class="text-end"><strong>Total General:</strong>
+                                                    </td>
+                                                    <td><strong>{{ total | currency }}</strong></td>
+                                                    <!-- 👈 Aquí usas la variable 'total' que recalculamos en el TS -->
+                                                    <td></td>
+                                                </tr>
+                                            </tfoot>
                                         </table>
                                     </div>
                                 </div>
