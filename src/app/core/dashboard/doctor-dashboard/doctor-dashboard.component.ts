@@ -380,7 +380,7 @@ export class DoctorDashboardComponent {
     
     this.dashboardService.dashboardDoctor(data).subscribe((resp:any)=>{
 
-      this.appointments= resp.appointments.data;
+      this.appointments = resp.appointments;
 
       this.num_appointments_current= resp.num_appointments_current;
       this.num_appointments_before= resp.num_appointments_before;

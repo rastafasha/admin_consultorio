@@ -51,6 +51,7 @@ export class DoctorsFormComponent implements OnInit {
 
   public doctor_selected: any;
   public addresSelected: any;
+  user:any;
 
   constructor(
     private fb: FormBuilder,
@@ -78,6 +79,11 @@ export class DoctorsFormComponent implements OnInit {
 
   ngOnInit(): void {
     window.scrollTo(0, 0);
+
+    const USER = localStorage.getItem("user");
+    this.user = JSON.parse(USER ? USER : '');
+    this.roles = this.user.roles[0];
+
     this.doctorService.closeMenuSidebar();
     this.doctorId = this.activatedRoute.snapshot.paramMap.get('id');
     if (this.doctorId) {
