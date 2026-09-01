@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core'; // 👈 Agregamos OnInit
-import { FormGroup, FormControl } from '@angular/forms'; // 👈 Importamos FormControl
+import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core'; // 1. 👈 Agregamos OnChanges y SimpleChanges
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-evolucion',
@@ -7,24 +7,30 @@ import { FormGroup, FormControl } from '@angular/forms'; // 👈 Importamos Form
   templateUrl: './evolucion.component.html',
   styleUrl: './evolucion.component.scss'
 })
-export class EvolucionComponent implements OnInit { // 👈 Implementamos OnInit
+export class EvolucionComponent implements OnInit, OnChanges { // 2. 👈 Implementamos OnChanges
   @Input() patientForm!: FormGroup;
+  @Input() evolucionesIniciales: any[] = [];
   
   isLoading = false;
   isSaving = false;
-  text_validation: string;
+  text_validation: string = ''; // 👈 Inicializado para evitar errores de TypeScript estricto
   public mevolucion: any = []; 
   name_evolucion: any;
-  fecha_evolucion: any; // Cambiado a any para soportar la limpieza con null
+  fecha_evolucion: any; 
 
   ngOnInit() {
-    // 🛡️ Si el Padre no declaró la llave 'evolucion', la creamos dinámicamente
     if (!this.patientForm.contains('evolucion')) {
       this.patientForm.addControl('evolucion', new FormControl([]));
     }
   }
 
-  // 🔄 Método de ayuda para mantener al Padre actualizado en tiempo real
+  // 3. 🧠 ¡LA SOLUCIÓN! Captura las evoluciones que el Padre cargó desde la base de datos
+   ngOnChanges(changes: SimpleChanges) {
+  if (changes['evolucionesIniciales'] && this.evolucionesIniciales) {
+    this.mevolucion = [...this.evolucionesIniciales];
+  }
+}
+
   private sincronizarConPadre() {
     this.patientForm.get('evolucion')?.setValue(this.mevolucion);
   }
@@ -36,7 +42,6 @@ export class EvolucionComponent implements OnInit { // 👈 Implementamos OnInit
         fecha_evolucion: this.fecha_evolucion,
       });
 
-      // 📲 Notificamos al Padre de la nueva fila agregada
       this.sincronizarConPadre();
 
       this.name_evolucion = '';
@@ -46,18 +51,9 @@ export class EvolucionComponent implements OnInit { // 👈 Implementamos OnInit
 
   deleteEvolucion(i: any) {
     this.mevolucion.splice(i, 1);
-    
-    // 📲 Notificamos al Padre del elemento eliminado
     this.sincronizarConPadre();
 
     this.name_evolucion = '';
     this.fecha_evolucion = null;
-
-    if (this.mevolucion.length === 0) {
-      this.name_evolucion = '';
-      this.fecha_evolucion = null;
-    }
   }
-
-  // ❌ Eliminamos la función save() vacía, ya que el Padre tiene la responsabilidad exclusiva del guardado
 }

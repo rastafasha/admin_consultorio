@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core'; // 1. Agrega OnChanges y SimpleChanges
 import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
@@ -7,30 +7,36 @@ import { FormGroup, FormControl } from '@angular/forms';
   templateUrl: './vacunas.component.html',
   styleUrl: './vacunas.component.scss'
 })
-export class VacunasComponent implements OnInit {
+export class VacunasComponent implements OnInit, OnChanges { // 2. Implementa OnChanges
   @Input() patientForm!: FormGroup;
   @Input() doctor: any;
   @Input() is_vacuna: any;
+   @Input() vacunasIniciales: any[] = [];
   
   isLoading = false;
   isSaving = false;
   text_validation: string = '';
   
   public mvacunas: any = []; 
-  description: any;5
+  description: any;
   name_medical: any;
   cantidad: number = 0;
   fecha_vacuna: any;
+ 
 
   ngOnInit() {
-    // 🛡️ CONTROL DE SEGURIDAD:
-    // Si el Padre no declaró la llave 'vacunas', la agregamos dinámicamente al formulario global
     if (!this.patientForm.contains('vacunas')) {
       this.patientForm.addControl('vacunas', new FormControl([]));
     }
   }
 
-  // Actualiza el formulario del padre cada vez que el array local cambia
+  // 3. ¡ESTA ES LA CLAVE! Escucha cuando el formulario del Padre cambia o recibe datos de la API
+  ngOnChanges(changes: SimpleChanges) {
+  if (changes['vacunasIniciales'] && this.vacunasIniciales) {
+    this.mvacunas = [...this.vacunasIniciales];
+  }
+}
+
   private sincronizarConPadre() {
     this.patientForm.get('vacunas')?.setValue(this.mvacunas);
   }
@@ -43,10 +49,8 @@ export class VacunasComponent implements OnInit {
         cantidad: this.cantidad + '',
       });
       
-      // 🔄 Sincronizamos la lista con el formulario del Padre
       this.sincronizarConPadre();
 
-      // Limpieza de inputs temporales
       this.name_medical = '';
       this.fecha_vacuna = null;
       this.cantidad = 0;
@@ -55,13 +59,9 @@ export class VacunasComponent implements OnInit {
 
   deleteVacuna(i: number) {
     this.mvacunas.splice(i, 1);
-    
-    // 🔄 Sincronizamos los cambios tras eliminar un ítem
     this.sincronizarConPadre();
 
     this.name_medical = '';
     this.cantidad = 0;
   }
-
-  // ❌ Se elimina la lógica interna de guardar; el botón general ahora reside en el Padre
 }

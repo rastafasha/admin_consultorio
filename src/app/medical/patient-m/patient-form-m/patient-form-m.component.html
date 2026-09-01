@@ -225,8 +225,9 @@
                 <app-signos-vitales [patientForm]="patientForm"></app-signos-vitales>
                 <!-- fin signos vitales -->
                 <!-- Vacunas -->
-                <app-vacunas #componenteVacunas [patientForm]="patientForm" [doctor]="doctor" *ngIf="patient_selected"
-                    [is_vacuna]="patientForm.get('is_vacuna')?.value ? 2 : 1">
+                <app-vacunas #componenteVacunas [patientForm]="patientForm" [doctor]="doctor"
+                    [vacunasIniciales]="patient_selected.vacunas" 👈 Agrega esta línea
+                    [is_vacuna]="patientForm.get('is_vacuna')?.value ? 2 : 1" *ngIf="patient_selected">
                 </app-vacunas>
                 <!-- Examen fisico -->
                 <app-examen-fisico [patientForm]="patientForm"></app-examen-fisico>
@@ -238,7 +239,7 @@
                 <!-- tratamiento -->
                 <app-tratamiento [patientForm]="patientForm"></app-tratamiento>
                 <!-- Evolucion -->
-                <app-evolucion #componenteEvolucion [patientForm]="patientForm"></app-evolucion>
+                <app-evolucion #componenteEvolucion [patientForm]="patientForm" [evolucionesIniciales]="patient_selected.evolucion"></app-evolucion>
 
                 <div class="col-12 mt-4 mb-5">
                     <div class="doctor-submit text-end">
