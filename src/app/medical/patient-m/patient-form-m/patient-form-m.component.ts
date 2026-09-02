@@ -83,10 +83,11 @@ export class PatientFormMComponent implements OnInit {
   <li><strong>Signos Vitales:</strong> Llenar esta sección permite al sistema generar gráficos de comportamiento y reportes automáticos en la App del Paciente.</li>
   <li>
     <strong>Comandos de voz:</strong>
-    <br>• <em>Navegación:</em> "pasar a motivo consulta" (o "ir a..."), "pasar a personales", "pasar a familiares", "pasar a alergias","pasar a enfermedad actual ó pasar a enfermedad", "pasar a examen", "pasar a historia", "pasar a diagnóstico", "pasar a tratamiento".
-    <br>• <em>Acciones:</em> "guardar".
+    <br>• <em>Navegación:</em> "pasar a motivo consulta", "pasar a personales", "pasar a familiares", "pasar a alergias", "pasar a enfermedad actual", "pasar a examen", "pasar a diagnóstico", "pasar a tratamiento", , "pasar a vacunas", "pasar a fecha de vacuna", "pasar a cantidad de vacuna", "agregar vacuna" , "pasar a evolución", "pasar a fecha de evolución", "agregar evolución".
+    <br>• <em>Acciones:</em> "guardar historia" (o "guardar"), "limpiar todo", "punto y aparte", "punto y seguido".
   </li>
 </ul>
+
 `;
 
   constructor(
