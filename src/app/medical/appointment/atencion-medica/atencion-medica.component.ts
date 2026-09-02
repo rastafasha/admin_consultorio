@@ -49,16 +49,16 @@ export class AtencionMedicaComponent {
 
   info_atender_cita = `
   <p>En esta sección :</p>
-          <ul>
-            <li>Podrás Atender una cita creada por ti o por tus pacientes</li>
-            <li>Al Cargar, traerá la información de interés para tener una guía de su condicion de salud</li>
-            <li>Crear El Diagnostico u observación </li>
-            <li>Opción de dictado: para una mejor experiencia, hemos habilitado el boton de dictado</li>
-            <li>Como funciona?: Activa el switch. comienza a dictar, el sistema recibe, el diagnostico, las medicinas, el uso, y puede imprimir </li>
-            <li>Comandos: limpiar todo, punto y aparte, punto y seguido, pasar a medicamentos ó siguiente campo, pasar a uso, ó siguiente campo, agregar medicamento, imprimir receta, imprimir récipe ó guardar e imprimir</li>
-            <li>Crear el Recipe de Medicinas</li>
-            <li>Coloca el nombre del medicamento, su uso o aplicación y la lista se ira creando</li>
-            <li>Al Pulsar Actualizar se compartirá esta información en la App Versión Paciente</li>
+         <ul>
+            <li><strong>Gestión de Cita:</strong> Atiende citas agendadas y visualiza al cargar el historial y condición de salud del paciente.</li>
+            <li><strong>Récipe Digital:</strong> Añade el nombre del medicamento y su uso para armar la lista. Al presionar <em>Actualizar</em>, se sincronizará de inmediato en la App del Paciente.</li>
+            <li><strong>Asistente de Voz:</strong> Activa el switch y dicta el diagnóstico, medicamentos y dosis sin tocar el teclado.</li>
+            <li>
+              <strong>Comandos de voz:</strong>
+              <br>• <em>Navegación:</em> "pasar a medicamentos" (o "siguiente campo"), "pasar a uso".
+              <br>• <em>Acciones:</em> "agregar medicamento", "imprimir récipe" (o "imprimir receta"), "guardar e imprimir".
+              <br>• <em>Edición:</em> "limpiar todo", "punto y aparte", "punto y seguido".
+            </li>
           </ul>`;
 
 
@@ -88,7 +88,7 @@ export class AtencionMedicaComponent {
     this.getAppointment();
     this.initSpeechRecognition();
   }
-  
+
   getUserRemoto(): void {
     if (!this.user?.id) return;
     this.staffService.getUser(this.user.id).subscribe((resp: any) => {

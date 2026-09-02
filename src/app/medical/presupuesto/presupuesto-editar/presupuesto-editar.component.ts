@@ -59,7 +59,7 @@ export class PresupuestoEditarComponent {
   appointment_atention_selected: string;
   diagnostico: string;
   specialityName: string;
-  isLoading= false;
+  isLoading = false;
 
   antecedent_alerg: any;
 
@@ -76,12 +76,12 @@ export class PresupuestoEditarComponent {
   DOCTOR_SELECTED: any;
   presupuestoSeleccionado: any;
 
-   // dictado
+  // dictado
   recognition: any;
   isListening: boolean = false;
-  campoActual: 'description' | 'name_medical'  |'cantidad' |'precio' |'diagnostico' = 'description';
- 
-  
+  campoActual: 'description' | 'name_medical' | 'cantidad' | 'precio' | 'diagnostico' = 'description';
+
+
 
 
   id = 0;
@@ -89,16 +89,15 @@ export class PresupuestoEditarComponent {
   info_crear_presupuesto = `
   <p>En esta sección :</p>
           <ul>
-            <li>Podrás crear y editar el presupuesto para cada uno de tus pacientes</li>
-            <li>Encuentra el paciente por número de cédula, si existe se llenarán los campos </li>
-            <li>Con el botón Reset, puedes borrar la info que trae el botón de filtro y los campos y rehacer una busqueda</li>
-            <li>Tienes el campo descripción o motivo del presupuesto</li>
-            <li>El Diagnostico u observación </li>
-            <li>En los campos: Item, Cantidad y Precio, podras colocar los costos de cada valor para sumarlos a la lista</li>
-            <li>El sistema te mostrará una tabla con la información recibida costos y cantidades</li>
-            <li>El sistema se encargará de hacer la suma total</li>
-            <li>Comandos: limpiar todo, punto y aparte, punto y seguido, pasar a descripción, pasar a diagnóstico, pasar a ítem ó ítem, pasar a cantidad ó cantidad, pasar a precio ó precio, agregar item , guardar</li>
-            <li>Al Pulsar Guardar se compartirá esta información en la App Versión Paciente, así tendran un archivo para poder consultarlo a futuro</li>
+            <li><strong>Paciente:</strong> Búscalo por cédula para autorellenar sus datos. Usa <em>Reset</em> para limpiar la búsqueda.</li>
+            <li><strong>Presupuesto:</strong> Añade ítems, cantidades y precios; el sistema calculará los subtotales y el total automáticamente.</li>
+            <li><strong>App del Paciente:</strong> Al presionar <em>Guardar</em>, el presupuesto se sincronizará de inmediato en la app de tu paciente para su consulta.</li>
+            <li>
+              <strong>Comandos de voz:</strong>
+              <br>• <em>Navegación:</em> "pasar a descripción", "pasar a diagnóstico", "pasar a ítem", "pasar a cantidad", "pasar a precio".
+              <br>• <em>Acciones:</em> "agregar ítem" (o "agregar"), "guardar presupuesto" (o "guardar").
+              <br>• <em>Edición:</em> "limpiar todo", "punto y aparte", "punto y seguido".
+            </li>
           </ul>`;
 
   constructor(
@@ -112,7 +111,7 @@ export class PresupuestoEditarComponent {
     public roleService: RolesService,
     public appointmentService: AppointmentService,
     public fb: FormBuilder,
-     private zone: NgZone
+    private zone: NgZone
   ) {
     this.user = this.authService.user;
   }
@@ -122,7 +121,7 @@ export class PresupuestoEditarComponent {
     this.isdisabled = false;
     this.isdoctor = false;
     window.scrollTo(0, 0);
-    
+
     const USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER : '');
     this.user = this.roleService.authService.user;
@@ -195,7 +194,7 @@ export class PresupuestoEditarComponent {
     })
   }
 
-   initSpeechRecognition() {
+  initSpeechRecognition() {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
@@ -228,49 +227,61 @@ export class PresupuestoEditarComponent {
       // 1. SECCIÓN DE COMANDOS DE NAVEGACIÓN
       // ==========================================
 
-      if (textoEvaluar.includes('pasar a descripción') ) {
+      // Primero evaluamos las frases largas y específicas de navegación
+      if (textoEvaluar.includes('pasar a descripción') || textoEvaluar.includes('ir a descripción')) {
+        this.zone.run(() => { this.campoActual = 'description'; });
+        return;
+      }
+
+      if (textoEvaluar.includes('pasar a diagnóstico') || textoEvaluar.includes('ir a diagnóstico')) {
+        this.zone.run(() => { this.campoActual = 'diagnostico'; });
+        return;
+      }
+
+      // Para cambiar de campo, exigimos la palabra "pasar a" o "ir a" 
+      // Así evitamos que se active el comando si solo estás dictando un valor numérico o un nombre.
+      if (textoEvaluar.includes('pasar a ítem') || textoEvaluar.includes('pasar a item') || textoEvaluar.includes('ir a ítem') || textoEvaluar.includes('ir a item')) {
+        this.zone.run(() => { this.campoActual = 'name_medical'; });
+        return;
+      }
+
+      if (textoEvaluar.includes('pasar a cantidad') || textoEvaluar.includes('ir a cantidad')) {
+        this.zone.run(() => { this.campoActual = 'cantidad'; });
+        return;
+      }
+
+      if (textoEvaluar.includes('pasar a precio') || textoEvaluar.includes('ir a precio')) {
+        this.zone.run(() => { this.campoActual = 'precio'; });
+        return;
+      }
+
+      // 🔥 COMANDO AGREGAR: Añadimos más variantes con y sin tilde para mayor seguridad
+      if (
+        textoEvaluar.includes('agregar ítem') ||
+        textoEvaluar.includes('agregar item') ||
+        textoEvaluar.includes('añadir ítem') ||
+        textoEvaluar.includes('añadir item') ||
+        textoEvaluar === 'agregar' ||
+        textoEvaluar === 'añadir'
+      ) {
         this.zone.run(() => {
-          this.campoActual = 'description';
+          this.addItemPresupuesto(); // Llama a tu función que calcula el amount correcto
+          this.name_medical = '';
+          this.cantidad = 0;
+          this.precio = 0;
+          this.campoActual = 'name_medical'; // Regresa el foco al inicio del flujo
         });
         return;
       }
 
-      if (textoEvaluar.includes('pasar a diagnóstico') ) {
+      // 🔥 COMANDO GUARDAR: Evaluamos frases completas primero para evitar falsos positivos
+      if (textoEvaluar.includes('guardar presupuesto') || textoEvaluar.includes('finalizar presupuesto') || textoEvaluar === 'guardar') {
         this.zone.run(() => {
-          this.campoActual = 'diagnostico';
-        });
-        return;
-      }
-      //item
-      if (textoEvaluar.includes('pasar a item') || textoEvaluar.includes('ítem')) {
-        this.zone.run(() => {
-          this.campoActual = 'name_medical';
-        });
-        return;
-      }
-      if (textoEvaluar.includes('pasar a cantidad') || textoEvaluar.includes('cantidad')) {
-        this.zone.run(() => {
-          this.campoActual = 'cantidad';
-        });
-        return;
-      }
-      if (textoEvaluar.includes('pasar a precio') || textoEvaluar.includes('precio')) {
-        this.zone.run(() => {
-          this.campoActual = 'precio';
+          this.save();
         });
         return;
       }
 
-      if (textoEvaluar.includes('agregar item') ) {
-        this.zone.run(() => {
-          this.addItemPresupuesto(); // Llama a tu función original del botón
-          this.name_medical = ''; // Limpia el input
-          this.cantidad = 0;          // Limpia el input
-          this.precio = 0;          // Limpia el input
-          this.campoActual = 'name_medical'; // Regresa al nombre del medicamento
-        });
-        return;
-      }
 
       // ==========================================
       // 2. SECCIÓN DE ESCRITURA CON NGZONE
@@ -343,13 +354,7 @@ export class PresupuestoEditarComponent {
         else if (this.campoActual === 'cantidad') {
           this.cantidad = this.cantidad ? `${this.cantidad} ${rawText.trim()}` : rawText.trim();
         }
-        // Comando unificado: GUARDA E IMPRIME
-        if (textoEvaluar.includes('guardar')) {
-          this.zone.run(() => {
-            this.save(); // Pasamos 'true' para indicar que queremos imprimir después de guardar
-          });
-          return;
-        }
+
 
       });
     };
@@ -368,9 +373,9 @@ export class PresupuestoEditarComponent {
         this.diagnostico = valor;
       } else if (campo === 'name_medical') {
         this.name_medical = valor;
-      }else if (campo === 'cantidad') {
+      } else if (campo === 'cantidad') {
         this.cantidad = monto;
-      }else if (campo === 'precio') {
+      } else if (campo === 'precio') {
         this.precio = monto;
       }
     });
@@ -448,42 +453,37 @@ export class PresupuestoEditarComponent {
         cantidad: this.cantidad + '',
         precio: this.precio + ''
       });
+
+      // Limpiamos el formulario temporal
       this.name_medical = '';
       this.precio = 0;
       this.cantidad = 0;
-      this.amount = 0;
+    }
 
-    }
-    this.amount = 0;
-    for (let i = 0; i < this.medical.length; i++) {
-      this.amount += parseFloat(this.medical[i].precio) * parseFloat(this.medical[i].cantidad);
-    }
+    // 🔥 Recalculamos el total general usando la función unificada
+    this.recalcularTotalPresupuesto();
   }
 
   deleteItemPresupuesto(i: any) {
-  // 1. Eliminamos el ítem seleccionado del array
-  this.medical.splice(i, 1);
-  
-  // 2. Limpiamos los campos de texto del formulario temporal
-  this.name_medical = '';
-  this.precio = 0;
-  this.amount = 0;
-  this.cantidad = 0;
+    // 1. Eliminamos el ítem seleccionado del array
+    this.medical.splice(i, 1);
 
-  // 3. 🔥 ¡LA CLAVE! Recalcular el total general con lo que quedó en el arreglo
-  this.recalcularTotalPresupuesto();
-}
+    // 2. Limpiamos los campos de texto del formulario temporal
+    this.name_medical = '';
+    this.precio = 0;
+    this.cantidad = 0;
 
-// Crea esta función ayudante para mantener limpio tu código
-private recalcularTotalPresupuesto() {
-  // Recorremos el array multiplicando precio por cantidad de cada ítem restante
-  this.total = this.medical.reduce((acumulado: number, item: any) => {
-    return acumulado + (Number(item.precio) * Number(item.cantidad));
-  }, 0);
-  
-  // Si usas un formulario reactivo padre, recuerda sincronizarlo aquí también:
-  // this.patientForm.get('total_presupuesto')?.setValue(this.total);
-}
+    // 3. 🔥 Recalculamos el total con la variable correcta
+    this.recalcularTotalPresupuesto();
+  }
+
+  // Función ayudante unificada que actualiza la variable exacta (this.amount)
+  private recalcularTotalPresupuesto() {
+    this.amount = this.medical.reduce((acumulado: number, item: any) => {
+      return acumulado + (Number(item.precio) * Number(item.cantidad));
+    }, 0);
+  }
+
 
 
 

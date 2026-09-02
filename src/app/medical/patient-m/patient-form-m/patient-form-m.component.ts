@@ -64,12 +64,15 @@ export class PatientFormMComponent implements OnInit {
   info_form_paciente = `
   <p>En esta sección :</p>
           <ul>
-            <li>Podrás llenar la ficha médica de tu paciente</li>
-            <li>Información Básica, de contacto, persona de contacto o familiar</li>
-            <li>Es Recomendable llenar la sección de Signos Vitales para tener un control del estado de salud</li>
-            <li>Con Signos Vitales esto podrá ayudar a la aplicación a futuro para mostrar un comportamiento y reportes presentados en la App  </li>
-            <li> Comandos de voz: pasar a ó ir a motivo consulta, pasar a ó ir a personales, pasar a ó ir a familiares , pasar a ó ir a alergias, pasar a ó ir a examen, pasar a ó ir a historia, pasar a ó ir a diagnostico, pasar a ó ir a tratamiento, guardar  </li>
-          </ul>`;
+  <li><strong>Ficha Médica:</strong> Registra la información básica, datos de contacto y familiares del paciente.</li>
+  <li><strong>Signos Vitales:</strong> Llenar esta sección permite al sistema generar gráficos de comportamiento y reportes automáticos en la App del Paciente.</li>
+  <li>
+    <strong>Comandos de voz:</strong>
+    <br>• <em>Navegación:</em> "pasar a motivo consulta" (o "ir a..."), "pasar a personales", "pasar a familiares", "pasar a alergias", "pasar a examen", "pasar a historia", "pasar a diagnóstico", "pasar a tratamiento".
+    <br>• <em>Acciones:</em> "guardar".
+  </li>
+</ul>
+`;
 
   constructor(
     private fb: FormBuilder,
