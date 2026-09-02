@@ -83,7 +83,7 @@ export class PatientFormMComponent implements OnInit {
   <li><strong>Signos Vitales:</strong> Llenar esta sección permite al sistema generar gráficos de comportamiento y reportes automáticos en la App del Paciente.</li>
   <li>
     <strong>Comandos de voz:</strong>
-    <br>• <em>Navegación:</em> "pasar a motivo consulta", "pasar a personales", "pasar a familiares", "pasar a alergias", "pasar a enfermedad actual", "pasar a examen", "pasar a diagnóstico", "pasar a tratamiento", , "pasar a vacunas", "pasar a fecha de vacuna", "pasar a cantidad de vacuna", "agregar vacuna" , "pasar a evolución", "pasar a fecha de evolución", "agregar evolución".
+    <br>• <em>Navegación:</em> "pasar a motivo consulta", "pasar a personales", "pasar a familiares", "pasar a alergias", "pasar a enfermedad actual", "pasar a examen", "pasar a diagnóstico", "pasar a tratamiento", "pasar a vacunas", "pasar a fecha de vacuna ó fecha de vacuna", "pasar a cantidad de vacuna", "agregar vacuna" , "pasar a evolución", "pasar a fecha de evolución ó fecha de evolución", "agregar evolución".
     <br>• <em>Acciones:</em> "guardar historia" (o "guardar"), "limpiar todo", "punto y aparte", "punto y seguido".
   </li>
 </ul>
@@ -287,7 +287,7 @@ export class PatientFormMComponent implements OnInit {
         return;
       }
 
-      if (textoEvaluar.includes('pasar a fecha de vacuna') || textoEvaluar.includes('pasar a fecha')) {
+      if (textoEvaluar.includes('pasar a fecha de vacuna') || textoEvaluar.includes('fecha de vacuna')) {
         this.zone.run(() => {
           this.campoActual = 'fecha_vacuna';
           if (this.vacunasHijo) this.vacunasHijo.focarVacunaFecha();
@@ -325,7 +325,7 @@ export class PatientFormMComponent implements OnInit {
         return;
       }
 
-      if (textoEvaluar.includes('pasar a fecha de evolución') || textoEvaluar.includes('ir a fecha de evolución')) {
+      if (textoEvaluar.includes('pasar a fecha de evolución') || textoEvaluar.includes('ir a fecha de evolución') || textoEvaluar.includes('fecha de evolución')) {
         this.zone.run(() => {
           this.campoActual = 'fecha_evolucion';
           if (this.evolucionHijo) this.evolucionHijo.focarEvolucionFecha();
