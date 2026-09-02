@@ -14,21 +14,25 @@
                             <div class="col-12 col-sm-12 col-md-6">
                                 <div class="form-group local-forms">
                                     <label>Item<span class="login-danger">*</span></label>
-                                    <input class="form-control" name="name_medical" [(ngModel)]="name_medical"
-                                        type="text">
+                                    <!-- 🔥 Añadimos #inputVacunaNombre -->
+                                    <input class="form-control" name="name_medical" #inputVacunaNombre
+                                        [(ngModel)]="name_medical" type="text">
                                 </div>
                             </div>
                             <div class="col-12 col-sm-4 col-md-2">
                                 <div class="form-group local-forms">
                                     <label>Fecha<span class="login-danger">*</span></label>
-                                    <input class="form-control" name="fecha_vacuna" [(ngModel)]="fecha_vacuna"
-                                        type="date">
+                                    <!-- 🔥 Añadimos #inputVacunaFecha -->
+                                    <input class="form-control" name="fecha_vacuna" #inputVacunaFecha
+                                        [(ngModel)]="fecha_vacuna" type="date">
                                 </div>
                             </div>
                             <div class="col-12 col-sm-4 col-md-2">
                                 <div class="form-group local-forms">
                                     <label>Cantidad<span class="login-danger">*</span></label>
-                                    <input class="form-control" name="cantidad" [(ngModel)]="cantidad" type="number">
+                                    <!-- 🔥 Añadimos #inputVacunaCantidad -->
+                                    <input class="form-control" name="cantidad" #inputVacunaCantidad
+                                        [(ngModel)]="cantidad" type="number">
                                 </div>
                             </div>
                             <div class="col-12 col-sm-4 col-md-2">
@@ -37,6 +41,7 @@
                             </div>
                         </div>
                     </div>
+
 
                     <!-- TABLA DE LISTADO -->
                     <div class="col-xs-12 mt-3">

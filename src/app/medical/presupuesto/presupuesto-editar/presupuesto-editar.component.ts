@@ -1,4 +1,4 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, ElementRef, NgZone, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router, ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -22,6 +22,11 @@ declare let $: any;
   standalone: false
 })
 export class PresupuestoEditarComponent {
+  @ViewChild('inputDescription') inputDescription!: ElementRef;
+  @ViewChild('inputDiagnostico') inputDiagnostico!: ElementRef;
+  @ViewChild('inputItem') inputItem!: ElementRef;
+  @ViewChild('inputCantidad') inputCantidad!: ElementRef;
+  @ViewChild('inputPrecio') inputPrecio!: ElementRef;
 
   public routes = routes;
   public presupuestoForm: FormGroup;
@@ -229,54 +234,86 @@ export class PresupuestoEditarComponent {
 
       // Primero evaluamos las frases largas y específicas de navegación
       if (textoEvaluar.includes('pasar a descripción') || textoEvaluar.includes('ir a descripción')) {
-        this.zone.run(() => { this.campoActual = 'description'; });
+        this.zone.run(() => {
+          this.campoActual = 'description';
+
+          // 🔥 Forzamos el foco visual para que aparezca el cursor parpadeando
+          setTimeout(() => {
+            if (this.inputDescription) {
+              this.inputDescription.nativeElement.focus();
+            }
+          }, 50);
+        });
         return;
       }
 
       if (textoEvaluar.includes('pasar a diagnóstico') || textoEvaluar.includes('ir a diagnóstico')) {
-        this.zone.run(() => { this.campoActual = 'diagnostico'; });
+        this.zone.run(() => {
+          this.campoActual = 'diagnostico';
+
+          // 🔥 Forzamos el foco visual para que aparezca el cursor parpadeando
+          setTimeout(() => {
+            if (this.inputDiagnostico) {
+              this.inputDiagnostico.nativeElement.focus();
+            }
+          }, 50);
+        });
         return;
       }
 
       // Para cambiar de campo, exigimos la palabra "pasar a" o "ir a" 
       // Así evitamos que se active el comando si solo estás dictando un valor numérico o un nombre.
       if (textoEvaluar.includes('pasar a ítem') || textoEvaluar.includes('pasar a item') || textoEvaluar.includes('ir a ítem') || textoEvaluar.includes('ir a item')) {
-        this.zone.run(() => { this.campoActual = 'name_medical'; });
-        return;
-      }
-
-      if (textoEvaluar.includes('pasar a cantidad') || textoEvaluar.includes('ir a cantidad')) {
-        this.zone.run(() => { this.campoActual = 'cantidad'; });
-        return;
-      }
-
-      if (textoEvaluar.includes('pasar a precio') || textoEvaluar.includes('ir a precio')) {
-        this.zone.run(() => { this.campoActual = 'precio'; });
-        return;
-      }
-
-      // 🔥 COMANDO AGREGAR: Añadimos más variantes con y sin tilde para mayor seguridad
-      if (
-        textoEvaluar.includes('agregar ítem') ||
-        textoEvaluar.includes('agregar item') ||
-        textoEvaluar.includes('añadir ítem') ||
-        textoEvaluar.includes('añadir item') ||
-        textoEvaluar === 'agregar' ||
-        textoEvaluar === 'añadir'
-      ) {
         this.zone.run(() => {
-          this.addItemPresupuesto(); // Llama a tu función que calcula el amount correcto
-          this.name_medical = '';
-          this.cantidad = 0;
-          this.precio = 0;
-          this.campoActual = 'name_medical'; // Regresa el foco al inicio del flujo
+          this.campoActual = 'name_medical';
+          setTimeout(() => { if (this.inputItem) this.inputItem.nativeElement.focus(); }, 50);
         });
         return;
       }
 
+      if (textoEvaluar.includes('pasar a cantidad') || textoEvaluar.includes('ir a cantidad')) {
+        this.zone.run(() => {
+          this.campoActual = 'cantidad';
+          setTimeout(() => { if (this.inputCantidad) this.inputCantidad.nativeElement.focus(); }, 50);
+        });
+        return;
+      }
+
+      if (textoEvaluar.includes('pasar a precio') || textoEvaluar.includes('ir a precio')) {
+        this.zone.run(() => {
+          this.campoActual = 'precio';
+          setTimeout(() => { if (this.inputPrecio) this.inputPrecio.nativeElement.focus(); }, 50);
+        });
+        return;
+      }
+
+      // Al agregar, limpiamos y devolvemos el foco automáticamente al primer campo (Ítem)
+      if (textoEvaluar.includes('agregar ítem') || textoEvaluar.includes('agregar')) {
+        this.zone.run(() => {
+          this.addItemPresupuesto();
+          this.name_medical = '';
+          this.cantidad = 0;
+          this.precio = 0;
+          this.campoActual = 'name_medical';
+          setTimeout(() => { if (this.inputItem) this.inputItem.nativeElement.focus(); }, 50);
+        });
+        return;
+      }
       // 🔥 COMANDO GUARDAR: Evaluamos frases completas primero para evitar falsos positivos
       if (textoEvaluar.includes('guardar presupuesto') || textoEvaluar.includes('finalizar presupuesto') || textoEvaluar === 'guardar') {
         this.zone.run(() => {
+          // 🔥 1. APAGAMOS EL DICTADO DE FORMA MANUAL
+          // Apaga el reconocimiento de voz de la API de Angular para detener el spinner
+          if (this.isListening) {
+            // Si tu función de palanca se llama toggleDictadoGlobal, la desactivamos pasando false
+            // O si tienes un método directo como this.stopListening(), llámalo aquí.
+            this.isListening = false;
+
+            // Detenemos el motor de la API de reconocimiento de voz nativo (Web Speech API)
+            if (this.recognition) {
+              this.recognition.stop();
+            }
+          }
           this.save();
         });
         return;

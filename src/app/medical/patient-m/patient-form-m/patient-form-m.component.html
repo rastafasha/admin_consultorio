@@ -213,14 +213,14 @@
                     <p *ngIf="isListening">Escuchando dictado</p>
                 </div>
                 <!-- motivo Consulta -->
-                <app-motivo-consulta [patientForm]="patientForm"></app-motivo-consulta>
+                <app-motivo-consulta #inputMotivo [patientForm]="patientForm"></app-motivo-consulta>
 
                 <!-- antecedentes -->
-                <app-antecedentes [patientForm]="patientForm"></app-antecedentes>
+                <app-antecedentes #compAntecedentes [patientForm]="patientForm"></app-antecedentes>
                 <!-- fin antecedentes -->
-                <app-enfermedad-actual [patientForm]="patientForm"></app-enfermedad-actual>
-                <!-- Historial enfermedad -->
-                <!-- <app-historial-enfermedad [patientForm]="patientForm"></app-historial-enfermedad> -->
+
+                <app-enfermedad-actual #compEnfermedad [patientForm]="patientForm"></app-enfermedad-actual>
+
                 <!-- signos vitales -->
                 <app-signos-vitales [patientForm]="patientForm"></app-signos-vitales>
                 <!-- fin signos vitales -->
@@ -230,16 +230,18 @@
                     [is_vacuna]="patientForm.get('is_vacuna')?.value ? 2 : 1" *ngIf="patient_selected">
                 </app-vacunas>
                 <!-- Examen fisico -->
-                <app-examen-fisico [patientForm]="patientForm"></app-examen-fisico>
+                <app-examen-fisico #compExamen [patientForm]="patientForm"></app-examen-fisico>
                 <!-- Reporte Laboratorio -->
                 <app-reporte-laboratorio #reporteLaboratory *ngIf="patient_selected"
                     [patient_selected]="patient_selected"></app-reporte-laboratorio>
                 <!-- Diagnostico -->
-                <app-diagnostico [patientForm]="patientForm"></app-diagnostico>
+                <app-diagnostico #compDiagnostico [patientForm]="patientForm"></app-diagnostico>
                 <!-- tratamiento -->
-                <app-tratamiento [patientForm]="patientForm"></app-tratamiento>
+                <app-tratamiento #compTratamiento [patientForm]="patientForm"></app-tratamiento>
                 <!-- Evolucion -->
-                <app-evolucion #componenteEvolucion [patientForm]="patientForm" [evolucionesIniciales]="patient_selected.evolucion"></app-evolucion>
+                <app-evolucion #componenteEvolucion [patientForm]="patientForm" [evolucionesIniciales]="patient_selected.evolucion"> </app-evolucion>
+
+
 
                 <div class="col-12 mt-4 mb-5">
                     <div class="doctor-submit text-end">

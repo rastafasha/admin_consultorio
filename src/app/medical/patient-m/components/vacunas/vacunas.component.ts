@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core'; // 1. Agrega OnChanges y SimpleChanges
+import { Component, Input, OnInit, OnChanges, SimpleChanges, ElementRef, ViewChild } from '@angular/core'; // 1. Agrega OnChanges y SimpleChanges
 import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
@@ -11,18 +11,23 @@ export class VacunasComponent implements OnInit, OnChanges { // 2. Implementa On
   @Input() patientForm!: FormGroup;
   @Input() doctor: any;
   @Input() is_vacuna: any;
-   @Input() vacunasIniciales: any[] = [];
-  
+  @Input() vacunasIniciales: any[] = [];
+
+  @ViewChild('inputVacunaNombre') inputVacunaNombre!: ElementRef;
+  @ViewChild('inputVacunaFecha') inputVacunaFecha!: ElementRef;
+  @ViewChild('inputVacunaCantidad') inputVacunaCantidad!: ElementRef;
+
+
   isLoading = false;
   isSaving = false;
   text_validation: string = '';
-  
-  public mvacunas: any = []; 
+
+  public mvacunas: any = [];
   description: any;
   name_medical: any;
   cantidad: number = 0;
   fecha_vacuna: any;
- 
+
 
   ngOnInit() {
     if (!this.patientForm.contains('vacunas')) {
@@ -32,13 +37,25 @@ export class VacunasComponent implements OnInit, OnChanges { // 2. Implementa On
 
   // 3. ¡ESTA ES LA CLAVE! Escucha cuando el formulario del Padre cambia o recibe datos de la API
   ngOnChanges(changes: SimpleChanges) {
-  if (changes['vacunasIniciales'] && this.vacunasIniciales) {
-    this.mvacunas = [...this.vacunasIniciales];
+    if (changes['vacunasIniciales'] && this.vacunasIniciales) {
+      this.mvacunas = [...this.vacunasIniciales];
+    }
   }
-}
 
   private sincronizarConPadre() {
     this.patientForm.get('vacunas')?.setValue(this.mvacunas);
+  }
+
+  focarVacunaNombre() {
+    setTimeout(() => { if (this.inputVacunaNombre) this.inputVacunaNombre.nativeElement.focus(); }, 50);
+  }
+
+  focarVacunaFecha() {
+    setTimeout(() => { if (this.inputVacunaFecha) this.inputVacunaFecha.nativeElement.focus(); }, 50);
+  }
+
+  focarVacunaCantidad() {
+    setTimeout(() => { if (this.inputVacunaCantidad) this.inputVacunaCantidad.nativeElement.focus(); }, 50);
   }
 
   addVacuna() {
@@ -48,7 +65,7 @@ export class VacunasComponent implements OnInit, OnChanges { // 2. Implementa On
         fecha_vacuna: this.fecha_vacuna,
         cantidad: this.cantidad + '',
       });
-      
+
       this.sincronizarConPadre();
 
       this.name_medical = '';

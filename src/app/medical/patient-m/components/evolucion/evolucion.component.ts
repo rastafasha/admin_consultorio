@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core'; // 1. 👈 Agregamos OnChanges y SimpleChanges
+import { Component, Input, OnInit, OnChanges, SimpleChanges, ElementRef, ViewChild } from '@angular/core'; // 1. 👈 Agregamos OnChanges y SimpleChanges
 import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
@@ -10,13 +10,16 @@ import { FormGroup, FormControl } from '@angular/forms';
 export class EvolucionComponent implements OnInit, OnChanges { // 2. 👈 Implementamos OnChanges
   @Input() patientForm!: FormGroup;
   @Input() evolucionesIniciales: any[] = [];
-  
+  @ViewChild('inputEvolucionNombre') inputEvolucionNombre!: ElementRef;
+  @ViewChild('inputEvolucionFecha') inputEvolucionFecha!: ElementRef;
+
+
   isLoading = false;
   isSaving = false;
   text_validation: string = ''; // 👈 Inicializado para evitar errores de TypeScript estricto
-  public mevolucion: any = []; 
+  public mevolucion: any = [];
   name_evolucion: any;
-  fecha_evolucion: any; 
+  fecha_evolucion: any;
 
   ngOnInit() {
     if (!this.patientForm.contains('evolucion')) {
@@ -24,12 +27,20 @@ export class EvolucionComponent implements OnInit, OnChanges { // 2. 👈 Implem
     }
   }
 
-  // 3. 🧠 ¡LA SOLUCIÓN! Captura las evoluciones que el Padre cargó desde la base de datos
-   ngOnChanges(changes: SimpleChanges) {
-  if (changes['evolucionesIniciales'] && this.evolucionesIniciales) {
-    this.mevolucion = [...this.evolucionesIniciales];
+  focarEvolucionNombre() {
+    setTimeout(() => { if (this.inputEvolucionNombre) this.inputEvolucionNombre.nativeElement.focus(); }, 50);
   }
-}
+
+  focarEvolucionFecha() {
+    setTimeout(() => { if (this.inputEvolucionFecha) this.inputEvolucionFecha.nativeElement.focus(); }, 50);
+  }
+
+  // 3. 🧠 ¡LA SOLUCIÓN! Captura las evoluciones que el Padre cargó desde la base de datos
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['evolucionesIniciales'] && this.evolucionesIniciales) {
+      this.mevolucion = [...this.evolucionesIniciales];
+    }
+  }
 
   private sincronizarConPadre() {
     this.patientForm.get('evolucion')?.setValue(this.mevolucion);

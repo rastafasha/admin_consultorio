@@ -20,14 +20,14 @@
             </div>
         </div>
         <!-- <app-skeleton-loader *ngIf="isLoading" [rows]="5" [columns]="4"></app-skeleton-loader> -->
-       
+
         <!-- /Page Header -->
         <div class="row">
             <!-- paciente -->
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                         <app-loading *ngIf="isLoading"></app-loading>
+                        <app-loading *ngIf="isLoading"></app-loading>
                         <form *ngIf="!isLoading">
 
                             <!-- paciente -->
@@ -125,11 +125,13 @@
                                 <div class="col-12">
                                     <div class="form-group local-forms">
                                         <label>Diagnostico/Revisión <span class="login-danger">*</span></label>
-                                        <textarea class="form-control" name="description" [(ngModel)]="description"
-                                            rows="4" cols="30"></textarea>
+                                        <!-- 🔥 Añadimos #inputCitaDiagnostico aquí -->
+                                        <textarea class="form-control" name="description" #inputCitaDiagnostico
+                                            [(ngModel)]="description" rows="4" cols="30"></textarea>
                                     </div>
                                 </div>
                             </div>
+
                             <div class="row align-items-center">
                                 <div class="col-xs-12 col-sm-6">
                                     <div class="row">
@@ -137,20 +139,23 @@
                                         <div class="col-12 ">
                                             <div class="form-group local-forms">
                                                 <label>Nombre de Medicamento<span class="login-danger">*</span></label>
-                                                <input class="form-control" name="name_medical"
+                                                <!-- 🔥 Añadimos #inputCitaMedicamento -->
+                                                <input class="form-control" name="name_medical" #inputCitaMedicamento
                                                     [(ngModel)]="name_medical" type="text">
                                             </div>
                                         </div>
                                         <div class="col-12 ">
                                             <div class="form-group local-forms">
                                                 <label>Uso<span class="login-danger">*</span></label>
-                                                <input class="form-control" name="uso" [(ngModel)]="uso" type="text">
+                                                <!-- 🔥 Añadimos #inputCitaUso -->
+                                                <input class="form-control" name="uso" #inputCitaUso [(ngModel)]="uso"
+                                                    type="text">
                                             </div>
                                         </div>
+
                                         <div class="col-12 mb-3">
                                             <button class="btn btn-primary btn-sm" (click)="addMedicamento()">+
                                                 Agregar</button>
-                                            <!-- <button class="btn btn-danger btn-sm">x</button> -->
                                         </div>
                                     </div>
                                 </div>

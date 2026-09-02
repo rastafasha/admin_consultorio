@@ -13,15 +13,17 @@
                             <div class="col-12 col-sm-6 col-md-8">
                                 <div class="form-group local-forms">
                                     <label>Item / Descripción de la Evolución<span class="login-danger">*</span></label>
-                                    <input class="form-control" name="name_evolucion" [(ngModel)]="name_evolucion"
-                                        type="text">
+                                    <!-- 🔥 Añadimos #inputEvolucionNombre -->
+                                    <input class="form-control" name="name_evolucion" #inputEvolucionNombre
+                                        [(ngModel)]="name_evolucion" type="text">
                                 </div>
                             </div>
                             <div class="col-12 col-sm-4 col-md-2">
                                 <div class="form-group local-forms">
                                     <label>Fecha<span class="login-danger">*</span></label>
-                                    <input class="form-control" name="fecha_evolucion" [(ngModel)]="fecha_evolucion"
-                                        type="date">
+                                    <!-- 🔥 Añadimos #inputEvolucionFecha -->
+                                    <input class="form-control" name="fecha_evolucion" #inputEvolucionFecha
+                                        [(ngModel)]="fecha_evolucion" type="date">
                                 </div>
                             </div>
                             <div class="col-12 col-sm-2 col-md-2">
@@ -29,6 +31,7 @@
                                     Agregar</button>
                             </div>
                         </div>
+
                     </div>
 
                     <!-- TABLA DE LISTADO EN TIEMPO REAL -->

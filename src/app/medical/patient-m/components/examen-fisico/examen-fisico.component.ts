@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 @Component({
@@ -10,4 +10,10 @@ import { FormGroup } from '@angular/forms';
 export class ExamenFisicoComponent {
   @Input()patientForm:FormGroup;
   text_validation:string;
+  @ViewChild('textareaExamFis') textareaExamFis!: ElementRef;
+  focarExamen() {
+    setTimeout(() => { 
+      if (this.textareaExamFis) this.textareaExamFis.nativeElement.focus(); 
+    }, 50);
+  }
 }

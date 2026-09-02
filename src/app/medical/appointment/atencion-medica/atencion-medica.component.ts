@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component, ChangeDetectorRef, NgZone, ElementRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppointmentService } from '../../../services/appointment.service';
 import Swal from 'sweetalert2';
@@ -12,6 +12,10 @@ import { StaffService } from '../../../services/staff.service';
   standalone: false
 })
 export class AtencionMedicaComponent {
+  @ViewChild('inputCitaDiagnostico') inputCitaDiagnostico!: ElementRef;
+  @ViewChild('inputCitaMedicamento') inputCitaMedicamento!: ElementRef;
+  @ViewChild('inputCitaUso') inputCitaUso!: ElementRef;
+
   public routes = routes;
   isLoading = false;
 
@@ -176,30 +180,71 @@ export class AtencionMedicaComponent {
       // ==========================================
       // 1. SECCIÓN DE COMANDOS DE NAVEGACIÓN
       // ==========================================
+      if (textoEvaluar.includes('pasar a diagnóstico') || textoEvaluar.includes('ir a diagnóstico')) {
+        this.zone.run(() => {
+          this.campoActual = 'description'; // Vinculado a tu variable description
 
-      if (textoEvaluar.includes('pasar a medicamentos') || textoEvaluar.includes('siguiente campo')) {
+          // 🔥 Forzamos el foco visual con el micro-retraso de seguridad
+          setTimeout(() => {
+            if (this.inputCitaDiagnostico) {
+              this.inputCitaDiagnostico.nativeElement.focus();
+            }
+          }, 50);
+        });
+        return;
+      }
+
+      if (textoEvaluar.includes('pasar a medicamentos') || textoEvaluar.includes('pasar a medicamento') || textoEvaluar.includes('siguiente campo')) {
         this.zone.run(() => {
           this.campoActual = 'name_medical';
+          setTimeout(() => { if (this.inputCitaMedicamento) this.inputCitaMedicamento.nativeElement.focus(); }, 50);
         });
         return;
       }
 
-      if (textoEvaluar.includes('pasar a uso')) {
+      if (textoEvaluar.includes('pasar a uso') || textoEvaluar.includes('ir a uso')) {
         this.zone.run(() => {
           this.campoActual = 'uso';
+          setTimeout(() => { if (this.inputCitaUso) this.inputCitaUso.nativeElement.focus(); }, 50);
         });
         return;
       }
 
-      if (textoEvaluar.includes('agregar medicamento')) {
+      if (textoEvaluar.includes('agregar medicamento') || textoEvaluar.includes('agregar')) {
         this.zone.run(() => {
-          this.addMedicamento(); // Llama a tu función original del botón
-          this.name_medical = ''; // Limpia el input
-          this.uso = '';          // Limpia el input
-          this.campoActual = 'name_medical'; // Regresa al nombre del medicamento
+          this.addMedicamento(); // Tu función original para meter el medicina al arreglo del récipe
+          this.name_medical = '';
+          this.uso = '';
+          this.campoActual = 'name_medical';
+
+          // Devolvemos el foco visual de inmediato para el próximo récipe
+          setTimeout(() => { if (this.inputCitaMedicamento) this.inputCitaMedicamento.nativeElement.focus(); }, 50);
         });
         return;
       }
+
+      // Comando unificado: GUARDA E IMPRIME
+      if (textoEvaluar.includes('imprimir receta') || textoEvaluar.includes('imprimir récipe') || textoEvaluar.includes('guardar e imprimir')) {
+        this.zone.run(() => {
+          // 🔥 1. APAGAMOS EL DICTADO DE FORMA MANUAL
+          // Apaga el reconocimiento de voz de la API de Angular para detener el spinner
+          if (this.isListening) {
+            // Si tu función de palanca se llama toggleDictadoGlobal, la desactivamos pasando false
+            // O si tienes un método directo como this.stopListening(), llámalo aquí.
+            this.isListening = false;
+
+            // Detenemos el motor de la API de reconocimiento de voz nativo (Web Speech API)
+            if (this.recognition) {
+              this.recognition.stop();
+            }
+          }
+          this.save(true); // Pasamos 'true' para indicar que queremos imprimir después de guardar
+        });
+        return;
+      }
+
+      
+
 
       // ==========================================
       // 2. SECCIÓN DE ESCRITURA CON NGZONE
@@ -244,13 +289,7 @@ export class AtencionMedicaComponent {
         else if (this.campoActual === 'uso') {
           this.uso = this.uso ? `${this.uso.trim()} ${rawText.trim()}` : rawText.trim();
         }
-        // Comando unificado: GUARDA E IMPRIME
-        if (textoEvaluar.includes('imprimir receta') || textoEvaluar.includes('imprimir récipe') || textoEvaluar.includes('guardar e imprimir')) {
-          this.zone.run(() => {
-            this.save(true); // Pasamos 'true' para indicar que queremos imprimir después de guardar
-          });
-          return;
-        }
+
 
       });
     };
