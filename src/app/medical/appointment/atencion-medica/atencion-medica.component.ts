@@ -45,6 +45,8 @@ export class AtencionMedicaComponent {
   roles: any;
   doctor: any;
   doctor_id: any;
+  addressconsultorio: any;
+  name_consultorio: any;
 
   // dictado
   recognition: any;
@@ -112,6 +114,8 @@ export class AtencionMedicaComponent {
       this.phone = this.appointment_selected.patient.phone;
       this.name_companion = this.appointment_selected.patient.name_companion;
       this.surname_companion = this.appointment_selected.patient.surname_companion;
+      this.addressconsultorio = this.appointment_selected.consultorio.address;
+      this.name_consultorio = this.appointment_selected.consultorio.name_consultorio;
       this.antecedent_alerg = this.appointment_selected.patient.antecedent_alerg;
       this.isLoading = false
     });
@@ -446,7 +450,8 @@ export class AtencionMedicaComponent {
               <h3>Médico Especialista:</h3>
               <p style="white-space: pre-wrap;">Dr(a).${this.doctor.name} ${this.doctor.surname}</p>
               <p style="white-space: pre-wrap;">Teléfono: ${this.doctor.mobile}</p>
-              <p style="white-space: pre-wrap;">Consultorio: ${this.doctor.address}</p>
+              <p style="white-space: pre-wrap;">Consultorio: ${this.name_consultorio}</p>
+              <p style="white-space: pre-wrap;">Dirección: ${this.addressconsultorio}</p>
             </div>
           
          <div class="content">
