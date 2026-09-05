@@ -324,22 +324,34 @@ export class AtencionMedicaComponent {
     });
   }
 
-  toggleDictadoGlobal() {
-  this.isListening = !this.isListening;
+ toggleDictado(event: any) {
+  // Capturamos si el switch está marcado (true) o desmarcado (false)
+  this.isListening = event.target.checked;
 
   if (this.isListening) {
-    // 🔥 CRÍTICO: Inicializamos el campo por defecto para que la voz sepa dónde escribir la primera palabra
+    // 1. Inicializamos el campo por defecto para que la voz sepa dónde escribir
     this.campoActual = 'description'; 
     
-    // Aquí es donde llamas a tu motor nativo
+    // 2. Configuramos el motor de voz con los parches de iOS
     this.initSpeechRecognition();
-    this.recognition.start();
+    
+    // 3. Encendemos el micrófono nativo
+    try {
+      this.recognition.start();
+      console.log('Motor de voz iniciado y escuchando...');
+    } catch (error) {
+      console.error('Error al arrancar el micrófono nativo:', error);
+    }
+
   } else {
+    // Si el usuario apaga el switch manualmente, detenemos todo
     if (this.recognition) {
       this.recognition.stop();
     }
+    console.log('Motor de voz detenido por el usuario.');
   }
 }
+
   save(debeImprimir: boolean = false) {
     this.text_validation = '';
     if (!this.description || this.medical.length == 0) {
