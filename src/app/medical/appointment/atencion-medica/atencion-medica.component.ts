@@ -153,163 +153,155 @@ export class AtencionMedicaComponent {
 
 
   initSpeechRecognition() {
-  const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
 
-  if (!SpeechRecognition) {
-    console.error('El dictado por voz no es soportado.');
-    return;
-  }
-
-  // Detectamos si es un dispositivo Apple (iPhone/iPad)
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
-
-  this.recognition = new SpeechRecognition();
-  
-  // 🔥 PARCHE 1: En iPhone continuous DEBE ser false o se congela la API
-  this.recognition.continuous = !isIOS; 
-  this.recognition.interimResults = false;
-  
-  // PARCHE 2: Diccionario estándar es más estable en iOS 15 viejo
-  this.recognition.lang = isIOS ? 'es-ES' : 'es-VE'; 
-
-  this.recognition.onresult = (event: any) => {
-    if (!event || !event.results) return;
-
-    const currentResultIndex = event.resultIndex;
-    const result = event.results[currentResultIndex];
-
-    if (!result || !result[0] || !result[0].transcript) return;
-
-    const rawText = result[0].transcript;
-    console.log('Texto crudo recibido:', rawText);
-
-    let textoEvaluar = rawText.toLowerCase().trim();
-    if (textoEvaluar.endsWith('.')) {
-      textoEvaluar = textoEvaluar.slice(0, -1).trim();
-    }
-
-    // ==========================================
-    // 1. SECCIÓN DE COMANDOS DE NAVEGACIÓN
-    // ==========================================
-    if (textoEvaluar.includes('pasar a diagnóstico') || textoEvaluar.includes('ir a diagnóstico')) {
-      this.zone.run(() => {
-        this.campoActual = 'description';
-        setTimeout(() => {
-          if (this.inputCitaDiagnostico) this.inputCitaDiagnostico.nativeElement.focus();
-        }, 50);
-      });
+    if (!SpeechRecognition) {
+      console.error('El dictado por voz no es soportado.');
       return;
     }
 
-    if (textoEvaluar.includes('pasar a medicamentos') || textoEvaluar.includes('pasar a medicamento') || textoEvaluar.includes('siguiente campo')) {
-      this.zone.run(() => {
-        this.campoActual = 'name_medical';
-        setTimeout(() => { if (this.inputCitaMedicamento) this.inputCitaMedicamento.nativeElement.focus(); }, 50);
-      });
-      return;
-    }
+    this.recognition = new SpeechRecognition();
+    this.recognition.continuous = true;
+    this.recognition.interimResults = false;
+    this.recognition.lang = 'es-VE';
 
-    if (textoEvaluar.includes('pasar a uso') || textoEvaluar.includes('ir a uso')) {
-      this.zone.run(() => {
-        this.campoActual = 'uso';
-        setTimeout(() => { if (this.inputCitaUso) this.inputCitaUso.nativeElement.focus(); }, 50);
-      });
-      return;
-    }
+    this.recognition.onresult = (event: any) => {
+      if (!event || !event.results) return;
 
-    if (textoEvaluar.includes('agregar medicamento') || textoEvaluar.includes('agregar')) {
-      this.zone.run(() => {
-        this.addMedicamento();
-        this.actualizarTexto('', 'name_medical');
-        this.actualizarTexto('', 'uso');
-        this.campoActual = 'name_medical';
-        setTimeout(() => { if (this.inputCitaMedicamento) this.inputCitaMedicamento.nativeElement.focus(); }, 50);
-      });
-      return;
-    }
+      const currentResultIndex = event.resultIndex;
+      const result = event.results[currentResultIndex];
 
-    if (textoEvaluar.includes('imprimir receta') || textoEvaluar.includes('imprimir récipe') || textoEvaluar.includes('guardar e imprimir')) {
+      if (!result || !result[0] || !result[0].transcript) return;
+
+      const rawText = result[0].transcript;
+      console.log('Texto crudo recibido:', rawText);
+
+      let textoEvaluar = rawText.toLowerCase().trim();
+      if (textoEvaluar.endsWith('.')) {
+        textoEvaluar = textoEvaluar.slice(0, -1).trim();
+      }
+
+      // ==========================================
+      // 1. SECCIÓN DE COMANDOS DE NAVEGACIÓN
+      // ==========================================
+      if (textoEvaluar.includes('pasar a diagnóstico') || textoEvaluar.includes('ir a diagnóstico')) {
+        this.zone.run(() => {
+          this.campoActual = 'description'; // Vinculado a tu variable description
+
+          // 🔥 Forzamos el foco visual con el micro-retraso de seguridad
+          setTimeout(() => {
+            if (this.inputCitaDiagnostico) {
+              this.inputCitaDiagnostico.nativeElement.focus();
+            }
+          }, 50);
+        });
+        return;
+      }
+
+      if (textoEvaluar.includes('pasar a medicamentos') || textoEvaluar.includes('pasar a medicamento') || textoEvaluar.includes('siguiente campo')) {
+        this.zone.run(() => {
+          this.campoActual = 'name_medical';
+          setTimeout(() => { if (this.inputCitaMedicamento) this.inputCitaMedicamento.nativeElement.focus(); }, 50);
+        });
+        return;
+      }
+
+      if (textoEvaluar.includes('pasar a uso') || textoEvaluar.includes('ir a uso')) {
+        this.zone.run(() => {
+          this.campoActual = 'uso';
+          setTimeout(() => { if (this.inputCitaUso) this.inputCitaUso.nativeElement.focus(); }, 50);
+        });
+        return;
+      }
+
+      if (textoEvaluar.includes('agregar medicamento') || textoEvaluar.includes('agregar')) {
+        this.zone.run(() => {
+          this.addMedicamento(); // Tu función original para meter el medicina al arreglo del récipe
+          this.name_medical = '';
+          this.uso = '';
+          this.campoActual = 'name_medical';
+
+          // Devolvemos el foco visual de inmediato para el próximo récipe
+          setTimeout(() => { if (this.inputCitaMedicamento) this.inputCitaMedicamento.nativeElement.focus(); }, 50);
+        });
+        return;
+      }
+
+      // Comando unificado: GUARDA E IMPRIME
+      if (textoEvaluar.includes('imprimir receta') || textoEvaluar.includes('imprimir récipe') || textoEvaluar.includes('guardar e imprimir')) {
+        this.zone.run(() => {
+          // 🔥 1. APAGAMOS EL DICTADO DE FORMA MANUAL
+          // Apaga el reconocimiento de voz de la API de Angular para detener el spinner
+          if (this.isListening) {
+            // Si tu función de palanca se llama toggleDictadoGlobal, la desactivamos pasando false
+            // O si tienes un método directo como this.stopListening(), llámalo aquí.
+            this.isListening = false;
+
+            // Detenemos el motor de la API de reconocimiento de voz nativo (Web Speech API)
+            if (this.recognition) {
+              this.recognition.stop();
+            }
+          }
+          this.save(true); // Pasamos 'true' para indicar que queremos imprimir después de guardar
+        });
+        return;
+      }
+
+      
+
+
+      // ==========================================
+      // 2. SECCIÓN DE ESCRITURA CON NGZONE
+      // ==========================================
       this.zone.run(() => {
-        if (this.isListening) {
-          this.isListening = false;
-          if (this.recognition) this.recognition.stop();
+
+        // SI ESTÁ EN EL CAMPO DIAGNÓSTICO
+        if (this.campoActual === 'description') {
+          if (textoEvaluar.includes('limpiar todo') || textoEvaluar.includes('borrar todo')) {
+            this.description = '';
+            return;
+          }
+          if (textoEvaluar.includes('punto y aparte')) {
+            this.description = this.description ? `${this.description.trim()}.\n\n` : '';
+            return;
+          }
+          if (textoEvaluar.includes('punto y seguido')) {
+            this.description = this.description ? `${this.description.trim()}. ` : '';
+            return;
+          }
+
+          let textoFinal = rawText.trim();
+          if (!this.description || this.description.endsWith('\n') || this.description.endsWith('. ')) {
+            textoFinal = textoFinal.charAt(0).toUpperCase() + textoFinal.slice(1);
+          }
+
+          this.description = this.description
+            ? (this.description.endsWith('\n') || this.description.endsWith(' ') ? this.description + textoFinal : this.description + ' ' + textoFinal)
+            : textoFinal;
         }
-        this.save(true);
-      });
-      return;
-    }
 
-    // ==========================================
-    // 2. SECCIÓN DE ESCRITURA (Usando actualizarTexto)
-    // ==========================================
-    this.zone.run(() => {
-
-      // CAMPO DIAGNÓSTICO
-      if (this.campoActual === 'description') {
-        if (textoEvaluar.includes('limpiar todo') || textoEvaluar.includes('borrar todo')) {
-          this.actualizarTexto('', 'description');
-          return;
-        }
-        if (textoEvaluar.includes('punto y aparte')) {
-          const nuevoValor = this.description ? `${this.description.trim()}.\n\n` : '';
-          this.actualizarTexto(nuevoValor, 'description');
-          return;
-        }
-        if (textoEvaluar.includes('punto y seguido')) {
-          const nuevoValor = this.description ? `${this.description.trim()}. ` : '';
-          this.actualizarTexto(nuevoValor, 'description');
-          return;
-        }
-
-        let textoFinal = rawText.trim();
-        if (!this.description || this.description.endsWith('\n') || this.description.endsWith('. ')) {
+        // SI ESTÁ EN EL NOMBRE DEL MEDICAMENTO
+        else if (this.campoActual === 'name_medical') {
+          let textoFinal = rawText.trim();
+          // Capitaliza el nombre del medicamento (Ej: "Ibuprofeno")
           textoFinal = textoFinal.charAt(0).toUpperCase() + textoFinal.slice(1);
+
+          this.name_medical = this.name_medical ? `${this.name_medical.trim()} ${textoFinal}` : textoFinal;
         }
 
-        const acumulado = this.description
-          ? (this.description.endsWith('\n') || this.description.endsWith(' ') ? this.description + textoFinal : this.description + ' ' + textoFinal)
-          : textoFinal;
+        // SI ESTÁ EN EL USO DEL MEDICAMENTO
+        else if (this.campoActual === 'uso') {
+          this.uso = this.uso ? `${this.uso.trim()} ${rawText.trim()}` : rawText.trim();
+        }
 
-        this.actualizarTexto(acumulado, 'description');
-      }
 
-      // NOMBRE DEL MEDICAMENTO
-      else if (this.campoActual === 'name_medical') {
-        let textoFinal = rawText.trim();
-        textoFinal = textoFinal.charAt(0).toUpperCase() + textoFinal.slice(1);
+      });
+    };
 
-        const acumulado = this.name_medical ? `${this.name_medical.trim()} ${textoFinal}` : textoFinal;
-        this.actualizarTexto(acumulado, 'name_medical');
-      }
-
-      // USO DEL MEDICAMENTO
-      else if (this.campoActual === 'uso') {
-        const acumulado = this.uso ? `${this.uso.trim()} ${rawText.trim()}` : rawText.trim();
-        this.actualizarTexto(acumulado, 'uso');
-      }
-
-    });
-  };
-
-  this.recognition.onerror = (event: any) => {
-    console.error('Error en el dictado:', event.error);
-    if (event.error === 'not-allowed') {
-      alert('Por favor, verifica que Siri y los permisos de micrófono estén activos en los ajustes de tu iPhone.');
-    }
-  };
-
-  // 🔥 PARCHE 3: El truco para simular continuidad reencendiendo el motor en iOS
-  this.recognition.onend = () => {
-    if (this.isListening) {
-      try {
-        this.recognition.start();
-      } catch (e) {
-        console.log('El motor de voz ya se estaba reiniciando de forma segura.');
-      }
-    }
-  };
-}
-
+    this.recognition.onerror = (event: any) => {
+      console.error('Error en el dictado:', event.error);
+    };
+  }
 
   // Mantenemos la función de ayuda para el diagnóstico
   actualizarTexto(valor: string, campo: string) {
@@ -324,34 +316,20 @@ export class AtencionMedicaComponent {
     });
   }
 
- toggleDictado(event: any) {
-  // Capturamos si el switch está marcado (true) o desmarcado (false)
-  this.isListening = event.target.checked;
+  toggleDictado(event: any) {
+    this.isListening = event.target.checked;
 
-  if (this.isListening) {
-    // 1. Inicializamos el campo por defecto para que la voz sepa dónde escribir
-    this.campoActual = 'description'; 
-    
-    // 2. Configuramos el motor de voz con los parches de iOS
-    this.initSpeechRecognition();
-    
-    // 3. Encendemos el micrófono nativo
-    try {
-      this.recognition.start();
-      console.log('Motor de voz iniciado y escuchando...');
-    } catch (error) {
-      console.error('Error al arrancar el micrófono nativo:', error);
+    if (!this.recognition) {
+      alert('Tu navegador no soporta dictado por voz.');
+      return;
     }
 
-  } else {
-    // Si el usuario apaga el switch manualmente, detenemos todo
-    if (this.recognition) {
+    if (this.isListening) {
+      this.recognition.start();
+    } else {
       this.recognition.stop();
     }
-    console.log('Motor de voz detenido por el usuario.');
   }
-}
-
   save(debeImprimir: boolean = false) {
     this.text_validation = '';
     if (!this.description || this.medical.length == 0) {
