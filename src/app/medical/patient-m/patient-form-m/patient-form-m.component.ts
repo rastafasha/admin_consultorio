@@ -31,6 +31,7 @@ export class PatientFormMComponent implements OnInit {
   @ViewChild('compExamen') compExamen!: any;
   @ViewChild('compDiagnostico') compDiagnostico!: any;
   @ViewChild('compTratamiento') compTratamiento!: any;
+  @ViewChild('compSignosVitales') compSignosVitales!: any;
 
 
 
@@ -61,7 +62,9 @@ export class PatientFormMComponent implements OnInit {
   recognition: any;
   isListening: boolean = false;
   campoActual: 'current_desease' | 'antecedent_personal' | 'antecedent_family' | 'antecedent_alerg' | 'enfermedad_actual' | 'examen_fisico' | 'tratamiento' | 'diagnostico' | 'name_medical' |
-    'fecha_vacuna' | 'cantidad' | 'name_evolucion' | 'fecha_evolucion' = 'current_desease';
+    'fecha_vacuna' | 'cantidad' | 'name_evolucion' | 'fecha_evolucion' |
+    'ta' | 'temperature' | 'fc' | 'fr' | 'peso' | 'talla'
+    = 'current_desease';
   current_desease: string = '';
   antecedent_personal: string = '';
   antecedent_family: string = '';
@@ -75,6 +78,12 @@ export class PatientFormMComponent implements OnInit {
   cantidad: number = 0;
   name_evolucion: string = '';
   fecha_evolucion: any;
+  ta: number = 0;
+  temperature: number = 0;
+  fc: number = 0;
+  fr: number = 0;
+  peso: number = 0;
+  talla: number = 0;
 
   info_form_paciente = `
   <p>En esta sección :</p>
@@ -83,7 +92,9 @@ export class PatientFormMComponent implements OnInit {
   <li><strong>Signos Vitales:</strong> Llenar esta sección permite al sistema generar gráficos de comportamiento y reportes automáticos en la App del Paciente.</li>
   <li>
     <strong>Comandos de voz:</strong>
-    <br>• <em>Navegación:</em> "pasar a motivo consulta", "pasar a personales", "pasar a familiares", "pasar a alergias", "pasar a enfermedad actual", "pasar a examen", "pasar a diagnóstico", "pasar a tratamiento", "pasar a vacunas", "pasar a fecha de vacuna ó fecha de vacuna", "pasar a cantidad de vacuna", "agregar vacuna" , "pasar a evolución", "pasar a fecha de evolución ó fecha de evolución", "agregar evolución".
+    <br>• <em>Navegación:</em> (ir a... o pasar a...) "pasar a motivo consulta", "pasar a personales", "pasar a familiares", "pasar a alergias", 
+    "pasar a presión", "pasar a temperatura", "pasar a frecuencia cardiaca", "pasar a frecuencia respiratoria", "pasar a peso", "pasar a talla",
+    "pasar a enfermedad actual", "pasar a examen", "pasar a diagnóstico", "pasar a tratamiento", "pasar a vacunas", "pasar a fecha de vacuna ó fecha de vacuna", "pasar a cantidad de vacuna", "agregar vacuna" , "pasar a evolución", "pasar a fecha de evolución ó fecha de evolución", "agregar evolución".
     <br>• <em>Acciones:</em> "guardar historia" (o "guardar"), "limpiar todo", "punto y aparte", "punto y seguido".
   </li>
 </ul>
@@ -191,7 +202,7 @@ export class PatientFormMComponent implements OnInit {
         });
         return;
       }
-
+      //Antecedentes
       if (textoEvaluar.includes('pasar a personales') || textoEvaluar.includes('ir a personales')) {
         this.zone.run(() => {
           this.campoActual = 'antecedent_personal';
@@ -229,6 +240,8 @@ export class PatientFormMComponent implements OnInit {
         return;
       }
 
+
+
       if (
         textoEvaluar.includes('pasar a enfermedad') ||
         textoEvaluar.includes('pasar a enfermedad actual') ||
@@ -244,6 +257,81 @@ export class PatientFormMComponent implements OnInit {
         });
         return;
       }
+
+      // ==========================================
+      // COMANDOS DE VOZ: Signos vitales
+      // ==========================================
+      if (textoEvaluar.includes('pasar a presión') || textoEvaluar.includes('ir a presión')) {
+        this.zone.run(() => {
+          this.campoActual = 'ta';
+
+          // 🔥 Le ordenamos al hijo que marque el campo específico de personales
+          if (this.compSignosVitales) {
+            this.compSignosVitales.focarPresion();
+          }
+        });
+        return;
+      }
+
+      if (textoEvaluar.includes('pasar a Temperatura') || textoEvaluar.includes('ir a Temperatura')) {
+        this.zone.run(() => {
+          this.campoActual = 'temperature';
+
+          // 🔥 Le ordenamos al hijo que marque el campo específico de familiares
+          if (this.compSignosVitales) {
+            this.compSignosVitales.focarTemperatura();
+          }
+        });
+        return;
+      }
+
+      if (textoEvaluar.includes('pasar a frecuencia cardiaca') || textoEvaluar.includes('ir a frecuencia cardiaca')) {
+        this.zone.run(() => {
+          this.campoActual = 'fc';
+
+          // 🔥 Le ordenamos al hijo que marque el campo específico de alergias
+          if (this.compSignosVitales) {
+            this.compSignosVitales.focarFrecuenciaCard();
+          }
+        });
+        return;
+      }
+      if (textoEvaluar.includes('pasar a frecuencia respiratoria') || textoEvaluar.includes('ir a frecuencia respiratoria')) {
+        this.zone.run(() => {
+          this.campoActual = 'fr';
+
+          // 🔥 Le ordenamos al hijo que marque el campo específico de personales
+          if (this.compSignosVitales) {
+            this.compSignosVitales.focarFrecuenciaResp();
+          }
+        });
+        return;
+      }
+
+      if (textoEvaluar.includes('pasar a peso') || textoEvaluar.includes('ir a peso')) {
+        this.zone.run(() => {
+          this.campoActual = 'peso';
+
+          // 🔥 Le ordenamos al hijo que marque el campo específico de familiares
+          if (this.compSignosVitales) {
+            this.compSignosVitales.focarPeso();
+          }
+        });
+        return;
+      }
+
+      if (textoEvaluar.includes('pasar a talla') || textoEvaluar.includes('ir a talla')) {
+        this.zone.run(() => {
+          this.campoActual = 'talla';
+
+          // 🔥 Le ordenamos al hijo que marque el campo específico de alergias
+          if (this.compSignosVitales) {
+            this.compSignosVitales.focarTalla();
+          }
+        });
+        return;
+      }
+
       if (textoEvaluar.includes('pasar a examen') || textoEvaluar.includes('ir a examen')) {
         this.zone.run(() => {
           this.campoActual = 'examen_fisico';
@@ -502,6 +590,49 @@ export class PatientFormMComponent implements OnInit {
           // 5. Sincronizamos el resultado final con el formulario reactivo
           this.actualizarTexto(resultadoCompleto, 'enfermedad_actual');
         }
+
+        // --- Signos vitales ---
+        // --- TEMPERATURA, PESO O TALLA (Aceptan Decimales, ej: 36.5, 70.2) ---
+        else if (this.campoActual === 'temperature' || this.campoActual === 'peso' || this.campoActual === 'talla') {
+          if (textoEvaluar.includes('limpiar') || textoEvaluar.includes('borrar')) {
+            this[this.campoActual] = 0;
+            this.actualizarTexto('0', this.campoActual); // Enviamos '0' como string
+            return;
+          }
+
+          // Buscamos números que puedan tener punto o coma decimal (ej: "36.5" o "36,5")
+          let coincidencias = rawText.match(/\d+([.,]\d+)?/g);
+
+          if (coincidencias) {
+            // Reemplazamos la coma por punto para que parseFloat lo entienda correctamente
+            let valorLimpio = coincidencias[0].replace(',', '.');
+            // Convertimos el texto a número decimal para tu variable
+            this[this.campoActual] = parseFloat(valorLimpio);
+            // Pasamos el valor convertido a string para cumplir con el tipo del método
+            this.actualizarTexto(this[this.campoActual].toString(), this.campoActual);
+          }
+        }
+
+        // --- FRECUENCIA CARDÍACA O RESPIRATORIA (Solo Números Enteros, ej: 80, 18) ---
+        else if (this.campoActual === 'fc' || this.campoActual === 'fr') {
+          if (textoEvaluar.includes('limpiar') || textoEvaluar.includes('borrar')) {
+            this[this.campoActual] = 0;
+            this.actualizarTexto('0', this.campoActual); // Enviamos '0' como string
+            return;
+          }
+
+          // Buscamos solo los dígitos enteros
+          let coincidencias = rawText.match(/\d+/g);
+
+          if (coincidencias) {
+            // Convertimos el texto a número entero para tu variable
+            this[this.campoActual] = parseInt(coincidencias[0], 10);
+            // Pasamos el valor convertido a string para cumplir con el tipo del método
+            this.actualizarTexto(this[this.campoActual].toString(), this.campoActual);
+          }
+        }
+
+
 
 
         // --- examen_fisico ---
