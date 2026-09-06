@@ -282,11 +282,10 @@ export class PatientFormMComponent implements OnInit {
         return;
       }
 
-      if (textoEvaluar.includes('pasar a Temperatura') || textoEvaluar.includes('ir a Temperatura')) {
+      // --- BLINDAJE PARA TEMPERATURA (Forzamos minúsculas) ---
+      if (textoEvaluar.includes('pasar a temperatura') || textoEvaluar.includes('ir a temperatura')) {
         this.zone.run(() => {
           this.campoActual = 'temperature';
-
-          // 🔥 Le ordenamos al hijo que marque el campo específico de familiares
           if (this.compSignosVitales) {
             this.compSignosVitales.focarTemperatura();
           }
@@ -294,28 +293,30 @@ export class PatientFormMComponent implements OnInit {
         return;
       }
 
-      if (textoEvaluar.includes('pasar a frecuencia cardiaca') || textoEvaluar.includes('ir a frecuencia cardiaca')) {
+      // --- BLINDAJE PARA FRECUENCIA CARDÍACA (Soporta con y sin acento) ---
+      if (
+        textoEvaluar.includes(' pasar a frecuencia cardiaca') ||
+        textoEvaluar.includes(' ir a  frecuencia cardíaca')) {
         this.zone.run(() => {
           this.campoActual = 'fc';
-
-          // 🔥 Le ordenamos al hijo que marque el campo específico de alergias
           if (this.compSignosVitales) {
             this.compSignosVitales.focarFrecuenciaCard();
           }
         });
         return;
       }
+
+      // --- BLINDAJE PARA FRECUENCIA RESPIRATORIA ---
       if (textoEvaluar.includes('pasar a frecuencia respiratoria') || textoEvaluar.includes('ir a frecuencia respiratoria')) {
         this.zone.run(() => {
           this.campoActual = 'fr';
-
-          // 🔥 Le ordenamos al hijo que marque el campo específico de personales
           if (this.compSignosVitales) {
             this.compSignosVitales.focarFrecuenciaResp();
           }
         });
         return;
       }
+
 
       if (textoEvaluar.includes('pasar a peso') || textoEvaluar.includes('ir a peso')) {
         this.zone.run(() => {
