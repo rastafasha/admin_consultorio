@@ -78,7 +78,7 @@ export class PatientFormMComponent implements OnInit {
   cantidad: number = 0;
   name_evolucion: string = '';
   fecha_evolucion: any;
-  ta: number = 0;
+  ta: string = '';
   temperature: number = 0;
   fc: number = 0;
   fr: number = 0;
