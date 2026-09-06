@@ -143,13 +143,16 @@
                                         <div class="skill-statistics">
                                             <div class="skills-head">
                                                 <h5>Presión Arterial (mm/hg)</h5>
-                                                <p>{{patient_selected.ta}}</p>
+                                                <!-- Aquí el doctor seguirá viendo el texto perfecto "120/80" -->
+                                                <p>{{patient_selected.ta || '0'}}</p>
                                             </div>
                                             <div class="progress mb-0">
+                                                <!-- Usamos el método para calcular el ancho real de la barra en base a la sistólica -->
                                                 <div class="progress-bar bg-operations" role="progressbar"
-                                                    [style.width]="patient_selected.ta+''+'%'"
-                                                    [attr.aria-valuenow]="patient_selected.ta" aria-valuemin="0"
-                                                    aria-valuemax="100"></div>
+                                                    [style.width]="obtenerAnchoPresion(patient_selected.ta) + '%'"
+                                                    [attr.aria-valuenow]="obtenerAnchoPresion(patient_selected.ta)"
+                                                    aria-valuemin="0" aria-valuemax="100">
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="skill-statistics">

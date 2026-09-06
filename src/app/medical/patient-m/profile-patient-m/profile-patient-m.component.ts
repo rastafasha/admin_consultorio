@@ -103,6 +103,25 @@ export class ProfilePatientMComponent {
     this.getResportes();
   }
 
+  obtenerAnchoPresion(ta: string | null | undefined): number {
+  if (!ta) return 0;
+  
+  // Si el formato es "120/80", split('/') lo divide en ['120', '80']
+  const partes = ta.split('/');
+  const sistolica = parseInt(partes[0], 10);
+  
+  if (isNaN(sistolica)) return 0;
+
+  // Como la sistólica normal es ~120 y puede subir a 180, 
+  // una regla de tres simple para que quepa en la barra del 0 al 100% de la pantalla:
+  // Si quieres que el 100% de la barra represente una presión alta de 180:
+  const porcentaje = (sistolica / 180) * 100;
+  
+  // Retornamos el porcentaje asegurando que no pase de 100% ni baje de 0%
+  return Math.min(Math.max(porcentaje, 0), 100);
+}
+
+
    getResportes() {
     this.isLoading = true;
     this.rlaboratoryService.getRLaboratoryByPatient(this.patient_id).subscribe((resp: any) => {

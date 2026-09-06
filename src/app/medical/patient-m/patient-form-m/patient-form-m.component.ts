@@ -91,12 +91,21 @@ export class PatientFormMComponent implements OnInit {
   <li><strong>Ficha Médica:</strong> Registra la información básica, datos de contacto y familiares del paciente.</li>
   <li><strong>Signos Vitales:</strong> Llenar esta sección permite al sistema generar gráficos de comportamiento y reportes automáticos en la App del Paciente.</li>
   <li>
-    <strong>Comandos de voz:</strong>
-    <br>• <em>Navegación:</em> (ir a... o pasar a...) "pasar a motivo consulta", "pasar a personales", "pasar a familiares", "pasar a alergias", 
-    "pasar a presión", "pasar a temperatura", "pasar a frecuencia cardiaca", "pasar a frecuencia respiratoria", "pasar a peso", "pasar a talla",
-    "pasar a enfermedad actual", "pasar a examen", "pasar a diagnóstico", "pasar a tratamiento", "pasar a vacunas", "pasar a fecha de vacuna ó fecha de vacuna", "pasar a cantidad de vacuna", "agregar vacuna" , "pasar a evolución", "pasar a fecha de evolución ó fecha de evolución", "agregar evolución".
-    <br>• <em>Acciones:</em> "guardar historia" (o "guardar"), "limpiar todo", "punto y aparte", "punto y seguido".
-  </li>
+  <strong>Comandos de voz:</strong>
+  <br>• <em>Navegación:</em> (ir a... o pasar a...) "pasar a motivo consulta", "pasar a personales", "pasar a familiares", "pasar a alergias", 
+  "pasar a presión", "pasar a temperatura", "pasar a frecuencia cardiaca", "pasar a frecuencia respiratoria", "pasar a peso", "pasar a talla",
+  "pasar a enfermedad actual", "pasar a examen", "pasar a diagnóstico", "pasar a tratamiento", "pasar a vacunas", "pasar a fecha de vacuna", 
+  "pasar a cantidad de vacuna", "agregar vacuna" , "pasar a evolución", "agregar evolución".
+  
+  <!-- Nueva sección añadida especialmente para los Signos Vitales -->
+  <br>• <em>Cómo dictar Signos Vitales:</em> 
+  <span class="text-muted">(Diga los números de forma natural)</span>
+  <br>&nbsp;&nbsp;&nbsp;&nbsp; <strong>Presión Arterial (TA):</strong> Diga <em class="text-primary">"ciento diez setenta"</em> o <em class="text-primary">"ciento veinte ochenta"</em> <text-muted>→ Resultado: 110/70 ó 120/80</text-muted>
+  <br>&nbsp;&nbsp;&nbsp;&nbsp; <strong>Campos con decimales:</strong> Diga <em class="text-success">"treinta y seis punto cinco"</em> (temperatura) o <em class="text-success">"setenta punto dos"</em> (peso).
+  
+  <br>• <em>Acciones:</em> "guardar historia" (o "guardar"), "limpiar todo", "punto y aparte", "punto y seguido".
+</li>
+
 </ul>
 
 `;
@@ -612,6 +621,28 @@ export class PatientFormMComponent implements OnInit {
             this.actualizarTexto(this[this.campoActual].toString(), this.campoActual);
           }
         }
+        // --- TENSIÓN ARTERIAL (Al ser varchar en Supabase y string en TS) ---
+        else if (this.campoActual === 'ta') {
+          if (textoEvaluar.includes('limpiar') || textoEvaluar.includes('borrar')) {
+            this.ta = '0';
+            this.actualizarTexto('0', 'ta');
+            return;
+          }
+
+          // Buscamos todas las agrupaciones de números en lo que dictó el médico
+          let numeros = rawText.match(/\d+/g);
+
+          if (numeros && numeros.length >= 2) {
+            // Si el médico dice "ciento veinte ochenta", une los dos primeros con la barra
+            this.ta = `${numeros[0]}/${numeros[1]}`;
+            this.actualizarTexto(this.ta, 'ta');
+          } else if (numeros && numeros.length === 1) {
+            // Si por ahora solo ha dictado la primera cifra (ej: "ciento quince")
+            this.ta = numeros[0];
+            this.actualizarTexto(this.ta, 'ta');
+          }
+        }
+
 
         // --- FRECUENCIA CARDÍACA O RESPIRATORIA (Solo Números Enteros, ej: 80, 18) ---
         else if (this.campoActual === 'fc' || this.campoActual === 'fr') {
