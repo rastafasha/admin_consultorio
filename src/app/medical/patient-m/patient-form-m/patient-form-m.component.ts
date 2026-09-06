@@ -295,8 +295,10 @@ export class PatientFormMComponent implements OnInit {
 
       // --- BLINDAJE PARA FRECUENCIA CARDÍACA (Soporta con y sin acento) ---
       if (
-        textoEvaluar.includes(' pasar a frecuencia cardiaca') ||
-        textoEvaluar.includes(' ir a  frecuencia cardíaca')) {
+        textoEvaluar.includes('pasar a frecuencia cardiaca') ||
+        textoEvaluar.includes('ir a frecuencia cardiaca') ||
+        textoEvaluar.includes('pasar a frecuencia cardíaca') ||
+        textoEvaluar.includes('ir a frecuencia cardíaca')) {
         this.zone.run(() => {
           this.campoActual = 'fc';
           if (this.compSignosVitales) {
