@@ -69,7 +69,7 @@ export class AtencionMedicaComponent {
 
 
   constructor(
-    public appointmentService: AppointmentService,
+    private appointmentService: AppointmentService,
     public staffService: StaffService,
     public router: Router,
     public ativatedRoute: ActivatedRoute,
@@ -455,18 +455,18 @@ export class AtencionMedicaComponent {
             </div>
           
          <div class="content">
-    <div class="section">
-      <h3>Indicaciones / Diagnóstico:</h3>
-      <p style="white-space: pre-wrap;">${this.description || 'No especificado.'}</p>
-    </div>
-    
-    <div class="section">
-      <h3>Tratamiento / Récipes:</h3>
-      <!-- 🎯 INYECCIÓN ATÓMICA DE LA LISTA COMPLETA DE MEDICAMENTOS -->
-      ${listaTratamientoHTML}
-    </div>
-  </div>
+          <div class="section">
+            <h3>Indicaciones / Diagnóstico:</h3>
+            <p style="white-space: pre-wrap;">${this.description || 'No especificado.'}</p>
+          </div>
           
+          <div class="section">
+            <h3>Tratamiento / Récipes:</h3>
+            <!-- 🎯 INYECCIÓN ATÓMICA DE LA LISTA COMPLETA DE MEDICAMENTOS -->
+            ${listaTratamientoHTML}
+          </div>
+        </div>
+                
           <div class="footer">
             <p>Récipe generado digitalmente a través de Klyntic.</p>
           </div>

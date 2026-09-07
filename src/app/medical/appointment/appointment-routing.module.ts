@@ -6,6 +6,7 @@ import { AtencionMedicaComponent } from './atencion-medica/atencion-medica.compo
 import { ListDocComponent } from './list-doc/list-doc.component';
 import { AtenderComponent } from './atender/atender.component';
 import { AppointmentFormComponent } from './appointment-form/appointment-form.component';
+import { OdontogramaComponent } from './odontograma/odontograma.component';
 
 const routes: Routes = [
   {path:'', component:AppointmentComponent,
@@ -30,6 +31,9 @@ const routes: Routes = [
     },
     {
       path:'atender/local/', component:AtenderComponent
+    },
+    {
+      path:'atender/odontograma/:id', component:OdontogramaComponent
     },
     
   ]

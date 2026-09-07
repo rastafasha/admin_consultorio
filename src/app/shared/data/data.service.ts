@@ -406,6 +406,17 @@ export class DataService {
           show_nav: true,
           subMenus: [],
         },
+        {
+          menuValue: 'Odontograma',
+          route: routes.addAppointmentOdontograma,
+          hasSubRoute: false,
+          showSubRoute: false,
+          img: 'assets/img/icons/call-icon-01.svg',
+          base: 'odontograma',
+          permision: 'view_odontograma',
+          show_nav: true,
+          subMenus: [],
+        },
         // Publicidad
         {
           menuValue: 'Publicidad',
