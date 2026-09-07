@@ -99,6 +99,7 @@ export class DoctorDashboardComponent {
   public query_n_appointment_year_before: any = [];
 
   public user: any;
+  public speciality: any;
 
   public appointment_pendings: any = [];
   public doctorPatientList: any = [];
@@ -340,6 +341,8 @@ export class DoctorDashboardComponent {
     this.doctor_id = this.user.id
     this.doctorService.showDoctorProfile(this.doctor_id).subscribe((resp: any) => {
       this.doctor = resp.doctor;
+      this.speciality = resp.doctor.speciality;
+      console.log(resp);
       this.appointment_pendings = resp.appointment_pendings.data;
       this.appointments = resp.appointments;
       this.schedule_selecteds = resp.schedule_selecteds;

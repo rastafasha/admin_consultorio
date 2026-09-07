@@ -82,6 +82,9 @@ export class routes {
   public static get addAppointmentDoctorLocal(): string {
     return this.baseUrl + '/appointments/atender/local/';
   }
+  public static get addAppointmentOdontograma(): string {
+    return this.baseUrl + '/appointments/atender/local/odontograma';
+  }
   // public static get appointmentList(): string {
   //   return this.baseUrl + '/appointments/appointment-list';
   // }

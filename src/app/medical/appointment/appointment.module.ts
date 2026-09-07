@@ -15,6 +15,7 @@ import { ModalInstruccionesModule } from '../../modales/modal-instrucciones.modu
 import { PipesModule } from '../../pipes/pipes.module';
 import { ReusablesModule } from '../../reusables/reusables.module';
 import { SharedModule } from '../../shared/shared.module';
+import { OdontogramaComponent } from './odontograma/odontograma.component';
 
 
 @NgModule({ declarations: [
@@ -23,14 +24,16 @@ import { SharedModule } from '../../shared/shared.module';
         ListAppointmentsComponent,
         AtencionMedicaComponent,
         ListDocComponent,
-        AtenderComponent
+        AtenderComponent,
+        OdontogramaComponent
     ],
     exports: [
         AppointmentComponent,
         AppointmentFormComponent,
         ListAppointmentsComponent,
         AtencionMedicaComponent,
-        AtenderComponent
+        AtenderComponent,
+        OdontogramaComponent
     ], imports: [
         CommonModule,
         AppointmentRoutingModule,
