@@ -142,6 +142,7 @@
                             <i class="fa-solid fa-pen-to-square m-r-5"></i> Edit</a>
                           <a class="dropdown-item" [routerLink]="['/appointments/cita-medica/', data.id]"
                             *ngIf="isPermission('view_appointment')"><i class="fa-solid fa-eye m-r-5"></i> Atender </a>
+                            <a class="dropdown-item" [routerLink]="['/appointments/atender/odontograma/', data.id]" *ngIf="speciality.name === 'Odontología'|| speciality.name === 'Cirugía Bucomaxilofacial'|| speciality.name === 'Cirugía Bucal'" ><i class="fa-solid fa-pen-to-square m-r-5"></i> Odontograma </a>
                           <a class="dropdown-item" href="javascript:void(0);" (click)="selectUser(data)"
                             data-bs-toggle="modal" *ngIf="isPermission('delete_appointment')"
                             [attr.data-bs-target]="'#delete_staff-'+data.id">
