@@ -67,10 +67,13 @@
                                         <div class="col-lg-4 col-md-4 d-flex align-items-center">
                                             <div class="grupobotones btn-group">
                                                 <a [routerLink]="['/patients/list/edit/', patient_id]"
-                                                    class="btn btn-info follow-btns">Edit</a>
+                                                    class="btn btn-info follow-btns" tooltipHtml="Editar Perfil"><i class="fa fa-pencil"></i> </a>
                                                 <a [routerLink]="['/appointments/atender/', patient_id ]"
-                                                    class="btn btn-info follow-btns">Crear Cita</a>
-                                                <a (click)="imprimirHistoria()" class="btn btn-info follow-btns"><i
+                                                    class="btn btn-info follow-btns" tooltipHtml="Crear Cita"><i class="fa fa-calendar"></i> </a>
+                                                <!-- <a [routerLink]="['/appointments/atender/odontograma/', patient_id]"
+                                                *ngIf="speciality.name === 'Odontología'|| speciality.name === 'Cirugía Bucomaxilofacial'|| speciality.name === 'Cirugía Bucal'"
+                                                    class="btn btn-info follow-btns" tooltipHtml="Crear Odontograma"><i class="fa fa-tooth"></i> </a> -->
+                                                <a (click)="imprimirHistoria()" class="btn btn-info follow-btns" tooltipHtml="Imprimir Historia Clínica"><i
                                                         class="fa fa-print"></i></a>
                                                 <!-- <button type="submit" class="btn btn-info message-btns">Message</button> -->
                                             </div>
@@ -488,6 +491,88 @@
 
                                 </div>
                             </div>
+                            <!-- TARJETA DEL ODONTOGRAMA EN EL PERFIL DEL PACIENTE -->
+                            <div class="card box-shadow-sm mb-4" *ngIf="specialityname === 'Odontología'|| specialityname === 'Cirugía Bucomaxilofacial'|| specialityname === 'Cirugía Bucal'">
+                                <div
+                                    class="card-header bg-light d-flex justify-content-between align-items-center py-3">
+                                    <h5 class="mb-0 text-dark"><i class="feather-activity text-primary me-2"></i> Estado
+                                        Dental Actual (FDI)</h5>
+                                    <span class="badge bg-success-light text-success fw-bold"
+                                        *ngIf="!tieneDientesEnfermos()">Dentición Sana</span>
+                                    <span class="badge bg-danger-light text-danger fw-bold"
+                                        *ngIf="tieneDientesEnfermos()">Requiere Tratamiento</span>
+                                </div>
+                                <div class="card-body bg-white p-3">
+
+                                    <!-- MATRIZ COMPACTA DE DIENTES (Estilo Fila Única con Desplazamiento) -->
+                                    <div class="odontograma-profile-grid text-center">
+
+                                        <!-- Arcada Superior -->
+                                        <div class="arcada-profile mb-3">
+                                            <span class="text-muted d-block text-start"
+                                                style="font-size: 11px; font-weight: bold; letter-spacing: 0.5px;">MAXILAR
+                                                SUPERIOR</span>
+                                            <div
+                                                class="d-flex justify-content-start flex-nowrap gap-1 container-scroll-dental">
+                                                <ng-container *ngFor="let diente of odontogramaPaciente">
+                                                    <div *ngIf="diente.diente_numero >= 11 && diente.diente_numero <= 28"
+                                                        class="diente-mini-box" [ngClass]="{
+                                'bg-danger text-white': diente.hallazgo === 'Caries',
+                                'bg-primary text-white': diente.hallazgo === 'Resina',
+                                'bg-secondary text-white': diente.hallazgo === 'Ausente',
+                                'bg-warning text-dark': diente.hallazgo === 'Corona' || diente.hallazgo === 'Endodoncia',
+                                'bg-light text-dark border': diente.hallazgo === 'Sano'
+                             }" [title]="'Diente ' + diente.diente_numero + ': ' + diente.hallazgo">
+                                                        {{ diente.diente_numero }}
+                                                    </div>
+                                                </ng-container>
+                                            </div>
+                                        </div>
+
+                                        <!-- Arcada Inferior -->
+                                        <div class="arcada-profile">
+                                            <span class="text-muted d-block text-start"
+                                                style="font-size: 11px; font-weight: bold; letter-spacing: 0.5px;">MANDÍBULA
+                                                INFERIOR</span>
+                                            <div
+                                                class="d-flex justify-content-start flex-nowrap gap-1 container-scroll-dental">
+                                                <ng-container *ngFor="let diente of odontogramaPaciente">
+                                                    <div *ngIf="diente.diente_numero >= 31 && diente.diente_numero <= 48"
+                                                        class="diente-mini-box" [ngClass]="{
+                                'bg-danger text-white': diente.hallazgo === 'Caries',
+                                'bg-primary text-white': diente.hallazgo === 'Resina',
+                                'bg-secondary text-white': diente.hallazgo === 'Ausente',
+                                'bg-warning text-dark': diente.hallazgo === 'Corona' || diente.hallazgo === 'Endodoncia',
+                                'bg-light text-dark border': diente.hallazgo === 'Sano'
+                             }" [title]="'Diente ' + diente.diente_numero + ': ' + diente.hallazgo">
+                                                        {{ diente.diente_numero }}
+                                                    </div>
+                                                </ng-container>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <!-- LISTA RESUMIDA DE HALLAZGOS (Solo si tiene problemas) -->
+                                    <div class="mt-3 pt-3 border-top" *ngIf="tieneDientesEnfermos()">
+                                        <h6 class="text-muted small mb-2">PIEZAS A TRATAR / TRATADAS:</h6>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <ng-container *ngFor="let d of odontogramaPaciente">
+                                                <span *ngIf="d.hallazgo !== 'Sano'"
+                                                    class="badge border text-dark bg-white p-2 d-flex align-items-center">
+                                                    <span class="dot-indicador me-2"
+                                                        [style.background-color]="d.hallazgo === 'Caries' ? '#dc3545' : d.hallazgo === 'Resina' ? '#0d6efd' : d.hallazgo === 'Ausente' ? '#6c757d' : '#ffc107'">
+                                                    </span>
+                                                    Diente {{ d.diente_numero }}: <strong>&nbsp;{{ d.hallazgo
+                                                        }}</strong>
+                                                </span>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
                             <!-- Enfermedad Actual -->
                             <div class="card">
                                 <div class="card-header">

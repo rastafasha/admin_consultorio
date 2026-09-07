@@ -109,7 +109,7 @@
                                         <div
                                             class="card-header bg-light d-flex justify-content-between align-items-center">
                                             <h4 class="mb-0">Odontograma Interactivo (Sistema FDI)</h4>
-                                            <div class="switch-wrapper d-flex align-items-center">
+                                            <div class="switch-wrapper ">
                                                 <div class="mini-spinner me-2" *ngIf="isListening"></div>
                                                 <label class="switch">
                                                     <!-- Conectamos con el método toggleEscucha() de tus AirPods -->
@@ -117,8 +117,8 @@
                                                         (change)="toggleEscucha()">
                                                     <span class="slider round"></span>
                                                 </label>
-                                                <p class="mb-0 ms-2 fw-bold" [class.text-danger]="isListening">
-                                                    {{ isListening ? 'Escuchando AirPods...' : 'Activar micrófono' }}
+                                                <p class="mb-0 ms-2 " [class.text-danger]="isListening">
+                                                    {{ isListening ? 'Escuchando...' : 'Activar micrófono' }}
                                                 </p>
                                             </div>
                                         </div>

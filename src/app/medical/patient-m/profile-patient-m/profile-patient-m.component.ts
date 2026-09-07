@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PatientMService } from '../../../services/patient-m.service';
 import { DoctorService } from '../../../services/doctor.service';
@@ -9,11 +9,12 @@ import { RLaboratoryService } from '../../../services/rlaboratory.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Speciality } from '../../../models/speciality.model';
 import { User } from '../../../models/user.model';
+import { OdontogramaService } from '../../../services/odontograma.service';
 @Component({
-    selector: 'app-profile-patient-m',
-    templateUrl: './profile-patient-m.component.html',
-    styleUrls: ['./profile-patient-m.component.scss'],
-    standalone: false
+  selector: 'app-profile-patient-m',
+  templateUrl: './profile-patient-m.component.html',
+  styleUrls: ['./profile-patient-m.component.scss'],
+  standalone: false
 })
 export class ProfilePatientMComponent {
   public routes = routes;
@@ -33,14 +34,22 @@ export class ProfilePatientMComponent {
   public appointments: any = [];
   public vacunas: any = [];
   public evolucion: any = [];
-  doctor:User;
-  speciality:Speciality;
+  doctor: User;
+  speciality: Speciality;
+  specialityname: string;
   public text_success = '';
   public text_validation = '';
 
   public rlaboratories_list: any[] = [];
   public file_selected: any;
-  public is_vacuna= 1;
+  public is_vacuna = 1;
+
+
+  public odontogramaPaciente: any[] = [];
+  public todosLosDientes = [
+    18, 17, 16, 15, 14, 13, 12, 11, 21, 22, 23, 24, 25, 26, 27, 28,
+    48, 47, 46, 45, 44, 43, 42, 41, 31, 32, 33, 34, 35, 36, 37, 38
+  ];
 
   constructor(
     public patientService: PatientMService,
@@ -49,6 +58,8 @@ export class ProfilePatientMComponent {
     private staffService: StaffService,
     public rlaboratoryService: RLaboratoryService,
     private _sanitizer: DomSanitizer,
+    private odontogramaService: OdontogramaService,
+    private cdr: ChangeDetectorRef,
   ) {
   }
   ngOnInit(): void {
@@ -63,18 +74,50 @@ export class ProfilePatientMComponent {
     this.roles = this.user.roles[0];
     this.getPatient();
     this.getUserRemoto();
-    
+
   }
+
+
 
   getUserRemoto(): void {
     if (!this.user?.id) return;
     this.staffService.getUser(this.user.id).subscribe((resp: any) => {
       this.doctor = resp.user;
-      this.speciality = this.doctor.speciality
+      this.specialityname = this.doctor.speciality.name;
+      if (this.specialityname === 'Odontología' || this.specialityname === 'Cirugía Bucal' || this.specialityname === 'Cirugía Bucomaxilofacial') {
+        this.cargarOdontogramaDelPaciente(this.patient_id)
+      }
     });
   }
 
- 
+
+
+  cargarOdontogramaDelPaciente(patientId: number) {
+    // 1. Inicializamos en sano por defecto
+    this.odontogramaPaciente = this.todosLosDientes.map(num => ({
+      diente_numero: num,
+      hallazgo: 'Sano'
+    }));
+
+    // 2. Traemos el historial desde Supabase
+    this.odontogramaService.lisFiterByPatient(patientId).subscribe((resp: any) => {
+      if (resp && resp.status === 'success' && resp.data) {
+        resp.data.forEach((item: any) => {
+          const d = this.odontogramaPaciente.find(diente => diente.diente_numero === item.diente_numero);
+          if (d) {
+            d.hallazgo = item.hallazgo; // Actualiza el color si tiene caries, resina, etc.
+          }
+        });
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  tieneDientesEnfermos(): boolean {
+    return this.odontogramaPaciente.some(d => d.hallazgo !== 'Sano');
+  }
+
+
   isPermission(permission: string) {
     if (this.user.roles.includes('SUPERADMIN')) {
       return true;
@@ -104,25 +147,25 @@ export class ProfilePatientMComponent {
   }
 
   obtenerAnchoPresion(ta: string | null | undefined): number {
-  if (!ta) return 0;
-  
-  // Si el formato es "120/80", split('/') lo divide en ['120', '80']
-  const partes = ta.split('/');
-  const sistolica = parseInt(partes[0], 10);
-  
-  if (isNaN(sistolica)) return 0;
+    if (!ta) return 0;
 
-  // Como la sistólica normal es ~120 y puede subir a 180, 
-  // una regla de tres simple para que quepa en la barra del 0 al 100% de la pantalla:
-  // Si quieres que el 100% de la barra represente una presión alta de 180:
-  const porcentaje = (sistolica / 180) * 100;
-  
-  // Retornamos el porcentaje asegurando que no pase de 100% ni baje de 0%
-  return Math.min(Math.max(porcentaje, 0), 100);
-}
+    // Si el formato es "120/80", split('/') lo divide en ['120', '80']
+    const partes = ta.split('/');
+    const sistolica = parseInt(partes[0], 10);
+
+    if (isNaN(sistolica)) return 0;
+
+    // Como la sistólica normal es ~120 y puede subir a 180, 
+    // una regla de tres simple para que quepa en la barra del 0 al 100% de la pantalla:
+    // Si quieres que el 100% de la barra represente una presión alta de 180:
+    const porcentaje = (sistolica / 180) * 100;
+
+    // Retornamos el porcentaje asegurando que no pase de 100% ni baje de 0%
+    return Math.min(Math.max(porcentaje, 0), 100);
+  }
 
 
-   getResportes() {
+  getResportes() {
     this.isLoading = true;
     this.rlaboratoryService.getRLaboratoryByPatient(this.patient_id).subscribe((resp: any) => {
       this.rlaboratories_list = resp.laboratories.data;
@@ -135,31 +178,31 @@ export class ProfilePatientMComponent {
   }
 
   getDocumentIframe(url: any) {
-  if (url === null || url === undefined) {
+    if (url === null || url === undefined) {
+      return '';
+    }
+
+    // 1. SI ES UN ARCHIVO BINARIO LOCAL (En cola para subirse por primera vez)
+    if (url instanceof File) {
+      const localBlobUrl = URL.createObjectURL(url);
+      // Envolvemos obligatoriamente la URL temporal en bypassSecurityTrustResourceUrl
+      return this._sanitizer.bypassSecurityTrustResourceUrl(localBlobUrl);
+    }
+
+    // 2. SI ES UNA URL EN STRING (Historial de Cloudinary que viene de Laravel)
+    if (typeof url === 'string') {
+      let documentUrl = url;
+      let results = url.match('[\\?&]v=([^&#]*)');
+      if (results !== null) {
+        documentUrl = results[1];
+      }
+
+      // Forzamos a Angular a confiar en la URL externa de Cloudinary para el visor embed
+      return this._sanitizer.bypassSecurityTrustResourceUrl(documentUrl);
+    }
+
     return '';
   }
-
-  // 1. SI ES UN ARCHIVO BINARIO LOCAL (En cola para subirse por primera vez)
-  if (url instanceof File) {
-    const localBlobUrl = URL.createObjectURL(url);
-    // Envolvemos obligatoriamente la URL temporal en bypassSecurityTrustResourceUrl
-    return this._sanitizer.bypassSecurityTrustResourceUrl(localBlobUrl);
-  }
-
-  // 2. SI ES UNA URL EN STRING (Historial de Cloudinary que viene de Laravel)
-  if (typeof url === 'string') {
-    let documentUrl = url;
-    let results = url.match('[\\?&]v=([^&#]*)');
-    if (results !== null) {
-      documentUrl = results[1];
-    }
-    
-    // Forzamos a Angular a confiar en la URL externa de Cloudinary para el visor embed
-    return this._sanitizer.bypassSecurityTrustResourceUrl(documentUrl);
-  }
-
-  return '';
-}
 
 
 
@@ -174,65 +217,65 @@ export class ProfilePatientMComponent {
 
     if (ventanaImpresion) {
 
-        // ==========================================
-  // PARTE 1: PROCESAR LOGICA DE ARREGLOS ARRIBA
-  // ==========================================
+      // =========================================================================
+      // PARTE 1: PROCESAR LÓGICA DE ARREGLOS DINÁMICOS
+      // =========================================================================
 
-  // A. Procesar Vacunas (Solo Pediatría) o cuando este activo
-  let bloqueVacunas = '';
-  if (this.doctor && this.doctor.speciality?.name === 'Pediatría' || this.is_vacuna === 2) {
-    let filasVacunas = '';
-    if (this.vacunas && this.vacunas.length > 0) {
-      filasVacunas = this.vacunas.map(item => `
+      // A. Procesar Vacunas (Solo Pediatría o cuando esté activo)
+      let bloqueVacunas = '';
+      if (this.doctor && this.doctor.speciality?.name === 'Pediatría' || this.is_vacuna === 2) {
+        let filasVacunas = '';
+        if (this.vacunas && this.vacunas.length > 0) {
+          filasVacunas = this.vacunas.map(item => `
+          <tr>
+            <td>${item.name_medical || ''}</td>
+            <td style="text-align: center;">${item.cantidad || ''}</td>
+            <td style="text-align: center;">${item.fecha_vacuna ? new Date(item.fecha_vacuna).toLocaleDateString('es-ES') : ''}</td>
+          </tr>
+        `).join('');
+        }
+        bloqueVacunas = `
+        <div class="section-title">4. Esquema de Vacunación</div>
+        ${filasVacunas === '' ? '<div class="text-block" style="color: #666; font-style: italic;">No se registran vacunas.</div>' : `
+          <table class="clinical-table">
+            <thead><tr><th>Descripción</th><th style="width:80px;text-align:center">Cantidad</th><th style="width:120px;text-align:center">Fecha</th></tr></thead>
+            <tbody>${filasVacunas}</tbody>
+          </table>
+        `}
+      `;
+      }
+
+      // B. Procesar Reporte Laboratorio
+      let filasLaboratorio = '';
+      if (this.rlaboratories_list && this.rlaboratories_list.length > 0) {
+        filasLaboratorio = this.rlaboratories_list.map(lab => `
         <tr>
-          <td>${item.name_medical || ''}</td>
-          <td style="text-align: center;">${item.cantidad || ''}</td>
-          <td style="text-align: center;">${item.fecha_vacuna ? new Date(item.fecha_vacuna).toLocaleDateString('es-ES') : ''}</td>
+          <td>${lab.comentario || ''}</td>
+          <td style="color: #3182ce;">📁 ${lab.name_file || 'archivo.jpg'}</td>
         </tr>
       `).join('');
-    }
-    bloqueVacunas = `
-      <div class="section-title">4. Esquema de Vacunación</div>
-      ${filasVacunas === '' ? '<div class="text-block" style="color: #666; font-style: italic;">No se registran vacunas.</div>' : `
+      }
+      let bloqueLaboratorio = `
+      <div class="section-title">5. Reportes de Laboratorio</div>
+      ${filasLaboratorio === '' ? '<div class="text-block" style="color: #666; font-style: italic;">No se registran exámenes.</div>' : `
         <table class="clinical-table">
-          <thead><tr><th>Descripción</th><th style="width:80px;text-align:center">Cantidad</th><th style="width:120px;text-align:center">Fecha</th></tr></thead>
-          <tbody>${filasVacunas}</tbody>
+          <thead><tr><th>Descripción del Examen</th><th style="width:180px">Adjuntos</th></tr></thead>
+          <tbody>${filasLaboratorio}</tbody>
         </table>
       `}
     `;
-  }
 
-  // B. Procesar Reporte Laboratorio
-  let filasLaboratorio = '';
-  if (this.rlaboratories_list && this.rlaboratories_list.length > 0) {
-    filasLaboratorio = this.rlaboratories_list.map(lab => `
-      <tr>
-        <td>${lab.comentario || ''}</td>
-        <td style="color: #3182ce;">📁 ${lab.name_file || 'archivo.jpg'}</td>
-      </tr>
-    `).join('');
-  }
-  let bloqueLaboratorio = `
-    <div class="section-title">5. Reportes de Laboratorio</div>
-    ${filasLaboratorio === '' ? '<div class="text-block" style="color: #666; font-style: italic;">No se registran exámenes.</div>' : `
-      <table class="clinical-table">
-        <thead><tr><th>Descripción del Examen</th><th style="width:180px">Adjuntos</th></tr></thead>
-        <tbody>${filasLaboratorio}</tbody>
-      </table>
-    `}
-  `;
-
-    // C. Procesar Evolución Clínica
-    let filasEvolucion = '';
-    if (this.evolucion && this.evolucion.length > 0) {
-      filasEvolucion = this.evolucion.map(evo => `
+      // C. Procesar Evolución Clínica
+      let filasEvolucion = '';
+      if (this.evolucion && this.evolucion.length > 0) {
+        filasEvolucion = this.evolucion.map(evo => `
         <tr>
           <td>${evo.name_evolucion || ''}</td>
           <td style="text-align: center;">${evo.fecha_evolucion ? new Date(evo.fecha_evolucion).toLocaleDateString('es-ES') : ''}</td>
         </tr>
       `).join('');
-    }
-    let bloqueEvolucion = `
+      }
+      let bloqueEvolucion = `
       <div class="section-title">6. Historial de Evolución Clínica</div>
       ${filasEvolucion === '' ? '<div class="text-block" style="color: #666; font-style: italic;">No se registran notas.</div>' : `
         <table class="clinical-table">
@@ -242,39 +285,116 @@ export class ProfilePatientMComponent {
       `}
     `;
 
-    // D. Datos Especiales Pediatría Nacer
-    let bloquePediatriaNacer = '';
-    if (this.doctor && this.doctor.speciality?.name === 'Pediatría') {
-      bloquePediatriaNacer = `
+      // D. Datos Especiales Pediatría Nacer
+      let bloquePediatriaNacer = '';
+      if (this.doctor && this.doctor.speciality?.name === 'Pediatría') {
+        bloquePediatriaNacer = `
         <div class="data-item"><span class="label">Peso al nacer:</span> ${this.patient_selected.peso_al_nacer || ''} g</div>
         <div class="data-item"><span class="label">Talla al nacer:</span> ${this.patient_selected.talla_al_nacer || ''} cm</div>
       `;
-    }
+      }
+
+      // =========================================================================
+      // E. PROCESAR ODONTOGRAMA (Sección 7 - Solo Especialidades Dentales)
+      // =========================================================================
+      let bloqueOdontograma = '';
+
+      if (this.doctor && (
+        this.doctor.speciality?.name === 'Odontología' ||
+        this.doctor.speciality?.name === 'Cirugía Bucomaxilofacial' ||
+        this.doctor.speciality?.name === 'Cirugía Bucal'
+      )) {
+
+        // Filtramos tu arreglo de memoria del perfil (el que ya se ve hermoso en pantalla)
+        let dientesAfectados = this.odontogramaPaciente.filter(d => d.hallazgo !== 'Sano');
+        let filasOdontograma = '';
+
+        if (dientesAfectados && dientesAfectados.length > 0) {
+          filasOdontograma = dientesAfectados.map(diente => `
+          <tr>
+            <td style="font-weight: bold; color: #2d3748; padding: 6px;">Pieza Dental: Diente ${diente.diente_numero}</td>
+            <td style="text-align: center; padding: 6px;">
+              <span style="
+                display: inline-block;
+                padding: 4px 10px;
+                font-size: 12px;
+                font-weight: bold;
+                border-radius: 4px;
+                color: #ffffff !important;
+                background-color: ${diente.hallazgo === 'Caries' ? '#e53e3e !important' :
+              diente.hallazgo === 'Resina' ? '#3182ce !important' :
+                diente.hallazgo === 'Ausente' ? '#718096 !important' : '#dd6b20 !important'
+            };
+                ${diente.hallazgo === 'Corona' || diente.hallazgo === 'Endodoncia' ? 'color: #1a202c !important;' : ''}
+              ">
+                ${diente.hallazgo}
+              </span>
+            </td>
+          </tr>
+        `).join('');
+        }
+
+        // Armamos la estructura de la sección 7
+        bloqueOdontograma = `
+        <div class="section-title">7. Estado Dental Actual (Odontograma)</div>
+        ${filasOdontograma === '' ? '<div class="text-block" style="color: #666; font-style: italic;">No se registran hallazgos patológicos activos. Todos los dientes están sanos.</div>' : `
+          <table class="clinical-table">
+            <thead>
+              <tr>
+                <th>Pieza Dental Seleccionada</th>
+                <th style="width:180px; text-align:center;">Hallazgo Clínico</th>
+              </tr>
+            </thead>
+            <tbody>${filasOdontograma}</tbody>
+          </table>
+        `}
+      `;
+      }
 
 
 
-    // =========================================================
-    // INYECCIÓN GENERAL LIMPIA EN DOCUMENT.WRITE
-    // =========================================================
+      // =========================================================================
+      // INYECCIÓN GENERAL LIMPIA EN DOCUMENT.WRITE (FASE 2 OPTIMIZADA)
+      // =========================================================================
 
-
-    ventanaImpresion.document.write(`
+      ventanaImpresion.document.write(`
     <html>
       <head>
         <title>Historia Clínica - Klyntic</title>
         <style>
-          body { font-family: Arial, sans-serif; line-height: 1.4; color: #111; padding: 40px; margin: 0; }
+          body { 
+            font-family: Arial, sans-serif; 
+            line-height: 1.4; 
+            color: #111; 
+            padding: 40px; 
+            margin: 0; 
+            /* 🔥 BLINDAJE: Fuerza a la impresora del navegador a pintar los fondos a color */
+            -webkit-print-color-adjust: exact !important; 
+            print-color-adjust: exact !important; 
+          }
           .header { text-align: center; border-bottom: 2px solid #007bff; padding-bottom: 15px; }
           .logo-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px; }
           .logoav { object-fit: contain; }
           .meta-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; font-size: 13px; margin-top: 15px; text-align: left; }
-          .section-title { background-color: #f2f2f2; font-size: 14px; font-weight: bold; text-transform: uppercase; padding: 5px 8px; margin-top: 20px; margin-bottom: 10px; border-left: 4px solid #007bff; -webkit-print-color-adjust: exact; }
+          
+          .section-title { 
+            background-color: #f2f2f2; 
+            font-size: 14px; 
+            font-weight: bold; 
+            text-transform: uppercase; 
+            padding: 5px 8px; 
+            margin-top: 20px; 
+            margin-bottom: 10px; 
+            border-left: 4px solid #007bff; 
+            -webkit-print-color-adjust: exact !important; 
+            print-color-adjust: exact !important; 
+          }
           .data-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; font-size: 13px; margin-bottom: 10px; }
           .data-item { margin-bottom: 5px; }
           .label { font-weight: bold; color: #444; }
           .text-block { font-size: 13px; margin: 8px 0; text-align: justify; white-space: pre-wrap; }
           .clinical-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; page-break-inside: avoid; }
-          .clinical-table th { background-color: #e6e6e6; border: 1px solid #aaa; padding: 6px; text-align: left; font-weight: bold; }
+          .clinical-table th { background-color: #e6e6e6; border: 1px solid #aaa; padding: 6px; text-align: left; font-weight: bold; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
           .clinical-table td { border: 1px solid #ccc; padding: 6px; }
           .footer { margin-top: 40px; text-align: center; font-size: 11px; color: #777; border-top: 1px solid #ddd; padding-top: 10px; }
           @media print { @page { size: A4; margin: 1.5cm; } }
@@ -291,7 +411,7 @@ export class ProfilePatientMComponent {
           <div class="meta-grid">
             <div><span class="label">Paciente:</span> ${this.patient_selected.full_name || ''}</div>
             <div><span class="label">C.i:</span> ${this.patient_selected.n_doc || ''}</div>
-            <div><span class="label">Fecha de Reporte:</span> 02/07/2026</div>
+            <div><span class="label">Fecha de Reporte:</span> ${new Date().toLocaleDateString('es-ES')}</div>
             <div><span class="label">ID Registro:</span> # ${this.patient_selected.id || ''}</div>
           </div>
         </div>
@@ -332,15 +452,19 @@ export class ProfilePatientMComponent {
         ${bloqueVacunas}
         ${bloqueLaboratorio}
         ${bloqueEvolucion}
+        
+        <!-- 🎯 INYECCIÓN INTELIGENTE DE LA SECCIÓN DE ODONTOLOGÍA -->
+        ${bloqueOdontograma}
 
         <div class="footer">
           <p>Historia Clínica generada digitalmente a través de Klyntic.</p>
+          <p style="font-size: 9px; color: #aaa; margin-top: 2px;">Documento oficial del ecosistema médico Klyntic.</p>
         </div>
       </body>
     </html>
     `);
- 
-   
+
+
 
       ventanaImpresion.document.close();
       ventanaImpresion.focus();

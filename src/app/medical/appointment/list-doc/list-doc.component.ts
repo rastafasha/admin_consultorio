@@ -53,6 +53,8 @@ export class ListDocComponent {
   confimation:any= null;
   public user:any;
   public doctor_id:any;
+  public doctor:any;
+  public speciality: any;
 
   info_lista_citas = `
   <p>En esta sección :</p>
@@ -85,6 +87,8 @@ export class ListDocComponent {
     this.user = JSON.parse(USER ? USER: '');
     // this.doctor_id = this.user.id;
     this.user = this.roleService.authService.user;
+    this.doctor_id = this.user.id;
+    this.getDoctor();
 
     this.ativatedRoute.params.subscribe((resp:any)=>{
       this.doctor_id = resp.doctor_id;
@@ -106,6 +110,17 @@ export class ListDocComponent {
   getSpecialities(){
     this.appointmentService.listConfig().subscribe((resp:any)=>{
       this.specialities = resp.specialities;
+    })
+  }
+
+  getDoctor() {
+    this.isLoading = true;
+    this.doctor_id = this.user.id
+    this.doctorService.showDoctorProfile(this.doctor_id).subscribe((resp: any) => {
+      this.doctor = resp.doctor;
+      this.speciality = resp.doctor.speciality;
+      this.isLoading = false;
+
     })
   }
 
