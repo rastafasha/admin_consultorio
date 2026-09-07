@@ -234,8 +234,8 @@
                                                 <div class="dropdown-menu dropdown-menu-end">
 
                                                     <a class="dropdown-item" [routerLink]="['/appointments/cita-medica/', data.id]" *ngIf="isPermission('view_appointment')"><i class="fa-solid fa-pen-to-square m-r-5"></i> Anteder </a>
-                                                    <a class="dropdown-item" [routerLink]="['/appointments/atender/odontograma/', data.id]"  ><i class="fa-solid fa-pen-to-square m-r-5"></i> Odontograma </a>
-                                                    <!-- <a class="dropdown-item" [routerLink]="['/appointments/atender/odontograma/', data.id]" *ngIf="speciality.name === 'Odontología'|| speciality.name === 'Cirugía Bucomaxilofacial'|| speciality.name === 'Cirugía Bucal'" ><i class="fa-solid fa-pen-to-square m-r-5"></i> Odontograma </a> -->
+                                                    <!-- <a class="dropdown-item" [routerLink]="['/appointments/atender/odontograma/', data.id]"  ><i class="fa-solid fa-pen-to-square m-r-5"></i> Odontograma </a> -->
+                                                    <a class="dropdown-item" [routerLink]="['/appointments/atender/odontograma/', data.id]" *ngIf="speciality.name === 'Odontología'|| speciality.name === 'Cirugía Bucomaxilofacial'|| speciality.name === 'Cirugía Bucal'" ><i class="fa-solid fa-pen-to-square m-r-5"></i> Odontograma </a>
                                                     
                                                 </div>
                                             </div>
