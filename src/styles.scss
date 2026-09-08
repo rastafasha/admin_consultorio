@@ -47,6 +47,37 @@ $klyntic_consultorio_admin-theme: mat.m2-define-light-theme(
 // @use "src/assets/style" as *;
 @import url('./assets/style.scss');
 
+/* =========================================================================
+   🛡️ BLINDAJE DE MENÚ MÓVIL PARA SAFARI / iOS VIEJO (iPhone 6s)
+   ========================================================================= */
+
+/* 1. Cuando la variable del servicio guarde "true" en el localStorage, 
+   tu plantilla usualmente le inyecta la clase 'slide-nav' o 'opened' al body o al wrapper */
+body.slide-nav #sidebar,
+body.opened #sidebar,
+.main-wrapper.slide-nav #sidebar {
+    /* Forzamos a que el sidebar aparezca en pantalla saltándose bloqueos */
+    left: 0px !important;
+    display: block !important;
+    visibility: visible !important;
+    z-index: 9999 !important;
+    
+    /* Añadimos soporte para el motor gráfico viejo de Apple (Aceleración de hardware) */
+    -webkit-transform: translateX(0) !important;
+    transform: translateX(0) !important;
+    -webkit-transition: all 0.4s ease !important;
+    transition: all 0.4s ease !important;
+}
+
+/* 2. Añadimos un truco por si tu plantilla usa un overlay (capa oscura de fondo) */
+body.slide-nav .sidebar-overlay,
+.main-wrapper.slide-nav .sidebar-overlay {
+    display: block !important;
+    opacity: 0.4 !important;
+    visibility: visible !important;
+}
+
+
 .full-cal {
   .fc .fc-button .fc-icon {
     color: #797979;

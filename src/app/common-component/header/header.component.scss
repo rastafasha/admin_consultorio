@@ -263,6 +263,8 @@ app-tasabcv {
 }
 
 
+
+
 /* =========================================================================
    📱 3. MEDIA QUERY: CELULARES ULTRA COMPACTOS (iPhone 6 / hasta 375px)
    ========================================================================= */
@@ -282,6 +284,27 @@ app-tasabcv {
             width: 26px !important;
             height: 26px !important;
             font-size: 10px !important;
+        }
+
+        /* 🎯 NUEVO BLINDAJE: Evita que la Tasa BCV empuje los elementos hacia afuera */
+        .tasa-movil-contenedor {
+            max-width: 85px !important; /* Límite físico en píxeles */
+            overflow: hidden !important;
+            white-space: nowrap !important;
+            
+            /* Encogemos el texto o badges internos de la Tasa BCV */
+            ::ng-deep span, 
+            ::ng-deep div {
+                font-size: 9px !important;
+                padding: 1px 3px !important;
+            }
+        }
+
+        /* 🎯 NUEVO BLINDAJE: Encogemos un 10% el menú del perfil para que no sature */
+        .notif-movil-wrapper {
+            transform: scale(0.9) !important;
+            display: flex !important;
+            align-items: center !important;
         }
     }
 }

@@ -28,48 +28,48 @@ export class routes {
   public static get addPayment(): string {
     return this.baseUrl + '/accounts/add-payment';
   }
-  public static get expenses(): string {
-    return this.baseUrl + '/accounts/expenses';
-  }
-  public static get addExpense(): string {
-    return this.baseUrl + '/accounts/add-expense';
-  }
-  public static get editExpense(): string {
-    return this.baseUrl + '/accounts/edit-expense';
-  }
-  public static get invoices(): string {
-    return this.baseUrl + '/accounts/invoices';
-  }
-  public static get invoiceView(): string {
-    return this.baseUrl + '/accounts/invoice-view';
-  }
-  public static get payments(): string {
-    return this.baseUrl + '/accounts/payments';
-  }
-  public static get editPayment(): string {
-    return this.baseUrl + '/accounts/edit-payment';
-  }
-  public static get providentFund(): string {
-    return this.baseUrl + '/accounts/provident-fund';
-  }
-  public static get addProvidentFund(): string {
-    return this.baseUrl + '/accounts/add-provident-fund';
-  }
-  public static get editProvidentFund(): string {
-    return this.baseUrl + '/accounts/edit-provident-fund';
-  }
-  public static get taxes(): string {
-    return this.baseUrl + '/accounts/taxes';
-  }
-  public static get addTax(): string {
-    return this.baseUrl + '/accounts/add-tax';
-  }
-  public static get editTax(): string {
-    return this.baseUrl + '/accounts/edit-tax';
-  }
-  public static get activities(): string {
-    return this.baseUrl + '/activities';
-  }
+  // public static get expenses(): string {
+  //   return this.baseUrl + '/accounts/expenses';
+  // }
+  // public static get addExpense(): string {
+  //   return this.baseUrl + '/accounts/add-expense';
+  // }
+  // public static get editExpense(): string {
+  //   return this.baseUrl + '/accounts/edit-expense';
+  // }
+  // public static get invoices(): string {
+  //   return this.baseUrl + '/accounts/invoices';
+  // }
+  // public static get invoiceView(): string {
+  //   return this.baseUrl + '/accounts/invoice-view';
+  // }
+  // public static get payments(): string {
+  //   return this.baseUrl + '/accounts/payments';
+  // }
+  // public static get editPayment(): string {
+  //   return this.baseUrl + '/accounts/edit-payment';
+  // }
+  // public static get providentFund(): string {
+  //   return this.baseUrl + '/accounts/provident-fund';
+  // }
+  // public static get addProvidentFund(): string {
+  //   return this.baseUrl + '/accounts/add-provident-fund';
+  // }
+  // public static get editProvidentFund(): string {
+  //   return this.baseUrl + '/accounts/edit-provident-fund';
+  // }
+  // public static get taxes(): string {
+  //   return this.baseUrl + '/accounts/taxes';
+  // }
+  // public static get addTax(): string {
+  //   return this.baseUrl + '/accounts/add-tax';
+  // }
+  // public static get editTax(): string {
+  //   return this.baseUrl + '/accounts/edit-tax';
+  // }
+  // public static get activities(): string {
+  //   return this.baseUrl + '/activities';
+  // }
   // public static get addAppointment(): string {
   //   return this.baseUrl + '/appointments/add-appointment';
   // }
@@ -216,81 +216,81 @@ export class routes {
     return this.baseUrl + '/tasabcv/edit';
   }
 
-  public static get email(): string {
-    return this.baseUrl + '/email';
-  }
-  public static get compose(): string {
-    return this.baseUrl + '/email/compose';
-  }
-  public static get confirmMail(): string {
-    return this.baseUrl + '/email/confirm-mail';
-  }
-  public static get inbox(): string {
-    return this.baseUrl + '/email/inbox';
-  }
-  public static get mailView(): string {
-    return this.baseUrl + '/email/mail-view';
-  }
-  public static get forms(): string {
-    return this.baseUrl + '/forms';
-  }
-  public static get formBasicInputs(): string {
-    return this.baseUrl + '/forms/form-basic-inputs';
-  }
-  public static get formHorizontal(): string {
-    return this.baseUrl + '/forms/form-horizontal';
-  }
-  public static get formInputGroups(): string {
-    return this.baseUrl + '/forms/form-input-groups';
-  }
-  public static get formVertical(): string {
-    return this.baseUrl + '/forms/form-vertical';
-  }
-  public static get gallery(): string {
-    return this.baseUrl + '/gallery';
-  }
-  public static get addInvoice(): string {
-    return this.baseUrl + '/invoice/add-invoice';
-  }
-  public static get createInvoice(): string {
-    return this.baseUrl + '/invoice/create-invoice';
-  }
-  public static get editInvoice(): string {
-    return this.baseUrl + '/invoice/edit-invoice';
-  }
-  public static get editInvoices(): string {
-    return this.baseUrl + '/invoice/edit-invoices';
-  }
-  public static get invoicesGrid(): string {
-    return this.baseUrl + '/invoice/invoices-grid';
-  }
-  public static get allInvoice(): string {
-    return this.baseUrl + '/invoice/all-invoice';
-  }
-  public static get invoicesCancelled(): string {
-    return this.baseUrl + '/invoice/invoices-cancelled';
-  }
-  public static get invoicesDraft(): string {
-    return this.baseUrl + '/invoice/invoices-draft';
-  }
-  public static get invoicesOverdue(): string {
-    return this.baseUrl + '/invoice/invoices-overdue';
-  }
-  public static get invoicesPaid(): string {
-    return this.baseUrl + '/invoice/invoices-paid';
-  }
-  public static get invoicesRecurring(): string {
-    return this.baseUrl + '/invoice/invoices-recurring';
-  }
-  public static get invoicesSettings(): string {
-    return this.baseUrl + '/invoice/invoices-settings';
-  }
-  public static get taxSettings(): string {
-    return this.baseUrl + '/invoice/tax-settings';
-  }
-  public static get viewInvoice(): string {
-    return this.baseUrl + '/invoice/view-invoice';
-  }
+  // public static get email(): string {
+  //   return this.baseUrl + '/email';
+  // }
+  // public static get compose(): string {
+  //   return this.baseUrl + '/email/compose';
+  // }
+  // public static get confirmMail(): string {
+  //   return this.baseUrl + '/email/confirm-mail';
+  // }
+  // public static get inbox(): string {
+  //   return this.baseUrl + '/email/inbox';
+  // }
+  // public static get mailView(): string {
+  //   return this.baseUrl + '/email/mail-view';
+  // }
+  // public static get forms(): string {
+  //   return this.baseUrl + '/forms';
+  // }
+  // public static get formBasicInputs(): string {
+  //   return this.baseUrl + '/forms/form-basic-inputs';
+  // }
+  // public static get formHorizontal(): string {
+  //   return this.baseUrl + '/forms/form-horizontal';
+  // }
+  // public static get formInputGroups(): string {
+  //   return this.baseUrl + '/forms/form-input-groups';
+  // }
+  // public static get formVertical(): string {
+  //   return this.baseUrl + '/forms/form-vertical';
+  // }
+  // public static get gallery(): string {
+  //   return this.baseUrl + '/gallery';
+  // }
+  // public static get addInvoice(): string {
+  //   return this.baseUrl + '/invoice/add-invoice';
+  // }
+  // public static get createInvoice(): string {
+  //   return this.baseUrl + '/invoice/create-invoice';
+  // }
+  // public static get editInvoice(): string {
+  //   return this.baseUrl + '/invoice/edit-invoice';
+  // }
+  // public static get editInvoices(): string {
+  //   return this.baseUrl + '/invoice/edit-invoices';
+  // }
+  // public static get invoicesGrid(): string {
+  //   return this.baseUrl + '/invoice/invoices-grid';
+  // }
+  // public static get allInvoice(): string {
+  //   return this.baseUrl + '/invoice/all-invoice';
+  // }
+  // public static get invoicesCancelled(): string {
+  //   return this.baseUrl + '/invoice/invoices-cancelled';
+  // }
+  // public static get invoicesDraft(): string {
+  //   return this.baseUrl + '/invoice/invoices-draft';
+  // }
+  // public static get invoicesOverdue(): string {
+  //   return this.baseUrl + '/invoice/invoices-overdue';
+  // }
+  // public static get invoicesPaid(): string {
+  //   return this.baseUrl + '/invoice/invoices-paid';
+  // }
+  // public static get invoicesRecurring(): string {
+  //   return this.baseUrl + '/invoice/invoices-recurring';
+  // }
+  // public static get invoicesSettings(): string {
+  //   return this.baseUrl + '/invoice/invoices-settings';
+  // }
+  // public static get taxSettings(): string {
+  //   return this.baseUrl + '/invoice/tax-settings';
+  // }
+  // public static get viewInvoice(): string {
+  //   return this.baseUrl + '/invoice/view-invoice';
+  // }
   // public static get addPatient(): string {
   //   return this.baseUrl + '/patient/add-patient';
   // }
