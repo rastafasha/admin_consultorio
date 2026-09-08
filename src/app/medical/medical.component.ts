@@ -23,22 +23,24 @@ export class MedicalComponent {
   page = '';
   currentUrl = '';
 
-  constructor(private sideBar: SideBarService,public router: Router,private data: DataService,) 
+  constructor(private sideBar: SideBarService, public router: Router, private data: DataService) 
   {
-    this.sideBar.toggleSideBar.subscribe((res: string) => {
-      if (res == 'true') {
-        this.miniSidebar = 'true';
-      } else {
-        this.miniSidebar = 'false';
+    // 🎯 NUEVO: Escuchamos activamente los cambios de ruta para que no se congele en móviles
+    this.router.events.subscribe((event) => {
+      // Importa NavigationEnd desde '@angular/router' arriba si te hace falta
+      // Pero para asegurar compatibilidad total en iOS viejo, evaluamos de forma directa:
+      if (event && event.constructor.name === 'NavigationEnd') {
+        this.getRoutes(event as Route);
       }
+    });
+    this.getRoutes(this.router);
+
+    this.sideBar.toggleSideBar.subscribe((res: string) => {
+      this.miniSidebar = res === 'true' ? 'true' : 'false';
     });
 
     this.sideBar.toggleMobileSideBar.subscribe((res: string) => {
-      if (res == 'true' || res == 'true') {
-        this.mobileSidebar = 'true';
-      } else {
-        this.mobileSidebar = 'false';
-      }
+      this.mobileSidebar = res === 'true' ? 'true' : 'false';
     });
 
     this.sideBar.expandSideBar.subscribe((res: string) => {
@@ -63,15 +65,22 @@ export class MedicalComponent {
         });
       }
     });
-    this.getRoutes(this.router);
   }
+
   public toggleMobileSideBar(): void {
     this.sideBar.switchMobileSideBarPosition();
   }
+
   private getRoutes(route: Route): void {
-    if (
-      route.url.split('/')[2] === 'confirm-mail'
-    ) {
+    // Protección por si la URL llega vacía en Safari móvil al inicializar
+    if (!route || !route.url) {
+      this.sideBarActivePath = true;
+      this.headerActivePath = true;
+      return;
+    }
+
+    const partesUrl = route.url.split('/');
+    if (partesUrl[2] === 'confirm-mail') {
       this.sideBarActivePath = false;
       this.headerActivePath = false;
     } else {

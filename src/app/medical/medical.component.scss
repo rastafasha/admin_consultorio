@@ -1,0 +1,17 @@
+/* Cuando se activa la clase slide-nav en el wrapper principal */
+.main-wrapper.slide-nav {
+    #sidebar {
+        left: 0px !important;
+        display: block !important;
+        visibility: visible !important;
+        z-index: 9999 !important;
+        -webkit-transform: translateX(0) !important;
+        transform: translateX(0) !important;
+    }
+
+    .sidebar-overlay {
+        display: block !important;
+        opacity: 0.4 !important;
+        visibility: visible !important;
+    }
+}
