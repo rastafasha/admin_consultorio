@@ -1,1 +1,25 @@
 
+.tasastyle{
+    display: flex;
+    flex-direction: row;
+    padding-top: 5px;
+    p{
+        font-size: 12px;
+            padding: 0px;
+            margin: 0px;
+    }
+    a{
+        font-size: 12px;
+        color: #513081;
+        padding: 0px;
+        margin: 0px;
+    }
+}
+
+@media (max-width: 375px) {
+    .tasastyle{
+    p{
+       display: none;
+    }
+}
+}
