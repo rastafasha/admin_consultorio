@@ -204,11 +204,15 @@
 
                 <!-- activar dictado -->
                 <div class="switch-wrapper">
+                    <!-- El spinner se activa correctamente de forma reactiva mientras el médico dicta -->
                     <div class="mini-spinner" *ngIf="isListening"></div>
+
                     <label class="switch-listen">
-                        <input type="checkbox" (change)="toggleDictadoGlobal($event)">
+                        <!-- 🟢 CORRECCIÓN: Enlazamos [checked] a isListening para que el switch se regrese solo si hay un error -->
+                        <input type="checkbox" [checked]="isListening" (change)="toggleDictadoGlobal($event)">
                         <span class="slider round"></span>
                     </label>
+
                     <p *ngIf="!isListening">Activar dictado</p>
                     <p *ngIf="isListening">Escuchando dictado</p>
                 </div>
@@ -227,8 +231,7 @@
                 <!-- Vacunas -->
                 <app-vacunas #componenteVacunas [patientForm]="patientForm" [doctor]="doctor"
                     [vacunasIniciales]="patient_selected.vacunas"
-                    [is_vacuna]="patientForm.get('is_vacuna')?.value ? 2 : 1" *ngIf="patient_selected">
-                </app-vacunas>
+                    [is_vacuna]="patientForm.get('is_vacuna')?.value ? 2 : 1" *ngIf="patient_selected"></app-vacunas>
                 <!-- Examen fisico -->
                 <app-examen-fisico #compExamen [patientForm]="patientForm"></app-examen-fisico>
                 <!-- Reporte Laboratorio -->
@@ -239,7 +242,8 @@
                 <!-- tratamiento -->
                 <app-tratamiento #compTratamiento [patientForm]="patientForm"></app-tratamiento>
                 <!-- Evolucion -->
-                <app-evolucion #componenteEvolucion [patientForm]="patientForm" [evolucionesIniciales]="patient_selected.evolucion"> </app-evolucion>
+                <app-evolucion #componenteEvolucion [patientForm]="patientForm"
+                    [evolucionesIniciales]="patient_selected.evolucion"> </app-evolucion>
 
 
 

@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { StaffService } from '../../../services/staff.service';
 import { OdontogramaService } from '../../../services/odontograma.service';
 import { AppointmentService } from '../../../services/appointment.service';
+import { ToastrService } from 'ngx-toastr';
 
 // Declaración global para el reconocimiento de voz del navegador (AirPods / Micrófono)
 declare var webkitSpeechRecognition: any;
@@ -86,7 +87,8 @@ export class OdontogramaComponent implements OnInit {
     public router: Router,
     public ativatedRoute: ActivatedRoute,
     private cdr: ChangeDetectorRef,
-    private zone: NgZone
+    private zone: NgZone,
+    private toastr: ToastrService   // 🔥 Inyectado para alertas amigables
   ) {
     this.inicializarMapaDientes();
   }
@@ -219,13 +221,57 @@ export class OdontogramaComponent implements OnInit {
     };
   }
 
-  toggleEscucha() {
-    if (this.isListening) {
-      this.recognition.stop();
+  // toggleEscucha() {
+  //   if (this.isListening) {
+  //     this.recognition.stop();
+  //   } else {
+  //     this.recognition.start();
+  //   }
+  // }
+
+
+  toggleDictado(event: any) {
+  this.isListening = event.target.checked;
+
+  if (!this.recognition) {
+    // Usamos el Toastr para que no se vea un alert rústico en el teléfono
+    this.toastr.warning('Tu dispositivo o navegador actual no admite dictado por voz.', 'No Soportado');
+    event.target.checked = false;
+    this.isListening = false;
+    return;
+  }
+
+  if (this.isListening) {
+    // 🔥 EL DETONANTE SEGURO PARA IOS PWA:
+    // Solicitamos acceso directo al chorro de audio del hardware. Esto obliga a Safari
+    // a levantar el cartel flotante de "Klyntic desea acceder al micrófono" pase lo que pase.
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then((stream) => {
+          // Permiso concedido por el médico: procedemos a apagar el stream temporal 
+          // para liberar el micrófono y encendemos el motor de reconocimiento avanzado
+          stream.getTracks().forEach(track => track.stop());
+          
+          // Encendemos el motor nativo que procesa tus comandos en es-VE
+          this.recognition.start();
+          console.log('🎙️ Motor de dictado Klyntic iniciado con éxito.');
+        })
+        .catch((err) => {
+          console.error('El iPhone rechazó el micrófono:', err);
+          this.toastr.error('Debes permitir el acceso al micrófono en los ajustes de Safari para dictar.', 'Permiso Denegado');
+          event.target.checked = false;
+          this.isListening = false;
+          this.cdr.detectChanges(); // Forzamos a Angular 19 a pintar el switch apagado
+        });
     } else {
+      // Si el navegador es sumamente viejo y no tiene mediaDevices, intentamos el arranque directo
       this.recognition.start();
     }
+  } else {
+    // Si el médico apaga el switch, detenemos el motor ordenadamente
+    this.recognition.stop();
   }
+}
   
 
   /**
