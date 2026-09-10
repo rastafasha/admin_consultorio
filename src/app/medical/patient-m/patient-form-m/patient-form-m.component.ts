@@ -147,83 +147,83 @@ export class PatientFormMComponent implements OnInit {
     this.initSpeechRecognition();
   }
 
-  // toggleDictadoGlobal(event: any) {
-  //   this.isListening = event.target.checked;
-  //   if (!this.recognition) {
-  //     alert('Tu navegador no soporta dictado por voz.');
-  //     return;
-  //   }
-  //   if (this.isListening) {
-  //     this.recognition.start();
-  //     console.log('🎤 Micrófono encendido globalmente...');
-  //   } else {
-  //     this.recognition.stop();
-  //     console.log('🛑 Micrófono apagado.');
-  //   }
-  // }
-
   toggleDictadoGlobal(event: any) {
-  this.isListening = event.target.checked;
-
-  if (!this.recognition) {
-    Swal.fire({
-      icon: 'warning',
-      title: 'No Soportado',
-      text: 'Tu dispositivo o navegador actual no admite dictado por voz.',
-      showConfirmButton: true
-    });
-    event.target.checked = false;
-    this.isListening = false;
-    return;
-  }
-
-  if (this.isListening) {
-    // 🎙️ EL DETONANTE DE SEGURIDAD PARA LA PWA EN IOS:
-    // Abrimos un canal de audio instantáneo en el hardware. Esto fuerza a Safari
-    // a desplegar la ventana flotante de solicitud de permisos en el iPhone 6s.
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices.getUserMedia({ audio: true })
-        .then((stream) => {
-          // Permiso concedido: apagamos el micrófono de prueba inmediatamente
-          // para liberar el canal físico y que el motor Speech lo use
-          stream.getTracks().forEach(track => track.stop());
-          
-          // Encendemos el motor global de Klyntic en la zona de Angular
-          this.zone.run(() => {
-            this.recognition.start();
-            console.log('🎤 Micrófono encendido globalmente con éxito...');
-          });
-        })
-        .catch((err) => {
-          console.error('El iPhone rechazó el micrófono global:', err);
-          
-          
-          Swal.fire({
-            icon: 'error',
-            title: 'Permiso Denegado',
-            text: 'Debes permitir el acceso al micrófono en los ajustes de Safari para poder usar el asistente de voz.',
-            showConfirmButton: true
-          });
-
-          this.zone.run(() => {
-            event.target.checked = false;
-            this.isListening = false;
-            if (this.recognition) {
-              this.recognition.stop();
-            }
-            this.cd.detectChanges(); // Fuerza a Angular a pintar el switch apagado
-          });
-        });
-    } else {
-      // Respaldo directo si corres en navegadores que no restrinjan el inicio
-      this.recognition.start();
+    this.isListening = event.target.checked;
+    if (!this.recognition) {
+      alert('Tu navegador no soporta dictado por voz.');
+      return;
     }
-  } else {
-    // Si el médico apaga el switch, detenemos el motor ordenadamente
-    this.recognition.stop();
-    console.log('🛑 Micrófono apagado.');
+    if (this.isListening) {
+      this.recognition.start();
+      console.log('🎤 Micrófono encendido globalmente...');
+    } else {
+      this.recognition.stop();
+      console.log('🛑 Micrófono apagado.');
+    }
   }
-}
+
+//   toggleDictadoGlobal(event: any) {
+//   this.isListening = event.target.checked;
+
+//   if (!this.recognition) {
+//     Swal.fire({
+//       icon: 'warning',
+//       title: 'No Soportado',
+//       text: 'Tu dispositivo o navegador actual no admite dictado por voz.',
+//       showConfirmButton: true
+//     });
+//     event.target.checked = false;
+//     this.isListening = false;
+//     return;
+//   }
+
+//   if (this.isListening) {
+//     // 🎙️ EL DETONANTE DE SEGURIDAD PARA LA PWA EN IOS:
+//     // Abrimos un canal de audio instantáneo en el hardware. Esto fuerza a Safari
+//     // a desplegar la ventana flotante de solicitud de permisos en el iPhone 6s.
+//     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+//       navigator.mediaDevices.getUserMedia({ audio: true })
+//         .then((stream) => {
+//           // Permiso concedido: apagamos el micrófono de prueba inmediatamente
+//           // para liberar el canal físico y que el motor Speech lo use
+//           stream.getTracks().forEach(track => track.stop());
+          
+//           // Encendemos el motor global de Klyntic en la zona de Angular
+//           this.zone.run(() => {
+//             this.recognition.start();
+//             console.log('🎤 Micrófono encendido globalmente con éxito...');
+//           });
+//         })
+//         .catch((err) => {
+//           console.error('El iPhone rechazó el micrófono global:', err);
+          
+          
+//           Swal.fire({
+//             icon: 'error',
+//             title: 'Permiso Denegado',
+//             text: 'Debes permitir el acceso al micrófono en los ajustes de Safari para poder usar el asistente de voz.',
+//             showConfirmButton: true
+//           });
+
+//           this.zone.run(() => {
+//             event.target.checked = false;
+//             this.isListening = false;
+//             if (this.recognition) {
+//               this.recognition.stop();
+//             }
+//             this.cd.detectChanges(); // Fuerza a Angular a pintar el switch apagado
+//           });
+//         });
+//     } else {
+//       // Respaldo directo si corres en navegadores que no restrinjan el inicio
+//       this.recognition.start();
+//     }
+//   } else {
+//     // Si el médico apaga el switch, detenemos el motor ordenadamente
+//     this.recognition.stop();
+//     console.log('🛑 Micrófono apagado.');
+//   }
+// }
 
 
 
@@ -239,6 +239,32 @@ export class PatientFormMComponent implements OnInit {
     this.recognition.continuous = true;
     this.recognition.interimResults = false;
     this.recognition.lang = 'es-VE';
+
+    // 🟢 EL ARREGLO CONTRA EL APAGADO AUTOMÁTICO EN IOS:
+
+    this.recognition.onstart = () => {
+      this.zone.run(() => this.isListening = true);
+    };
+
+    this.recognition.onend = () => {
+      this.zone.run(() => {
+        // Si el motor se apaga solo pero el switch físico en la pantalla sigue ENCENDIDO,
+        // significa que iOS cortó el micrófono por inactividad. ¡Lo encendemos de nuevo al instante!
+        if (this.isListening) {
+          console.log('🔄 Reencendiendo micrófono automáticamente para evitar el apagado de iOS...');
+          try {
+            this.recognition.start();
+          } catch (e) {
+            // Evitamos saturar la consola si el motor ya estaba intentando arrancar
+            console.log('Intento de reencendido ignorado por ejecución activa.');
+          }
+        } else {
+          // Si el médico lo apagó a propósito por el switch, se queda apagado de verdad
+          this.isListening = false;
+        }
+      });
+    };
+    // 🟢 EL ARREGLO CONTRA EL APAGADO AUTOMÁTICO EN IOS- fin
 
     this.recognition.onresult = (event: any) => {
       if (!event || !event.results) return;

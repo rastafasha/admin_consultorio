@@ -422,47 +422,62 @@ export class PresupuestoEditarComponent {
   }
 
    toggleDictado(event: any) {
-  this.isListening = event.target.checked;
+    this.isListening = event.target.checked;
 
-  if (!this.recognition) {
-    // Usamos el Toastr para que no se vea un alert rústico en el teléfono
-    this.toastr.warning('Tu dispositivo o navegador actual no admite dictado por voz.', 'No Soportado');
-    event.target.checked = false;
-    this.isListening = false;
-    return;
-  }
-
-  if (this.isListening) {
-    // 🔥 EL DETONANTE SEGURO PARA IOS PWA:
-    // Solicitamos acceso directo al chorro de audio del hardware. Esto obliga a Safari
-    // a levantar el cartel flotante de "Klyntic desea acceder al micrófono" pase lo que pase.
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices.getUserMedia({ audio: true })
-        .then((stream) => {
-          // Permiso concedido por el médico: procedemos a apagar el stream temporal 
-          // para liberar el micrófono y encendemos el motor de reconocimiento avanzado
-          stream.getTracks().forEach(track => track.stop());
-          
-          // Encendemos el motor nativo que procesa tus comandos en es-VE
-          this.recognition.start();
-          console.log('🎙️ Motor de dictado Klyntic iniciado con éxito.');
-        })
-        .catch((err) => {
-          console.error('El iPhone rechazó el micrófono:', err);
-          this.toastr.error('Debes permitir el acceso al micrófono en los ajustes de Safari para dictar.', 'Permiso Denegado');
-          event.target.checked = false;
-          this.isListening = false;
-          this.cdr.detectChanges(); // Forzamos a Angular 19 a pintar el switch apagado
-        });
-    } else {
-      // Si el navegador es sumamente viejo y no tiene mediaDevices, intentamos el arranque directo
-      this.recognition.start();
+    if (!this.recognition) {
+      alert('Tu navegador no soporta dictado por voz.');
+      return;
     }
-  } else {
-    // Si el médico apaga el switch, detenemos el motor ordenadamente
-    this.recognition.stop();
+
+    if (this.isListening) {
+      this.recognition.start();
+    } else {
+      this.recognition.stop();
+    }
   }
-}
+
+//    toggleDictado(event: any) {
+//   this.isListening = event.target.checked;
+
+//   if (!this.recognition) {
+//     // Usamos el Toastr para que no se vea un alert rústico en el teléfono
+//     this.toastr.warning('Tu dispositivo o navegador actual no admite dictado por voz.', 'No Soportado');
+//     event.target.checked = false;
+//     this.isListening = false;
+//     return;
+//   }
+
+//   if (this.isListening) {
+//     // 🔥 EL DETONANTE SEGURO PARA IOS PWA:
+//     // Solicitamos acceso directo al chorro de audio del hardware. Esto obliga a Safari
+//     // a levantar el cartel flotante de "Klyntic desea acceder al micrófono" pase lo que pase.
+//     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+//       navigator.mediaDevices.getUserMedia({ audio: true })
+//         .then((stream) => {
+//           // Permiso concedido por el médico: procedemos a apagar el stream temporal 
+//           // para liberar el micrófono y encendemos el motor de reconocimiento avanzado
+//           stream.getTracks().forEach(track => track.stop());
+          
+//           // Encendemos el motor nativo que procesa tus comandos en es-VE
+//           this.recognition.start();
+//           console.log('🎙️ Motor de dictado Klyntic iniciado con éxito.');
+//         })
+//         .catch((err) => {
+//           console.error('El iPhone rechazó el micrófono:', err);
+//           this.toastr.error('Debes permitir el acceso al micrófono en los ajustes de Safari para dictar.', 'Permiso Denegado');
+//           event.target.checked = false;
+//           this.isListening = false;
+//           this.cdr.detectChanges(); // Forzamos a Angular 19 a pintar el switch apagado
+//         });
+//     } else {
+//       // Si el navegador es sumamente viejo y no tiene mediaDevices, intentamos el arranque directo
+//       this.recognition.start();
+//     }
+//   } else {
+//     // Si el médico apaga el switch, detenemos el motor ordenadamente
+//     this.recognition.stop();
+//   }
+// }
 
 
 
