@@ -125,26 +125,34 @@ export class AtencionMedicaComponent {
 
     this.appointmentService.showCitamedica(this.appointment_id).subscribe((resp: any) => {
       this.appointment_atention_selected = resp.appointment_attention;
-      this.medical = this.appointment_atention_selected.receta_medica;
       this.description = this.appointment_atention_selected.description;
       this.laboratory_number = this.appointment_atention_selected.laboratory;
 
+      // 🟢 EL BLINDAJE CONTRA EL CRASH:
+      // Si 'receta_medica' viene del backend como null o undefined, el operador || []
+      // fuerza a que la variable se quede como un arreglo vacío listo para recibir .push()
+      this.medical = this.appointment_atention_selected.receta_medica || [];
+
       if (this.laboratory_number === 2) {
-        this.laboratory = true
+        this.laboratory = true;
       } else {
-        this.laboratory = false
+        this.laboratory = false;
       }
-
-
-    })
+    });
 
   }
 
   addMedicamento() {
+    // Si por alguna extraña razón 'this.medical' llega a ser nulo, lo restauramos en el acto
+    if (!this.medical) {
+      this.medical = [];
+    }
+
     this.medical.push({
       name_medical: this.name_medical,
       uso: this.uso
-    })
+    });
+
     this.name_medical = '';
     this.uso = '';
   }
@@ -249,7 +257,7 @@ export class AtencionMedicaComponent {
         return;
       }
 
-      
+
 
 
       // ==========================================
@@ -318,7 +326,7 @@ export class AtencionMedicaComponent {
     });
   }
 
-   toggleDictado(event: any) {
+  toggleDictado(event: any) {
     this.isListening = event.target.checked;
 
     if (!this.recognition) {
@@ -333,48 +341,48 @@ export class AtencionMedicaComponent {
     }
   }
 
-//   toggleDictado(event: any) {
-//   this.isListening = event.target.checked;
+  //   toggleDictado(event: any) {
+  //   this.isListening = event.target.checked;
 
-//   if (!this.recognition) {
-//     // Usamos el Toastr para que no se vea un alert rústico en el teléfono
-//     this.toastr.warning('Tu dispositivo o navegador actual no admite dictado por voz.', 'No Soportado');
-//     event.target.checked = false;
-//     this.isListening = false;
-//     return;
-//   }
+  //   if (!this.recognition) {
+  //     // Usamos el Toastr para que no se vea un alert rústico en el teléfono
+  //     this.toastr.warning('Tu dispositivo o navegador actual no admite dictado por voz.', 'No Soportado');
+  //     event.target.checked = false;
+  //     this.isListening = false;
+  //     return;
+  //   }
 
-//   if (this.isListening) {
-//     // 🔥 EL DETONANTE SEGURO PARA IOS PWA:
-//     // Solicitamos acceso directo al chorro de audio del hardware. Esto obliga a Safari
-//     // a levantar el cartel flotante de "Klyntic desea acceder al micrófono" pase lo que pase.
-//     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-//       navigator.mediaDevices.getUserMedia({ audio: true })
-//         .then((stream) => {
-//           // Permiso concedido por el médico: procedemos a apagar el stream temporal 
-//           // para liberar el micrófono y encendemos el motor de reconocimiento avanzado
-//           stream.getTracks().forEach(track => track.stop());
-          
-//           // Encendemos el motor nativo que procesa tus comandos en es-VE
-//           this.recognition.start();
-//           console.log('🎙️ Motor de dictado Klyntic iniciado con éxito.');
-//         })
-//         .catch((err) => {
-//           console.error('El iPhone rechazó el micrófono:', err);
-//           this.toastr.error('Debes permitir el acceso al micrófono en los ajustes de Safari para dictar.', 'Permiso Denegado');
-//           event.target.checked = false;
-//           this.isListening = false;
-//           this.cdr.detectChanges(); // Forzamos a Angular 19 a pintar el switch apagado
-//         });
-//     } else {
-//       // Si el navegador es sumamente viejo y no tiene mediaDevices, intentamos el arranque directo
-//       this.recognition.start();
-//     }
-//   } else {
-//     // Si el médico apaga el switch, detenemos el motor ordenadamente
-//     this.recognition.stop();
-//   }
-// }
+  //   if (this.isListening) {
+  //     // 🔥 EL DETONANTE SEGURO PARA IOS PWA:
+  //     // Solicitamos acceso directo al chorro de audio del hardware. Esto obliga a Safari
+  //     // a levantar el cartel flotante de "Klyntic desea acceder al micrófono" pase lo que pase.
+  //     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+  //       navigator.mediaDevices.getUserMedia({ audio: true })
+  //         .then((stream) => {
+  //           // Permiso concedido por el médico: procedemos a apagar el stream temporal 
+  //           // para liberar el micrófono y encendemos el motor de reconocimiento avanzado
+  //           stream.getTracks().forEach(track => track.stop());
+
+  //           // Encendemos el motor nativo que procesa tus comandos en es-VE
+  //           this.recognition.start();
+  //           console.log('🎙️ Motor de dictado Klyntic iniciado con éxito.');
+  //         })
+  //         .catch((err) => {
+  //           console.error('El iPhone rechazó el micrófono:', err);
+  //           this.toastr.error('Debes permitir el acceso al micrófono en los ajustes de Safari para dictar.', 'Permiso Denegado');
+  //           event.target.checked = false;
+  //           this.isListening = false;
+  //           this.cdr.detectChanges(); // Forzamos a Angular 19 a pintar el switch apagado
+  //         });
+  //     } else {
+  //       // Si el navegador es sumamente viejo y no tiene mediaDevices, intentamos el arranque directo
+  //       this.recognition.start();
+  //     }
+  //   } else {
+  //     // Si el médico apaga el switch, detenemos el motor ordenadamente
+  //     this.recognition.stop();
+  //   }
+  // }
 
   save(debeImprimir: boolean = false) {
     this.text_validation = '';
