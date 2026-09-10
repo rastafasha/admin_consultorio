@@ -29,34 +29,71 @@ export class NotificacionService {
   private toastr = inject(ToastrService);
   private router = inject(Router);
 
-  // 1. El flujo de datos reactivo que escucharán todas las campanas de la app
+  // ESTADOS REACTIVOS NUEVOS: Controlan la UI del switch de forma segura
+  public isSubscribed$ = new BehaviorSubject<boolean>(false);
+  public isProcessing$ = new BehaviorSubject<boolean>(false);
+
   private unreadCountSub = new BehaviorSubject<number>(0);
   public unreadCount$ = this.unreadCountSub.asObservable();
 
-  // Memoria en tiempo real para las alertas del listado del header
   public listaNotificaciones: Notificacion[] = [];
-
   private socket!: Socket;
 
   constructor() {
-    // 🔥 Al arrancar el servicio de forma global, se conectan los cables del WebSocket de una vez
     this.inicializarEcosistemaAlertas();
   }
 
   get currentRole(): 'DOCTOR'  {
     const userString = localStorage.getItem('user');
     const userObj = userString ? JSON.parse(userString) : null;
-    // Retorna 'MEDICO' si tiene la propiedad de doctor o rol médico, si no, 'GUEST'
-    return userObj && (userObj.doctor_id || userObj.roles[0] === 'DOCTOR')
+    return userObj && (userObj.doctor_id || userObj.roles === 'DOCTOR');
   }
 
   private getOptions() {
     return { headers: { 'x-token': localStorage.getItem('token') || '' } };
   }
 
-  /**
-   * 🔥 EL MOTOR CENTRAL: Conecta el socket y se queda escuchando de forma pasiva por detrás
-   */
+  // NUEVO: Consulta las preferencias reales guardadas en la BD (Evita que el switch mienta)
+  verificarPreferenciaServidor(usuarioId: string): void {
+    this.isProcessing$.next(true);
+    this.http.get<{ ok: boolean, activo: boolean }>(
+      `${BackendApi}/klyntic/notificaciones/preferencia/${usuarioId}`,
+      this.getOptions()
+    ).subscribe({
+      next: (res) => {
+        if (res.ok) {
+          this.isSubscribed$.next(res.activo);
+        }
+        this.isProcessing$.next(false);
+      },
+      error: () => {
+        // Si da error o "no tiene registro", el switch se queda apagado de forma segura
+        this.isSubscribed$.next(false);
+        this.isProcessing$.next(false);
+      }
+    });
+  }
+
+  // NUEVO: Actualiza el switch en Node.js y maneja el estado de carga
+  actualizarPreferencia(usuarioId: string, activado: boolean): Observable<{ ok: boolean }> {
+    this.isProcessing$.next(true);
+    return this.http.put<{ ok: boolean }>(
+      `${BackendApi}/klyntic/notificaciones/configurar`,
+      { usuarioId, activado },
+      this.getOptions()
+    ).pipe(
+      tap({
+        next: () => {
+          this.isSubscribed$.next(activado);
+          this.isProcessing$.next(false);
+        },
+        error: () => {
+          this.isProcessing$.next(false);
+        }
+      })
+    );
+  }
+
   inicializarEcosistemaAlertas() {
     const token = localStorage.getItem('token') || '';
     if (!token) return; 
@@ -65,16 +102,14 @@ export class NotificacionService {
       this.socket.disconnect();
     }
 
-    // 🔌 Conectamos a la URL raíz de producción y forzamos los transportes correctos
     this.socket = io(SocketUrl, {
       autoConnect: true,
-      transports: ['websocket', 'polling'], // 👈 Indispensable para que Render no tire error
+      transports: ['websocket', 'polling'],
       extraHeaders: { 'x-token': token }
     });
 
     this.socket.on('connect', () => {
       console.log(`⚡ Sockets centralizados de Klyntic listos para el rol: ${this.currentRole}`);
-
       const userString = localStorage.getItem('user');
       const userObj = userString ? JSON.parse(userString) : null;
       if (userObj && userObj.id) {
@@ -82,44 +117,31 @@ export class NotificacionService {
       }
     });
 
-    // 1. Escucha pasiva del socket dentro del constructor del servicio centralizado
     this.socket.on('recibir-alerta', (nuevaNotif: Notificacion) => {
       console.log('🔔 Capturada por WebSocket:', nuevaNotif);
-
-      // Alimentamos la lista del header sin hacer peticiones HTTP extras
       this.listaNotificaciones.unshift(nuevaNotif);
-
-      // Actualizamos el contador de la campana sumando 1 de una vez
       const actual = this.unreadCountSub.value;
       this.unreadCountSub.next(actual + 1);
-
-      // 🔥 LA LLAMADA LIMPIA: Lanzamos el Toastr directo usando el objeto que viajó por el cable
       this.lanzarToastrEnPantalla(nuevaNotif);
     });
   }
 
-  /**
-   * Consulta inicial rápida por HTTP para saber el conteo del pasado
-   */
   cargarContadorInicial(usuarioId: string): void {
     this.http.get<{ ok: boolean, notificaciones: Notificacion[] }>(
       `${BackendApi}/klyntic/notificaciones/usuario/${usuarioId}?page=1`,
       this.getOptions()
     ).subscribe({
       next: (res) => {
-        if (res.ok) {
+        if (res.ok && res.notificaciones) {
           this.listaNotificaciones = res.notificaciones;
           const sinLeer = this.listaNotificaciones.filter(n => !n.leido).length;
-          // Inicializamos la burbuja roja con las alertas viejas sin leer
           this.unreadCountSub.next(sinLeer);
         }
-      }
+      },
+      error: () => this.unreadCountSub.next(0)
     });
   }
 
-  /**
-   * El switch de Toastrs que procesa los Enums médicos
-   */
   private lanzarToastrEnPantalla(notif: Notificacion) {
     let toast;
     const config = { timeOut: 10000, closeButton: true, tapToDismiss: true };
@@ -127,22 +149,14 @@ export class NotificacionService {
 
     switch (notif.tipo) {
       case 'PAGO_RECIBIDO':
-        toast = this.toastr.success(
-          notif.mensaje,
-          esMedico ? '💰 Pago Reportado por Paciente' : '✅ Tu Pago ha sido Recibido',
-          config
-        );
+        toast = this.toastr.success(notif.mensaje, esMedico ? '💰 Pago Reportado por Paciente' : '✅ Tu Pago ha sido Recibido', config);
         break;
-
-
       case 'PRESUPUESTO_APROBADO':
         toast = this.toastr.success(notif.mensaje, '🎉 ¡Presupuesto Aprobado por Paciente!', config);
         break;
-
       case 'CONSULTA_NUEVA':
         toast = this.toastr.info(notif.mensaje, '🩺 Nueva Consulta Iniciada', config);
         break;
-
       case 'LLAMADO_MEDICO':
         toast = this.toastr.warning(notif.mensaje, '🚨 Llamado Urgente / Alerta', config);
         break;
@@ -180,7 +194,6 @@ export class NotificacionService {
     const userString = localStorage.getItem('user');
     const userObj = userString ? JSON.parse(userString) : null;
     const usuarioId = userObj ? userObj.id : '';
-
     return this.http.get(`${BackendApi}/klyntic/notificaciones/usuario/${usuarioId}?page=${page}`, this.getOptions());
   }
 
@@ -200,25 +213,9 @@ export class NotificacionService {
     return '/app/home';
   }
 
-
-
-
-
-  // borrarNotificacion(id: string): Observable<any> {
-  //   return this.http.delete(`${BackendApi}/klyntic/notificaciones/por_id/${id}`, this.getOptions()).pipe(
-  //     tap(() => this.cargarContador())
-  //   );
-  // }
-
   limpiarBuzonCompleto(): Observable<any> {
     return this.http.delete(`${BackendApi}/klyntic/notificaciones/limpiar/todas`, this.getOptions()).pipe(
       tap(() => this.unreadCountSub.next(0))
     );
   }
-
-
-
-
-
-
 }

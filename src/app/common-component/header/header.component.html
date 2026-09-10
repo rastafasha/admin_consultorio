@@ -2,98 +2,111 @@
    🖥️ 1. HEADER EXCLUSIVO PARA COMPUTADORAS Y TABLETS (¡Estructura Final!)
    ========================================================================= -->
 <div class="header-escritorio-completo">
-    
+
     <!-- 🚀 CARRIEL IZQUIERDO: Reordenamos los elementos para que el botón sea el primero -->
     <div class="header-left pt-3 header-left-modif">
-        
+
         <!-- 🎯 1. El botón de menú ahora abre la fila a la extrema izquierda -->
-        <a (click)="toggleSideBar()" id="toggle_btn" href="javascript:void(0);">
+        <!-- Botón del menú en Escritorio -->
+        <a href="javascript:void(0);" id="toggle_btn" (click)="toggleSideBar()">
+            <i class="feather icon-menu"></i>
+        </a>
+
+        <!-- Botón del menú en Móvil (Responsive) -->
+        <a id="mobile_btn" class="mobile_btn float-start" (click)="toggleSideBar()">
             <img src="assets/img/icons/bar-icon.svg" alt="menu">
         </a>
 
         <!-- 🎯 2. El Logo se posiciona en el medio -->
         <a routerLink="/">
-            <img class="logoav" src="assets/svg/logoklintic.svg"  alt="logo">
+            <img class="logoav" src="assets/svg/logoklintic.svg" alt="logo">
         </a>
-        
+
         <!-- 🎯 3. El Texto cierra el carril izquierdo -->
         <span class="nmclin">
-            Klyntic | {{name_setting}} <br> 
+            Klyntic | {{name_setting}} <br>
             Dr.{{user.name}} {{user.surname}}
         </span>
     </div>
 
     <!-- 🚀 LADO DERECHO: Totalmente estático, limpio y sin variaciones -->
     <div class="header-right">
-        <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm" (click)="openModal()" data-bs-toggle="modal" data-bs-target="#viewQRPaciente" title="Ayuda de la sección">
+        <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm" (click)="openModal()"
+            data-bs-toggle="modal" data-bs-target="#viewQRPaciente" title="Ayuda de la sección">
             <i class="fas fa-qrcode"></i>
         </button>
         <app-tasabcv></app-tasabcv>
         <div class="setting-row" *ngIf="!isLoadingSwitch" [class.loading]="pushService.isProcessing$ | async">
             <div class="setting-info"><i class="fa fa-bell"></i></div>
             <div class="switch-wrapper">
+                <!-- El spinner se activa correctamente de forma reactiva mientras la petición viaja al servidor -->
                 <div *ngIf="pushService.isProcessing$ | async" class="mini-spinner"></div>
+
                 <label class="switch">
-                    <input type="checkbox" [disabled]="pushService.isProcessing$ | async" [checked]="pushService.isSubscribed$ | async" (change)="togglePush()">
+                    <!-- El switch se deshabilita mientras procesa y se marca/desmarca según la realidad del servidor -->
+                    <input type="checkbox" [disabled]="pushService.isProcessing$ | async"
+                        [checked]="pushService.isSubscribed$ | async" (change)="togglePush()">
                     <span class="slider round"></span>
                 </label>
             </div>
         </div>
-        <app-notificacionesupdate [routes]="routes" [user]="user" [usuario]="usuario" [imagenSerUrl]="imagenSerUrl" [logout]="logout"></app-notificacionesupdate>
+        <app-notificacionesupdate [routes]="routes" [user]="user" [usuario]="usuario" [imagenSerUrl]="imagenSerUrl"
+            [logout]="logout"></app-notificacionesupdate>
     </div>
 </div>
 
 
-
-<!-- ========================================================================= -->
-
 <!-- =========================================================================
    📱 2. HEADER EXCLUSIVO PARA CELULARES (¡Estructura Blindada!)
    ========================================================================= -->
-<div class="header-movil-custom d-flex d-md-none">
-    
-    <!-- Bloque Izquierdo: Menú Hamburguesa y Logo ordenados en línea -->
-    <div class="bloque-izq">
-        <a (click)="toggleMobileSideBar()" class="trigger-menu-movil">
+<div class="header-movil-custom d-flex d-md-none justify-content-between align-items-center w-100 px-2">
+
+    <!-- Bloque Izquierdo: Convertido a botón nativo para forzar la interactividad en iOS -->
+    <div class="bloque-izq d-flex align-items-center">
+        <button (click)="toggleMobileSideBar()" class="btn btn-link p-0 border-0 trigger-menu-movil"
+            style="cursor: pointer;">
             <img src="assets/img/icons/bar-icon.svg" width="24" alt="menu">
-        </a>
-        <a routerLink="/" class="enlace-logo-movil">
+        </button>
+        <a routerLink="/" class="enlace-logo-movil ml-2">
             <img src="assets/svg/logoklintic.svg" width="28" alt="logo">
         </a>
     </div>
 
-    <!-- Bloque Derecho: Elementos individuales alineados fluidamente -->
-    <div class="bloque-der">
+    <!-- Bloque Derecho: Alineados fluidamente -->
+    <div class="bloque-der d-flex align-items-center justify-content-end gap-1 flex-nowrap overflow-hidden">
         <!-- 1. Botón QR -->
-        <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm boton-qr-movil" (click)="openModal()" data-bs-toggle="modal" data-bs-target="#viewQRPaciente">
+        <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm boton-qr-movil" (click)="openModal()"
+            data-bs-toggle="modal" data-bs-target="#viewQRPaciente">
             <i class="fas fa-qrcode"></i>
         </button>
-        
+
         <!-- 2. Tasa Cambiaria -->
         <div class="tasa-movil-contenedor">
             <app-tasabcv></app-tasabcv>
         </div>
-        
+
         <!-- 3. Campana de Sockets y Switch -->
-        <div class="setting-row switch-movil-compacto" *ngIf="!isLoadingSwitch" [class.loading]="pushService.isProcessing$ | async">
-            <div class="setting-info">
+        <div class="setting-row switch-movil-compacto d-flex align-items-center" *ngIf="!isLoadingSwitch"
+            [class.loading]="pushService.isProcessing$ | async">
+            <div class="setting-info mr-1">
                 <i class="fa fa-bell" style="font-size: 16px; color: #513081;"></i>
             </div>
             <div class="switch-wrapper">
+                <!-- El spinner se activa correctamente de forma reactiva mientras la petición viaja al servidor -->
+                <div *ngIf="pushService.isProcessing$ | async" class="mini-spinner"></div>
+
                 <label class="switch">
-                    <input type="checkbox" [disabled]="pushService.isProcessing$ | async" [checked]="pushService.isSubscribed$ | async" (change)="togglePush()">
+                    <!-- El switch se deshabilita mientras procesa y se marca/desmarca según la realidad del servidor -->
+                    <input type="checkbox" [disabled]="pushService.isProcessing$ | async"
+                        [checked]="pushService.isSubscribed$ | async" (change)="togglePush()">
                     <span class="slider round"></span>
                 </label>
             </div>
         </div>
 
-        <!-- 4. 🚀 AJUSTE: El componente de notificaciones se maneja de forma aislada -->
+        <!-- 4. Componente de notificaciones aislado -->
         <div class="notif-movil-wrapper">
-            <app-notificacionesupdate 
-                [routes]="routes" 
-                [user]="user" 
-                [usuario]="usuario" 
-                [imagenSerUrl]="imagenSerUrl" 
+            <app-notificacionesupdate [routes]="routes" [user]="user" [usuario]="usuario" [imagenSerUrl]="imagenSerUrl"
                 [logout]="logout">
             </app-notificacionesupdate>
         </div>
@@ -104,4 +117,5 @@
 
 
 
-<app-qracceso  #viewQRPaciente ></app-qracceso>
+
+<app-qracceso #viewQRPaciente></app-qracceso>

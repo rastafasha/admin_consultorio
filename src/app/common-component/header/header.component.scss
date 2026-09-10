@@ -92,7 +92,6 @@ app-tasabcv {
 }
 
 
-
 /* =========================================================================
    📱 2. MEDIA QUERY: AJUSTES GENERALES PARA MÓVILES (Hasta 767.98px)
    ========================================================================= */
@@ -123,20 +122,25 @@ app-tasabcv {
             gap: 10px !important;
             height: 100% !important;
             margin-right: 10px;
+            flex-shrink: 0 !important; /* 🚀 BLINDAJE: El logo y menú nunca se encogen en iPhone */
         }
 
+        /* Corregido para forzar interactividad total en pantallas táctiles de iOS */
         .trigger-menu-movil {
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
             width: 32px;
             height: 32px;
-            cursor: pointer;
+            cursor: pointer !important;
+            user-select: none !important;
+            -webkit-tap-highlight-color: transparent !important; /* Quita el cuadro gris feo al tocar en iPhone */
         }
 
         .enlace-logo-movil {
             display: flex !important;
             align-items: center !important;
+            flex-shrink: 0 !important;
             & img { object-fit: contain; }
         }
 
@@ -144,8 +148,14 @@ app-tasabcv {
             display: flex !important;
             align-items: center !important;
             justify-content: flex-end !important;
-            gap: 8px !important;
+            gap: 6px !important; /* Ligera optimización de espacio */
             height: 100% !important;
+            flex-wrap: nowrap !important; /* 🚀 OBLIGATORIO: Fuerza a mantener una sola línea horizontal */
+            
+            /* 🚀 EL GRAN BLINDAJE PARA SAFARI: Evita que los iconos colapsen a 0px */
+            & > div, & > button, & > app-notificacionesupdate {
+                flex-shrink: 0 !important; 
+            }
         }
 
         .boton-qr-movil {
@@ -170,6 +180,8 @@ app-tasabcv {
             transform-origin: right center !important;
             margin: 0 !important;
             gap: 4px !important;
+            display: flex !important;
+            align-items: center !important;
         }
 
         /* 🚀 CONTROL DE FLUJO AISLADO PARA EL PERFIL MÓVIL */
@@ -238,6 +250,7 @@ app-tasabcv {
         min-width: 32px !important;
         height: 32px !important;
         position: relative !important;
+        flex-shrink: 0 !important; /* 🚀 Imprescindible para preservar su espacio físico */
 
         & a, & img, & i {
             display: inline-block !important;
@@ -255,29 +268,26 @@ app-tasabcv {
     }
 
     .logoav {
-    width: 32px !important;
-    height: 32px !important;
-    object-fit: contain;
-    flex-shrink: 0;
+        width: 32px !important;
+        height: 32px !important;
+        object-fit: contain;
+        flex-shrink: 0 !important;
+    }
 }
-}
-
-
-
 
 /* =========================================================================
-   📱 3. MEDIA QUERY: CELULARES ULTRA COMPACTOS (iPhone 6 / hasta 375px)
+   📱 3. MEDIA QUERY: CELULARES ULTRA COMPACTOS (iPhone SE / hasta 375px)
    ========================================================================= */
 @media (max-width: 375px) {
     .header-movil-custom {
-        padding: 0 6px !important; /* Aprovechamos más los bordes del iPhone 6 */
+        padding: 0 6px !important;
         
         .bloque-der {
-            gap: 4px !important; /* Ajuste milimétrico para que no colisionen */
+            gap: 4px !important; 
         }
 
         .switch-movil-compacto {
-            transform: scale(0.8) !important; /* Encogemos sutilmente el switch verde */
+            transform: scale(0.8) !important; 
         }
 
         .boton-qr-movil {
@@ -288,9 +298,10 @@ app-tasabcv {
 
         /* 🎯 NUEVO BLINDAJE: Evita que la Tasa BCV empuje los elementos hacia afuera */
         .tasa-movil-contenedor {
-            max-width: 85px !important; /* Límite físico en píxeles */
+            max-width: 85px !important; 
             overflow: hidden !important;
             white-space: nowrap !important;
+            flex-shrink: 0 !important;
             
             /* Encogemos el texto o badges internos de la Tasa BCV */
             ::ng-deep span, 
@@ -305,9 +316,11 @@ app-tasabcv {
             transform: scale(0.9) !important;
             display: flex !important;
             align-items: center !important;
+            flex-shrink: 0 !important;
         }
     }
 }
+
 
 
 /* =========================================================================

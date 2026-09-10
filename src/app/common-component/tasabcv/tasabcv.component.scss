@@ -1,7 +1,9 @@
 
 .tasastyle{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    padding: 0px;
+    margin: 0px;
     padding-top: 5px;
     p{
         font-size: 12px;
@@ -9,7 +11,7 @@
             margin: 0px;
     }
     a{
-        font-size: 12px;
+        font-size: 16px;
         color: #513081;
         padding: 0px;
         margin: 0px;

@@ -8,10 +8,10 @@ import { routes } from '../../shared/routes/routes';
 import { SideBarService } from '../../shared/side-bar/side-bar.service';
 
 @Component({
-    selector: 'app-sidebar',
-    templateUrl: './sidebar.component.html',
-    styleUrls: ['./sidebar.component.scss'],
-    standalone: false
+  selector: 'app-sidebar',
+  templateUrl: './sidebar.component.html',
+  styleUrls: ['./sidebar.component.scss'],
+  standalone: false
 })
 export class SidebarComponent implements OnInit {
   base = '';
@@ -46,8 +46,8 @@ export class SidebarComponent implements OnInit {
       this.loadSidebarData();
     });
   }
-  
-private loadSidebarData(): void {
+
+  private loadSidebarData(): void {
     if (!this.user) {
       this.sidebarData = [];
       return;
@@ -82,7 +82,7 @@ private loadSidebarData(): void {
         if (side && Array.isArray(side.menu)) {
           for (let j = 0; j < side.menu.length; j++) {
             const menu_s = side.menu[j];
-            
+
             // Filtrar submenús manualmente (reemplaza a .filter e .includes)
             const SUB_MENUS: any[] = [];
             if (menu_s.subMenus && Array.isArray(menu_s.subMenus)) {
@@ -117,7 +117,7 @@ private loadSidebarData(): void {
   public expandSubMenus(menu: any): void {
     if (!this.sidebarData) return;
     sessionStorage.setItem('menuValue', menu.menuValue);
-    
+
     for (let i = 0; i < this.sidebarData.length; i++) {
       const mainMenus = this.sidebarData[i];
       if (mainMenus && mainMenus.menu) {
@@ -168,28 +168,28 @@ private loadSidebarData(): void {
 
 
 
-//boton install pwa
+  //boton install pwa
 
   public promptEvent;
 
-@HostListener('window:beforeinstallprompt', ['$event'])
-onbeforeinstallprompt(e) {
-  e.preventDefault();
-  this.promptEvent = e;
-}
+  @HostListener('window:beforeinstallprompt', ['$event'])
+  onbeforeinstallprompt(e) {
+    e.preventDefault();
+    this.promptEvent = e;
+  }
 
-public installPWA() {
-  this.promptEvent.prompt();
-}
+  public installPWA() {
+    this.promptEvent.prompt();
+  }
 
-public shouldInstall(): boolean {
-  return !this.isRunningStandalone() && this.promptEvent;
-}
+  public shouldInstall(): boolean {
+    return !this.isRunningStandalone() && this.promptEvent;
+  }
 
-public isRunningStandalone(): boolean {
-  return (window.matchMedia('(display-mode: standalone)').matches);
-}
+  public isRunningStandalone(): boolean {
+    return (window.matchMedia('(display-mode: standalone)').matches);
+  }
 
-  
+
 
 }

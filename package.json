@@ -7,7 +7,7 @@
     "start:dev": "ng serve --port 4300",
     "start:local": "ng serve --configuration local --port 4300",
     "start:consultorio": "ng serve --configuration consultorio --port 4300",
-    "start:prod": "ng build && lite-server -p 8080 --baseDir dist/klyntic_consultorio_admin",
+    "start:prod": "ng build && lite-server -p 8080 --baseDir dist/klyntic_consultorio_admin/browser",
     "build": "ng build",
     "build:consultorio": "ng build --configuration consultorio",
     "build:local": "ng build --configuration local --base-href /",
