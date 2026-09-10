@@ -147,83 +147,83 @@ export class PatientFormMComponent implements OnInit {
     this.initSpeechRecognition();
   }
 
+  // toggleDictadoGlobal(event: any) {
+  //   this.isListening = event.target.checked;
+  //   if (!this.recognition) {
+  //     alert('Tu navegador no soporta dictado por voz.');
+  //     return;
+  //   }
+  //   if (this.isListening) {
+  //     this.recognition.start();
+  //     console.log('🎤 Micrófono encendido globalmente...');
+  //   } else {
+  //     this.recognition.stop();
+  //     console.log('🛑 Micrófono apagado.');
+  //   }
+  // }
+
   toggleDictadoGlobal(event: any) {
-    this.isListening = event.target.checked;
-    if (!this.recognition) {
-      alert('Tu navegador no soporta dictado por voz.');
-      return;
-    }
-    if (this.isListening) {
-      this.recognition.start();
-      console.log('🎤 Micrófono encendido globalmente...');
-    } else {
-      this.recognition.stop();
-      console.log('🛑 Micrófono apagado.');
-    }
+  this.isListening = event.target.checked;
+
+  if (!this.recognition) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'No Soportado',
+      text: 'Tu dispositivo o navegador actual no admite dictado por voz.',
+      showConfirmButton: true
+    });
+    event.target.checked = false;
+    this.isListening = false;
+    return;
   }
 
-//   toggleDictadoGlobal(event: any) {
-//   this.isListening = event.target.checked;
-
-//   if (!this.recognition) {
-//     Swal.fire({
-//       icon: 'warning',
-//       title: 'No Soportado',
-//       text: 'Tu dispositivo o navegador actual no admite dictado por voz.',
-//       showConfirmButton: true
-//     });
-//     event.target.checked = false;
-//     this.isListening = false;
-//     return;
-//   }
-
-//   if (this.isListening) {
-//     // 🎙️ EL DETONANTE DE SEGURIDAD PARA LA PWA EN IOS:
-//     // Abrimos un canal de audio instantáneo en el hardware. Esto fuerza a Safari
-//     // a desplegar la ventana flotante de solicitud de permisos en el iPhone 6s.
-//     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-//       navigator.mediaDevices.getUserMedia({ audio: true })
-//         .then((stream) => {
-//           // Permiso concedido: apagamos el micrófono de prueba inmediatamente
-//           // para liberar el canal físico y que el motor Speech lo use
-//           stream.getTracks().forEach(track => track.stop());
+  if (this.isListening) {
+    // 🎙️ EL DETONANTE DE SEGURIDAD PARA LA PWA EN IOS:
+    // Abrimos un canal de audio instantáneo en el hardware. Esto fuerza a Safari
+    // a desplegar la ventana flotante de solicitud de permisos en el iPhone 6s.
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then((stream) => {
+          // Permiso concedido: apagamos el micrófono de prueba inmediatamente
+          // para liberar el canal físico y que el motor Speech lo use
+          stream.getTracks().forEach(track => track.stop());
           
-//           // Encendemos el motor global de Klyntic en la zona de Angular
-//           this.zone.run(() => {
-//             this.recognition.start();
-//             console.log('🎤 Micrófono encendido globalmente con éxito...');
-//           });
-//         })
-//         .catch((err) => {
-//           console.error('El iPhone rechazó el micrófono global:', err);
+          // Encendemos el motor global de Klyntic en la zona de Angular
+          this.zone.run(() => {
+            this.recognition.start();
+            console.log('🎤 Micrófono encendido globalmente con éxito...');
+          });
+        })
+        .catch((err) => {
+          console.error('El iPhone rechazó el micrófono global:', err);
           
           
-//           Swal.fire({
-//             icon: 'error',
-//             title: 'Permiso Denegado',
-//             text: 'Debes permitir el acceso al micrófono en los ajustes de Safari para poder usar el asistente de voz.',
-//             showConfirmButton: true
-//           });
+          Swal.fire({
+            icon: 'error',
+            title: 'Permiso Denegado',
+            text: 'Debes permitir el acceso al micrófono en los ajustes de Safari para poder usar el asistente de voz.',
+            showConfirmButton: true
+          });
 
-//           this.zone.run(() => {
-//             event.target.checked = false;
-//             this.isListening = false;
-//             if (this.recognition) {
-//               this.recognition.stop();
-//             }
-//             this.cd.detectChanges(); // Fuerza a Angular a pintar el switch apagado
-//           });
-//         });
-//     } else {
-//       // Respaldo directo si corres en navegadores que no restrinjan el inicio
-//       this.recognition.start();
-//     }
-//   } else {
-//     // Si el médico apaga el switch, detenemos el motor ordenadamente
-//     this.recognition.stop();
-//     console.log('🛑 Micrófono apagado.');
-//   }
-// }
+          this.zone.run(() => {
+            event.target.checked = false;
+            this.isListening = false;
+            if (this.recognition) {
+              this.recognition.stop();
+            }
+            this.cd.detectChanges(); // Fuerza a Angular a pintar el switch apagado
+          });
+        });
+    } else {
+      // Respaldo directo si corres en navegadores que no restrinjan el inicio
+      this.recognition.start();
+    }
+  } else {
+    // Si el médico apaga el switch, detenemos el motor ordenadamente
+    this.recognition.stop();
+    console.log('🛑 Micrófono apagado.');
+  }
+}
 
 
 
