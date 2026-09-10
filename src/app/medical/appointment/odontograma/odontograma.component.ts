@@ -205,13 +205,39 @@ export class OdontogramaComponent implements OnInit {
     this.recognition.interimResults = false;
     this.recognition.lang = 'es-ES'; // Idioma español latino/españa
 
+    // 🟢 EL ARREGLO CONTRA EL APAGADO AUTOMÁTICO EN IOS:
+
     this.recognition.onstart = () => {
       this.zone.run(() => this.isListening = true);
     };
 
     this.recognition.onend = () => {
-      this.zone.run(() => this.isListening = false);
+      this.zone.run(() => {
+        // Si el motor se apaga solo pero el switch físico en la pantalla sigue ENCENDIDO,
+        // significa que iOS cortó el micrófono por inactividad. ¡Lo encendemos de nuevo al instante!
+        if (this.isListening) {
+          console.log('🔄 Reencendiendo micrófono automáticamente para evitar el apagado de iOS...');
+          try {
+            this.recognition.start();
+          } catch (e) {
+            // Evitamos saturar la consola si el motor ya estaba intentando arrancar
+            console.log('Intento de reencendido ignorado por ejecución activa.');
+          }
+        } else {
+          // Si el médico lo apagó a propósito por el switch, se queda apagado de verdad
+          this.isListening = false;
+        }
+      });
     };
+    // 🟢 EL ARREGLO CONTRA EL APAGADO AUTOMÁTICO EN IOS- fin
+
+    // this.recognition.onstart = () => {
+    //   this.zone.run(() => this.isListening = true);
+    // };
+
+    // this.recognition.onend = () => {
+    //   this.zone.run(() => this.isListening = false);
+    // };
 
     this.recognition.onresult = (event: any) => {
       const resultIndex = event.resultIndex;
