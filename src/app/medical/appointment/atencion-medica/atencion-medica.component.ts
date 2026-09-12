@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { routes } from '../../../shared/routes/routes';
 import { StaffService } from '../../../services/staff.service';
 import { ToastrService } from 'ngx-toastr';
+import { OfflineService } from '../../../services/offline.service';
 
 @Component({
   selector: 'app-atencion-medica',
@@ -77,6 +78,7 @@ export class AtencionMedicaComponent {
     private cdr: ChangeDetectorRef,
     private zone: NgZone,
     private toastr: ToastrService,
+    private offlineService: OfflineService,
   ) {
 
   }
@@ -392,55 +394,100 @@ export class AtencionMedicaComponent {
     }
 
     if (this.laboratory == true) {
-      this.laboratory_number = 2
+      this.laboratory_number = 2;
     } else {
-      this.laboratory_number = 1
+      this.laboratory_number = 1;
     }
 
-    const data = {
+    // Armamos el objeto base con los datos del formulario
+   const data = {
       appointment_id: this.appointment_id,
       description: this.description,
       medical: this.medical,
       laboratory: this.laboratory_number,
       patient_id: this.appointment_selected.patient_id,
-    }
+      created_at: new Date().toISOString() // <--- ESTA ES LA CLAVE
+    };
 
-    this.appointmentService.registerAttention(data).subscribe((resp: any) => {
-      if (resp.message == 403) {
-        this.text_validation = resp.message_text;
-        Swal.fire({
-          position: "top-end",
-          icon: "warning",
-          title: this.text_validation,
-          showConfirmButton: false,
-          timer: 1500
-        });
-      } else {
-        this.text_success = 'Se guardó la informacion de la cita médica'
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: this.text_success,
-          showConfirmButton: false,
-          timer: 1500
-        });
+    // =========================================================================
+    // DETECCIÓN DE CONECTIVIDAD (Utilizando el ConnectionService o navigator.onLine)
+    // =========================================================================
+    const isOnline = navigator.onLine; // O: this.connectionService.currentStatus;
 
-        // =========================================================
-        // LA CLAVE: DISPARAR LA IMPRESIÓN ANTES DE CAMBIAR DE RUTA
-        // =========================================================
+    if (isOnline) {
+      // -----------------------------------------------------------------------
+      // MODO ONLINE: Tu flujo original (Envío directo al servidor)
+      // -----------------------------------------------------------------------
+      this.appointmentService.registerAttention(data).subscribe((resp: any) => {
+        if (resp.message == 403) {
+          this.text_validation = resp.message_text;
+          Swal.fire({
+            position: "top-end",
+            icon: "warning",
+            title: this.text_validation,
+            showConfirmButton: false,
+            timer: 1500
+          });
+        } else {
+          this.text_success = 'Se guardó la informacion de la cita médica';
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: this.text_success,
+            showConfirmButton: false,
+            timer: 1500
+          });
+
+          if (debeImprimir) {
+            this.imprimirRecipe(); 
+          }
+
+          this.redirigirUsuario();
+        }
+      });
+
+    } else {
+      // -----------------------------------------------------------------------
+      // MODO OFFLINE: Resguardo local e inmediato en el navegador (Costo $0)
+      // -----------------------------------------------------------------------
+      const endpointOffline = 'appointments/register-attention'; // El segmento de la API correspondiente
+      
+      // Guardamos en la cola local mediante el servicio offline
+      this.offlineService.saveFormOffline('/appointment-atention/store', data, 'Atencion');
+  
+
+      // Alerta de tranquilidad estilo Apple para el médico
+      Swal.fire({
+        position: "top-end",
+        icon: "info",
+        title: "Guardado localmente. Sin internet en el consultorio. Klyntic sincronizará los datos automáticamente al detectar la red.",
+        showConfirmButton: true, // Le dejamos el botón de OK para que lo lea con calma
+        confirmButtonText: "Entendido"
+      }).then(() => {
+        // =====================================================================
+        // VENTAJA BRUTAL: La impresora física o el PDF local no necesitan internet.
+        // Disparada la impresión, el médico puede entregar el récipe en físico.
+        // =====================================================================
         if (debeImprimir) {
-          this.imprimirRecipe(); // Imprime usando el arreglo completo de medicines que guardaste
+          this.imprimirRecipe();
         }
 
-        if (this.user.roles === 'SUPERADMIN') {
-          this.router.navigate(['/appointments/list']);
-        }
-        if (this.user.roles === 'DOCTOR') {
-          this.router.navigate(['/appointments/list/doctor/', this.user.id]);
-        }
-      }
-    })
+        // Redirigimos de una vez para que pueda atender al siguiente paciente offline
+        this.redirigirUsuario();
+      });
+    }
+}
+
+// Helper extraído para no repetir código de redirección
+private redirigirUsuario() {
+  if (this.user.roles === 'SUPERADMIN') {
+    this.router.navigate(['/appointments/list']);
   }
+  if (this.user.roles === 'DOCTOR') {
+    this.router.navigate(['/appointments/list/doctor/', this.user.id]);
+  }
+}
+
 
   imprimirRecipe() {
     // Crear una ventana flotante para la impresión

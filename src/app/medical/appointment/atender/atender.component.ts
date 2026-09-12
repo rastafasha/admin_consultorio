@@ -11,6 +11,7 @@ import { SettignService } from '../../../core/settings/settigs.service';
 import { Patient } from '../../../models/patient.model';
 import { routes } from '../../../shared/routes/routes';
 import { DoctorAddress } from '../../../models/DoctorAddress.model';
+import { OfflineService } from '../../../services/offline.service';
 
 @Component({
   selector: 'app-atender',
@@ -94,6 +95,7 @@ export class AtenderComponent implements OnInit {
     public specialitiService: SpecialitieService,
     public roleService: RolesService,
     public settigService: SettignService,
+    private offlineService: OfflineService,
 
   ) {
 
@@ -313,40 +315,74 @@ export class AtenderComponent implements OnInit {
 
 
   onSave() {
+  // 1. Construir el objeto DATA base e inyectarle el created_at para congelar la hora
+  const data = {
+    segment_hour: this.hour,
+    "date_appointment": this.date_appointment,
+    "speciality_id": this.speciality_id,
+    "doctor_schedule_join_hour_id": this.selected_segment_hour.id,
 
-    const data = {
+    amount_add: this.amount_add,
+    amount: this.amount,
+    method_payment: this.method_payment,
 
-      segment_hour: this.hour,
-      "date_appointment": this.date_appointment,
-      "speciality_id": this.speciality_id,
-      "doctor_schedule_join_hour_id": this.selected_segment_hour.id,
+    name: this.name,
+    surname: this.surname,
+    phone: this.phone,
+    n_doc: this.n_doc,
+    name_companion: this.name_companion,
+    surname_companion: this.surname_companion,
 
-      amount_add: this.amount_add,
-      amount: this.amount,
-      method_payment: this.method_payment,
+    appointment_id: 0,
+    patient_id: this.patient ? this.patient.id : null, 
+    doctor_id: this.doctor_id,
+    user_id: this.patient ? this.patient.id : null,
+    created_at: new Date().toISOString() // <-- Clave para proteger la cronología de la consulta financiera/médica
+  };
 
-      name: this.name,
-      surname: this.surname,
-      phone: this.phone,
-      n_doc: this.n_doc,
-      name_companion: this.name_companion,
-      surname_companion: this.surname_companion,
+  // =========================================================================
+  // DETECCIÓN DE CONECTIVIDAD 
+  // =========================================================================
+  const isOnline = navigator.onLine;
 
-      appointment_id: 0,
-      patient_id: this.patient ? this.patient.id : null, // Updated line
-      doctor_id: this.doctor_id,
-      user_id: this.patient ? this.patient.id : null, // Updated line
-    }
-
+  if (isOnline) {
+    // -----------------------------------------------------------------------
+    // MODO ONLINE: Tu flujo original (Envío directo a Laravel en Render)
+    // -----------------------------------------------------------------------
     this.appointmentService.registerAttentionLocal(data).subscribe((resp: any) => {
-      // console.log(data );
-      Swal.fire('Registrado!', `Se guardó la informacion de la Atención médica`, 'success');
-      // this.text_success = 'Se guardó la informacion de la cita médica'
+      Swal.fire({
+        title: '¡Registrado!',
+        text: 'Se guardó la información de la Atención médica',
+        icon: 'success',
+        confirmButtonColor: '#0071e3'
+      });
       this.router.navigate(['/appointments/list/doctor', this.doctor_id]);
-
     }, (error) => {
       Swal.fire('Error', error.error.msg, 'error');
-      // this.errors = error.error;
+    });
+
+  } else {
+    // -----------------------------------------------------------------------
+    // MODO OFFLINE: Resguardo local e inmediato en LocalStorage (Costo $0)
+    // -----------------------------------------------------------------------
+    const endpointPath = '/appointment-atention/store-local'; // Ajusta este path exacto a como esté en tu backend
+
+    // Guardamos ordenadamente en la cola universal de Klyntic
+    this.offlineService.saveFormOffline(endpointPath, data, 'Atencion');
+
+    // Mensaje premium estilo Apple para mantener la calma en el consultorio
+    Swal.fire({
+      title: 'Atención guardada en el dispositivo',
+      html: 'Se detectó una falla de internet.<br><br>Klyntic ha respaldado la información localmente de forma segura y la subirá a la nube de forma automática apenas regrese la señal.',
+      icon: 'info',
+      confirmButtonColor: '#0071e3',
+      confirmButtonText: 'Entendido'
+    }).then(() => {
+      // Redirigimos de inmediato para que la pantalla no se quede congelada y la doctora siga trabajando
+      this.router.navigate(['/appointments/list/doctor', this.doctor_id]);
     });
   }
+}
+
+
 }

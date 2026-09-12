@@ -11,6 +11,7 @@ import { EvolucionComponent } from '../components/evolucion/evolucion.component'
 import { VacunasComponent } from '../components/vacunas/vacunas.component';
 import { ReporteLaboratorioComponent } from '../components/reporte-laboratorio/reporte-laboratorio.component';
 import { SpeechRecognitionService } from '../../../services/speech-recognition.service';
+import { OfflineService } from '../../../services/offline.service';
 
 @Component({
   selector: 'app-patient-form-m',
@@ -119,7 +120,8 @@ export class PatientFormMComponent implements OnInit {
     private staffService: StaffService,
     private cd: ChangeDetectorRef,
     private speechService: SpeechRecognitionService,
-    private zone: NgZone
+    private zone: NgZone,
+    private offlineService: OfflineService,
   ) {
 
   }
@@ -1233,45 +1235,41 @@ export class PatientFormMComponent implements OnInit {
 
   // eslint-disable-next-line no-debugger
   save(): void {
-    if (!this.patientForm.valid) {
-      //mostramos las alertas de los campos requeridos
-      this.patientForm.markAllAsTouched(); // Esto activa las validaciones visuales
-      return
-    }
+  if (!this.patientForm.valid) {
+    this.patientForm.markAllAsTouched(); 
+    return;
+  }
 
-    // console.log('DEBUG patient-form save(): isEditMode=', this.isEditMode, 'patientId=', this.patientId);
-    if (this.isSaving || this.isLoading) {
-      // console.log('DEBUG save(): already saving/loading, ignore');
-      return;
-    }
-    this.isSaving = true;
-    this.isLoading = true;
-    if (this.patientForm.invalid) {
-      this.text_validation = 'Los campos con * son obligatorios';
-      this.isSaving = false;
-      this.isLoading = false;
-      return;
-    }
+  if (this.isSaving || this.isLoading) {
+    return;
+  }
+  
+  this.isSaving = true;
+  this.isLoading = true;
 
+  if (this.patientForm.invalid) {
+    this.text_validation = 'Los campos con * son obligatorios';
+    this.isSaving = false;
+    this.isLoading = false;
+    return;
+  }
+
+  // =========================================================================
+  // 📡 CAPTURA DE CONECTIVIDAD (Estrategia Offline-First)
+  // =========================================================================
+  const isOnline = navigator.onLine;
+
+  if (isOnline) {
+    // -----------------------------------------------------------------------
+    // MODO ONLINE: Tu flujo original usando FormData (Soporta archivos/imágenes)
+    // -----------------------------------------------------------------------
     const formData = new FormData();
     const formValue = this.patientForm.value;
-    // 1. Extraemos el valor actual del formulario (puede ser true, false, 1 o 2)
-    const estadoVacunaForm = this.patientForm.get('is_vacuna')?.value;
 
-
-
-    // =========================================================================
-    // 🎯 TRADUCCIÓN EXPLICITA PARA EL TIPO SMALLINT DE POSTGRESQL
-    // =========================================================================
-    // Evaluamos el booleano real del formulario e inyectamos manualmente el número correcto
     const estadoVacuna = this.patientForm.get('is_vacuna')?.value;
     const valorSmallint = (estadoVacuna === true || estadoVacuna === 2) ? '2' : '1';
-
     formData.append('is_vacuna', valorSmallint);
 
-    console.log('🚀 Envío blindado a PostgreSQL - is_vacuna:', valorSmallint); 5
-
-    // Append all fields (optional skipped if empty as per original)
     formData.append('name', formValue.name);
     formData.append('surname', formValue.surname);
     formData.append('phone', formValue.phone || '');
@@ -1279,7 +1277,6 @@ export class PatientFormMComponent implements OnInit {
     formData.append('address', formValue.address || '');
     formData.append('n_doc', formValue.n_doc);
     formData.append('talla', formValue.talla);
-    // formData.append('historia_enfermedad', formValue.historia_enfermedad);
     formData.append('enfermedad_actual', formValue.enfermedad_actual);
     formData.append('tratamiento', formValue.tratamiento);
     formData.append('examen_fisico', formValue.examen_fisico);
@@ -1289,18 +1286,12 @@ export class PatientFormMComponent implements OnInit {
     formData.append('diganostico', formValue.diagnostico || formValue.diganostico || '');
     formData.append('doctor_id', this.doctor_id.toString());
 
-    // (Usamos un fallback de arreglo vacío [] por si el componente no se renderizó)
     const listaVacunas = this.patientForm.get('vacunas')?.value || [];
     const listaEvoluciones = this.patientForm.get('evolucion')?.value || [];
-
-    // 2. 🛡️ SERIALIZACIÓN CRÍTICA: Convertimos los arrays a texto estructurado JSON
     formData.append('vacunas', JSON.stringify(listaVacunas));
     formData.append('evolucion', JSON.stringify(listaEvoluciones));
 
-    // 3. Adjuntar el resto de campos normales de tu formulario
-    // Recorremos todos los controles del formulario para meterlos al FormData de un solo golpe
     Object.keys(this.patientForm.controls).forEach(key => {
-      // 🎯 CORRECCIÓN: Agregamos 'is_vacuna' a las excepciones para que no se meta como "false"
       if (key !== 'vacunas' && key !== 'evolucion' && key !== 'is_vacuna') {
         const value = this.patientForm.get(key)?.value;
         if (value !== null && value !== undefined) {
@@ -1309,8 +1300,6 @@ export class PatientFormMComponent implements OnInit {
       }
     });
 
-
-    // Optional vitals
     ['ta', 'fc', 'fr', 'peso', 'temperature'].forEach(field => {
       const val = formValue[field];
       if (val && val !== 0) {
@@ -1318,7 +1307,6 @@ export class PatientFormMComponent implements OnInit {
       }
     });
 
-    // Optional others
     ['role_id', 'antecedent_personal', 'antecedent_family', 'antecedent_alerg',
       'name_companion', 'surname_companion', 'mobile_companion', 'relationship_companion',
       'name_responsable', 'surname_responsable', 'mobile_responsable', 'relationship_responsable',
@@ -1335,14 +1323,12 @@ export class PatientFormMComponent implements OnInit {
 
     this.text_validation = '';
 
-
     let observable = this.isEditMode
       ? this.patientService.editPatient(formData, +this.patientId!)
       : this.patientService.createPatient(formData);
 
     observable = observable.pipe(
       catchError((err: any) => {
-        console.error('DEBUG patient-form save ERROR:', err, 'isEditMode:', this.isEditMode);
         this.text_validation = err.error?.message_text || err.error?.message || 'Error saving patient';
         this.isLoading = false;
         this.isSaving = false;
@@ -1351,17 +1337,65 @@ export class PatientFormMComponent implements OnInit {
     );
 
     observable.subscribe((resp: any) => {
-      console.log('DEBUG patient-form save SUCCESS:', resp);
       if (resp.message === 403) {
         this.text_validation = resp.message_text;
       } else {
         this.isLoading = false;
         this.isSaving = false;
         Swal.fire('Exito!', `El Paciente se ha ${this.isEditMode ? 'Actualizado' : 'Creado'}`, 'success');
-        // this.router.navigate(['/patient-m/list/doctor/', this.doctor_id]);
+        this.router.navigate(['/patient-m/list/doctor/', this.doctor_id]);
       }
     });
+
+  } else {
+    // -----------------------------------------------------------------------
+    // MODO OFFLINE: Mapeo y Resguardo en JSON plano ordenado (Evita errores de FormData)
+    // -----------------------------------------------------------------------
+    const formValue = this.patientForm.value;
+    const estadoVacuna = this.patientForm.get('is_vacuna')?.value;
+    const valorSmallint = (estadoVacuna === true || estadoVacuna === 2) ? '2' : '1';
+
+    // Construimos un JSON nativo limpio con la hora congelada
+    const jsonOfflineData = {
+      ...formValue,
+      is_vacuna: valorSmallint,
+      doctor_id: this.doctor_id,
+      vacunas: this.patientForm.get('vacunas')?.value || [],
+      evolucion: this.patientForm.get('evolucion')?.value || [],
+      diganostico: formValue.diagnostico || formValue.diganostico || '',
+      created_at: new Date().toISOString()
+    };
+
+    // Definimos la ruta dinámica de la API para pacientes
+    const endpointPath = this.isEditMode
+      ? `/patient/update/${this.patientId}` // Ajusta este path exacto a tu backend de Laravel
+      : '/patient/store';
+
+    // Despachamos a la cola universal de Klyntic
+    this.offlineService.saveFormOffline(endpointPath, jsonOfflineData, 'Paciente');
+
+    this.isLoading = false;
+    this.isSaving = false;
+
+    // Alerta descriptiva y profesional estilo Apple
+    let infoHtml = 'Se detectó que el consultorio está sin internet.<br><br>La ficha clínica, vitales, vacunas y evoluciones médicas han sido **respaldadas localmente de forma segura** en el navegador.';
+    
+    if (this.FILE_AVATAR) {
+      infoHtml += '<br><br><span class="text-warning">⚠️ Nota: La foto de perfil requiere conexión y no se pudo guardar offline, podrá adjuntarla al recuperar la red.</span>';
+    }
+
+    Swal.fire({
+      title: this.isEditMode ? 'Actualización en caché local' : 'Paciente guardado en el dispositivo',
+      html: infoHtml,
+      icon: 'info',
+      confirmButtonColor: '#0071e3',
+      confirmButtonText: 'Entendido'
+    }).then(() => {
+      this.router.navigate(['/patient-m/list/doctor/', this.doctor_id]);
+    });
   }
+}
+
 
   public get title(): string {
     return this.isEditMode ? `Editar Paciente #${this.patientId}` : 'Agregar Paciente';

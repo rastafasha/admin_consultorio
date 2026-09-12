@@ -27,6 +27,9 @@
     .notifications .drop-scroll {
         width: 100% !important; /* Ocupa la totalidad de los 320px del menú */
     }
+    .net-status-text{
+        display: none !important; /* Oculta el texto de conectividad en móviles */
+    }
 }
 
 /* El resto de tus clases (.globowhite, .globoblack, etc.) se quedan exactamente igual abajo */
@@ -151,3 +154,76 @@ body.dark .globowhite {
         }
     }
 }
+
+
+/* ==========================================================================
+   📌 INDICADOR DE CONECTIVIDAD (Look Apple iOS - Adaptado a SCSS)
+   ========================================================================== */
+
+.apple-network-badge {
+  border: 1px solid transparent;
+  font-size: 0.68rem; // Tamaño compacto para la barra de usuario
+  letter-spacing: 0.5px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+  // El punto indicador circular base
+  .net-pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+
+  // --- Estado Conectado (Verde Esmeralda) ---
+  &.net-online {
+    background-color: rgba(39, 201, 63, 0.1) !important;
+    color: #1e7e34 !important; // Verde oscuro legible sobre fondo claro
+    border: 1px solid rgba(39, 201, 63, 0.25) !important;
+
+    .net-pulse-dot {
+      background-color: #28a745;
+      box-shadow: 0 0 6px rgba(39, 201, 63, 0.5);
+    }
+  }
+
+  // --- Estado Desconectado (Naranja de Advertencia) ---
+  &.net-offline {
+    background-color: rgba(255, 159, 10, 0.12) !important;
+    color: #d35400 !important; // Naranja óxido legible sobre blanco
+    border: 1px solid rgba(255, 159, 10, 0.3) !important;
+    animation: appleBadgePulse 2s infinite ease-in-out;
+
+    .net-pulse-dot {
+      background-color: #ff9f0a;
+      box-shadow: 0 0 6px rgba(255, 159, 10, 0.6);
+      animation: dotPulseMobile 1.2s infinite ease-in-out;
+    }
+  }
+}
+
+/* --- Animaciones de Pulsación --- */
+@keyframes dotPulseMobile {
+  0%, 100% { 
+    transform: scale(1); 
+    opacity: 1; 
+  }
+  50% { 
+    transform: scale(1.4); 
+    opacity: 0.4; 
+  }
+}
+
+@keyframes appleBadgePulse {
+  0%, 100% { 
+    border-color: rgba(255, 159, 10, 0.3); 
+  }
+  50% { 
+    border-color: rgba(255, 159, 10, 0.6); 
+  }
+}
+

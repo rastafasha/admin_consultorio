@@ -6,6 +6,7 @@ import { Pais } from '../../../models/pais';
 import { DoctorService } from '../../../services/doctor.service';
 import { routes } from '../../../shared/routes/routes';
 import { DoctorAddress } from '../../../models/DoctorAddress.model';
+import { OfflineService } from '../../../services/offline.service';
 
 @Component({
   selector: 'app-doctors-form',
@@ -57,7 +58,8 @@ export class DoctorsFormComponent implements OnInit {
     private fb: FormBuilder,
     public doctorService: DoctorService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private offlineService: OfflineService,
   ) {
     this.doctorForm = this.fb.group({
       name: ['', Validators.required],

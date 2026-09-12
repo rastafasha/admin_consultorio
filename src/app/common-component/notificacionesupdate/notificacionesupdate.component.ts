@@ -5,10 +5,11 @@ import { PaymentService } from "../../services/payment.service";
 import { RolesService } from "../../services/roles.service";
 import { StaffService } from "../../services/staff.service";
 import { AuthService } from "../../shared/auth/auth.service";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { NotificacionService } from "../../services/notificacion.service";
 import { ToastrService } from "ngx-toastr";
 import { PushNotificationService } from "../../services/push-notification.service";
+import { ConnectionService } from "../../services/connection.service";
 
 @Component({
     selector: "app-notificacionesupdate",
@@ -22,6 +23,9 @@ export class NotificacionesupdateComponent implements OnInit, OnDestroy {
   @Input() usuario;
   @Input() imagenSerUrl;
   @Input() logout;
+
+  isOnline: boolean = true;
+  private networkSub!: Subscription;
 
   appointments: any = [];
   appointments_doctors: any = [];
@@ -46,12 +50,18 @@ export class NotificacionesupdateComponent implements OnInit, OnDestroy {
     public staffService: StaffService,
     public notifService: NotificacionService,
     public pushService: PushNotificationService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private connectionService: ConnectionService
   ) {}
 
   ngOnInit(): void {
   const userString = localStorage.getItem('user');
   const userObj = userString ? JSON.parse(userString) : null;
+
+  // Escucha activa del estado del WiFi de la clínica
+    this.networkSub = this.connectionService.checkStatus().subscribe(status => {
+      this.isOnline = status;
+    });
   
   if (userObj && userObj.id) {
     const uid = userObj.id.toString();
@@ -73,10 +83,15 @@ export class NotificacionesupdateComponent implements OnInit, OnDestroy {
       this.getUserRemoto();
     }
   });
+
+  
 }
 
 
   ngOnDestroy(): void {
+    if (this.networkSub) {
+      this.networkSub.unsubscribe();
+    }
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();
     }

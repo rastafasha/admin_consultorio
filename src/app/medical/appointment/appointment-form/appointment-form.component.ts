@@ -9,6 +9,7 @@ import { SettignService } from '../../../core/settings/settigs.service';
 import { RolesService } from '../../../services/roles.service';
 import { routes } from '../../../shared/routes/routes';
 import { DoctorAddress } from '../../../models/DoctorAddress.model';
+import { OfflineService } from '../../../services/offline.service';
 
 @Component({
   selector: 'app-appointment-form',
@@ -72,7 +73,8 @@ export class AppointmentFormComponent implements OnInit {
     public specialitiService: SpecialitieService,
     public roleService: RolesService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private offlineService: OfflineService,
   ) {
     this.appointmentForm = this.fb.group({
       n_doc: ['', Validators.required],
@@ -327,7 +329,7 @@ export class AppointmentFormComponent implements OnInit {
 
   this.text_validation = '';
 
-  // 5. Construir el objeto DATA combinando el formulario y las variables externas
+  // 5. Construir el objeto DATA inyectándole el created_at para congelar la hora
   const data = {
     doctor_id: this.DOCTOR_SELECTED,
     user_id: this.patient?.id, // ID del paciente obtenido en filterPatient()
@@ -342,20 +344,60 @@ export class AppointmentFormComponent implements OnInit {
     doctor_schedule_join_hour_id: this.selected_segment_hour.id,
     amount: formValues.amount,
     amount_add: formValues.amount_add,
-    method_payment: formValues.method_payment
+    method_payment: formValues.method_payment,
+    created_at: new Date().toISOString() // <-- Congelamos la hora del reloj local
   };
 
-  // 6. Determinar si es Edición o Creación
-  const observable = this.isEditMode
-    ? this.appointmentService.editAppointment(data, +this.appointmentId!)
-    : this.appointmentService.storeAppointment(data);
+  // =========================================================================
+  // DETECCIÓN DE CONECTIVIDAD (Costo $0 de infraestructura)
+  // =========================================================================
+  const isOnline = navigator.onLine;
 
-  // 7. Enviar al servidor
-  observable.subscribe((resp: any) => {
-    Swal.fire('Éxito!', 'Cita ' + (this.isEditMode ? 'actualizada' : 'creada'), 'success');
-    this.router.navigate(['/appointments/list/doctor/', this.doctor_id]);
-  });
+  if (isOnline) {
+    // -----------------------------------------------------------------------
+    // MODO ONLINE: Tu flujo original (Envío directo al servidor en Render)
+    // -----------------------------------------------------------------------
+    const observable = this.isEditMode
+      ? this.appointmentService.editAppointment(data, +this.appointmentId!)
+      : this.appointmentService.storeAppointment(data);
+
+    observable.subscribe((resp: any) => {
+      Swal.fire({
+        title: '¡Éxito!',
+        text: 'Cita ' + (this.isEditMode ? 'actualizada' : 'creada') + ' correctamente.',
+        icon: 'success',
+        confirmButtonColor: '#0071e3'
+      });
+      this.router.navigate(['/appointments/list/doctor/', this.doctor_id]);
+    });
+
+  } else {
+    // -----------------------------------------------------------------------
+    // MODO OFFLINE: Resguardo inteligente y ordenado en LocalStorage
+    // -----------------------------------------------------------------------
+    
+    // Definimos las rutas dinámicas según lo que esté haciendo el usuario
+    const endpointPath = this.isEditMode
+      ? `/appointment/update/${this.appointmentId}` // Ajusta esta URL exacta a como esté en tu backend de Laravel
+      : '/appointment/store';
+
+    // Guardamos en la cola universal con la etiqueta 'Cita'
+    this.offlineService.saveFormOffline(endpointPath, data, 'Cita');
+
+    // Mensaje premium estilo Apple para la asistente o médico
+    Swal.fire({
+      title: this.isEditMode ? 'Actualización respaldada' : 'Cita guardada localmente',
+      html: 'Se detectó una falla de internet en el consultorio.<br><br>Klyntic ha guardado los datos de forma segura en el dispositivo y los subirá a la nube de forma automática apenas detecte la red.',
+      icon: 'info',
+      confirmButtonColor: '#0071e3',
+      confirmButtonText: 'Entendido'
+    }).then(() => {
+      // Sacamos al usuario de la pantalla de edición/creación para que la interfaz siga fluyendo
+      this.router.navigate(['/appointments/list/doctor/', this.doctor_id]);
+    });
+  }
 }
+
 
 
   get title(): string {
