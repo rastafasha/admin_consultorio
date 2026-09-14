@@ -8,7 +8,7 @@ import { AuthService } from '../shared/auth/auth.service';
 interface OfflineRequest {
   urlPath: string;    // Ejemplo: '/appointment-atention/store'
   payload: any;       // El JSON del formulario
-  tipo: string;       // Etiqueta visual ('Cita', 'Presupuesto', 'Paciente')
+  tipo: string;       // Etiqueta visual ('Cita', 'Presupuesto', 'Paciente', 'Odontograma')
   timestamp: number;
 }
 
@@ -62,8 +62,10 @@ export class OfflineService {
     const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.authService.token });
     const remainingQueue: OfflineRequest[] = [];
     
-    // Contadores para el SweetAlert final
-    const conteo: { [key: string]: number } = { Cita: 0, Presupuesto: 0, Paciente: 0, Atencion: 0 };
+    // =========================================================================
+    // MODIFICACIÓN 1: Inicializamos 'Odontograma' en el objeto de conteo
+    // =========================================================================
+    const conteo: { [key: string]: number } = { Cita: 0, Presupuesto: 0, Paciente: 0, Atencion: 0, Odontograma: 0 };
 
     for (const item of queue) {
       try {
@@ -95,6 +97,11 @@ export class OfflineService {
       if (conteo['Cita'] > 0) resumen += `• ${conteo['Cita']} Cita(s) guardada(s)<br>`;
       if (conteo['Presupuesto'] > 0) resumen += `• ${conteo['Presupuesto']} Presupuesto(s) sincronizado(s)<br>`;
       if (conteo['Atencion'] > 0) resumen += `• ${conteo['Atencion']} Atención(es) médica(s) guardada(s)<br>`;
+      
+      // =========================================================================
+      // MODIFICACIÓN 2: Añadimos la viñeta de texto para reportar el Odontograma
+      // =========================================================================
+      if (conteo['Odontograma'] > 0) resumen += `• ${conteo['Odontograma']} Diagnóstico(s) de Odontograma guardado(s)<br>`;
       
       Swal.fire({
         title: '¡Sincronización Completada!',
