@@ -14,7 +14,8 @@
                 <app-back-bottn></app-back-bottn>
             </div>
         </div>
-        <app-skeleton-loader *ngIf="isLoading" [rows]="5" [columns]="4"></app-skeleton-loader>
+        <!-- <app-skeleton-loader *ngIf="isLoading" [rows]="5" [columns]="4"></app-skeleton-loader> -->
+         <app-loading *ngIf="isLoading"></app-loading>
         <!-- /Page Header -->
         <div class="row" *ngIf="!isLoading && moneda ==='USD'" >
             <!-- paciente -->

@@ -14,6 +14,7 @@ export class TasabcvComponent {
   tasa:number;
   moneda:string;
   user:any;
+  isLoading=false;
   public tasadollar;
   public tasaeuro;
 
@@ -37,6 +38,7 @@ export class TasabcvComponent {
   }
 
   getDoctorMoneda(){
+    
     this.doctorService.showDoctor(+this.user.id!).subscribe((resp: any) => {
       this.moneda = resp.user.moneda;
       if(this.moneda === 'USD'){
@@ -52,18 +54,24 @@ export class TasabcvComponent {
   }
 
    getTasaDollarUltima(){
+    this.isLoading = true;
     this.tasaBcvService.getUltimaTasa().subscribe((resp:any)=>{
       this.tasadollar = resp.precio_dia;
+      this.isLoading = false;
     })
   }
   getTasaEuroUltima(){
+    this.isLoading = true;
     this.tasaEuroBcvService.getUltimaTasa().subscribe((resp:any)=>{
       this.tasaeuro = resp.precio_dia;
+      this.isLoading = false;
     })
   }
   getTasaPersonalizada(){
+    this.isLoading = true;
     this.tasaPersonalizadaService.getTasasByUser(this.user.id).subscribe((resp:any)=>{
       this.tasa = resp.tasa.precio_dia;
+      this.isLoading = false;
     })
   }
 
