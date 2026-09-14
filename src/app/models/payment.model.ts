@@ -5,6 +5,7 @@ export class Payment{
         bank_name:string;
         monto:number;
         nombre:string;
+        moneda:string;
         email:string;
         patient_id:number;
         doctor_id:number;

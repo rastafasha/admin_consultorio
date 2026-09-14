@@ -69,6 +69,7 @@ export class DoctorsFormComponent implements OnInit {
       password: ['', Validators.required],
       password_confirmation: ['', Validators.required],
       birth_date: [''],
+      moneda: [''],
       gender: [1],
       education: [''],
       designation: [''],
@@ -140,6 +141,7 @@ export class DoctorsFormComponent implements OnInit {
         surname: this.doctor_selected.surname,
         mobile: this.doctor_selected.mobile,
         email: this.doctor_selected.email,
+        moneda: this.doctor_selected.moneda,
         // birth_date: new Date(this.doctor_selected.birth_date).toISOString(),
         birth_date: this.doctor_selected.birth_date
           ? new Date(this.doctor_selected.birth_date).toISOString().substring(0, 10)
@@ -615,6 +617,7 @@ export class DoctorsFormComponent implements OnInit {
     formData.append('surname', formValue.surname);
     formData.append('mobile', formValue.mobile || '');
     formData.append('email', formValue.email);
+    formData.append('moneda', formValue.moneda);
     formData.append('birth_date', formValue.birth_date);
     formData.append('gender', formValue.gender.toString());
     formData.append('speciality_id', this.speciality_id?.toString() || '');

@@ -2,20 +2,17 @@
     <app-sidebar ></app-sidebar>
     <router-outlet></router-outlet> -->
 
-    <div class="main-wrapper" [ngClass]="{
+<div class="main-wrapper" [ngClass]="{
         'expand-menu': expandMenu === 'true' && miniSidebar === 'true',
         'mini-sidebar': miniSidebar === 'true',
         'slide-nav': mobileSidebar === 'true'
     }">
-        <app-header [ngClass]="{
+    <app-header [ngClass]="{
             'd-none': sideBarActivePath === false && headerActivePath === false}"></app-header>
-        <app-sidebar [ngClass]="{
+    <app-sidebar [ngClass]="{
             'd-none': sideBarActivePath === false && headerActivePath === false}"></app-sidebar>
-        <router-outlet></router-outlet>
-        <div
-    class="sidebar-overlay"
-    [ngClass]="{
+    <router-outlet></router-outlet>
+    <div class="sidebar-overlay" [ngClass]="{
       opened: mobileSidebar === 'true'
-    }"
-    ></div>
-    </div>
+    }"></div>
+</div>

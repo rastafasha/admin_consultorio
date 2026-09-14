@@ -8,7 +8,7 @@
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a routerLink="/">Dashboard </a></li>
                         <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
-                        <li class="breadcrumb-item active">Tasa BCV</li>
+                        <li class="breadcrumb-item active">Tasa {{moneda}} </li>
                     </ul>
                 </div>
                 <app-back-bottn></app-back-bottn>
@@ -16,7 +16,7 @@
         </div>
         <app-skeleton-loader *ngIf="isLoading" [rows]="5" [columns]="4"></app-skeleton-loader>
         <!-- /Page Header -->
-        <div class="row" *ngIf="!isLoading" >
+        <div class="row" *ngIf="!isLoading && moneda ==='USD'" >
             <!-- paciente -->
             <div class="col-sm-12">
                 <div class="card">
@@ -75,6 +75,12 @@
 
             </div>
             <!-- fin paciente -->
+        </div>
+        <div class="row" *ngIf="!isLoading && moneda ==='EUR'" >
+            <app-tasabcveuro-edit></app-tasabcveuro-edit>
+        </div>
+        <div class="row" *ngIf="!isLoading && moneda ==='PERSONALIZADA'" >
+            <app-tasapersonalizada-edit></app-tasapersonalizada-edit>
         </div>
     </div>
 </div>

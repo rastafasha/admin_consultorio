@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import Swal from 'sweetalert2';
 import { Tasabcv } from '../../../models/tasabcba';
 import { TasadollarbcvService } from '../../../services/tasabcv.service';
+import { DoctorService } from '../../../services/doctor.service';
+import { TasaeurobcvService } from '../../../services/tasaeurobcv.service';
+import { TasaEurobcv } from '../../../models/tasaeurobcv';
 @Component({
     selector: 'app-tasabcv-edit',
     templateUrl: './tasabcv-edit.component.html',
@@ -18,17 +21,30 @@ export class TasabcvEditComponent {
   isLoading = false;
   user:any;
   roles:any;
+  moneda:string;
 
   constructor(
     private tasaBcvService: TasadollarbcvService,
+    private tasaEuroBcvService: TasaeurobcvService,
+    public doctorService: DoctorService,
   ) { }
 
   ngOnInit(): void {
-    this.getTasas();
+    
      window.scrollTo(0, 0);
     const USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER: '');
     this.roles = this.user.roles[0];
+    this.getDoctorMoneda();
+  }
+
+   getDoctorMoneda(){
+    this.doctorService.showDoctor(+this.user.id!).subscribe((resp: any) => {
+      this.moneda = resp.user.moneda;
+      if(this.moneda === 'USD'){
+         this.getTasas();
+      }
+    })
   }
 
 
@@ -39,6 +55,7 @@ export class TasabcvEditComponent {
       this.isLoading = false;
     });
   }
+ 
 
 
   save() {

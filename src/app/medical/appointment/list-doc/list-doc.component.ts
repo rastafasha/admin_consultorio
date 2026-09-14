@@ -290,7 +290,7 @@ export class ListDocComponent {
 
     const blobData = new Blob([excelBuffer],{type: EXCEL_TYPE});
 
-    this.fileSaver.save(blobData, "pacientes_db_health_connectme_consult",)
+    this.fileSaver.save(blobData, "pacientes_db_klyntic_consultorio",)
 
   }
   csvExport(){
@@ -313,7 +313,7 @@ export class ListDocComponent {
 
     const blobData = new Blob([excelBuffer],{type: CSV_TYPE});
 
-    this.fileSaver.save(blobData, "pacientes_db_health_connectme_consult_csv", CSV_EXTENSION)
+    this.fileSaver.save(blobData, "pacientes_db_klyntic_consultorio_csv", CSV_EXTENSION)
 
   }
   txtExport(){
@@ -337,7 +337,7 @@ export class ListDocComponent {
 
     const blobData = new Blob([excelBuffer],{type: TXT_TYPE});
 
-    this.fileSaver.save(blobData, "pacientes_db_health_connectme_consult", TXT_EXTENSION)
+    this.fileSaver.save(blobData, "pacientes_db_klyntic_consultorio_txt", TXT_EXTENSION)
 
   }
 

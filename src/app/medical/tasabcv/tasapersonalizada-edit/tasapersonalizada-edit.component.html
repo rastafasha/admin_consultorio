@@ -1,0 +1,55 @@
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-body">
+
+            <app-loading *ngIf="isLoading"></app-loading>
+            <form *ngIf="!isLoading">
+
+                <div class="row align-items-center">
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="row">
+
+                            <div class="col-12 ">
+                                <div class="form-group local-forms">
+                                    <label for="exampleInputEmail1">Precio</label>
+                                    <input [(ngModel)]="precio_dia" name="precio_dia" type="text" class="form-control"
+                                        [ngModelOptions]="{standalone: true}">
+                                </div>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <button class="btn btn-primary  btn-sm" (click)="save()">+ Agregar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Monto</th>
+                                        <th>Fecha</th>
+                                        <th>Opciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{tasasPersonalizada.precio_dia}}</td>
+                                        <td>{{tasasPersonalizada.createdAt|date}}</td>
+                                        <td>
+                                            <button class="btn btn-danger btn-sm" (click)="deleteTasa(tasasPersonalizada)">x</button>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>

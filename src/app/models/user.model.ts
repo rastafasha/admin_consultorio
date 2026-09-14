@@ -6,6 +6,7 @@ export class User {
     id: number;
     name: string;
     email: string;
+    moneda: string;
     password: string;
     n_doc: string;
     surname: string;

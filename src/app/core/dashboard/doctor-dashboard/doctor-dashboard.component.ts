@@ -342,7 +342,6 @@ export class DoctorDashboardComponent {
     this.doctorService.showDoctorProfile(this.doctor_id).subscribe((resp: any) => {
       this.doctor = resp.doctor;
       this.speciality = resp.doctor.speciality;
-      console.log(resp);
       this.appointment_pendings = resp.appointment_pendings.data;
       this.appointments = resp.appointments;
       this.schedule_selecteds = resp.schedule_selecteds;
@@ -451,7 +450,7 @@ export class DoctorDashboardComponent {
         xaxis: { categories: resp.months_name },
       };
 
-      console.log("DATOS REALES DEL SERVIDOR:", resp.query_patients_by_gender);
+      // console.log("DATOS REALES DEL SERVIDOR:", resp.query_patients_by_gender);
 
 
       // =========================================================================
@@ -475,7 +474,7 @@ export class DoctorDashboardComponent {
       data_by_gender.push(hombres);
       data_by_gender.push(mujeres);
 
-      console.log("Valores procesados para la Dona (Hombres, Mujeres):", data_by_gender);
+      // console.log("Valores procesados para la Dona (Hombres, Mujeres):", data_by_gender);
 
       // Reconfiguración limpia y asignación directa obligatoria
       this.chartOptionsTwo = {

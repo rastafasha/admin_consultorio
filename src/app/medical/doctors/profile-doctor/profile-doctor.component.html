@@ -53,7 +53,8 @@
                                                 </div>
                                                 <div class="doctor-follows">
                                                     <h5>Ganancia</h5>
-                                                    <h4>{{money_of_appointments|currency}}</h4>
+                                                    <h4 *ngIf="doctor_selected?.moneda ==='PERSONALIZADA'">{{money_of_appointments |currency:'$'}}</h4>
+                                                    <h4 *ngIf="doctor_selected?.moneda !=='PERSONALIZADA'">{{money_of_appointments |currency:doctor_selected?.moneda }}</h4>
                                                 </div>
                                                 <div class="doctor-follows">
                                                     <h5>Citas Pendientes</h5>
@@ -133,6 +134,10 @@
                                             <li>
                                                 <h4>Precio Cita</h4>
                                                 <span>{{doctor_selected?.precio_cita|currency}}</span>
+                                            </li>
+                                            <li>
+                                                <h4>Moneda</h4>
+                                                <span>{{doctor_selected?.moneda}}</span>
                                             </li>
                                         </ul>
                                     </div>

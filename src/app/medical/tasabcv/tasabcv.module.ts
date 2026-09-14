@@ -10,12 +10,16 @@ import { ModalInstruccionesModule } from '../../modales/modal-instrucciones.modu
 import { PipesModule } from '../../pipes/pipes.module';
 import { ReusablesModule } from '../../reusables/reusables.module';
 import { SharedModule } from '../../shared/shared.module';
+import { TasabcveuroEditComponent } from './tasabcveuro-edit/tasabcveuro-edit.component';
+import { TasapersonalizadaEditComponent } from './tasapersonalizada-edit/tasapersonalizada-edit.component';
 
 
 
 @NgModule({ declarations: [
         TasabcvComponent,
-        TasabcvEditComponent
+        TasabcvEditComponent,
+        TasabcveuroEditComponent,
+        TasapersonalizadaEditComponent
     ], imports: [
         CommonModule,
         TasabcvRoutingModule,

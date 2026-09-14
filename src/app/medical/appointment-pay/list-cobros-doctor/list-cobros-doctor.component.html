@@ -79,6 +79,7 @@
                     <th mat-sort-header="metodo">metodo</th>
                     <th mat-sort-header="referencia">referencia</th>
                     <th mat-sort-header="monto">monto</th>
+                    <th mat-sort-header="moneda">moneda</th>
                     <th mat-sort-header="tasa">Tasa BCV</th>
                     <th mat-sort-header="fecha">Fecha</th>
                     <th mat-sort-header="status">status</th>
@@ -100,6 +101,7 @@
                     <td>{{data.metodo}}</td>
                     <td>{{data.referencia}}</td>
                     <td>{{data.monto | currency }}</td>
+                    <td>{{data.moneda }}</td>
                     <td>{{data.tasabcv | currency:'Bs. ':'symbol':'1.2-2' }}</td>
                     <td>{{data.fecha|date}}</td>
                     <td>
