@@ -77,10 +77,10 @@
             </div>
             <!-- fin paciente -->
         </div>
-        <div class="row" *ngIf="!isLoading && moneda ==='EUR'" >
+        <div class="row" *ngIf="moneda ==='EUR'" >
             <app-tasabcveuro-edit></app-tasabcveuro-edit>
         </div>
-        <div class="row" *ngIf="!isLoading && moneda ==='PERSONALIZADA'" >
+        <div class="row" *ngIf="moneda ==='PERSONALIZADA'" >
             <app-tasapersonalizada-edit></app-tasapersonalizada-edit>
         </div>
     </div>
