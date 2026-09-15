@@ -39,8 +39,8 @@ export class TasabcvEditComponent {
   }
 
    getDoctorMoneda(){
-    this.doctorService.showDoctor(+this.user.id!).subscribe((resp: any) => {
-      this.moneda = resp.user.moneda;
+    this.doctorService.showDoctorMoneda(+this.user.id!).subscribe((resp: any) => {
+      this.moneda = resp.moneda;
       if(this.moneda === 'USD'){
          this.getTasas();
       }

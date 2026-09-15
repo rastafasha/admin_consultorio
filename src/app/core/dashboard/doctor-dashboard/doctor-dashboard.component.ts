@@ -100,6 +100,7 @@ export class DoctorDashboardComponent {
 
   public user: any;
   public speciality: any;
+  public moneda: string = ''; 
 
   public appointment_pendings: any = [];
   public doctorPatientList: any = [];
@@ -107,6 +108,7 @@ export class DoctorDashboardComponent {
   public appointmentpaysbydoc: any = [];
   public doctor: any = [];
   public schedule_selecteds: any = [];
+
 
   @ViewChild('modalInstrucciones') modal!: ModalInstruccionesComponent;
 
@@ -325,6 +327,7 @@ export class DoctorDashboardComponent {
     const USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER : '');
     this.doctor_id = this.user.id;
+    
 
     if (this.user.roles[0] === 'DOCTOR') {
 
@@ -341,16 +344,54 @@ export class DoctorDashboardComponent {
     this.doctor_id = this.user.id
     this.doctorService.showDoctorProfile(this.doctor_id).subscribe((resp: any) => {
       this.doctor = resp.doctor;
+
       this.speciality = resp.doctor.speciality;
       this.appointment_pendings = resp.appointment_pendings.data;
       this.appointments = resp.appointments;
       this.schedule_selecteds = resp.schedule_selecteds;
       this.dashboardDoctorProfile();
       this.dashboardDoctorProfileYear();
+      
       this.isLoading = false;
 
+      this.getDoctorMoneda();
     })
   }
+
+ getDoctorMoneda() {
+  this.doctorService.showDoctorMoneda(this.doctor.id).subscribe((resp: any) => {
+    // Esto es correcto ya que tu backend devuelve { moneda: 'PERSONALIZADA' }
+    this.moneda = resp.moneda; 
+    console.log("Moneda asignada:", this.moneda);
+  });
+}
+
+getOpcionesMoneda() {
+  const esPersonalizada = this.moneda === 'PERSONALIZADA';
+  
+  // Mapa para traducir el código ISO de 3 letras a su símbolo visual
+  const simbolosMoneda: { [key: string]: string } = {
+    'USD': '$',
+    'EUR': '€',
+    'GBP': '£',
+    'ARS': '$',
+    'MXN': '$',
+    'COP': '$'
+    // Puedes agregar aquí cualquier otra moneda que soporte tu backend
+  };
+
+  // Buscamos el símbolo en el mapa. Si no existe, usamos el código tal cual (ej. 'BRL')
+  const simboloFinal = simbolosMoneda[this.moneda] || (this.moneda ? `${this.moneda} ` : '$');
+
+  return {
+    duration: 2,          // Tiempo de la animación
+    decimalPlaces: 2,     // Dos decimales para el dinero
+    prefix: esPersonalizada ? '$p' : simboloFinal, // Prefijo inteligente
+    separator: ',',       // Separador de miles
+    decimal: '.'          // Separador de decimales
+  };
+}
+
 
 
 

@@ -21,50 +21,58 @@ export class DoctorService {
   
 
   listDoctors(){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer' +this.authService.token});
     const URL = url_servicios+"/doctors";
     return this.http.get(URL, {headers:headers});
   }
   listConfig(){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+    const headers = new HttpHeaders({'Authorization': 'Bearer' +this.authService.token})
     const URL = url_servicios+'/doctors/config';
     return this.http.get(URL, {headers:headers});
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   storeDoctor(data:any){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer' +this.authService.token});
     const URL = url_servicios+"/doctors/store";
     return this.http.post(URL,data, {headers:headers});
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   showDoctor(doctor_id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer' +this.authService.token});
     const URL = url_servicios+"/doctors/show/"+doctor_id;
     return this.http.get(URL,{headers:headers});
   }
+  showDoctorMoneda(doctor_id: number) {
+  //  CORREGIDO: Se agregó el espacio después de 'Bearer '
+  const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.authService.token });
+  
+  const URL = url_servicios + "/doctors/moneda/" + doctor_id;
+  return this.http.get(URL, { headers: headers });
+}
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   editDoctor(data:any, doctor_id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer' +this.authService.token});
     const URL = url_servicios+"/doctors/update/"+doctor_id;
     return this.http.post(URL,data,{headers:headers});
   }
   
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   showDoctorProfile(doctor_id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer' +this.authService.token});
     const URL = url_servicios+"/doctors/profile/"+doctor_id;
     return this.http.get(URL,{headers:headers});
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   editDoctorProfile(data:any, doctor_id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer' +this.authService.token});
     const URL = url_servicios+"/staffs/update/"+doctor_id;
     return this.http.post(URL,data,{headers:headers});
   }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
   yo(user:any){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer' +this.authService.token});
     // let headers = this.headers;
     const URL = url_servicios+'/me';
     return this.http.post(URL,user, {headers: headers})
@@ -72,7 +80,7 @@ export class DoctorService {
   
   
   deleteDoctor(doctor_id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer' +this.authService.token});
     const URL = url_servicios+"/doctors/destroy/"+doctor_id;
     return this.http.delete(URL, {headers:headers});
   }
@@ -83,7 +91,7 @@ export class DoctorService {
   }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
   updateStatus(data:any, doctor_id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer' +this.authService.token});
     const URL = url_servicios+"/doctors/update/status/"+doctor_id;
     return this.http.put(URL,data,{headers:headers});
   }
