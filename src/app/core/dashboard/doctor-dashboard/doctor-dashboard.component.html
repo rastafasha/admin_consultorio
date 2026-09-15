@@ -125,17 +125,10 @@
                             <img src="assets/img/icons/doctor-dash-04.svg" alt="">
                         </div>
                         <div class="doctor-content dash-count flex-grow-1">
-                            <h4>
-                                <!-- Dinero principal -->
-                                <span [countUp]="money_of_appointments" [options]="opcionesMoneda()">0</span>
-
-                                <!-- Contadores secundarios (Citas actuales / Citas anteriores) -->
-                                <span class="counter-up">{{ num_appointments_total_pay_current }}/{{
-                                    num_appointments_total_pay_before }}</span>
-
-                                <!-- Porcentaje -->
-                                <span class="status-green" *ngIf="porcentaje_dtp >= 0">{{ porcentaje_dtp }}%</span>
-                                <span class="status-pink" *ngIf="porcentaje_dtp < 0">{{ porcentaje_dtp }}%</span>
+                            <!-- [countUp]="530" [options]="{duration: 10}" -->
+                            <h4>$<span class="counter-up" >{{num_appointments_total_pay_current}}</span><span>/{{num_appointments_total_pay_before}}</span>
+                                <span class="status-green" *ngIf="porcentaje_dtp >= 0">{{porcentaje_dtp}}%</span>
+                                <span class="status-pink" *ngIf="porcentaje_dtp < 0">{{porcentaje_dtp}}%</span>
                             </h4>
                             <h5>Ganancias</h5>
                         </div>
@@ -148,21 +141,13 @@
                             <img src="assets/img/icons/doctor-dash-04.svg" alt="">
                         </div>
                         <div class="doctor-content dash-count flex-grow-1">
-                            <h4>
-                                <!-- El dinero principal con su animación independiente -->
-                                <span [countUp]="num_appointments_total_pending_current"
-                                    [options]="opcionesMoneda()">0</span>
-
-                                <!-- Los contadores separados para que mantengan su color gris y formato correcto -->
-                                <span class="counter-up">/{{ num_appointments_total_pending_before }}</span>
-
-                                <!-- El porcentaje flotando a la derecha -->
-                                <span class="status-green" *ngIf="porcentaje_dtpn >= 0">{{ porcentaje_dtpn }}%</span>
-                                <span class="status-pink" *ngIf="porcentaje_dtpn < 0">{{ porcentaje_dtpn }}%</span>
+                            <!-- [countUp]="530" [options]="{duration: 10}" -->
+                            <h4>$<span class="counter-up" >{{num_appointments_total_pending_current}}</span><span>/{{num_appointments_total_pending_before}}</span>
+                                <span class="status-green" *ngIf="porcentaje_dtpn >= 0">{{porcentaje_dtpn}}%</span>
+                                <span class="status-pink" *ngIf="porcentaje_dtpn < 0">{{porcentaje_dtpn}}%</span>
                             </h4>
                             <h5>Pendientes</h5>
                         </div>
-
                     </div>
                 </div>
             </div>
