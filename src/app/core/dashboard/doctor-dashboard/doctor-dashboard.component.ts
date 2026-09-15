@@ -366,31 +366,24 @@ export class DoctorDashboardComponent {
   });
 }
 
-getOpcionesMoneda() {
+// Cambia de función a un "getter"
+get opcionesMoneda() {
   const esPersonalizada = this.moneda === 'PERSONALIZADA';
-  
-  // Mapa para traducir el código ISO de 3 letras a su símbolo visual
-  const simbolosMoneda: { [key: string]: string } = {
-    'USD': '$',
-    'EUR': '€',
-    'GBP': '£',
-    'ARS': '$',
-    'MXN': '$',
-    'COP': '$'
-    // Puedes agregar aquí cualquier otra moneda que soporte tu backend
+  const simbolosMoneda: { [key: string]: string } = { 
+    'USD': '$', 'EUR': '€', 'GBP': '£', 'ARS': '$', 'MXN': '$', 'COP': '$' 
   };
-
-  // Buscamos el símbolo en el mapa. Si no existe, usamos el código tal cual (ej. 'BRL')
+  
   const simboloFinal = simbolosMoneda[this.moneda] || (this.moneda ? `${this.moneda} ` : '$');
 
   return {
-    duration: 2,          // Tiempo de la animación
-    decimalPlaces: 2,     // Dos decimales para el dinero
-    prefix: esPersonalizada ? '$p' : simboloFinal, // Prefijo inteligente
-    separator: ',',       // Separador de miles
-    decimal: '.'          // Separador de decimales
+    duration: 2,
+    decimalPlaces: 2,
+    prefix: esPersonalizada ? '$p' : simboloFinal,
+    separator: ',',
+    decimal: '.'
   };
 }
+
 
 
 

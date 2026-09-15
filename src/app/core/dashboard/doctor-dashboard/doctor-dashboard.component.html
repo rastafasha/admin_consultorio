@@ -127,7 +127,7 @@
                         <div class="doctor-content dash-count flex-grow-1">
                             <h4>
                                 <!-- Dinero principal -->
-                                <span [countUp]="money_of_appointments" [options]="getOpcionesMoneda()">0</span>
+                                <span [countUp]="money_of_appointments" [options]="opcionesMoneda()">0</span>
 
                                 <!-- Contadores secundarios (Citas actuales / Citas anteriores) -->
                                 <span class="counter-up">{{ num_appointments_total_pay_current }}/{{
@@ -151,7 +151,7 @@
                             <h4>
                                 <!-- El dinero principal con su animación independiente -->
                                 <span [countUp]="num_appointments_total_pending_current"
-                                    [options]="getOpcionesMoneda()">0</span>
+                                    [options]="opcionesMoneda()">0</span>
 
                                 <!-- Los contadores separados para que mantengan su color gris y formato correcto -->
                                 <span class="counter-up">/{{ num_appointments_total_pending_before }}</span>
