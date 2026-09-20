@@ -1,6 +1,6 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { environment } from '../../environments/environment.consultorio'; // Ajusta la ruta a tu environment
+import { environment } from '../../environments/environment'; // Asegúrate de apuntar a tu archivo base de environment
 
 
 @Injectable({
@@ -10,29 +10,28 @@ export class SecurityService {
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
-  public disableDeveloperTools(): void {
-    // 1. Asegurar que estamos en producción y ejecutándonos en el Navegador (evita errores con SSR)
-    if (!environment.production || !isPlatformBrowser(this.platformId)) {
+ public disableDeveloperTools(): void {
+    // 🚀 SOLUCIÓN AL ERROR TS2339:
+    // Casteamos el objeto 'environment' como 'any' para indicarle a TypeScript 
+    // que confíe en que la propiedad 'production' sí existirá en tiempo de ejecución.
+    const envData = environment as any;
+
+    if (!isPlatformBrowser(this.platformId) || !envData.production) {
       return;
     }
 
-    // 2. Bloquear clic derecho (Menú Contextual)
+    // 1. Bloquear menú contextual (Clic derecho)
     document.addEventListener('contextmenu', (event) => {
       event.preventDefault();
     });
 
-    // 3. Bloquear combinaciones de teclado
+    // 2. Bloquear combinación de teclas de desarrollo (F12, Ctrl+Shift+I, etc.)
     document.addEventListener('keydown', (event) => {
-      // Bloquear F12
       if (event.key === 'F12') {
         event.preventDefault();
         return;
       }
 
-      // Bloquear Ctrl+Shift+I / Cmd+Alt+I (Inspector)
-      // Bloquear Ctrl+Shift+J / Cmd+Alt+J (Consola)
-      // Bloquear Ctrl+Shift+C (Selector de elementos)
-      // Bloquear Ctrl+U (Ver código fuente)
       const isCtrlOrCmd = event.ctrlKey || event.metaKey;
       const isShiftOrAlt = event.shiftKey || event.altKey;
 
@@ -43,5 +42,11 @@ export class SecurityService {
         event.preventDefault();
       }
     });
+
+    // 3. Opcional: Silenciar mensajes en la consola en producción
+    if (window && window.console) {
+      window.console.log = () => {};
+      window.console.warn = () => {};
+    }
   }
 }

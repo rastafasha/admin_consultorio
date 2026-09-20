@@ -77,6 +77,7 @@ export class DoctorDashboardComponent {
   public doctor_id: any;
 
   isLoading = false;
+  isLoadingDataInicial = false;
 
 
   public appointments: any = []
@@ -339,25 +340,29 @@ export class DoctorDashboardComponent {
   }
 
 
-  getDoctor() {
+ getDoctor() {
+    // 🚀 Activamos de forma única y centralizada las pantallas de carga
     this.isLoading = true;
-    this.doctor_id = this.user.id
+    this.isLoadingDataInicial = true;
+    this.doctor_id = this.user.id;
+
     this.doctorService.showDoctorProfile(this.doctor_id).subscribe((resp: any) => {
       this.doctor = resp.doctor;
-
       this.speciality = resp.doctor.speciality;
-      this.appointment_pendings = resp.appointment_pendings.data;
-      this.appointments = resp.appointments;
-      this.schedule_selecteds = resp.schedule_selecteds;
-      this.dashboardDoctorProfile();
+      
+      // Manejo seguro del listado paginado
+      this.appointment_pendings = resp.appointment_pendings?.data ?? resp.appointment_pendings ?? [];
+      this.appointments = resp.appointments ?? [];
+      this.schedule_selecteds = resp.schedule_selecteds ?? [];
+      
+      // 🚀 Encadenamos las llamadas del Dashboard y la moneda de forma limpia
+      this.getDoctorMoneda();
       this.dashboardDoctorProfileYear();
       
-      this.isLoading = false;
-
-      this.getDoctorMoneda();
-    })
+      // Llamamos a las estadísticas y ella misma se encargará de apagar el Loading general
+      this.dashboardDoctorProfile();
+    });
   }
-
  getDoctorMoneda() {
   this.doctorService.showDoctorMoneda(this.doctor.id).subscribe((resp: any) => {
     // Esto es correcto ya que tu backend devuelve { moneda: 'PERSONALIZADA' }
@@ -406,47 +411,56 @@ get opcionesMoneda() {
       this.doctors = resp.doctors;
     })
   }
-
   dashboardDoctorProfile() {
-    this.isLoading = true;
     this.doctor_id = this.doctor.id;
     const data = {
       doctor_id: this.doctor_id
-    }
+    };
 
     this.dashboardService.dashboardDoctor(data).subscribe((resp: any) => {
+      // 🚀 CORREGIDO: Mapeo exacto basado en las llaves que te devuelve el JSON de tu servidor
+      this.num_appointments_current = resp.num_appointments_current ?? 0;
+      this.num_appointments_before = resp.num_appointments_before ?? 0; 
+      this.porcentaje_d = resp.porcentaje_d ?? 0;
 
-     // 1. Estadísticas numéricas y porcentajes (Siempre estables)
-      this.num_appointments_current = resp.num_appointments_current;
-      this.num_appointments_before = resp.num_appointments_before;
-      this.porcentaje_d = resp.porcentaje_d;
+      this.num_appointments_attention_current = resp.num_appointments_attention_current ?? 0;
+      this.num_appointments_attention_before = resp.num_appointments_attention_before ?? 0;
+      this.porcentaje_da = resp.porcentaje_da ?? 0;
 
-      this.num_appointments_attention_current = resp.num_appointments_attention_current;
-      this.num_appointments_attention_before = resp.num_appointments_attention_before;
-      this.porcentaje_da = resp.porcentaje_da;
+      this.num_appointments_total_pay_current = resp.num_appointments_total_pay_current ?? 0;
+      this.num_appointments_total_pay_before = resp.num_appointments_total_pay_before ?? 0;
+      this.porcentaje_dtp = resp.porcentaje_dtp ?? 0;
 
-      this.num_appointments_total_pay_current = resp.num_appointments_total_pay_current;
-      this.num_appointments_total_pay_before = resp.num_appointments_total_pay_before;
-      this.porcentaje_dtp = resp.porcentaje_dtp;
+      this.num_appointments_total_pending_current = resp.num_appointments_total_pending_current ?? 0;
+      this.num_appointments_total_pending_before = resp.num_appointments_total_pending_before ?? 0;
+      this.porcentaje_dtpn = resp.porcentaje_dtpn ?? 0;
 
-      this.num_appointments_total_pending_current = resp.num_appointments_total_pending_current;
-      this.num_appointments_total_pending_before = resp.num_appointments_total_pending_before;
-      this.porcentaje_dtpn = resp.porcentaje_dtpn;
-
-      // =========================================================================
-      // 🛡️ FILTRO DE SEGURIDAD ANTIFALLAS (KLYNTIC)
-      // =========================================================================
-      // Si resp.appointments es un array directo, lo usa. Si es un objeto con .data, entra a .data.
+      // 🚀 ALERTA DE SEGURIDAD MÁXIMA: 
+      // El JSON del servidor no trae la propiedad 'doctor' ni 'schedule_selecteds'. 
+      // Si hacemos "resp.doctor ?? this.doctor" y resp.doctor es undefined (pero la propiedad no existe), 
+      // en algunos entornos limpia la variable. Lo blindamos validando explícitamente si existen en el JSON:
+      if (resp.doctor) {
+        this.doctor = resp.doctor;
+      }
+      if (resp.schedule_selecteds) {
+        this.schedule_selecteds = resp.schedule_selecteds;
+      }
       
+      if (resp.appointment_pendings) {
+        this.appointment_pendings = resp.appointment_pendings?.data ?? resp.appointment_pendings ?? [];
+      }
+
       this.doctorPatientList = Array.isArray(resp.patientsbydoc) ? resp.patientsbydoc : (resp.patientsbydoc?.data || []);
-      
       this.paymentsbydoc = Array.isArray(resp.paymentsbydoc) ? resp.paymentsbydoc : (resp.paymentsbydoc?.data || []);
-      
       this.appointmentpaysbydoc = Array.isArray(resp.appointmentpaysbydoc) ? resp.appointmentpaysbydoc : (resp.appointmentpaysbydoc?.data || []);
 
+      // 🚀 APAGADO DE PANTALLAS DE CARGA
       this.isLoading = false;
+      this.isLoadingDataInicial = false;
     });
   }
+
+
 
   dashboardDoctorProfileYear() {
     this.isLoading = true;
