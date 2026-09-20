@@ -124,7 +124,7 @@ export class ListDoctorComponent {
 
   getTiposdePagoByDoctor(){
     this.settigService.getActivoPagoByDoctor(this.doctor_id).subscribe((resp:any)=>{
-      console.log(resp);
+      // console.log(resp);
       this.tiposdepagos = resp.tiposdepagos;
       // console.log(this.tiposdepagos);
     })
@@ -136,10 +136,10 @@ export class ListDoctorComponent {
 
     this.appointmentpayService.listAppointmentPaysByDoctor(this.doctor_id, page, this.searchDataValue, 
      this.date_start,this.date_end).subscribe((resp:any)=>{
-      // console.log(resp);
+      console.log(resp);
 
       this.totalDataPatient = resp.total;
-      this.appointmentList = resp.appointmentpays.data;
+      this.appointmentList = resp.appointmentpays;
       // this.getTableDataGeneral();
       this.dataSource = new MatTableDataSource<any>(this.appointmentList);
       this.calculateTotalPages(this.totalDataPatient, this.pageSize);
@@ -165,21 +165,23 @@ export class ListDoctorComponent {
         this.text_validation = resp.message_text;
       }else{
         this.text_success = "El Pago se registró correctamente";
-        data.payment.push(resp.appoimentpay);
+        data.payment.push(resp.appointmentpay);
 
         const INDEX = this.appointmentList.findIndex((appo:any)=>appo.id == data.id);
         if(INDEX != -1){
-          this.appointmentList[INDEX].status_pay = !resp.appoimentpay.is_total_payment ? 2: 1;
+          this.appointmentList[INDEX].status_pay = !resp.appointmentpay.is_total_payment ? 2: 1;
         }
         this.amount_add = 0;
         this.method_payment = ''; 
         
-        $('#add_payment').hide();
-        $("#add_payment").removeClass("show");
-        $(".modal-backdrop").remove();
-        $("body").removeClass();
-        $("body").removeAttr("style");
-        this.closebutton.nativeElement.click();
+        // $('#add_payment').hide();
+        // $("#add_payment").removeClass("show");
+        // $(".modal-backdrop").remove();
+        // $("body").removeClass();
+        // $("body").removeAttr("style");
+        // this.closebutton.nativeElement.click();
+         // 🚀 Invocamos el cierre nativo e independiente de jQuery
+        this.closeModalCleanly();
         this.getTableData();
       }
     })
@@ -187,6 +189,7 @@ export class ListDoctorComponent {
 
   selectPayment(payment:any){
     this.payment_selected = payment;
+    console.log(payment)
   }
 
   selectEditPayment(payment:any){
@@ -205,43 +208,79 @@ export class ListDoctorComponent {
     this.text_success = '';
   }
 
-  editPayment(data:any){
+    editPayment(data: any) {
     this.text_validation = '';
-    if(!this.method_payment || !this.amount_add){
-      this.text_validation = "Se Requiere todos los campos"
+    
+    // 🚀 CORREGIDO: Usamos las variables correctas del formulario de EDICIÓN
+    if (!this.method_payment || !this.amount_add) {
+      this.text_validation = "Se Requiere todos los campos";
       return;
     }
-    const dataD ={
+    
+    const dataD = {
       appointment_id: data.id,
       appointment_total: data.amount,
-      amount: this.amount_add,
-      method_payment: this.method_payment
-    }
-    this.appointmentpayService.editAppointmentPay(dataD, this.payment_selected.id).subscribe((resp:any)=>{
-      if(resp.message == 403){
+      amount: this.amount_add,     // 🚀 CORREGIDO
+      method_payment: this.method_payment // 🚀 CORREGIDO
+    };
+
+    this.appointmentpayService.editAppointmentPay(dataD, this.payment_selected.id).subscribe((resp: any) => {
+      if (resp.message == 403) {
         this.text_validation = resp.message_text;
-      }else{
+      } else {
         this.text_success = "El Pago se Actualizó correctamente";
-        const index = data.payments.findIndex((pay:any)=>pay.id == resp.appoimentpay.id);
-        if(index != -1){
-          data.payment[index] = resp.appoimentpay;
+        
+        // 🚀 SOLUCIÓN AL ERROR DE UNDEFINED:
+        // Evaluamos dinámicamente si la propiedad vino en singular (payment) o en plural (payments)
+        const paymentsArray = data.payment || data.payments || [];
+        
+        if (resp.appointmentpay && paymentsArray.length > 0) {
+          const index = paymentsArray.findIndex((pay: any) => pay.id == resp.appointmentpay.id);
+          if (index != -1) {
+            paymentsArray[index] = resp.appointmentpay;
+          }
         }
-        const INDEX = this.appointmentList.findIndex((appo:any)=>appo.id == data.id);
-        if(INDEX != -1){
-          this.appointmentList[INDEX].status_pay = !resp.appoimentpay.is_total_payment ? 2: 1;
+
+        const INDEX = this.appointmentList.findIndex((appo: any) => appo.id == data.id);
+        if (INDEX != -1 && resp.appointmentpay) {
+          this.appointmentList[INDEX].status_pay = !resp.appointmentpay.is_total_payment ? 2 : 1;
         }
+        
+        // Limpiamos las variables globales de edición
         this.amount_add = 0;
         this.method_payment = '';   
 
-        $('#edit_payment').hide();
-        $("#edit_payment").removeClass("show");
-        $(".modal-backdrop").remove();
-        $("body").removeClass();
-        $("body").removeAttr("style");
+        // 🚀 Invocamos el cierre nativo e independiente de jQuery
+        this.closeModalCleanly();
+        
+        // Refrescamos la tabla con los datos nuevos
         this.getTableData();
       }
-    })
+    });
   }
+
+  private closeModalCleanly() {
+    setTimeout(() => {
+      // 🚀 SOLUCIÓN SIN JQUERY: Buscamos el botón de cerrar nativo de Bootstrap del modal que esté abierto
+      const activeModalCloseBtn = document.querySelector('.modal.show [data-bs-dismiss="modal"]') as HTMLElement;
+      
+      if (activeModalCloseBtn) {
+        // Simulamos el clic. Bootstrap se encargará de hacer la animación y quitar el fondo negro solo
+        activeModalCloseBtn.click();
+      } else {
+        // Resguardo de emergencia por si el backdrop se queda pegado en el DOM
+        const backdrops = document.querySelectorAll('.modal-backdrop');
+        backdrops.forEach(backdrop => backdrop.remove());
+        document.body.classList.remove('modal-open');
+        document.body.removeAttribute('style');
+      }
+
+      // Limpiamos los formularios y refrescamos la información
+      this.clearData();
+      this.getTableData(this.currentPage);
+    }, 1200);
+  }
+
 
   closeReload(){
     this.getTableData();
@@ -437,24 +476,6 @@ export class ListDoctorComponent {
 
   }
 
-  pdfExport(){
-    // var doc = new jspdf(); 
-    
-    // const worksheet = XLSX.utils.json_to_sheet(this.appointmentList);
-
-    // const workbook = {
-    //   Sheets:{
-    //     'testingSheet': worksheet
-    //   },
-    //   SheetNames:['testingSheet']
-    // }
-
-    // doc.html(document.body, {
-    //   callback: function (doc) {
-    //     doc.save('appointments_pays_db_appcitasmedicas.pdf');
-    //   }
-    // });
-
-  }
+  
 
 }

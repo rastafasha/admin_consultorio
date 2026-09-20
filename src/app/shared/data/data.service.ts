@@ -396,7 +396,7 @@ export class DataService {
         },
         // Tasa BCV
         {
-          menuValue: 'Tasa Bcv',
+          menuValue: 'Tasa Moneda',
           route: routes.tasabcv,
           hasSubRoute: false,
           showSubRoute: false,
