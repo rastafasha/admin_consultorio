@@ -29,6 +29,7 @@ export class ListDoctorComponent {
   public appointmentList: any = [];
   dataSource!: MatTableDataSource<any>;
 
+  public isLoading = false;
   public showFilter = false;
   public lastIndex = 0;
   public pageSize = 10;

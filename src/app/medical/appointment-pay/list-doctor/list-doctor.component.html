@@ -69,8 +69,8 @@
                 </div>
               </form>
             </div>
-
-            <div class="table-responsive">
+            <app-loading *ngIf="isLoading"></app-loading>
+            <div class="table-responsive" *ngIf="!isLoading" >
               <table matSort (matSortChange)="sortData($event)"
                 class="table border-0 custom-table comman-table datatable mb-0">
                 <thead>
@@ -103,6 +103,17 @@
                           [ngClass]="{'status-green' : data.status_pay === 1, 'status-pink' : data.status_pay === 2}"
                           class="custom-badge">{{data.status_pay === 1 ? 'Pagado' : 'Deuda'}}</button></td>
                       <td>{{data.amount | currency}}</td>
+                      <td class="text-end">
+                          <!-- 🚀 SOLUCIÓN A: Si la cita tiene deuda (2) y NO tiene abonos aún, el botón aparece en la fila padre -->
+                          <button class="btn btn-primary btn-sm" 
+                                  *ngIf="data.status_pay === 2 && (!data.payment || data.payment.length === 0)"
+                                  data-bs-toggle="modal"
+                                    [attr.data-bs-target]="'#add_payment-'+data.id" 
+                                  (click)="clearData(data)">
+                              <i class="fa fa-plus"></i> Nuevo Pago
+                          </button>
+                      </td>
+                      
                       <!-- 🚀 pagos realizados -->
                     <tr *ngFor="let payment of data.payment; let i = index" style="border-bottom: solid 1px #513081;">
                       
@@ -153,6 +164,7 @@
                     </div>
                     <!-- modal Eliminar pago-->
                     </tr>
+                    
                     <!-- modal editar pago -->
                     <div [attr.id]="'edit_payment-'+data.id" class="modal  delete-modal" role="dialog">
                       <div class="modal-dialog modal-dialog-centered">
