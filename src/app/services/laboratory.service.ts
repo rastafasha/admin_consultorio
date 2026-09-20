@@ -18,7 +18,7 @@ export class LaboratoryService {
   
 
   listAppointments(page:number=1, search:string='', speciality_id:number=0,date:string= ''){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     let LINK = "";
     if(search){
       LINK+="&search="+search;
@@ -34,26 +34,26 @@ export class LaboratoryService {
   }
 
   getLaboratorys(){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/laboratory";
     return this.http.get(URL, {headers:headers});
   }
   
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   storeLaboratory(data:any){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/laboratory/store";
     return this.http.post(URL,data, {headers:headers});
   }
 
   getLaboratoryByAppointment(appointment_id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/laboratory/showByAppointment/"+appointment_id;
     return this.http.get(URL,{headers:headers});
   }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
   editLaboratory(data:any, laboratory_id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/laboratory/update/"+laboratory_id;
     return this.http.post(URL,data,{headers:headers});
   }
@@ -61,7 +61,7 @@ export class LaboratoryService {
   
   
   deleteLaboratory(laboratory_id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/laboratory/destroy/"+laboratory_id;
     return this.http.delete(URL, {headers:headers});
   }

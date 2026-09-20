@@ -23,7 +23,7 @@ export class PaymentService {
     // date_start:string= '',
     // date_end:string= '',
     ){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     let LINK = "";
     if(search_referencia){
     LINK+="&search_referencia="+search_referencia;
@@ -52,7 +52,7 @@ getAllByDoctor(
   date_end='', 
   search_patient='', 
   ){
-  const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+  const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
   let LINK = "";
   if(search_referencia){
   LINK+="&search_referencia="+search_referencia;
@@ -71,19 +71,19 @@ getAllByDoctor(
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
    update(data:any, id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/payment/update/"+id;
     return this.http.put(URL,data,{headers:headers});
   }
 
    getPagosbyUser(id:number) {
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/payment/pagosbyUser/"+id;
     return this.http.put(URL,{headers:headers});
   }
 
    getRecientes() {
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token})
     const URL = url_servicios+'/payment/recientes';
     return this.http.get(URL,{headers:headers});
     
@@ -91,19 +91,19 @@ getAllByDoctor(
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   updateStatus(data:any, payment_id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/payment/update/status/"+payment_id;
     return this.http.put(URL,data,{headers:headers});
   }
 
   pendings(){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/payment/pendientes";
     return this.http.get(URL, {headers:headers});
   }
 
   pendingsbyDoctor(doctor_id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/payment/pendientesbydoctor/"+doctor_id;
     return this.http.get(URL, {headers:headers});
   }

@@ -15,7 +15,7 @@ export class CalendarAppointmentService {
   ) { }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
   calendarAppointment(data:any){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/appointment/calendar";
     return this.http.post(URL,data, {headers:headers});
   }

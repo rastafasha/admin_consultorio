@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { filter } from 'rxjs/operators';
+import { SecurityService } from './services/security.service';
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -10,9 +11,13 @@ import { filter } from 'rxjs/operators';
 export class AppComponent {
   title = 'klyntic_consultorio_admin';
 
-  constructor(private swUpdate: SwUpdate){}
+  constructor(
+    private swUpdate: SwUpdate,
+    private securityService: SecurityService
+  ){}
 
   ngOnInit() {
+    this.securityService.disableDeveloperTools(); // seguridad evitando acceder a la consola
    // =========================================================================
     // 🟢 LOGS DE SEGUIMIENTO PARA EL SERVICE WORKER EN EL RAÍZ
     // =========================================================================

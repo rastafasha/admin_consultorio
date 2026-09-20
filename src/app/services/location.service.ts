@@ -23,7 +23,7 @@ export class LocationService {
     name_doctor:string= '',
     email_doctor:string= '',
     ){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     let LINK = "";
     if(client_id){
     LINK+="&client_id="+client_id;
@@ -48,29 +48,29 @@ export class LocationService {
     }
     
   getLocations(){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/location";
     return this.http.get(URL, {headers:headers});
   }
   listConfig(){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/location/config";
     return this.http.get(URL, {headers:headers});
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   storeLocation(data:any){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/location/store";
     return this.http.post(URL,data, {headers:headers});
   }
   getLocation(location_id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/location/show/"+location_id;
     return this.http.get(URL,{headers:headers});
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   editLocation(data:any, location_id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/location/update/"+location_id;
     return this.http.post(URL,data,{headers:headers});
   }
@@ -78,7 +78,7 @@ export class LocationService {
   
   
   deleteLocation(location_id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/roles/destroy/"+location_id;
     return this.http.delete(URL, {headers:headers});
   }

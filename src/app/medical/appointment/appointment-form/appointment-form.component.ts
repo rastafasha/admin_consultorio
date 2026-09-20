@@ -56,6 +56,7 @@ export class AppointmentFormComponent implements OnInit {
   DOCTOR: any = [];
   addresses: DoctorAddress[];
   segments: any[] = [];
+  public consultorioSeleccionado: any = null;
 
   info_editar_cita = `
   <p>En esta sección :</p>
@@ -224,65 +225,52 @@ export class AppointmentFormComponent implements OnInit {
   // }
 
   filtroDoctor() {
-    this.isfiltered = false;
+  this.isfiltered = false;
 
-    // 1. Obtener el ID de la hora seleccionada (ej: 10)
-    const horaSeleccionadaId = +this.appointmentForm.get('hour')?.value || +this.hour;
+  const horaSeleccionadaId = +this.appointmentForm.get('hour')?.value || +this.hour;
+  const horaObjeto = this.hours.find((h: any) => +h.id === horaSeleccionadaId);
+  const nombreHora = horaObjeto ? horaObjeto.name.trim().toLowerCase() : ''; 
 
-    // 2. Buscar el nombre de la hora en tu arreglo "hours" (ej: "10:00 AM" o "10 AM")
-    const horaObjeto = this.hours.find((h: any) => +h.id === horaSeleccionadaId);
-    const nombreHora = horaObjeto ? horaObjeto.name : ''; // Esto tendrá el texto ej: "10:00 AM"
+  const data = {
+    date_appointment: this.date_appointment,
+    hour: horaSeleccionadaId,
+    speciality_id: this.speciality_id
+  };
 
-    const data = {
-      date_appointment: this.date_appointment,
-      hour: horaSeleccionadaId,
-      speciality_id: this.speciality_id
-    };
+  this.appointmentService.lisFiterByDoctor(data, this.DOCTOR_SELECTED).subscribe((resp: any) => {
+    if (resp.message === 403 || !resp.doctor) {
+      this.text_validation = resp.message_text || 'Error en la consulta';
+      Swal.fire({ position: "top-end", icon: "warning", title: this.text_validation, showConfirmButton: false, timer: 1500 });
+      this.segments = [];
+      this.addresses = [];
+      return;
+    }
 
-    // console.log('Filtrando para la hora ID:', horaSeleccionadaId, 'Texto:', nombreHora);
+    this.DOCTOR = resp.doctor;
+    // Guardamos las direcciones del doctor por si necesitas un selector global
+    this.addresses = resp.doctor.addresses ?? []; 
 
-    this.appointmentService.lisFiterByDoctor(data, this.DOCTOR_SELECTED).subscribe((resp: any) => {
-      // console.log('Respuesta del backend (32 segmentos):', resp);
+    if (resp.segments && Array.isArray(resp.segments)) {
+      this.segments = resp.segments.filter((seg: any) => {
+        const segHourId = +seg.doctor_schedule_hour_id || +seg.format_segment?.id;
+        const inicioHoraTexto = (seg.format_segment?.format_hour_start || '').trim().toLowerCase();
 
-      if (resp.message === 403 || !resp.doctor) {
-        this.text_validation = resp.message_text || 'Error en la consulta';
-        Swal.fire({ position: "top-end", icon: "warning", title: this.text_validation, showConfirmButton: false, timer: 1500 });
-        this.segments = [];
-        this.addresses = [];
-        return;
-      }
+        // Filtro robusto: Compara por ID numérico o limpia los textos para evitar fallos por mayúsculas/minúsculas
+        return segHourId === horaSeleccionadaId || 
+               (nombreHora && inicioHoraTexto.includes(nombreHora.substring(0, 2)));
+      });
+    } else {
+      this.segments = [];
+    }
 
-      this.DOCTOR = resp.doctor;
-      this.addresses = resp.doctor.addresses ?? [];
+    this.isfiltered = true;
 
-      // 3. ¡EL FILTRO MANUAL AQUÍ! 
-      // Si el backend te devuelve los 32, filtramos para quedarnos SOLO con los 4 de esa hora general
-      if (resp.segments && Array.isArray(resp.segments)) {
-        this.segments = resp.segments.filter((seg: any) => {
-          // Obtenemos el ID de la hora que viene dentro del segmento
-          const segHourId = seg.doctor_schedule_hour_id || seg.format_segment?.doctor_schedule_hour_id;
+    if (this.isEditMode) {
+      this.highlightCurrentDoctor();
+    }
+  });
+}
 
-          // También podemos validar por texto de hora si el ID fallara en el backend
-          const inicioHoraTexto = seg.format_segment?.format_hour_start || ''; // ej: "10:15 AM"
-
-          // Condición: Que coincida el ID de la hora general (10) 
-          // O que el texto del segmento empiece por el número de la hora (ej: "10:")
-          return +segHourId === horaSeleccionadaId || inicioHoraTexto.startsWith(nombreHora.substring(0, 3));
-        });
-      } else {
-        this.segments = [];
-      }
-
-      // console.log('Segmentos filtrados mostrados al usuario (Deberían ser 4):', this.segments);
-
-      // 4. Mostramos las tablas en el HTML
-      this.isfiltered = true;
-
-      if (this.isEditMode) {
-        this.highlightCurrentDoctor();
-      }
-    });
-  }
 
 
 
@@ -297,9 +285,16 @@ export class AppointmentFormComponent implements OnInit {
     this.DOCTOR_SELECTED = DOCTOR;
   }
 
-  selecSegment(SEGMENT: any): void {
-    this.selected_segment_hour = SEGMENT;
+ selecSegment(SEGMENT: any): void {
+  this.selected_segment_hour = SEGMENT;
+  
+  // 🚀 Capturamos el consultorio en tiempo real según la hora seleccionada
+  if (SEGMENT.consultorio) {
+    this.consultorioSeleccionado = SEGMENT.consultorio;
+  } else {
+    this.consultorioSeleccionado = null;
   }
+}
 
   isDoctorSelected(DOCTOR: any): boolean { if (this.isEditMode) { return DOCTOR.doctor.id === this.DOCTOR_SELECTED.doctor_id; } return false; }
 
@@ -330,9 +325,10 @@ export class AppointmentFormComponent implements OnInit {
   this.text_validation = '';
 
   // 5. Construir el objeto DATA inyectándole el created_at para congelar la hora
-  const data = {
-    doctor_id: this.DOCTOR_SELECTED,
-    user_id: this.patient?.id, // ID del paciente obtenido en filterPatient()
+   const data = {
+    doctor_id: this.DOCTOR_SELECTED, // ID numérico del médico
+    patient_id: this.patient?.id || null, // 🚀 CORREGIDO: Mapea a patient_id en tu base de datos
+    user_id: this.user?.id || null, // 🚀 CORREGIDO: El usuario (recepcionista/médico) logueado que registra la cita
     name: formValues.name,
     surname: formValues.surname,
     n_doc: formValues.n_doc,
@@ -340,12 +336,12 @@ export class AppointmentFormComponent implements OnInit {
     name_companion: formValues.name_companion,
     surname_companion: formValues.surname_companion,
     date_appointment: formValues.date_appointment,
-    speciality_id: formValues.speciality_id,
+    speciality_id: this.speciality_id, // 🚀 CORREGIDO: Usamos la variable global mapeada en lugar de formValues
     doctor_schedule_join_hour_id: this.selected_segment_hour.id,
     amount: formValues.amount,
     amount_add: formValues.amount_add,
     method_payment: formValues.method_payment,
-    created_at: new Date().toISOString() // <-- Congelamos la hora del reloj local
+    created_at: new Date().toISOString()
   };
 
   // =========================================================================

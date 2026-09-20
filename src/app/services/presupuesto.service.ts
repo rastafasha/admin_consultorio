@@ -18,7 +18,7 @@ export class PresupuestoService {
 
 
   listPresupuestos(page=1, search='', speciality_id=0,date= ''){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     let LINK = "";
     if(search){
       LINK+="&search="+search;
@@ -40,7 +40,7 @@ export class PresupuestoService {
     search_patient='',
     date= '',
   ){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     let LINK = "";
     if(search){
       LINK+="&search="+search;
@@ -60,14 +60,14 @@ export class PresupuestoService {
   
 
   listConfig(){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token})
     const URL = url_servicios+'/presupuesto/config';
     return this.http.get(URL, {headers:headers}).pipe(
       catchError(err => throwError(() => err))
     );
   }
   getPresupuesto(presupuesto_id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token})
     const URL = url_servicios+'/presupuesto/show/'+presupuesto_id;
     return this.http.get(URL, {headers:headers})
     .pipe(
@@ -78,35 +78,35 @@ export class PresupuestoService {
     );
   }
   createPresupuesto(data){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token})
     const URL = url_servicios+'/presupuesto/store';
     return this.http.post(URL,data, {headers:headers});
   }
   editPresupuesto( data: any, presupuesto_id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token})
     const URL = url_servicios+'/presupuesto/update/'+presupuesto_id;
     return this.http.put(URL,data,{headers:headers});
   }
   deletePresupuesto(presupuesto_id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token})
     const URL = url_servicios+'/presupuesto/destroy/'+presupuesto_id;
     return this.http.delete(URL, {headers:headers});
   }
 
   showPresupuesto(presupuesto_id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/presupuesto/profile/"+presupuesto_id;
     return this.http.get(URL,{headers:headers});
   }
   updateStatus(data: any, presupuesto_id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/presupuesto/update/status/"+presupuesto_id;
     return this.http.put(URL,data,{headers:headers}).pipe(
       catchError(err => throwError(() => err))
     );
   }
   updateConfirmation(data: any, presupuesto_id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/presupuesto/update/confirmation/"+presupuesto_id;
     return this.http.put(URL,data,{headers:headers}).pipe(
       catchError(err => throwError(() => err))

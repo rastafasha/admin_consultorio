@@ -157,18 +157,32 @@
                                         <table class="table mb-0">
                                             <thead>
                                                 <tr>
-                                                    <th>Consultorio</th>
+                                                    <th>Consultorio Asignado</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr *ngFor="let addr of addresses; let i = index">
-                                                    <td>{{ addr?.name_consultorio }}</td>
-                                                    <td>{{ addr?.address }}</td>
+                                                <!-- Caso A: Si el usuario aún no escoge una hora en los radios -->
+                                                <tr *ngIf="!consultorioSeleccionado">
+                                                    <td class="text-muted text-center py-3">
+                                                        Selecciona un horario a la izquierda para ver el consultorio
+                                                        asignado.
+                                                    </td>
+                                                </tr>
+
+                                                <!-- Caso B: Se renderiza automáticamente el consultorio de la hora cliqueada -->
+                                                <tr *ngIf="consultorioSeleccionado">
+                                                    <td>
+                                                        <strong>{{ consultorioSeleccionado.name_consultorio }}</strong>
+                                                        <br>
+                                                        <span class="text-muted">{{ consultorioSeleccionado.address
+                                                            }}</span>
+                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
+
 
                             </div>
 

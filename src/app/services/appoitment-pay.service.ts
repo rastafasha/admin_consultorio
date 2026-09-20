@@ -15,7 +15,7 @@ export class AppoitmentPayService {
   ) { }
 
   listConfig(){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token})
     const URL = url_servicios+'/appointments/config';
     return this.http.get(URL, {headers:headers});
   }
@@ -27,7 +27,7 @@ export class AppoitmentPayService {
                       date_start= '',
                       date_end= '',
                       ){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     let LINK = "";
     if(search_doctor){
       LINK+="&search_doctor="+search_doctor;
@@ -55,7 +55,7 @@ export class AppoitmentPayService {
     date_start= '',
     date_end= '',
     ){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     let LINK = "";
     
     if(search_patient){
@@ -72,25 +72,25 @@ export class AppoitmentPayService {
   }
 
   storeAppointmentPay(data:any){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/appointmentpay/store";
     return this.http.post(URL,data, {headers:headers});
   }
 
   getAppointmentPaybyDoctor(doctor_id:number) {
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/appointmentpay/byDoctor/"+doctor_id;
     return this.http.put(URL,{headers:headers});
   }
 
   editAppointmentPay(data:any, appointmentpay_id:any){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/appointmentpay/update/"+appointmentpay_id;
     return this.http.put(URL,data,{headers:headers});
   }
   
   deleteAppointmentPay(appointmentpay_id:any){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/appointmentpay/destroy/"+appointmentpay_id;
     return this.http.delete(URL, {headers:headers});
   }

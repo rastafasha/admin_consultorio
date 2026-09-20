@@ -15,40 +15,40 @@ export class AppointmentService {
   ) { }
 
   listConfig(){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token})
     const URL = url_servicios+'/appointments/config';
     return this.http.get(URL, {headers:headers});
   }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
   lisFiter(data:any){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer '  +this.authService.token});
     const URL = url_servicios+"/appointments/filter";
     return this.http.post(URL,data, {headers:headers});
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   lisFiterByDoctor(data:any, doctor_id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer '  +this.authService.token});
     const URL = url_servicios+"/appointments/filterbydoctor/"+doctor_id;
     return this.http.post(URL,data, {headers:headers});
   }
   pendings(){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer '  +this.authService.token});
     const URL = url_servicios+"/appointments/pendientes";
     return this.http.get(URL, {headers:headers});
   }
   pendingsbyDoctor(doctor_id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/appointments/pendientesbydoctor/"+doctor_id;
     return this.http.get(URL, {headers:headers});
   }
 
   getPatient(n_doc =''){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/appointments/patient?n_doc="+n_doc;
     return this.http.get(URL, {headers:headers});
   }
   listAppointments(page=1, search='', speciality_id=0,date= ''){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     let LINK = "";
     if(search){
       LINK+="&search="+search;
@@ -69,7 +69,7 @@ export class AppointmentService {
     search_patient='',
     date= '',
   ){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     let LINK = "";
     if(search){
       LINK+="&search="+search;
@@ -89,30 +89,30 @@ export class AppointmentService {
   
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
   storeAppointment(data:any){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/appointment/store";
     return this.http.post(URL,data, {headers:headers});
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   showAppointment(appointment_id:any){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/appointments/show/"+appointment_id;
     return this.http.get(URL,{headers:headers});
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   editAppointment(data:any, appointment_id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/appointments/update/"+appointment_id;
     return this.http.put(URL,data,{headers:headers});
   }
   deleteAppointment(appointment_id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/appointments/destroy/"+appointment_id;
     return this.http.delete(URL, {headers:headers});
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   updateConfirmation(data:any, appointment_id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/appointments/update/cofirmation/"+appointment_id;
     return this.http.put(URL,data,{headers:headers});
   }
@@ -120,24 +120,24 @@ export class AppointmentService {
   //cita medica
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerAttention(data:any){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/appointment-atention/store";
     return this.http.post(URL,data, {headers:headers});
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerAttentionLocal(data:any){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/appointment-atention/store-local";
     return this.http.post(URL,data, {headers:headers});
   }
 
   showCitamedica(appointment_id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/appointment-atention/show/"+appointment_id;
     return this.http.get(URL,{headers:headers});
   }
   cancelAppointment(appointment_id:number){
-    const headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token});
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     const URL = url_servicios+"/appointments/cancel/"+appointment_id;
     return this.http.delete(URL, {headers:headers});
   }
