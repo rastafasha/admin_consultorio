@@ -26,5 +26,21 @@
         ]
       }
     }
+  ],
+
+  "dataGroups": [
+    {
+      "name": "klyntic-api-notificaciones",
+      "urls": [
+        "https://back-klyntic-envios.onrender.com/api/notipush/**",
+        "https://onrender.com**"
+      ],
+      "cacheConfig": {
+        "maxSize": 50,
+        "maxAge": "1d",
+        "timeout": "5s",
+        "strategy": "freshness"
+      }
+    }
   ]
 }

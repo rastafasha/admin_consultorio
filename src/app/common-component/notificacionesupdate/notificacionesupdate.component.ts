@@ -12,10 +12,10 @@ import { PushNotificationService } from "../../services/push-notification.servic
 import { ConnectionService } from "../../services/connection.service";
 
 @Component({
-    selector: "app-notificacionesupdate",
-    templateUrl: "./notificacionesupdate.component.html",
-    styleUrls: ["./notificacionesupdate.component.scss"],
-    standalone: false
+  selector: "app-notificacionesupdate",
+  templateUrl: "./notificacionesupdate.component.html",
+  styleUrls: ["./notificacionesupdate.component.scss"],
+  standalone: false
 })
 export class NotificacionesupdateComponent implements OnInit, OnDestroy {
   @Input() routes;
@@ -52,40 +52,40 @@ export class NotificacionesupdateComponent implements OnInit, OnDestroy {
     public pushService: PushNotificationService,
     private toastr: ToastrService,
     private connectionService: ConnectionService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-  const userString = localStorage.getItem('user');
-  const userObj = userString ? JSON.parse(userString) : null;
+    const userString = localStorage.getItem('user');
+    const userObj = userString ? JSON.parse(userString) : null;
 
-  // Escucha activa del estado del WiFi de la clínica
+    // Escucha activa del estado del WiFi de la clínica [15]
     this.networkSub = this.connectionService.checkStatus().subscribe(status => {
       this.isOnline = status;
     });
-  
-  if (userObj && userObj.id) {
-    const uid = userObj.id.toString();
-    // 🔔 Llama a la ruta liberada en Node para cargar la campana sin dar 401
-    this.notifService.cargarContadorInicial(uid);
-    
-    // 🌐 Sincronización nativa pura del switch basada en el navegador:
-    if (Notification.permission === 'granted') {
-      this.pushService.isSubscribed$.next(true);
-    } else {
-      this.pushService.isSubscribed$.next(false);
+
+    // 🚀 LÍNEA INYECTADA: Enlazamos el conteo del globo directamente con el BehaviorSubject del servicio
+    this.unreadCount$ = this.notifService.unreadCount$;
+
+    if (userObj && userObj.id) {
+      const uid = userObj.id.toString();
+      this.notifService.cargarContadorInicial(uid); // [15]
+
+      if (Notification.permission === 'granted') { // [15]
+        this.pushService.isSubscribed$.next(true); // [15]
+      } else {
+        this.pushService.isSubscribed$.next(false); // [15]
+      }
     }
+
+    this.userSubscription = this.authService.currentUser$.subscribe((user) => { // [15]
+      this.user = user; // [15]
+      this.roles = user?.roles ? (Array.isArray(user.roles) ? user.roles.map(r => r.name || r).flat() : [user.roles.name || user.roles]) : []; // [15]
+      if (user) { // [15]
+        this.getUserRemoto(); // [15]
+      }
+    });
   }
 
-  this.userSubscription = this.authService.currentUser$.subscribe((user) => {
-    this.user = user;
-    this.roles = user?.roles ? (Array.isArray(user.roles) ? user.roles.map(r => r.name || r).flat() : [user.roles.name || user.roles]) : [];
-    if (user) {
-      this.getUserRemoto();
-    }
-  });
-
-  
-}
 
 
   ngOnDestroy(): void {
@@ -102,7 +102,7 @@ export class NotificacionesupdateComponent implements OnInit, OnDestroy {
    */
   onSwitchChange(event: any): void {
     const nuevoEstado = event.target.checked;
-    
+
     // Validamos que tengamos el ID del usuario antes de enviar la petición
     const userString = localStorage.getItem('user');
     const userObj = userString ? JSON.parse(userString) : null;
@@ -122,7 +122,7 @@ export class NotificacionesupdateComponent implements OnInit, OnDestroy {
         // 🛑 CONTROL DE ERROR 500: Si el servidor falla, el interruptor vuelve a su estado anterior en la UI
         event.target.checked = !nuevoEstado;
         this.notifService.isSubscribed$.next(!nuevoEstado);
-        
+
         this.toastr.error('Ocurrió un error en el servidor (500). Inténtalo de nuevo.', 'Error del Sistema');
         console.error('Detalle técnico del error 500:', err);
       }

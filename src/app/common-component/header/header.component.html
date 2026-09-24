@@ -37,7 +37,15 @@
         </button>
         <app-tasabcv></app-tasabcv>
         <div class="setting-row" *ngIf="!isLoadingSwitch" [class.loading]="pushService.isProcessing$ | async">
-            <div class="setting-info"><i class="fa fa-bell"></i></div>
+            <div class="setting-info">
+                <i class="fa fa-bell"></i>
+                <!-- 🔥 INYECTA ESTE BADGE ROJO EXACTAMENTE AQUÍ (Inmune a fugas de memoria): -->
+                    <span *ngIf="(unreadCount$ | async) ? (unreadCount$ | async)! > 0 : false" 
+                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger animate-bounce"
+                        style="font-size: 0.65rem; padding: 4px 6px; z-index: 10; margin-top: -5px; margin-left: -12px; background-color: #dc3545 !important; color: white !important;">
+                    {{ unreadCount$ | async }}
+                    </span>
+            </div>
             <div class="switch-wrapper">
                 <!-- El spinner se activa correctamente de forma reactiva mientras la petición viaja al servidor -->
                 <div *ngIf="pushService.isProcessing$ | async" class="mini-spinner"></div>

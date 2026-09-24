@@ -38,6 +38,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private userSubscription: any;
 
   public isLoadingSwitch: boolean = false;
+   public unreadCount$!: Observable<number>;
 
   constructor(
     public router: Router,
@@ -47,7 +48,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     public settingService: SettignService,
     public pushService: PushNotificationService,
     private swPush: SwPush,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    public notifService: NotificacionService
   ) {
     this.sideBar.toggleSideBar.subscribe((res: string) => {
       if (res == 'true') {
@@ -63,12 +65,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // Inicializamos en false hasta que el backend o el flujo confirmen la existencia del registro.
     this.pushService.isSubscribed$.next(false);
 
+    // 🚀 ENLAZAMOS EL CONTADOR CON EL BEHAVIOR_SUBJECT DEL SERVICIO CENTRAL
+    this.unreadCount$ = this.notifService.unreadCount$;
+
     this.userSubscription = this.authService.currentUser$.subscribe((user) => {
       this.user = user;
       if (user) {
-        // 🔥 Sincronización real con el servidor:
-        // Le preguntamos al servicio si este usuario específico tiene registro push en la BD
         this.verificarSuscripcionRealEnServidor(user.id);
+        
+        // 🚀 CARGAMOS EL CONTADOR DE ALERTAS DE MONGO EN CALIENTE AL INICIAR SESIÓN
+        this.notifService.cargarContadorInicial(user.id.toString());
       }
       if (user && this.user_id) {
         this.getDoctor();

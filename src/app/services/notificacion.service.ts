@@ -117,13 +117,30 @@ export class NotificacionService {
       }
     });
 
-    this.socket.on('recibir-alerta', (nuevaNotif: Notificacion) => {
-      console.log('🔔 Capturada por WebSocket:', nuevaNotif);
-      this.listaNotificaciones.unshift(nuevaNotif);
-      const actual = this.unreadCountSub.value;
-      this.unreadCountSub.next(actual + 1);
-      this.lanzarToastrEnPantalla(nuevaNotif);
+        // 🚀 EVENTO CORREGIDO: Intercepta la estructura híbrida de Node.js { notificacion, unreadCount }
+    this.socket.on('recibir-alerta', (data: any) => {
+      console.log('🔔 Capturada por WebSocket estructurado Klyntic:', data);
+      
+      if (data && data.notificacion) {
+        const nuevaNotif: Notificacion = data.notificacion;
+        
+        // Insertamos la notificación al inicio del buzón
+        this.listaNotificaciones.unshift(nuevaNotif);
+        
+        // ⚡ SINCRONIZACIÓN AUTOMÁTICA DEL GLOBO:
+        // En lugar de adivinar y sumar +1, tomamos el conteo real exacto de la Base de Datos
+        if (data.unreadCount !== undefined) {
+          this.unreadCountSub.next(data.unreadCount);
+        } else {
+          const actual = this.unreadCountSub.value;
+          this.unreadCountSub.next(actual + 1);
+        }
+        
+        // Disparamos el Toastr de alerta en pantalla
+        this.lanzarToastrEnPantalla(nuevaNotif);
+      }
     });
+
   }
 
   cargarContadorInicial(usuarioId: string): void {
