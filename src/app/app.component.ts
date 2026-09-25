@@ -17,7 +17,7 @@ export class AppComponent {
   ){}
 
   ngOnInit() {
-    this.securityService.disableDeveloperTools(); // seguridad evitando acceder a la consola
+    // this.securityService.disableDeveloperTools(); // seguridad evitando acceder a la consola
    // =========================================================================
     // 🟢 LOGS DE SEGUIMIENTO PARA EL SERVICE WORKER EN EL RAÍZ
     // =========================================================================
