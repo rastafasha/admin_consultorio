@@ -42,7 +42,7 @@
                                 <thead>
                                     <tr>
                                         <th mat-sort-header="name">Nombre</th>
-                                        <!-- <th mat-sort-header="price">Precio</th> -->
+                                        <th mat-sort-header="price">Precio</th>
                                         <th mat-sort-header="state">Status</th>
                                         <th mat-sort-header="created_at">Fecha de registro</th>
                                         <th ></th>
@@ -52,7 +52,7 @@
                                     <tr *ngFor="let data of specialitiesList">
                                        
                                         <td>{{data.name}}</td>
-                                        <!-- <td>{{data.price}}</td> -->
+                                        <td>{{data.price}}</td>
                                         <td>
                                           <button [ngClass]="{'status-green' : data.state === 1, 'status-pink' : data.state === 2}" class="custom-badge">
                                             {{data.state === 1 ? 'Activo' : 'Inactivo' }}

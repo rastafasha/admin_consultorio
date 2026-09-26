@@ -134,7 +134,7 @@ export class LoginComponent implements OnInit {
       if(this.user.roles == 'ENFERMERA' ){
         this.router.navigate([routes.doctorDashboard]);
       }
-      if(this.user.roles == 'RECEPCIÓN' ){
+      if(this.user.roles == 'RECEPCION' ){
         this.router.navigate([routes.adminDashboard]);
       }
       if(this.user.roles == 'GUEST' ){

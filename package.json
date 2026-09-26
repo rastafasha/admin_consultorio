@@ -10,6 +10,7 @@
     "start:prod": "ng build && lite-server -p 8080 --baseDir dist/klyntic_consultorio_admin/browser",
     "build": "ng build",
     "build:consultorio": "ng build --configuration consultorio",
+    "build:clinica": "ng build --configuration clinica",
     "build:local": "ng build --configuration local --base-href /",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",

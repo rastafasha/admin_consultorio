@@ -23,6 +23,8 @@ import { DoctorService } from '../../../services/doctor.service';
 import { DataService } from '../../../shared/data/data.service';
 import { recentPatients, upcomingAppointments } from '../../../shared/models/models';
 import { routes } from '../../../shared/routes/routes';
+import { ClinicaService, ConsultorioCRM } from '../../../services/clinica.service';
+import { Subscription } from 'rxjs';
 export type ChartOptions = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   series: ApexAxisChartSeries | any;
@@ -103,11 +105,19 @@ export class AdminDashboardComponent {
   public user: any;
   //datos reales
 
+  // Variables de control de usuario que ya manejas
+  public isLoading: boolean = false;
+
+  // 🏢 VARIABLES ENTERPRISE: Almacena los datos del CRM de Node.js [5]
+  public clinicaSelected: ConsultorioCRM | null = null;
+  private clinicaSubscription!: Subscription;
+
   constructor(
     public data : DataService,
     public dashboardService : DashboardService,
     public doctorService : DoctorService,
     public appointmentService : AppointmentService,
+    private clinicaService : ClinicaService,
     
     ) {
       this.chartOptionsOne = {
@@ -269,9 +279,53 @@ export class AdminDashboardComponent {
     window.scrollTo(0, 0);
     this.getDashboardAdmin();
     this.getDashboardAdminYear();
+    this.cargarDatosUsuario(); // Tu lógica existente para recuperar el LocalStorage
+    this.sincronizarContextoClinica();
     // this.getAppointmentPending();
     let USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER: '');
+  }
+
+  /**
+   * 🏛️ Consume la API de Node.js a través de la caché reactiva de ClinicaService [5]
+   */
+  sincronizarContextoClinica(): void {
+    this.isLoading = true;
+    
+    // 1. Extraemos el subdominio/slug (ej: 'clinica-prueba') [5]
+    const slug = this.clinicaService.obtenerSlugDeUrl();
+
+    // 2. Le pegamos a la caché reactiva conectada a Node.js [5]
+    this.clinicaSubscription = this.clinicaService.getClinicaBySlugCached(slug)
+      .subscribe({
+        next: (clinica: ConsultorioCRM | null) => {
+          if (clinica) {
+            this.clinicaSelected = clinica;
+            console.log(`🏢 [Dashboard CRM] Conectado al entorno corporativo: ${clinica.name}`);
+            
+            // 🎨 Inyectamos los colores de la clínica en la cabecera del DOM en caliente [5]
+            this.clinicaService.aplicarEstilosDinamicos(clinica.css_personalizado);
+          }
+          this.isLoading = false;
+        },
+        error: (err) => {
+          console.error('❌ Error sincronizando el dashboard con MongoDB Atlas:', err);
+          this.isLoading = false;
+        }
+      });
+  }
+
+  cargarDatosUsuario() {
+    if (localStorage.getItem('user')) {
+      this.user = JSON.parse(localStorage.getItem('user') || '{}');
+    }
+  }
+
+  ngOnDestroy(): void {
+    // 🧹 Apagamos la suscripción para evitar fugas de memoria en MAMP
+    if (this.clinicaSubscription) {
+      this.clinicaSubscription.unsubscribe();
+    }
   }
 
   getAppointmentPending(){

@@ -110,6 +110,7 @@
                                         </mat-select>
                                     </div>
                                 </div>
+                                @if (clinicaSelected?.tipoClinica !== 'Clinica') {
                                 <div class="col-12 col-sm-6 col-md-6 col-xl-4">
                                     <div class="form-group local-forms">
                                         <label>Pais</label>
@@ -128,29 +129,27 @@
                                         <input class="form-control" formControlName="precio_cita" type="number">
                                     </div>
                                 </div>
-                                <div class="col-12 col-sm-6 col-md-6 col-xl-4">
-                                    <div class="form-group local-forms">
-                                        <!-- <label>Moneda <span class="required">*</span></label> -->
-                                        <mat-select formControlName="moneda" 
-                                            class="form-control select" placeholder="Select Moneda">
-                                           <mat-option disabled value="">{{'Seleccione Moneda'}}</mat-option>
-                                            <mat-option value="USD">USD</mat-option>
-                                            <mat-option value="EUR">EUR</mat-option>
-                                            <mat-option value="PERSONALIZADA">$ Personalizada</mat-option>
-                                            <!-- 🌍 NUEVAS MONEDAS INTERNACIONALES SOPORTADAS -->
-                                            <!-- <mat-option value="ARS">ARS</mat-option>
-                                                <mat-option value="CLP">CLP</mat-option>
-                                                <mat-option value="UYU">UYU</mat-option>
-                                                <mat-option value="EGP">EGP</mat-option> -->
-                                        </mat-select>
+                                
+                                    
+                                    <div class="col-12 col-sm-6 col-md-6 col-xl-4">
+                                        <div class="form-group local-forms">
+                                            <!-- <label>Moneda <span class="required">*</span></label> -->
+                                            <mat-select formControlName="moneda" 
+                                                class="form-control select" placeholder="Select Moneda">
+                                               <mat-option disabled value="">{{'Seleccione Moneda'}}</mat-option>
+                                                <mat-option value="USD">USD</mat-option>
+                                                <mat-option value="EUR">EUR</mat-option>
+                                                <mat-option value="PERSONALIZADA">$ Personalizada</mat-option>
+                                                <!-- 🌍 NUEVAS MONEDAS INTERNACIONALES SOPORTADAS -->
+                                                <!-- <mat-option value="ARS">ARS</mat-option>
+                                                    <mat-option value="CLP">CLP</mat-option>
+                                                    <mat-option value="UYU">UYU</mat-option>
+                                                    <mat-option value="EGP">EGP</mat-option> -->
+                                            </mat-select>
+                                        </div>
                                     </div>
-                                </div>
-                                <!-- <div class="col-12 col-sm-6 col-md-6 col-xl-6">
-                                    <div class="form-group local-forms">
-                                        <label>Dirección</label>
-                                        <textarea class="form-control" formControlName="address" rows="3" cols="30"></textarea>
-                                    </div>
-                                </div> -->
+                                }
+                                
                                 <div class="col-12 col-sm-4 col-md-4 col-xl-4">
                                     <div class="form-group local-top-form">
                                         <label class="local-top">Avatar</label>
@@ -163,7 +162,7 @@
                                     <img *ngIf="IMAGE_PREVISUALIZA" [src]="IMAGE_PREVISUALIZA" style="width: 250px;"
                                         alt="">
                                 </div>
-
+                                 
                                 <!-- SECCIÓN DE CONSULTORIOS MÚLTIPLES (Reemplazo del textarea único) -->
                                 <div class="col-12 mt-3 mb-4" *ngIf="doctorId ">
                                     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -172,7 +171,7 @@
                                         <button type="button" *ngIf="!cargandoAdd" class="btn btn-primary btn-sm px-3"
                                             (click)="addAddress()" data-bs-toggle="modal"
                                             data-bs-target="#modal-add-address">
-                                            <i class="fa fa-plus me-1"></i> Añadir Sede
+                                            <i class="fa fa-plus me-1"></i> Añadir Consultorio
                                         </button>
                                     </div>
 
@@ -227,7 +226,6 @@
 
 
                                 </div>
-
 
 
                             </div>

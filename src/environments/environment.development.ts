@@ -4,8 +4,12 @@ export const environment = {
     url_servicios: 'http://127.0.0.1:8000/api',
     url_frontend: 'http://localhost:4300/',
     url_media: 'http://127.0.0.1:8000/storage/',
-    backend_node:"http://localhost:3000/api",
-    socket_url:"http://localhost:3000",
+
+    backend_node:"http://localhost:5000/api",
+    socket_url:"http://localhost:5000",
+
+    nombreSelected:'clinica-prueba',
+    backend_CRM_node:"http://localhost:3000/api",
     
     
     //conexion a node y manejo de notificaciones

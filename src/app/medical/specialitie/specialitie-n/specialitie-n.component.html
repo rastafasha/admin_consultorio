@@ -30,6 +30,15 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label class="col-form-label col-md-2"><span class="login-danger">*</span> Precio</label>
+                            <div class="col-md-10">
+                                <input class="form-control" formControlName="price" type="text">
+                                <mat-error *ngIf="specialitieForm.get('price')?.invalid && specialitieForm.get('price')?.touched">
+                                    Precio requerido
+                                </mat-error>
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label class="col-form-label col-md-2"><span class="login-danger">*</span> Estado</label>
                             <div class="col-md-10">
                                 <div class="form-check-inline">

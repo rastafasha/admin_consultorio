@@ -1,17 +1,26 @@
-<app-loading *ngIf="isLoading"></app-loading>
-<div class="tasastyle " *ngIf="moneda ==='USD' && !isLoading">
-        <p>$Bcv: </p>
-        <a routerLink="/tasabcv/edit">{{tasadollar|currency:'Bs.'}}</a>
+<div class="klyntic-tasa-display-container" *ngIf="!isLoading">
+    
+    <!-- Muestra el indicador si la moneda del establecimiento es Bolívar o Dólar -->
+    @if (moneda === 'USD' ) {
+      <div class="tasa-item animate__animated animate__fadeIn">
+        <span class="label text-muted small"><i class="fa-solid fa-money-bill-1 text-success me-1"></i> Tasa BCV ($):</span>
+        <strong class="value text-dark ms-1">{{ tasadollar | currency:'Bs.' }}</strong>
+      </div>
+    }
+
+    <!-- Muestra el indicador si la moneda del establecimiento es Euro -->
+    @if (moneda === 'EUR') {
+      <div class="tasa-item animate__animated animate__fadeIn">
+        <span class="label text-muted small"><i class="fa-solid fa-euro-sign text-primary me-1"></i> Tasa Euro (€):</span>
+        <strong class="value text-dark ms-1">{{ tasaeuro | currency:'Bs.' }}</strong>
+      </div>
+    }
+
+    <!-- Muestra el indicador si la moneda es una Tasa Fija Personalizada en Caja -->
+    @if (moneda === 'PERSONALIZADA') {
+      <div class="tasa-item animate__animated animate__fadeIn">
+        <span class="label text-muted small"><i class="fa-solid fa-vault text-warning me-1"></i> Tasa Fija Clínica:</span>
+        <strong class="value text-dark ms-1">{{ tasa | currency:'Bs.' }}</strong>
+      </div>
+    }
 </div>
-<div class="tasastyle " *ngIf="moneda ==='EUR' && !isLoading">
-        <p>€Bcv: </p>
-        <a routerLink="/tasabcv/edit">{{tasaeuro|currency:'Bs.'}}</a>
-</div>
-<div class="tasastyle " *ngIf="moneda ==='PERSONALIZADA' && !isLoading">
-        <p>$P: </p>
-        <a routerLink="/tasabcv/edit">{{tasa|currency:'Bs.'}}</a>
-</div>
-<!-- <div class="tasastyle nav user-menu d-flex flex-column pt-2">
-        <p>$Bcv: </p><br>
-        <a routerLink="/tasabcv/edit">{{tasa|currency:'Bs.'}}</a>
-</div> -->

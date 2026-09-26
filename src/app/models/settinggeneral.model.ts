@@ -7,5 +7,6 @@ export class SettingGeneral {
     state: string;
     zip: string;
     country: string;
+    moneda: string;
     avatar: string;
 }

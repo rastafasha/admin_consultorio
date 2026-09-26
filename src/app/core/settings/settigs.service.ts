@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { url_servicios } from '../../config/config';
 import { AuthService } from '../../shared/auth/auth.service';
+import { ClinicaService } from '../../services/clinica.service';
 
 const baseUrl = environment.url_servicios;
 
@@ -12,43 +13,59 @@ const baseUrl = environment.url_servicios;
 })
 export class SettignService {
 
-
   constructor(
     public http: HttpClient,
-    public authService:AuthService
+    public authService:AuthService,
+    private clinicaService:ClinicaService
   ) { }
+
+/**
+   * Helper para construir las cabeceras Enterprise con el subdominio actual
+   */
+  private getHeadersEnterprise(): HttpHeaders {
+    const slugActual = this.clinicaService.obtenerSlugDeUrl();
+    
+    // Inyectamos el Token JWT clásico junto a tu nueva cabecera de aislamiento
+    return new HttpHeaders({
+      'Authorization': `Bearer ${localStorage.getItem('token') || ''}`,
+      'X-Clinica-Slug': slugActual // 🚀 ¡El eslabón perdido que Laravel está esperando!
+    });
+  }
+
 
 //payment methods
 
+
+
 getAllSettings(){
-  let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+  let headers = this.getHeadersEnterprise()
   let URL = url_servicios+'/setting';
   return this.http.get(URL, {headers:headers});
   
 }
 
 getSettingById(setting_id:any){
-  let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+  let headers = this.getHeadersEnterprise()
   let URL = url_servicios+'/setting/show/'+setting_id;
   return this.http.get(URL, {headers:headers});
   
 }
 
 createSetting(data:any){
-  let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+  let headers = this.getHeadersEnterprise()
   let URL = url_servicios+'/setting/store';
   return this.http.post(URL,data, {headers:headers});
 }
 
 updateSetting(data, setting_id:any, ){
  
-  let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+  let headers = this.getHeadersEnterprise()
   let URL = url_servicios+'/setting/update/'+setting_id;
   return this.http.post(URL,data,{headers:headers});
 }
 
 deleteSetting(setting_id): Observable<any> {
-  let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+  let headers = this.getHeadersEnterprise()
   let URL = url_servicios+'/setting/destroy/'+setting_id;
   return this.http.delete(URL, {headers:headers});
 }
@@ -60,53 +77,53 @@ deleteSetting(setting_id): Observable<any> {
 //payment methods
 
   getAll(){
-    let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+    let headers = this.getHeadersEnterprise()
     let URL = url_servicios+'/paymentmethods';
     return this.http.get(URL, {headers:headers});
     
   }
 
   getPagoById(id:number){
-    let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+    let headers = this.getHeadersEnterprise()
     let URL = url_servicios+'/paymentmethods/show/'+id;
     return this.http.get(URL, {headers:headers});
     
   }
   getPagoByDoctor(doctor_id:number){
-    let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+    let headers = this.getHeadersEnterprise()
     let URL = url_servicios+'/paymentmethods/bydoctor/'+doctor_id;
     return this.http.get(URL, {headers:headers});
     
   }
   getActivoPagoByDoctor(doctor_id:number){
-    let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+    let headers = this.getHeadersEnterprise()
     let URL = `${baseUrl}/paymentmethods/bydoctor-activo/`+doctor_id;
     return this.http.get(URL, {headers:headers});
     
   }
 
   getActivas() {
-    let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+    let headers = this.getHeadersEnterprise()
     let URL = url_servicios+'/paymentmethods/activos';
     return this.http.get(URL, {headers:headers});
     
   }
 
   create(data:any){
-    let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+    let headers = this.getHeadersEnterprise()
     let URL = url_servicios+'/paymentmethods/store';
     return this.http.post(URL,data, {headers:headers});
   }
 
   update(data, tiposdepago:any, ){
    
-    let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+    let headers = this.getHeadersEnterprise()
     let URL = url_servicios+'/paymentmethods/update/'+tiposdepago;
     return this.http.put(URL,data,{headers:headers});
   }
 
   updateStatus(data, tipodepago_id:any) {
-    let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+    let headers = this.getHeadersEnterprise()
     let URL = url_servicios+'/paymentmethods/update/status/'+tipodepago_id;
     return this.http.put(URL,data,{headers:headers});
 
@@ -114,7 +131,7 @@ deleteSetting(setting_id): Observable<any> {
 
 
   delete(id): Observable<any> {
-    let headers = new HttpHeaders({'Authorization': 'Bearer'+this.authService.token})
+    let headers = this.getHeadersEnterprise()
     let URL = url_servicios+'/paymentmethods/destroy/'+id;
     return this.http.delete(URL, {headers:headers});
   }

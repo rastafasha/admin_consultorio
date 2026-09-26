@@ -4,7 +4,7 @@ import { Tasabcv } from '../../../models/tasabcba';
 import { TasadollarbcvService } from '../../../services/tasabcv.service';
 import { DoctorService } from '../../../services/doctor.service';
 import { TasaeurobcvService } from '../../../services/tasaeurobcv.service';
-import { TasaEurobcv } from '../../../models/tasaeurobcv';
+
 @Component({
     selector: 'app-tasabcv-edit',
     templateUrl: './tasabcv-edit.component.html',

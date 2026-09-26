@@ -18,14 +18,11 @@
 
         <div class="settings-menu-links">
             <ul class="nav nav-tabs menu-tabs">
-                <li class="nav-item " *ngIf="roles === 'SUPERADMIN'">
+                <li class="nav-item " >
                     <a class="nav-link" [routerLink]="routes.settings">Configuración General</a>
                 </li>
-                <li class="nav-item active" *ngIf="roles === 'SUPERADMIN'">
+                <li class="nav-item active" >
                     <a class="nav-link" [routerLink]="routes.paymentSettings">Configuración Pagos</a>
-                </li>
-                <li class="nav-item active" *ngIf="roles === 'DOCTOR' ">
-                    <a class="nav-link" >Configuración Pagos</a>
                 </li>
             </ul>
         </div>

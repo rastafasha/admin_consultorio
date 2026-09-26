@@ -7,6 +7,8 @@ import { DoctorService } from '../../../services/doctor.service';
 import { routes } from '../../../shared/routes/routes';
 import { DoctorAddress } from '../../../models/DoctorAddress.model';
 import { OfflineService } from '../../../services/offline.service';
+import { ClinicaService, ConsultorioCRM } from '../../../services/clinica.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-doctors-form',
@@ -54,12 +56,16 @@ export class DoctorsFormComponent implements OnInit {
   public addresSelected: any;
   user:any;
 
+  // 🏢 VARIABLES ENTERPRISE: Almacena los datos del CRM de Node.js [5]
+    public clinicaSelected: ConsultorioCRM | null = null;
+    private clinicaSubscription!: Subscription;
+
   constructor(
     private fb: FormBuilder,
     public doctorService: DoctorService,
-    private router: Router,
     private activatedRoute: ActivatedRoute,
-    private offlineService: OfflineService,
+    private clinicaService: ClinicaService,
+
   ) {
     this.doctorForm = this.fb.group({
       name: ['', Validators.required],
@@ -97,9 +103,39 @@ export class DoctorsFormComponent implements OnInit {
       this.doctorForm.get('password_confirmation')?.updateValueAndValidity();
     }
     this.loadConfig();
+    this.sincronizarContextoClinica();
 
 
   }
+
+  /**
+     * 🏛️ Consume la API de Node.js a través de la caché reactiva de ClinicaService [5]
+     */
+    sincronizarContextoClinica(): void {
+      this.isLoading = true;
+      
+      // 1. Extraemos el subdominio/slug (ej: 'clinica-prueba') [5]
+      const slug = this.clinicaService.obtenerSlugDeUrl();
+  
+      // 2. Le pegamos a la caché reactiva conectada a Node.js [5]
+      this.clinicaSubscription = this.clinicaService.getClinicaBySlugCached(slug)
+        .subscribe({
+          next: (clinica: ConsultorioCRM | null) => {
+            if (clinica) {
+              this.clinicaSelected = clinica;
+              console.log(`🏢 [Dashboard CRM] Conectado al entorno corporativo: ${clinica.name}`);
+              
+              // 🎨 Inyectamos los colores de la clínica en la cabecera del DOM en caliente [5]
+              this.clinicaService.aplicarEstilosDinamicos(clinica.css_personalizado);
+            }
+            this.isLoading = false;
+          },
+          error: (err) => {
+            console.error('❌ Error sincronizando el dashboard con MongoDB Atlas:', err);
+            this.isLoading = false;
+          }
+        });
+    }
 
   loadConfig(): void {
     this.isLoading = true

@@ -10,4 +10,5 @@ export class TipoPago {
     telefono: string;
     status: string;
     doctor_id: number;
+    clinica_id: number;
 }
