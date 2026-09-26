@@ -10,6 +10,7 @@ export const environment = {
 
     nombreSelected:'clinica-prueba',
     backend_CRM_node:"http://localhost:3000/api",
+    IS_CLINIC_DEPLOYMENT: true,
     
     
     //conexion a node y manejo de notificaciones

@@ -26,7 +26,7 @@
                                                     <a class="btn"><img src="assets/img/icons/search-normal.svg" alt=""></a>
                                             </div>
                                             <div class="add-group">
-                                                <a routerLink="/staffs/staff-n" class="btn btn-primary add-pluss ms-2"><img src="assets/img/icons/plus.svg" alt=""></a>
+                                                <a routerLink="/staffs/add-staff" class="btn btn-primary add-pluss ms-2"><img src="assets/img/icons/plus.svg" alt=""></a>
                                                 <a href="javascript:;" (click)="PageSize()" class="btn btn-primary doctor-refresh ms-2"><img src="assets/img/icons/re-fresh.svg" alt=""></a>
                                             </div>
                                         </div>
@@ -36,15 +36,15 @@
                             </div>
                         </div>
                         <!-- /Table Header -->
-                        
-                        <div class="table-responsive">
+                        <app-loading *ngIf="isLoading"></app-loading>
+                        <div class="table-responsive" *ngIf="!isLoading">
                             <table matSort (matSortChange)="sortData($event)" class="table border-0 custom-table comman-table datatable mb-0">
                                 <thead>
                                     <tr>
                                         
                                         <th mat-sort-header="name">Nobre</th>
                                         <th mat-sort-header="email">email</th>
-                                        <th mat-sort-header="especializacion">Especialización</th>
+                                        <!-- <th mat-sort-header="especializacion">Especialización</th> -->
                                         <th mat-sort-header="telefono">Teléfono</th>
                                         <th mat-sort-header="role">Role</th>
                                         <th mat-sort-header="created">Creación</th>
@@ -63,7 +63,7 @@
                                           </span>
                                         </td>
                                         <td>{{data.email}}</td>
-                                        <td>{{data.education}}</td>
+                                        <!-- <td>{{data.education}}</td> -->
                                         <td>{{data.mobile}}</td>
                                         <td>{{data.roles.name}}</td>
                                         <!-- <td>{{data.permision_pluck.length > 0 ? data.permision_pluck: 'TODOS LOS PERMISOS' }}</td> -->

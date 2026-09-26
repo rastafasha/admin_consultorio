@@ -11,9 +11,10 @@ import { AppointmentService } from '../../../services/appointment.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Patient } from '../../../models/patient.model';
 import { Doctor, Speciality } from '../../../models/presupuesto.model';
-import { AuthService } from '../../../shared/auth/auth.service';
 import { routes } from '../../../shared/routes/routes';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../../../services/auth.service';
+import { environment } from '../../../../environments/environment';
 declare let $: any;
 
 @Component({
@@ -81,6 +82,12 @@ export class PresupuestoEditarComponent {
   specialities: Speciality[];
   DOCTOR_SELECTED: any;
   presupuestoSeleccionado: any;
+  // 🔒 CAPTURA EL FLAG INYECTADO POR VERCEL AL COMPILAR
+  public readonly isClinicMode = environment.IS_CLINIC_DEPLOYMENT;
+
+  // Variables para la gestión de Clínica Enterprise
+  public medicosFiltrados: any[] = [];
+  public doctor_id_selected: any = null;
 
   // dictado
   recognition: any;
@@ -436,6 +443,7 @@ export class PresupuestoEditarComponent {
     }
   }
 
+//dictado para telefonos con ios 18 o mas
 //    toggleDictado(event: any) {
 //   this.isListening = event.target.checked;
 
@@ -481,25 +489,55 @@ export class PresupuestoEditarComponent {
 
 
 
+  
+
+  getDoctor() {
+    this.isLoading = true;
+    this.doctorService.showDoctor(this.doctor_id).subscribe((resp: any) => {
+      this.DOCTOR_SELECTED = resp.user;
+      
+      // 🩺 MODO CONSULTORIO: Comportamiento original intacto
+      if (!this.isClinicMode) {
+        this.speciality_id = this.DOCTOR_SELECTED.speciality_id;
+        this.specialitiService.showSpeciality(this.speciality_id).subscribe((resp: any) => {
+          this.specialityName = resp.name;
+        });
+      }
+      this.isLoading = false;
+    });
+  }
   getSpecialities() {
     this.presupuestoService.listConfig().subscribe((resp: any) => {
       this.specialities = resp.specialities;
     })
   }
 
-  getDoctor() {
-    this.isLoading = true
-    this.doctorService.showDoctor(this.doctor_id).subscribe((resp: any) => {
-      this.DOCTOR_SELECTED = resp.user;
-      this.speciality_id = this.DOCTOR_SELECTED.speciality_id;
+  /**
+   * 🏢 EVENTO ENTERPRISE: Al cambiar la especialidad en la clínica,
+   * filtra de inmediato los médicos asignados a esa área.
+   */
+ onSpecialityChange(specialityId: number): void {
+    this.speciality_id = specialityId;
+    this.medicosFiltrados = [];
+    this.doctor_id_selected = null;
 
-      this.speciality_id = this.DOCTOR_SELECTED.speciality_id;
-      this.specialitiService.showSpeciality(this.speciality_id).subscribe((resp: any) => {
-        this.specialityName = resp.name
-      })
-      this.isLoading = false
-    })
+    if (!specialityId) return;
+
+    // Buscamos la especialidad seleccionada en el pool cargado de Laravel
+    const spec = this.specialities.find((s: any) => s.id === specialityId);
+    if (spec) {
+      // Extraemos el chorro de datos crudo que viene de la relación with()
+      const rawDoctors = spec.active_doctors;
+
+      if (rawDoctors) {
+        // 🚀 BLINDAJE DE TIPADO: Si ya es un arreglo lo asigna; si es un objeto único lo envuelve en []
+        this.medicosFiltrados = Array.isArray(rawDoctors) ? rawDoctors : [rawDoctors];
+      } else {
+        this.medicosFiltrados = [];
+      }
+    }
   }
+
 
   filterPatient() {
     this.appointmentService.getPatient(this.n_doc + "").subscribe((resp: any) => {
@@ -572,6 +610,15 @@ export class PresupuestoEditarComponent {
 
 
   save() {
+    // 🚀 ASIGNACIÓN DINÁMICA: Determinamos qué doctor y especialidad viajan según el despliegue
+    const idEspecialidadFinal = this.speciality_id;
+    const idDoctorFinal = this.isClinicMode ? this.doctor_id_selected : this.DOCTOR_SELECTED.id;
+
+    if (this.isClinicMode && (!idDoctorFinal || !idEspecialidadFinal)) {
+      Swal.fire('Campos Incompletos', 'Debe seleccionar una especialidad y un médico especialista.', 'warning');
+      return;
+    }
+
     const data = {
 
       medical: this.medical,
@@ -586,75 +633,39 @@ export class PresupuestoEditarComponent {
       surname: this.surname,
       phone: this.phone,
 
-      speciality_id: this.DOCTOR_SELECTED.speciality_id,
-      presupuesto_id: this.presupuesto_id,
-      doctor_id: this.DOCTOR_SELECTED.id,
-
-      // ...this.atentionForm.value,
+       // Inyección de variables mapeadas polimórficamente
+      speciality_id: idEspecialidadFinal,
+      doctor_id: idDoctorFinal,
+      presupuesto_id: this.presupuesto_id
 
 
     }
 
-
-
     if (this.presupuesto_id) {
       this.presupuestoService.editPresupuesto(data, this.presupuesto_id).subscribe((resp: any) => {
-        console.log(data);
-        if (resp.message == 403) {
-          this.text_validation = resp.message_text;
-          Swal.fire({
-            position: "top-end",
-            icon: "warning",
-            title: this.text_validation,
-            showConfirmButton: false,
-            timer: 1500
-          });
-        } else {
-          this.text_success = 'Se guardó la informacion del Laboratorio con la cita'
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: this.text_success,
-            showConfirmButton: false,
-            timer: 1500
-          });
-          if (this.user.roles[0] === 'DOCTOR') {
-            this.router.navigate(['/presupuesto/list/doctor']);
-          } else {
-
-            this.router.navigate(['/presupuesto/list']);
-          }
-        }
-      })
+        this.procesarRespuestaServidor(resp);
+      });
     } else {
-      console.log('Creating new presupuesto with data:', data);
       this.presupuestoService.createPresupuesto(data).subscribe((resp: any) => {
-        if (resp.message == 403) {
-          this.text_validation = resp.message_text;
-          Swal.fire({
-            position: "top-end",
-            icon: "warning",
-            title: this.text_validation,
-            showConfirmButton: false,
-            timer: 1500
-          });
-        } else {
-          this.text_success = 'Se guardó la informacion del Laboratorio con la cita'
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: this.text_success,
-            showConfirmButton: false,
-            timer: 1500
-          });
-          if (this.user.roles[0] === 'DOCTOR') {
-            this.router.navigate(['/presupuesto/list/doctor']);
-          } else {
+        this.procesarRespuestaServidor(resp);
+      });
+    }
 
-            this.router.navigate(['/presupuesto/list']);
-          }
-        }
-      })
+  }
+
+  private procesarRespuestaServidor(resp: any) {
+    if (resp.message == 403) {
+      this.text_validation = resp.message_text;
+      Swal.fire({ position: "top-end", icon: "warning", title: this.text_validation, showConfirmButton: false, timer: 1500 });
+    } else {
+      this.text_success = 'El presupuesto ha sido procesado de manera exitosa.';
+      Swal.fire({ position: "top-end", icon: "success", title: this.text_success, showConfirmButton: false, timer: 1500 });
+      
+      if (this.user.roles[0] === 'DOCTOR') {
+        this.router.navigate(['/presupuesto/list/doctor']);
+      } else {
+        this.router.navigate(['/presupuesto/list']);
+      }
     }
   }
 }

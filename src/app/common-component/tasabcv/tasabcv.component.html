@@ -1,26 +1,46 @@
-<div class="klyntic-tasa-display-container" *ngIf="!isLoading">
-    
-    <!-- Muestra el indicador si la moneda del establecimiento es Bolívar o Dólar -->
-    @if (moneda === 'USD' ) {
-      <div class="tasa-item animate__animated animate__fadeIn">
-        <span class="label text-muted small"><i class="fa-solid fa-money-bill-1 text-success me-1"></i> Tasa BCV ($):</span>
-        <strong class="value text-dark ms-1">{{ tasadollar | currency:'Bs.' }}</strong>
-      </div>
-    }
+<div class="klyntic-tasa-display-container">
 
-    <!-- Muestra el indicador si la moneda del establecimiento es Euro -->
-    @if (moneda === 'EUR') {
-      <div class="tasa-item animate__animated animate__fadeIn">
-        <span class="label text-muted small"><i class="fa-solid fa-euro-sign text-primary me-1"></i> Tasa Euro (€):</span>
-        <strong class="value text-dark ms-1">{{ tasaeuro | currency:'Bs.' }}</strong>
-      </div>
-    }
+  @if (isLoading) {
+    <!-- 🔄 ESTADO DE CARGA: Se muestra de primero mientras se consulta al CRM -->
+    <div class="d-flex align-items-center justify-content-center py-1">
+      <!-- <app-loading></app-loading> -->
+      <app-skeleton-loader  [rows]="1" [columns]="2"></app-skeleton-loader>
+    </div>
+  } @else {
+    <!-- 📊 ESTADO COMPLETADO: Se dibuja limpiamente al cambiar isLoading a false -->
+    <div class="tasa-content-wrapper">
+      
+      <!-- 1. Indicador si la moneda del establecimiento es Dólar -->
+      @if (moneda === 'USD' || moneda === 'VED') {
+        <div class="tasa-item animate__animated animate__fadeIn">
+          <span class="label text-muted small">
+            <i class="fa-solid fa-money-bill-1 text-success me-1"></i> Tasa BCV ($):
+          </span>
+          <strong class="value text-dark ms-1">{{ tasadollar | currency:'Bs. ' }}</strong>
+        </div>
+      }
 
-    <!-- Muestra el indicador si la moneda es una Tasa Fija Personalizada en Caja -->
-    @if (moneda === 'PERSONALIZADA') {
-      <div class="tasa-item animate__animated animate__fadeIn">
-        <span class="label text-muted small"><i class="fa-solid fa-vault text-warning me-1"></i> Tasa Fija Clínica:</span>
-        <strong class="value text-dark ms-1">{{ tasa | currency:'Bs.' }}</strong>
-      </div>
-    }
+      <!-- 2. Indicador si la moneda del establecimiento es Euro -->
+      @if (moneda === 'EUR') {
+        <div class="tasa-item animate__animated animate__fadeIn">
+          <span class="label text-muted small">
+            <i class="fa-solid fa-euro-sign text-primary me-1"></i> Tasa Euro (€):
+          </span>
+          <strong class="value text-dark ms-1">{{ tasaeuro | currency:'Bs. ' }}</strong>
+        </div>
+      }
+
+      <!-- 3. Indicador si la moneda es una Tasa Fija Personalizada en Caja -->
+      @if (moneda === 'PERSONALIZADA') {
+        <div class="tasa-item animate__animated animate__fadeIn">
+          <span class="label text-muted small">
+            <i class="fa-solid fa-vault text-warning me-1"></i> Tasa Fija Clínica:
+          </span>
+          <strong class="value text-dark ms-1">{{ tasa | currency:'Bs. ' }}</strong>
+        </div>
+      }
+
+    </div>
+  }
+
 </div>

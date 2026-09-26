@@ -8,6 +8,7 @@ export const environment = {
     backend_node: "https://back-klyntic-envios.onrender.com/api",
     //sockets tiempo real
     socket_url:"https://back-klyntic-envios.onrender.com",
+    IS_CLINIC_DEPLOYMENT: false,
 
     url_frontend: 'https://consultorio.klyntic.com/',
     urlBackedNotification: 'https://back-klyntic-envios.onrender.com/api/notipush/save-subscription',

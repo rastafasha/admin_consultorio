@@ -2,14 +2,14 @@
     <div class="content">
     
         <!-- Page Header -->
-        <app-breadcum-doctor-dashboard *ngIf="isPermission('admin_dashboard')  && user.roles[0] === 'SUPERADMIN' " [titlePage]="titlePage" [routes]="routes.adminDashboard"></app-breadcum-doctor-dashboard>
-        <app-breadcum-doctor-dashboard *ngIf="isPermission('admin_dashboard')  && user.roles[0] === 'ADMIN' " [titlePage]="titlePage" [routes]="routes.adminDashboard"></app-breadcum-doctor-dashboard>
-        <app-breadcum-doctor-dashboard *ngIf="isPermission('doctor_dashboard') && user.roles[0] !== 'SUPERADMIN'  " [titlePage]="titlePage" [routes]="routes.doctorDashboard"></app-breadcum-doctor-dashboard>
+        <app-breadcum-doctor-dashboard *ngIf="isPermission('admin_dashboard')  && user.roles[0] === 'SUPERADMIN' || user.roles[0] === 'ADMIN' " [titlePage]="titlePage" [routes]="routes.adminDashboard"></app-breadcum-doctor-dashboard>
+        <app-breadcum-doctor-dashboard *ngIf="isPermission('doctor_dashboard') && user.roles[0] === 'DOCTOR'  " [titlePage]="titlePage" [routes]="routes.doctorDashboard"></app-breadcum-doctor-dashboard>
+        <app-breadcum-doctor-dashboard *ngIf="isPermission('admin_dashboard') && user.roles[0] === 'RECEPCION' " [titlePage]="titlePage" [routes]="routes.adminDashboard"></app-breadcum-doctor-dashboard>
         <!-- /Page Header -->
         <!-- <app-skeleton-loader *ngIf="isLoading" [rows]="5" [columns]="4"></app-skeleton-loader> -->
         
         
-        <div class="row" *ngIf="roles ==='SUPERADMIN' && !isLoading">
+        <div class="row" >
             <div class="col-sm-12">
             
                 <div class="card card-table show-entire">
@@ -17,36 +17,44 @@
                     
                         <!-- Table Header -->
                         <div class="page-table-header mb-2">
-                            <div class="row align-items-center">
-                                <div class="col">
-                                    <div class="doctor-table-blk">
-                                        <h3>Lista de Pacientes: </h3>
-                                        <div class="doctor-search-blk">
-                                            <div class="top-nav-search table-search-blk">
-                                                    <input  class="form-control" placeholder="Search here" [(ngModel)]="searchDataValue"
-                                                    (ngModelChange)="searchData()">
-                                                    <a class="btn"><img src="assets/img/icons/search-normal.svg" alt=""></a>
-                                            </div>
-                                            <div class="add-group">
-                                                <a routerLink="/patients/add" class="btn btn-primary add-pluss ms-2" *ngIf="isPermission('register_patient')"><img src="assets/img/icons/plus.svg" alt=""></a>
-                                                <a href="javascript:;" (click)="PageSize()" class="btn btn-primary doctor-refresh ms-2"><img src="assets/img/icons/re-fresh.svg" alt=""></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <app-export-lists></app-export-lists>
-                            </div>
-                        </div>
+              <div class="row align-items-center">
+                <div class="col">
+                  <div class="doctor-table-blk">
+                    <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm"
+                      (click)="modalListaPacientes.open()" title="Ayuda de la sección">
+                      <i class="fas fa-question"></i>
+                    </button>
+                    <h3>{{titlePage}}: </h3>
+                    <div class="doctor-search-blk">
+                      <div class="top-nav-search table-search-blk">
+                        <input class="form-control" placeholder="Search here" [(ngModel)]="searchDataValue"
+                          (ngModelChange)="searchData()">
+                        <a class="btn"><img src="assets/img/icons/search-normal.svg" alt=""></a>
+                      </div>
+                      <div class="add-group">
+                        <a routerLink="/patients/add" class="btn btn-primary add-pluss ms-2"
+                          *ngIf="isPermission('register_patient')"><img src="assets/img/icons/plus.svg" alt=""></a>
+                        <a href="javascript:;" (click)="PageSize()" class="btn btn-primary doctor-refresh ms-2"><img
+                            src="assets/img/icons/re-fresh.svg" alt=""></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+               <app-export-lists [dataToExport]="patientList" filenamePrefix="listado_pacientes_doctor"
+                    exportPermission="list_appointments">
+                  </app-export-lists>
+              </div>
+            </div>
                         <!-- /Table Header -->
-                        
-                        <div class="table-responsive">
+                        <app-loading *ngIf="isLoading"></app-loading>
+                        <div class="table-responsive" *ngIf="!isLoading">
                             <table matSort (matSortChange)="sortData($event)" class="table border-0 custom-table comman-table datatable mb-0">
                                 <thead>
                                     <tr>
                                         
                                         <th mat-sort-header="name">Nobre</th>
                                         <th mat-sort-header="email">email</th>
-                                        <th mat-sort-header="especializacion">Profesión</th>
+                                        <!-- <th mat-sort-header="especializacion">Profesión</th> -->
                                         <th mat-sort-header="telefono">Teléfono</th>
                                         <th mat-sort-header="n_doc">N. Documento</th>
                                         <th mat-sort-header="created">Creación</th>
@@ -65,7 +73,7 @@
                                           </span>
                                         </td>
                                         <td>{{data.email}}</td>
-                                        <td>{{data.education}}</td>
+                                        <!-- <td>{{data.education}}</td> -->
                                         <td>{{data.phone}}</td>
                                         <td>{{data.n_doc}}</td>
                                         <td>{{data.created_at | date }}</td>
@@ -233,6 +241,8 @@
         
     </div>
 </div>
+<app-modal-instrucciones [info]="info_mis_pacientes_list" sectionId="lista_pacientes"
+  #modalListaPacientes></app-modal-instrucciones>
 
 
  

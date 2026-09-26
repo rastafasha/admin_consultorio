@@ -8,7 +8,7 @@
                 <div class="col-sm-10">
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a routerLink="/presupuesto/list"
-                                *ngIf="user.roles[0] === 'SUPERADMIN'">Presupuestos </a></li>
+                                *ngIf="user.roles[0] !== 'DOCTOR'">Presupuestos </a></li>
                         <li class="breadcrumb-item"><a routerLink="/presupuesto/list/doctor/"
                                 *ngIf="user.roles[0] === 'DOCTOR'">Mis Presupuestos </a></li>
                         <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
@@ -78,37 +78,53 @@
                                             [ngModelOptions]="{standalone: true}" type="text">
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6 col-xl-3">
-                                    <div class="form-group local-forms">
-                                        <label>Especialidad <span class="login-danger">*</span></label>
-                                        {{specialityName}}
+                                <div class="row align-items-center">
+
+                                    @if (!isClinicMode) {
+                                    <!-- 🩺 MODO CONSULTORIO: Renderizado tradicional estático de solo lectura -->
+                                    <div class="col-12 col-md-6 mb-3">
+                                        <div class="form-group local-forms mb-0">
+                                            <label>Especialidad <span class="text-danger">*</span></label>
+                                            <input class="form-control" type="text" [value]="specialityName" readonly
+                                                style="background-color: #f8f9fa;">
+                                        </div>
                                     </div>
+                                    } @else {
+                                    <!-- 🏢 MODO CLÍNICA: Doble control interactivo para la Recepción Central -->
+                                    <div class="col-12 col-md-6 mb-3">
+                                        <div class="form-group local-forms mb-0">
+                                            <label>Seleccionar Especialidad <span class="login-danger">*</span></label>
+                                            <mat-select [(ngModel)]="speciality_id"
+                                                (selectionChange)="onSpecialityChange($event.value)"
+                                                class="form-control select" placeholder="Seleccione Especialidad">
+                                                <mat-option *ngFor="let data of specialities" [value]="data.id">
+                                                    {{ data.name }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-6 mb-3">
+                                        <div class="form-group local-forms mb-0">
+                                            <label>Médico Especialista Asignado <span
+                                                    class="login-danger">*</span></label>
+                                            <select class="form-select text-dark font-weight-medium"
+                                                [(ngModel)]="doctor_id_selected"
+                                                [disabled]="medicosFiltrados.length === 0"
+                                                style="height: 46px; border-radius: 4px;">
+                                                <option [value]="null" disabled selected>-- Seleccione Especialista --
+                                                </option>
+                                                <option *ngFor="let medico of medicosFiltrados" [value]="medico.id">
+                                                    Dr(a). {{ medico.surname }}, {{ medico.name }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    }
+
                                 </div>
 
-                                <!-- <div class="col-12 col-md-6 col-xl-4" *ngIf="!isdoctor">
-                                    <div class="form-group local-forms">
-                                        <label>Especialidad<span class="login-danger">*</span></label>
-                                        <mat-select [(ngModel)]="speciality_id" [ngModelOptions]="{standalone: true}"
-                                            class="form-control select" placeholder="Select Speciality">
-                                            <mat-option *ngFor="let data of specialities" [value]="data.id">
-                                                {{data.name}}
-                                            </mat-option>
-                                        </mat-select>
-                                    </div>
-                                </div> -->
-                                <!-- <div class="col-12 col-md-6 col-xl-4" *ngIf="isdoctor">
-                                    <div class="form-group local-forms">
-                                        <label>Especialidad<span class="login-danger">*</span></label>
-                                        <mat-select [(ngModel)]="speciality_id" [disabled]="[isdisabled]"
-                                            [ngModelOptions]="{standalone: true}" class="form-control select"
-                                            placeholder="Select Speciality">
-                                            <mat-option *ngFor="let data of specialities | especialidadFilter"
-                                                [value]="data.id">
-                                                {{data.name}}
-                                            </mat-option>
-                                        </mat-select>
-                                    </div>
-                                </div> -->
+
                                 <!-- <div class="col-xs-12 col-sm-3">
 
                                     <div class="form-group ">

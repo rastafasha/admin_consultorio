@@ -16,7 +16,7 @@ import {
   ApexLegend,
   ApexTooltip,
 } from 'ng-apexcharts';
-import { DashboardService } from '../service/dashboard.service';
+import { DashboardService } from '../../../services/dashboard.service';
 import { ActivatedRoute } from '@angular/router';
 import { ModalInstruccionesComponent } from '../../../modales/modal-instrucciones/modal-instrucciones.component';
 import { DoctorService } from '../../../services/doctor.service';

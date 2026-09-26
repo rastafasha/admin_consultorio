@@ -1,45 +1,50 @@
 import { Patient } from "./patient.model";
+import { User } from "./user.model";
 
 export class Presupuesto {
 
-    id:number;
-    doctor_id:number;
-        patient_id:number;
-        speciality_id:number;
-        doctor: Doctor;
-        patient: Patient;
-        speciality: Speciality;
-        user_id:number;
-        amount:number;
-        status:number;
-        confirmation:string;
-        description:string;
-        diagnostico:string;
-        date_presupuesto:string;
-        date_presupuesto_format:string;
-        medical:object;
+    id: number;
+    doctor_id: number;
+    patient_id: number;
+    speciality_id: number;
+    doctor: Doctor;
+    patient: Patient;
+    speciality: Speciality;
+    user_id: number;
+    amount: number;
+    status: number;
+    confirmation: string;
+    description: string;
+    diagnostico: string;
+    date_presupuesto: string;
+    date_presupuesto_format: string;
+    medical: object;
 
-    
+
 }
 export class Medical {
-    id:number;
-    name_medical:string;
-    precio:number;
+    id: number;
+    name_medical: string;
+    precio: number;
 
-    
+
 }
 export class Doctor {
-    id:number;
-    full_name:string;
-    speciality_id:number;
+    id: number;
+    full_name: string;
+    speciality_id: number;
     speciality: Speciality;
 
-    
+
 }
 export class Speciality {
-    id:number;
-        name:string;
-        price:number;
+    id: number;
+    name: string;
+    price: number;
+    state: number;
+    active_doctors: User;
 
-    
 }
+
+
+

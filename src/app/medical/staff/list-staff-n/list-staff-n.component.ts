@@ -8,22 +8,23 @@ import { DoctorService } from '../../../services/doctor.service';
 import { RolesService } from '../../../services/roles.service';
 import { routes } from '../../../shared/routes/routes';
 
-declare var $:any;  
+declare var $: any;
 
 @Component({
-    selector: 'app-list-staff-n',
-    templateUrl: './list-staff-n.component.html',
-    styleUrls: ['./list-staff-n.component.scss'],
-    standalone: false
+  selector: 'app-list-staff-n',
+  templateUrl: './list-staff-n.component.html',
+  styleUrls: ['./list-staff-n.component.scss'],
+  standalone: false
 })
 export class ListStaffNComponent {
   public routes = routes;
-  @ViewChild('content') content:ElementRef;
-  
-  titlePage   = 'Personal';
+  @ViewChild('content') content: ElementRef;
+
+  titlePage = 'Personal';
   public staffList: any = [];
   dataSource!: MatTableDataSource<any>;
 
+  public isLoading = false;
   public showFilter = false;
   public searchDataValue = '';
   public lastIndex = 0;
@@ -38,20 +39,20 @@ export class ListStaffNComponent {
   public pageSelection: Array<any> = [];
   public totalPages = 0;
 
-  public staff_generals:any = [];
-  public staff_id:any;
-  public staff_selected:any;
-  public text_validation:any;
-  public user:any;
-  public roles:any;
- 
+  public staff_generals: any = [];
+  public staff_id: any;
+  public staff_selected: any;
+  public text_validation: any;
+  public user: any;
+  public roles: any;
+
   public addClass = false;
   constructor(
     public staffService: StaffService,
     public doctorService: DoctorService,
     public roleService: RolesService,
     private fileSaver: FileSaverService
-    ){
+  ) {
 
   }
   ngOnInit() {
@@ -61,63 +62,70 @@ export class ListStaffNComponent {
     this.user = this.roleService.authService.user;
     this.roles = this.user.roles[0];
   }
-  private getTableData(): void {
-    this.staffList = [];
-    this.serialNumberArray = [];
 
-    this.staffService.listUsers().subscribe((resp:any)=>{
-      
-      // console.log(resp);
-
-      this.totalDataStaff = resp.users.data.length;
-      this.staff_generals = resp.users.data;
-      this.staff_id = resp.users.id;
-     this.getTableDataGeneral();
-    })
-
-  }
-
-  isPermission(permission:string){
-    if(this.user.roles.includes('SUPERADMIN')){
+  isPermission(permission: string) {
+    if (this.user.roles.includes('SUPERADMIN')) {
       return true;
     }
-    if(this.user.permissions.includes(permission)){
+    if (this.user.permissions.includes(permission)) {
       return true;
     }
     return false;
   }
 
-  getTableDataGeneral(){
+  private getTableData(): void {
+
     this.staffList = [];
     this.serialNumberArray = [];
-    
+    this.isLoading = true;
+    this.staffService.listUsers().subscribe((resp: any) => {
+
+      // console.log(resp);
+
+      this.totalDataStaff = resp.users.data.length;
+      this.staff_generals = resp.users.data;
+      this.staff_id = resp.users.id;
+      this.getTableDataGeneral();
+      this.isLoading = false;
+    })
+
+  }
+
+
+
+  getTableDataGeneral() {
+    this.isLoading = true;
+    this.staffList = [];
+    this.serialNumberArray = [];
+
     this.staff_generals.map((res: any, index: number) => {
       const serialNumber = index + 1;
       if (index >= this.skip && serialNumber <= this.limit) {
-       
+
         this.staffList.push(res);
         this.serialNumberArray.push(serialNumber);
       }
     });
     this.dataSource = new MatTableDataSource<any>(this.staffList);
     this.calculateTotalPages(this.totalDataStaff, this.pageSize);
+    this.isLoading = false;
   }
-  
-  selectUser(staff:any){
+
+  selectUser(staff: any) {
     this.staff_selected = staff;
   }
 
-  deleteRol(){
-    this.staffService.deleteUser(this.staff_selected.id).subscribe((resp:any)=>{
+  deleteRol() {
+    this.staffService.deleteUser(this.staff_selected.id).subscribe((resp: any) => {
       // console.log(resp);
 
-      if(resp.message == 403){
+      if (resp.message == 403) {
         this.text_validation = resp.message_text;
-      }else{
+      } else {
 
-        const INDEX = this.staffList.findIndex((item:any)=> item.id == this.staff_selected.id);
-      if(INDEX !=-1){
-        this.staffList.splice(INDEX,1);
+        const INDEX = this.staffList.findIndex((item: any) => item.id == this.staff_selected.id);
+        if (INDEX != -1) {
+          this.staffList.splice(INDEX, 1);
 
           $('#delete_patient').hide();
           $("#delete_patient").removeClass("show");
@@ -185,7 +193,7 @@ export class ListStaffNComponent {
     this.limit = this.pageSize;
     this.skip = 0;
     this.currentPage = 1;
-    this.getTableDataGeneral();
+    this.ngOnInit();
     this.searchDataValue = '';
   }
 
@@ -205,7 +213,7 @@ export class ListStaffNComponent {
   }
 
 
-  excelExport(){
+  excelExport() {
     const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8';
     const EXCLE_EXTENSION = '.xlsx';
 
@@ -216,20 +224,20 @@ export class ListStaffNComponent {
     const worksheet = XLSX.utils.json_to_sheet(this.staff_generals);
 
     const workbook = {
-      Sheets:{
+      Sheets: {
         'testingSheet': worksheet
       },
-      SheetNames:['testingSheet']
+      SheetNames: ['testingSheet']
     }
 
-    const excelBuffer = XLSX.write(workbook, {bookType:'xlsx', type: 'array'});
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
 
-    const blobData = new Blob([excelBuffer],{type: EXCEL_TYPE});
+    const blobData = new Blob([excelBuffer], { type: EXCEL_TYPE });
 
     this.fileSaver.save(blobData, "staffs_db_appcitasmedicas",)
 
   }
-  csvExport(){
+  csvExport() {
     const CSV_TYPE = 'text/csv';
     const CSV_EXTENSION = '.csv';
 
@@ -239,21 +247,21 @@ export class ListStaffNComponent {
     const worksheet = XLSX.utils.json_to_sheet(this.staff_generals);
 
     const workbook = {
-      Sheets:{
+      Sheets: {
         'testingSheet': worksheet
       },
-      SheetNames:['testingSheet']
+      SheetNames: ['testingSheet']
     }
 
-    const excelBuffer = XLSX.write(workbook, {bookType:'csv', type: 'array'});
+    const excelBuffer = XLSX.write(workbook, { bookType: 'csv', type: 'array' });
 
-    const blobData = new Blob([excelBuffer],{type: CSV_TYPE});
+    const blobData = new Blob([excelBuffer], { type: CSV_TYPE });
 
     this.fileSaver.save(blobData, "staffs_db_appcitasmedicas", CSV_EXTENSION)
 
   }
 
-  txtExport(){
+  txtExport() {
     const TXT_TYPE = 'text/txt';
     const TXT_EXTENSION = '.txt';
 
@@ -264,23 +272,23 @@ export class ListStaffNComponent {
     const worksheet = XLSX.utils.json_to_sheet(this.staff_generals);
 
     const workbook = {
-      Sheets:{
+      Sheets: {
         'testingSheet': worksheet
       },
-      SheetNames:['testingSheet']
+      SheetNames: ['testingSheet']
     }
 
-    const excelBuffer = XLSX.write(workbook, {bookType:'xlsx', type: 'array'});
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
 
-    const blobData = new Blob([excelBuffer],{type: TXT_TYPE});
+    const blobData = new Blob([excelBuffer], { type: TXT_TYPE });
 
     this.fileSaver.save(blobData, "staffs_db_appcitasmedicas", TXT_EXTENSION)
 
   }
 
-  pdfExport(){
+  pdfExport() {
     // var doc = new jspdf(); 
-    
+
     // const worksheet = XLSX.utils.json_to_sheet(this.staff_generals);
 
     // const workbook = {
@@ -298,7 +306,7 @@ export class ListStaffNComponent {
 
   }
 
-  
-  
+
+
 
 }

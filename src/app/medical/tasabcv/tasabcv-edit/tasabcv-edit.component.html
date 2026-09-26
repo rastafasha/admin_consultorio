@@ -18,64 +18,87 @@
          <app-loading *ngIf="isLoading"></app-loading>
         <!-- /Page Header -->
         <div class="row" *ngIf="!isLoading && moneda ==='USD'" >
-            <!-- paciente -->
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-
-                        <app-loading *ngIf="isLoading"></app-loading>
-                        <form *ngIf="!isLoading" > 
-
-                            <div class="row align-items-center">
-                                <div class="col-xs-12 col-sm-6">
-                                    <div class="row">
-
-                                        <div class="col-12 ">
-                                            <div class="form-group local-forms">
-                                                <label for="exampleInputEmail1">Precio</label>
-                                                <input [(ngModel)]="precio_dia" name="precio_dia" type="text"
-                                                    class="form-control" [ngModelOptions]="{standalone: true}">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 mb-3">
-                                            <button class="btn btn-primary  btn-sm" (click)="save()">+ Agregar</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-6">
-                                    <div class="table-responsive">
-                                        <table class="table mb-0">
-                                            <thead>
-                                                <tr>
-                                                    <th>Monto</th>
-                                                    <th>Fecha</th>
-                                                    <th>Opciones</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr *ngFor="let tasa of tasasbcv; let i = index">
-                                                    <td>{{tasa.precio_dia}}</td>
-                                                    <td>{{tasa.created_at|date}}</td>
-                                                    <td>
-                                                        <button class="btn btn-danger btn-sm"
-                                                            (click)="deleteTasa(tasa)">x</button>
-                                                    </td>
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </form>
-
+           <!-- Panel Izquierdo: Formulario de Actualización -->
+    <div class="col-12 col-md-5 mb-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body p-4">
+                <h5 class="card-title fw-bold text-secondary mb-3">Establecer Nueva Tasa</h5>
+                
+                @if (moneda === 'USD' || moneda === 'VED') {
+                    <div class="form-group mb-3">
+                        <label class="form-label fw-semibold text-muted small">Monto en Bolívares (Bs.)</label>
+                        <div class="input-group" style="height: 46px;">
+                            <span class="input-group-text bg-light text-secondary fw-bold">Bs.</span>
+                            <input 
+                                type="number" 
+                                class="form-control" 
+                                [(ngModel)]="precio_dia" 
+                                placeholder="Ej: 36.50"
+                                style="height: 100%;">
+                        </div>
                     </div>
-                </div>
-
+                    
+                    <button 
+                        (click)="save()" 
+                        [disabled]="isLoading || !precio_dia"
+                        class="btn btn-primary w-100 fw-bold d-flex align-items-center justify-content-center" 
+                        style="height: 46px; border-radius: 4px;">
+                        <i class="bi bi-plus-circle me-2"></i>Agregar Tasa
+                    </button>
+                } @else {
+                    <div class="alert alert-warning border-0 p-3 mb-0 d-flex align-items-start">
+                        <i class="bi bi-exclamation-triangle-fill me-3 fs-4 text-warning"></i>
+                        <div>
+                            <strong class="d-block text-dark">Moneda No Coincide</strong>
+                            <small class="text-muted">El establecimiento está configurado bajo la divisa <strong>{{ moneda }}</strong>. Diríjase al panel correspondiente para actualizar su valor.</small>
+                        </div>
+                    </div>
+                }
             </div>
-            <!-- fin paciente -->
+        </div>
+    </div>
+
+    <!-- Panel Derecho: Tabla de Historial Reciente -->
+    <div class="col-12 col-md-7 mb-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body p-4">
+                <h5 class="card-title fw-bold text-secondary mb-3">Historial de Tasas Recientes</h5>
+
+                @if (isLoading) {
+                    <div class="d-flex justify-content-center align-items-center py-5">
+                        <div class="spinner-border text-primary" role="status"></div>
+                    </div>
+                } @else if (tasasbcv && tasasbcv.length > 0) {
+                    <div class="table-responsive" style="max-height: 350px; overflow-y: auto;">
+                        <table class="table table-hover align-middle border-light">
+                            <thead class="table-light sticky-top" style="z-index: 1;">
+                                <tr>
+                                    <th class="fw-bold text-secondary small">Monto</th>
+                                    <th class="fw-bold text-secondary small">Fecha Registro</th>
+                                    <th class="fw-bold text-secondary small text-end">Opciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let data of tasasbcv">
+                                    <td class="fw-semibold text-dark">Bs. {{ data?.precio_dia }}</td>
+                                    <td class="text-muted" *ngIf="data?.created_at">{{ data?.created_at | date:'dd/MM/yyyy hh:mm A' }}</td>
+                                    <td class="text-muted" *ngIf="!data?.created_at">Extraida del BCV</td>
+                                    
+                                    <td class="text-end">
+                                        <button (click)="deleteTasa(data)" class="btn btn-sm btn-outline-danger border-0" title="Eliminar Registro">
+                                           <i class="fa fa-trash fs-3"></i>  
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                } @else {
+                    <p class="text-muted text-center py-4 mb-0">No se registran tasas cargadas en el sistema para esta divisa.</p>
+                }
+            </div>
+        </div>
+    </div>
         </div>
         <div class="row" *ngIf="moneda ==='EUR'" >
             <app-tasabcveuro-edit></app-tasabcveuro-edit>

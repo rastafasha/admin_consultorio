@@ -2,9 +2,9 @@ import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DoctorService } from '../../../services/doctor.service';
 import { routes } from '../../../shared/routes/routes';
-import { SettignService } from '../settigs.service';
 import { ClinicaService } from '../../../services/clinica.service'; // 🚀 INYECTADO PARA DETECTAR EL SLUG/TENANT
 import { PaymentMethod } from '../paymentMethod';
+import { SettignService } from '../../../services/settigs.service';
 
 @Component({
     selector: 'app-payment-settings',
@@ -107,7 +107,7 @@ export class PaymentSettingsComponent implements OnInit {
    */
   getTiposdePago() {
     // Al usar getAllTiposDePagos se inyectan en automático los HttpHeaders 'X-Clinica-Slug'
-    this.settigService.getAll().subscribe({
+    this.settigService.getAllPaymentMethods().subscribe({
       next: (resp: any) => {
         console.log('📡 [Caja] Cuentas bancarias centralizadas cargadas:', resp);
         this.tiposdepagos = resp.tiposdepagos;
@@ -129,7 +129,7 @@ export class PaymentSettingsComponent implements OnInit {
   }
   
   cambiarStatus(tipodepago: any) {
-    this.settigService.updateStatus(tipodepago, tipodepago.id).subscribe({
+    this.settigService.updateStatusPaymentMethod(tipodepago, tipodepago.id).subscribe({
       next: (resp) => {
         this.actualizarTablaVisual();
       },
@@ -155,7 +155,7 @@ export class PaymentSettingsComponent implements OnInit {
       data.doctor_id = this.doctor_id;
     }
 
-    this.settigService.create(data).subscribe({
+    this.settigService.createPaymentMethod(data).subscribe({
       next: (resp: any) => {
         this.actualizarTablaVisual();
         // 🧹 Limpieza rápida de los inputs del formulario tras guardar con éxito
@@ -172,7 +172,7 @@ export class PaymentSettingsComponent implements OnInit {
   }
   
   deleteTipoPago(tiposdepago: any) {
-    this.settigService.delete(tiposdepago.id).subscribe({
+    this.settigService.deletePaymentMethod(tiposdepago.id).subscribe({
       next: (resp: any) => {
         this.actualizarTablaVisual();
       },

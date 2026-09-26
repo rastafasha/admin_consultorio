@@ -19,6 +19,7 @@ export class User {
     speciality_id: number;
     speciality: Speciality;
     pais_id: number;
+    clinica_id: number;
     precio_cita: number;
     status: string;
     roles:Role;

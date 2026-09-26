@@ -3,7 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms'; // 🚀 API
 import Swal from 'sweetalert2';
 import { DoctorService } from '../../../services/doctor.service';
 import { routes } from '../../../shared/routes/routes';
-import { SettignService } from '../settigs.service';
+import { SettignService } from '../../../services/settigs.service';
+import { environment } from '../../../../environments/environment';
+import { ClinicaService } from '../../../services/clinica.service';
 
 @Component({
     selector: 'app-general-settings',
@@ -16,6 +18,7 @@ export class GeneralSettingsComponent implements OnInit {
   public routes = routes;
   public deleteIcon1 = true;
   public deleteIcon2 = true;
+  public isClinic: boolean = false;
 
   // 📋 Estructura unificada del Formulario Reactivo
   public formGroup!: FormGroup;
@@ -31,30 +34,52 @@ export class GeneralSettingsComponent implements OnInit {
   // Alertas y notificaciones locales de validación
   public text_validation: string = '';
 
+  // 🔒 Captura el flag inyectado por Vercel al compilar
+  public readonly isClinicMode = environment.IS_CLINIC_DEPLOYMENT;
+  public nombreClinicaCRM: string = '';
+
+
   // Inyección moderna de dependencias mediante inject()
   private fb = inject(FormBuilder);
   public settingService = inject(SettignService);
   public doctorService = inject(DoctorService);
+  public clinicaService = inject(ClinicaService);
 
   ngOnInit(): void {
     this.inicializarFormularioReactivo();
     this.getSettings();
     this.doctorService.closeMenuSidebar();
+    // 🏢 Si es modo clínica, cargamos de inmediato el nombre real desde MongoDB
+    if (this.isClinicMode) {
+      this.cargarNombreDesdeCRM();
+    }
+  }
+   /**
+   * 🛰️ Recupera el nombre de la clínica usando el subdominio/slug de la URL
+   */
+  private cargarNombreDesdeCRM(): void {
+    const slug = this.clinicaService.obtenerSlugDeUrl();
+    this.clinicaService.getClinicaBySlugCached(slug).subscribe(clinica => {
+      if (clinica) {
+        this.nombreClinicaCRM = clinica.name;
+      }
+    });
   }
 
   /**
    * 🏗️ Inicializa el esquema y las validaciones del formulario reactivo
    */
-  private inicializarFormularioReactivo(): void {
+ private inicializarFormularioReactivo(): void {
     this.formGroup = this.fb.group({
-      name: ['', [Validators.required, Validators.maxLength(250)]],
+      // 🔥 Si es clínica, eliminamos el validador requerido de este campo
+      name: ['', this.isClinicMode ? [Validators.maxLength(250)] : [Validators.required, Validators.maxLength(250)]],
       address: ['', [Validators.required]],
       phone: ['', [Validators.required, Validators.pattern('^[0-9+ ]*$')]],
       city: ['', [Validators.required]],
       state: ['', [Validators.required]],
       zip: ['', [Validators.required]],
       country: ['', [Validators.required]],
-      moneda: ['USD', [Validators.required]] // 💰 Tu nuevo selector de divisas centralizado por defecto
+      moneda: ['USD', [Validators.required]]
     });
   }
 
@@ -62,35 +87,38 @@ export class GeneralSettingsComponent implements OnInit {
    * 🛰️ Recupera las configuraciones de la base de datos de Laravel
    */
   getSettings(): void {
-    this.settingService.getAllSettings().subscribe({
-      next: (resp: any) => {
-        console.log('📡 [Configuración] Datos cargados de Laravel:', resp);
-        if (resp && resp.settings && resp.settings.data && resp.settings.data.length > 0) {
-          this.settings = resp.settings.data;
-          const currentSetting = resp.settings.data[0];
-          this.setting_selectedId = currentSetting.id;
+  this.settingService.getAllSettings().subscribe({
+    next: (resp: any) => {
+      console.log('📡 [Configuración] Datos cargados de Laravel:', resp);
+      if (resp && resp.settings && resp.settings.data && resp.settings.data.length > 0) {
+        this.settings = resp.settings.data;
+        const currentSetting = resp.settings.data[0];
+        this.setting_selectedId = currentSetting.id;
 
-          // 🔄 Llenado automático e inteligente del Formulario Reactivo en caliente
-          this.formGroup.patchValue({
-            name: currentSetting.name,
-            address: currentSetting.address,
-            phone: currentSetting.phone,
-            city: currentSetting.city,
-            state: currentSetting.state,
-            zip: currentSetting.zip,
-            country: currentSetting.country,
-            moneda: currentSetting.moneda || 'USD' // Asigna la moneda existente o USD por defecto
-          });
+        // Evaluamos si el backend ya reporta que es una clínica (0 o 1 / false o true)
+        this.isClinic = !!currentSetting.is_clinic;
 
-          // Si el consultorio ya posee un logo guardado
-          if (currentSetting.img_logo) {
-            this.IMAGE_PREVISUALIZA = currentSetting.img_logo;
-          }
+        // 🔄 Llenado automático incluyendo el discriminador de negocio
+        this.formGroup.patchValue({
+          name: currentSetting.name,
+          address: currentSetting.address,
+          phone: currentSetting.phone,
+          city: currentSetting.city,
+          state: currentSetting.state,
+          zip: currentSetting.zip,
+          country: currentSetting.country,
+          moneda: currentSetting.moneda || 'USD',
+          is_clinic: this.isClinic
+        });
+
+        if (currentSetting.img_logo) {
+          this.IMAGE_PREVISUALIZA = currentSetting.img_logo;
         }
-      },
-      error: (err) => console.error('Error descargando configuraciones del servidor:', err)
-    });
-  }
+      }
+    },
+    error: (err) => console.error('Error descargando configuraciones del servidor:', err)
+  });
+}
 
   /**
    * 🖼️ Gestiona la previsualización del logotipo de la clínica mitigando formatos inválidos

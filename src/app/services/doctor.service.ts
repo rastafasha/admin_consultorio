@@ -1,9 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { url_servicios } from '../config/config';
-import { AuthService } from '../shared/auth/auth.service';
 import { Observable } from 'rxjs';
 import { DoctorAddress } from '../models/DoctorAddress.model';
+import { AuthService } from './auth.service';
 declare let $:any;
 
 @Injectable({

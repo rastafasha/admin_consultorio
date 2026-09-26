@@ -13,6 +13,7 @@ import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../shared/shared.module';
 import { ReusablesModule } from '../../reusables/reusables.module';
 import { PerfilWhatsappComponent } from './perfil-whatsapp/perfil-whatsapp.component';
+import { ModalInstruccionesModule } from '../../modales/modal-instrucciones.module';
 
 
 
@@ -37,5 +38,6 @@ import { PerfilWhatsappComponent } from './perfil-whatsapp/perfil-whatsapp.compo
         RouterModule,
         SharedModule,
         ReusablesModule,
+        ModalInstruccionesModule,
         PipesModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class DoctorsModule { }

@@ -32,7 +32,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <app-export-lists></app-export-lists>
+                                <app-export-lists [dataToExport]="specialitiesList" filenamePrefix="listado_especialidades"
+                    exportPermission="list_appointments">
+                  </app-export-lists>
                             </div>
                         </div>
                         <!-- /Table Header -->

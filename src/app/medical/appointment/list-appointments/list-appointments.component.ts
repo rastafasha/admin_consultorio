@@ -1,9 +1,6 @@
 import { Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { AppointmentService } from '../../../services/appointment.service';
-import { FileSaverService } from 'ngx-filesaver';
-import * as XLSX from 'xlsx';
-import { jsPDF } from 'jspdf';
 import { DoctorService } from '../../../services/doctor.service';
 import { RolesService } from '../../../services/roles.service';
 import { routes } from '../../../shared/routes/routes';
@@ -20,6 +17,9 @@ export class ListAppointmentsComponent {
   titlePage = 'Listado de Citas';
   public appointmentList: any = [];
   dataSource!: MatTableDataSource<any>;
+
+  public doctor_id: any = 'TODOS';
+public medicos: any[] = [];
 
   public showFilter = false;
   public searchDataValue = '';
@@ -47,11 +47,11 @@ export class ListAppointmentsComponent {
 
   confimation:any= null;
   public user:any;
+  isLoading = false
 
   constructor(
     public appointmentService: AppointmentService,
     public doctorService: DoctorService,
-    private fileSaver: FileSaverService,
     public roleService: RolesService,
     ){
 
@@ -61,6 +61,7 @@ export class ListAppointmentsComponent {
     this.doctorService.closeMenuSidebar();
     this.getTableData();
     this.getSpecialities();
+    this.cargarMedicosFiltro();
     this.user = this.roleService.authService.user;
   }
 
@@ -74,6 +75,14 @@ export class ListAppointmentsComponent {
     return false;
   }
 
+  cargarMedicosFiltro(): void {
+  // Aprovechamos tu doctorService inyectado para traer el personal médico
+  this.doctorService.listDoctors().subscribe((resp: any) => {
+    // Si tu respuesta viene envuelta en un objeto, ajústalo (ej: resp.users.data)
+    this.medicos = resp.users?.data || resp.doctors || resp;
+  });
+}
+
 
   getSpecialities(){
     this.appointmentService.listConfig().subscribe((resp:any)=>{
@@ -81,21 +90,28 @@ export class ListAppointmentsComponent {
     })
   }
 
-  private getTableData(page=1): void {
-    this.appointmentList = [];
-    this.serialNumberArray = [];
+  private getTableData(page = 1): void {
 
-    this.appointmentService.listAppointments(page, this.searchDataValue, this.speciality_id, this.date).subscribe((resp:any)=>{
-      // console.log(resp);
+  this.appointmentList = [];
+  this.serialNumberArray = [];
+  this.isLoading = true;
 
-      this.totalDataPatient = resp.total;
-      this.appointmentList = resp.appointments.data;
-      this.appointment_id = resp.appointments.id;
-      // this.getTableDataGeneral();
-      this.dataSource = new MatTableDataSource<any>(this.appointmentList);
-      this.calculateTotalPages(this.totalDataPatient, this.pageSize);
-    })
-  }
+  // 🚀 SANEADO ENTERPRISE: Agregamos this.doctor_id al final de los parámetros enviados
+  this.appointmentService.listAppointments(
+    page, 
+    this.searchDataValue, 
+    this.speciality_id, 
+    this.date, 
+    this.doctor_id
+  ).subscribe((resp: any) => {
+    this.totalDataPatient = resp.total;
+    this.appointmentList = resp.appointments.data;
+    this.appointment_id = resp.appointments.id;
+    this.dataSource = new MatTableDataSource<any>(this.appointmentList);
+    this.calculateTotalPages(this.totalDataPatient, this.pageSize);
+    this.isLoading = false;
+  });
+}
 
   getTableDataGeneral(){
     this.appointmentList = [];
@@ -196,15 +212,16 @@ export class ListAppointmentsComponent {
   }
 
   public PageSize(): void {
-    this.pageSelection = [];
-    this.limit = this.pageSize;
-    this.skip = 0;
-    this.currentPage = 1;
-    this.getTableData();
-    this.searchDataValue = '';
-    this.speciality_id = 0;
-    this.date= null;
-  }
+  this.pageSelection = [];
+  this.limit = this.pageSize;
+  this.skip = 0;
+  this.currentPage = 1;
+  this.searchDataValue = '';
+  this.speciality_id = 0;
+  this.date = null;
+  this.doctor_id = 'TODOS'; // 🧹 Reseteamos a la sábana global
+  this.getTableData();
+}
 
   private calculateTotalPages(totalDataPatient: number, pageSize: number): void {
     this.pageNumberArray = [];
@@ -221,99 +238,7 @@ export class ListAppointmentsComponent {
     }
   }
 
-  excelExport(){
-    const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8';
-    const EXCLE_EXTENSION = '.xlsx';
-
-    this.getTableDataGeneral();
-
-
-    //custom code
-    const worksheet = XLSX.utils.json_to_sheet(this.appointmentList);
-
-    const workbook = {
-      Sheets:{
-        'testingSheet': worksheet
-      },
-      SheetNames:['testingSheet']
-    }
-
-    const excelBuffer = XLSX.write(workbook, {bookType:'xlsx', type: 'array'});
-
-    const blobData = new Blob([excelBuffer],{type: EXCEL_TYPE});
-
-    this.fileSaver.save(blobData, "citas_db_appcitasmedicas",)
-
-  }
-  csvExport(){
-    const CSV_TYPE = 'text/csv';
-    const CSV_EXTENSION = '.csv';
-
-    this.getTableDataGeneral();
-
-    //custom code
-    const worksheet = XLSX.utils.json_to_sheet(this.appointmentList);
-
-    const workbook = {
-      Sheets:{
-        'testingSheet': worksheet
-      },
-      SheetNames:['testingSheet']
-    }
-
-    const excelBuffer = XLSX.write(workbook, {bookType:'csv', type: 'array'});
-
-    const blobData = new Blob([excelBuffer],{type: CSV_TYPE});
-
-    this.fileSaver.save(blobData, "citas_db_appcitasmedicas", CSV_EXTENSION)
-
-  }
-
-  txtExport(){
-    const TXT_TYPE = 'text/txt';
-    const TXT_EXTENSION = '.txt';
-
-    this.getTableDataGeneral();
-
-
-    //custom code
-    const worksheet = XLSX.utils.json_to_sheet(this.appointmentList);
-
-    const workbook = {
-      Sheets:{
-        'testingSheet': worksheet
-      },
-      SheetNames:['testingSheet']
-    }
-
-    const excelBuffer = XLSX.write(workbook, {bookType:'xlsx', type: 'array'});
-
-    const blobData = new Blob([excelBuffer],{type: TXT_TYPE});
-
-    this.fileSaver.save(blobData, "citas_db_appcitasmedicas", TXT_EXTENSION)
-
-  }
-
-  pdfExport(){
-    // var doc = new jspdf(); 
-    
-    // const worksheet = XLSX.utils.json_to_sheet(this.staff_generals);
-
-    // const workbook = {
-    //   Sheets:{
-    //     'testingSheet': worksheet
-    //   },
-    //   SheetNames:['testingSheet']
-    // }
-
-    // doc.html(document.body, {
-    //   callback: function (doc) {
-    //     doc.save('staffs_db_appcitasmedicas.pdf');
-    //   }
-    // });
-
-  }
-
+  
   cambiarStatus(data:any){
     const VALUE = data.confimation;
     console.log(VALUE);

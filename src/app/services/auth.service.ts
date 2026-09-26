@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
-import { routes } from '../routes/routes';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, of } from 'rxjs';
-import { url_servicios } from '../../config/config';
-import { User } from '../../models/user.model';
-import { NotificacionService } from '../../services/notificacion.service';
+import { url_servicios } from '../config/config';
+import { User } from '../models/user.model';
+import { routes } from '../shared/routes/routes';
+import { NotificacionService } from './notificacion.service';
 
 @Injectable({
   providedIn: 'root',

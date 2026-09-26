@@ -83,6 +83,7 @@
         <app-loading *ngIf="isLoadingDataInicial"></app-loading>
         <div class="doctor-list-blk" *ngIf="!isLoadingDataInicial && doctor && doctor.id">
             <div class="row">
+                <!-- Citas -->
                 <div class="col-xl-3 col-md-6 col-xs-12 col-sm-6">
                     <div class="doctor-widget border-right-bg">
                         <div class="doctor-box-icon flex-shrink-0">
@@ -101,7 +102,7 @@
                         </div>
                     </div>
                 </div>
-
+                <!-- Atendidas -->
                 <div class="col-xl-3 col-md-6 col-xs-12 col-sm-6">
                     <div class="doctor-widget border-right-bg">
                         <div class="doctor-box-icon flex-shrink-0">
@@ -118,7 +119,7 @@
                         </div>
                     </div>
                 </div>
-
+                <!-- Ganancias -->
                 <div class="col-xl-3 col-md-6 col-xs-12 col-sm-6">
                     <div class="doctor-widget">
                         <div class="doctor-box-icon flex-shrink-0">
@@ -135,7 +136,7 @@
                         </div>
                     </div>
                 </div>
-
+                <!-- Pendientes -->
                 <div class="col-xl-3 col-md-6 col-xs-12 col-sm-6">
                     <div class="doctor-widget">
                         <div class="doctor-box-icon flex-shrink-0">

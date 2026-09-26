@@ -36,6 +36,7 @@ export class ClinicaService {
   // Caché reactiva para evitar pegarle a Node.js en cada cambio de vista administrativa
   private clinicaCache$!: Observable<ConsultorioCRM | null>;
   private cacheSlug: string = '';
+  private clinicaActual: ConsultorioCRM | null = null;
 
   /**
    * 🗺️ Extrae el slug/subdominio de la URL del navegador.
@@ -89,6 +90,20 @@ export class ClinicaService {
     );
 
     return this.clinicaCache$;
+  }
+
+  /**
+   * 🏢 EXTRAE EL ID ACTUAL EN CALIENTE
+   * Método síncrono ultra veloz para acoplar con los FormData del personal administrativo.
+   */
+  getClinicaIdActual(): string {
+    if (this.clinicaActual && this.clinicaActual._id) {
+      return this.clinicaActual._id;
+    }
+    
+    // Salvavidas por si un componente llama antes de que se resuelva la caché
+    console.warn('⚠️ Intentando extraer el ClinicaId antes de que se resuelva la carga del CRM.');
+    return '';
   }
 
   /**

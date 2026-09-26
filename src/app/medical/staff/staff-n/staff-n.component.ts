@@ -6,14 +6,15 @@ import { DoctorService } from '../../../services/doctor.service';
 import { RolesService } from '../../../services/roles.service';
 import Swal from 'sweetalert2';
 import { routes } from '../../../shared/routes/routes';
+import { ClinicaService } from '../../../services/clinica.service';
 
 declare let $: any;
 
 @Component({
-    selector: 'app-staff-n',
-    templateUrl: './staff-n.component.html',
-    styleUrls: ['./staff-n.component.scss'],
-    standalone: false
+  selector: 'app-staff-n',
+  templateUrl: './staff-n.component.html',
+  styleUrls: ['./staff-n.component.scss'],
+  standalone: false
 })
 export class StaffNComponent implements OnInit {
   public routes = routes;
@@ -32,6 +33,7 @@ export class StaffNComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    private clinicaService: ClinicaService,
     public staffService: StaffService,
     public router: Router,
     public activatedRoute: ActivatedRoute,
@@ -47,6 +49,7 @@ export class StaffNComponent implements OnInit {
       gender: [1, Validators.required],
       designation: [''],
       address: [''],
+      clinica_id: [''],
       role_id: ['', Validators.required],
       password: ['', this.isEditing ? [] : [Validators.required, Validators.minLength(6)]],
       password_confirmation: ['', this.isEditing ? [] : [Validators.required]]
@@ -93,7 +96,8 @@ export class StaffNComponent implements OnInit {
         gender: this.staff_selected.gender,
         designation: this.staff_selected.designation,
         address: this.staff_selected.address,
-        role_id: this.staff_selected.roles.id
+        role_id: this.staff_selected.roles.id,
+        clinica_id: this.staff_selected.clinica_id
       });
       this.IMAGE_PREVISUALIZA = this.staff_selected.avatar;
       this.titlePage = `Editar Personal ${this.staff_selected.id}`;
@@ -108,7 +112,7 @@ export class StaffNComponent implements OnInit {
         gender: [this.staff_selected.gender, Validators.required],
         designation: [this.staff_selected.designation],
         address: [this.staff_selected.address],
-        role_id: [this.staff_selected.roles.id, Validators.required],
+        clinica_id: [this.staff_selected.roles.id, Validators.required],
         password: [''],
         password_confirmation: ['']
       });
@@ -160,6 +164,9 @@ export class StaffNComponent implements OnInit {
     formData.append('address', formValue.address);
     formData.append('role_id', formValue.role_id);
 
+    const clinicaId = this.clinicaService.getClinicaIdActual();
+    formData.append('clinica_id', clinicaId);
+
     const password = formValue.password?.trim();
     if (password) {
       formData.append('password', password);
@@ -172,13 +179,13 @@ export class StaffNComponent implements OnInit {
     if (this.isEditing && this.user_id) {
       this.staffService.editUser(formData, this.user_id).subscribe((resp: any) => {
         this.handleResponse(resp);
-        
+
         this.isLoading = false
       });
     } else {
       this.staffService.createUser(formData).subscribe((resp: any) => {
         this.handleResponse(resp);
-        
+
         this.isLoading = false
       });
     }

@@ -13,6 +13,7 @@ export const environment = {
     // 🚀 Fallback de producción para identificar el entorno de la clínica de la doctora si entra sin subdominio
     backend_CRM_node:"https://backend-crmklyntic-mean.onrender.com/api",
     nombreSelected: 'clinica-prueba', 
+    IS_CLINIC_DEPLOYMENT: true,
 
     // URL oficial del frontend para el ecosistema de Clínicas
     url_frontend: 'https://clinica.klyntic.com/',

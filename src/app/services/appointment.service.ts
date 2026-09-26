@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { url_servicios } from '../config/config';
-import { AuthService } from '../shared/auth/auth.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -47,7 +47,8 @@ export class AppointmentService {
     const URL = url_servicios+"/appointments/patient?n_doc="+n_doc;
     return this.http.get(URL, {headers:headers});
   }
-  listAppointments(page=1, search='', speciality_id=0,date= ''){
+  
+  listAppointments(page=1, search='', speciality_id=0, date= '', doctor_id = 'TODOS'){
     const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
     let LINK = "";
     if(search){
@@ -59,9 +60,15 @@ export class AppointmentService {
     if(date){
       LINK+="&date="+date;
     }
+    // 🚀 SANEADO ENTERPRISE: Concatenamos el ID del médico si no es la sábana global
+    if(doctor_id && doctor_id !== 'TODOS'){
+      LINK+="&doctor_id="+doctor_id;
+    }
+    
     const URL = url_servicios+'/appointment?page='+page+LINK;
     return this.http.get(URL, {headers:headers});
   }
+
   listAppointmentDocts(
     doctor_id:number, 
     page=1, 

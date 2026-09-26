@@ -3,8 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { StaffService } from '../../services/staff.service';
-import { AuthService } from '../../shared/auth/auth.service';
 import { routes } from '../../shared/routes/routes';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
     selector: 'app-register',

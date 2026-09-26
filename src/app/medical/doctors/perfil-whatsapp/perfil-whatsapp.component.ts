@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ConsultorioService } from '../../../services/consultorio.service';
-import { AuthService } from '../../../shared/auth/auth.service';
 import { NotificacionService } from '../../../services/notificacion.service'; // 👈 IMPORTA TU SERVICIO DE SOCKETS
 import * as QRCode from 'qrcode';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-perfil-whatsapp',

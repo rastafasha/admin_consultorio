@@ -3,10 +3,9 @@ import { TasadollarbcvService } from '../../services/tasabcv.service';
 import { DoctorService } from '../../services/doctor.service';
 import { TasaeurobcvService } from '../../services/tasaeurobcv.service';
 import { TasapersonalizadaService } from '../../services/tasapersonalizada.service';
- // 🚀 INYECTADO PARA CONFIGURACIÓN CENTRAL
-import { ClinicaService } from '../../services/clinica.service'; // 🚀 INYECTADO PARA SABER EL TENANT
+import { ClinicaService } from '../../services/clinica.service'; 
 import { switchMap, of, Observable } from 'rxjs';
-import { SettignService } from '../../core/settings/settigs.service';
+import { SettignService } from '../../services/settigs.service';
 
 @Component({
     selector: 'app-tasabcv',
@@ -23,7 +22,7 @@ export class TasabcvComponent implements OnInit {
   public tasadollar: any;
   public tasaeuro: any;
 
-  // Inyección moderna de dependencias mediante inject() que limpia el constructor
+  // Inyección moderna de dependencias mediante inject()
   private clinicaService = inject(ClinicaService);
   private settingService = inject(SettignService);
   private doctorService = inject(DoctorService);
@@ -79,15 +78,15 @@ export class TasabcvComponent implements OnInit {
       switchMap((contexto: any) => {
         this.moneda = contexto.moneda ? contexto.moneda.toUpperCase().trim() : 'USD';
 
+        // 🚀 SANEADO MULTI-TENANT: Evaluamos dinámicamente el ID del dueño real (Setting ID o User ID)
+        const targetOwnerId = contexto.isEnterprise ? contexto.settingId : this.user.id;
+
         const estrategiasTasa: { [key: string]: () => Observable<any> } = {
-          'USD': () => this.tasaBcvService.getUltimaTasa(),
-          'VED': () => this.tasaBcvService.getUltimaTasa(), // Soporta VED/Bolívares usando la tasa del dólar
-          'EUR': () => this.tasaEuroBcvService.getUltimaTasa(),
-          'PERSONALIZADA': () => {
-            // Si es clínica enterprise, la tasa fija se amarra al ID de la configuración, si no, al del doctor
-            const refId = contexto.isEnterprise ? contexto.settingId : this.user.id;
-            return this.tasaPersonalizadaService.getTasasByUser(refId);
-          }
+          // 🔥 Pasamos el ID del dueño real a los métodos refactorizados de tus servicios
+          'USD': () => this.tasaBcvService.getUltimaTasa(targetOwnerId),
+          'VED': () => this.tasaBcvService.getUltimaTasa(targetOwnerId), 
+          'EUR': () => this.tasaEuroBcvService.getUltimaTasa(targetOwnerId),
+          'PERSONALIZADA': () => this.tasaPersonalizadaService.getTasasByUser(targetOwnerId)
         };
 
         return estrategiasTasa[this.moneda] ? estrategiasTasa[this.moneda]() : of(null);

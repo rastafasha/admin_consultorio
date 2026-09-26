@@ -4,12 +4,12 @@ import { AppointmentService } from "../../services/appointment.service";
 import { PaymentService } from "../../services/payment.service";
 import { RolesService } from "../../services/roles.service";
 import { StaffService } from "../../services/staff.service";
-import { AuthService } from "../../shared/auth/auth.service";
 import { Observable, Subscription } from "rxjs";
 import { NotificacionService } from "../../services/notificacion.service";
 import { ToastrService } from "ngx-toastr";
 import { PushNotificationService } from "../../services/push-notification.service";
 import { ConnectionService } from "../../services/connection.service";
+import { AuthService } from "../../services/auth.service";
 
 @Component({
   selector: "app-notificacionesupdate",

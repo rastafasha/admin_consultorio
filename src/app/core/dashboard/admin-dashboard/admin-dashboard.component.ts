@@ -17,7 +17,7 @@ import {
   
 } from 'ng-apexcharts';
 import { Sort } from '@angular/material/sort';
-import { DashboardService } from '../service/dashboard.service';
+import { DashboardService } from '../../../services/dashboard.service';
 import { AppointmentService } from '../../../services/appointment.service';
 import { DoctorService } from '../../../services/doctor.service';
 import { DataService } from '../../../shared/data/data.service';
@@ -25,6 +25,7 @@ import { recentPatients, upcomingAppointments } from '../../../shared/models/mod
 import { routes } from '../../../shared/routes/routes';
 import { ClinicaService, ConsultorioCRM } from '../../../services/clinica.service';
 import { Subscription } from 'rxjs';
+import { ModalInstruccionesComponent } from '../../../modales/modal-instrucciones/modal-instrucciones.component';
 export type ChartOptions = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   series: ApexAxisChartSeries | any;
@@ -107,10 +108,66 @@ export class AdminDashboardComponent {
 
   // Variables de control de usuario que ya manejas
   public isLoading: boolean = false;
+  public isLoadingYear: boolean = false;
+  public isLoadingData: boolean = false;
 
   // 🏢 VARIABLES ENTERPRISE: Almacena los datos del CRM de Node.js [5]
   public clinicaSelected: ConsultorioCRM | null = null;
   private clinicaSubscription!: Subscription;
+
+
+    @ViewChild('modalInstrucciones') modal!: ModalInstruccionesComponent;
+  
+    // infomodales
+    info_pacientes_recientes = `
+    <p>En esta sección :</p>
+            <ul>
+              <li>Podrás ver una lista resumida de tus Pacientes</li>
+              <li>En el boton ver Mis Pacientes verás todos tus pacientes</li>
+            </ul>`;
+  
+    info_citas = `
+    <p>En esta sección :</p>
+            <ul>
+              <li>Podrás ver una tus Citas  pendientes</li>
+              <li>El estado de pago de la cita, el monto abonado o pagado </li>
+              <li>En el boton ver Todos verás todos tus citas</li>
+            </ul>`;
+  
+    info_transferencias_recientes = `
+    <p>En esta sección :</p>
+            <ul>
+              <li>Podrás ver tus trasnferecias</li>
+              <li>Gestionar tus Metodos de pago</li>
+              <li>En el boton ver Todos verás Todo, podras Gestionar tus Metodos de pago </li>
+            </ul>`;
+  
+    info_pagos_recientes = `
+    <p>En esta sección :</p>
+            <ul>
+              <li>Podrás los pagos confirmados</li>
+              <li>El estado de pago de la cita, el monto abonado o pagado </li>
+              <li>En el boton ver Todos verás Todo, podras Gestionar tus Metodos de pago </li>
+            </ul>`;
+    info_entradas = `
+    <p>En esta sección :</p>
+            <ul>
+              <li>Podrás ver un gráfico económico por año</li>
+              <li>Estar al tanto del movimiento de tu consultorio mensualmente</li>
+            </ul>`;
+    info_mis_citas = `
+    <p>En esta sección :</p>
+            <ul>
+               <li>Podrás ver un gráfico de comportamiento por mes</li>
+              <li>Este gráfico indica el movimiento por cantidad de citas mensuales</li>
+            </ul>`;
+    info_generos = `
+    <p>En esta sección :</p>
+            <ul>
+               <li>Podrás ver un gráfico referente a géneros</li>
+              <li>Cantidad de hombres y mujeres atendidas</li>
+            </ul>`;
+    // infomodales
 
   constructor(
     public data : DataService,
@@ -290,7 +347,7 @@ export class AdminDashboardComponent {
    * 🏛️ Consume la API de Node.js a través de la caché reactiva de ClinicaService [5]
    */
   sincronizarContextoClinica(): void {
-    this.isLoading = true;
+    this.isLoadingData = true;
     
     // 1. Extraemos el subdominio/slug (ej: 'clinica-prueba') [5]
     const slug = this.clinicaService.obtenerSlugDeUrl();
@@ -306,11 +363,11 @@ export class AdminDashboardComponent {
             // 🎨 Inyectamos los colores de la clínica en la cabecera del DOM en caliente [5]
             this.clinicaService.aplicarEstilosDinamicos(clinica.css_personalizado);
           }
-          this.isLoading = false;
+          this.isLoadingData = false;
         },
         error: (err) => {
           console.error('❌ Error sincronizando el dashboard con MongoDB Atlas:', err);
-          this.isLoading = false;
+          this.isLoadingData = false;
         }
       });
   }
@@ -336,6 +393,7 @@ export class AdminDashboardComponent {
   }
 
   getDashboardAdmin(){
+    this.isLoading = true;
     this.dashboardService.dashboardAdmin({}).subscribe((resp:any)=>{
       // console.log(resp);
 
@@ -356,14 +414,17 @@ export class AdminDashboardComponent {
       this.num_appointments_total_current = resp.num_appointments_total_current;
       this.num_appointments_total_before = resp.num_appointments_total_before;
       this.porcentaje_dt = resp.porcentaje_dt;
+      this.isLoading = false;
     })
   }
 
   getDashboardAdminYear(){
+    this.isLoadingYear = true
     let data ={
       year: this.selectedValue,
     }
     this.query_income_year = null;
+
     this.dashboardService.dashboardAdminYear(data).subscribe((resp:any)=>{
       // console.log(resp);
       //start
@@ -451,6 +512,7 @@ export class AdminDashboardComponent {
           categories: resp.months_name,
         },
       };
+      this.isLoadingYear = false
       
       // this.chartOptionsThree.xaxis.categories = resp.months_name
       // this.chartOptionsThree.series = [
