@@ -38,20 +38,34 @@ export class ClinicaService {
   public isClinicMode: boolean = false;
 
   /**
-   * 🗺️ Extrae el slug/subdominio de la URL del navegador.
+   * 🗺️ Extrae el slug/subdominio de la URL del navegador de forma polimórfica.
+   * Soporta tanto URLs planas de captación como subdominios de segundo nivel administrativo.
    */
   obtenerSlugDeUrl(): string {
     const host = window.location.hostname;
-    const domainParts = host.split('.');
+    const domainParts = host.split('.'); 
 
+    // 1. Entorno de desarrollo local (Simulador por environment)
     if (host === 'localhost' || host === '127.0.0.1') {
       return environment.nombreSelected || 'clinica-prueba';
     }
 
-    if (domainParts.length >= 3 && domainParts[0] !== 'www') {
-      return domainParts[0];
+    // 2. Control de subdominios en producción
+    if (domainParts.length >= 3) {
+      // 👔 Caso A: URL del Panel Administrativo de Vercel (ej: ://klyntic.com)
+      // El arreglo queda: ['clinica-sanitas', 'admin', 'klyntic', 'com'] -> El slug está en el índice 0
+      if (domainParts[1] === 'admin') {
+        return domainParts[0].toLowerCase().trim();
+      }
+
+      // 🩺 Caso B: URL Pública tradicional de Express (ej: ://klyntic.com)
+      // El arreglo queda: ['clinica-sanitas', 'klyntic', 'com'] -> Validamos que no sea el prefijo www
+      if (domainParts[0] !== 'www') {
+        return domainParts[0].toLowerCase().trim();
+      }
     }
 
+    // Fallback de seguridad si entra por el dominio raíz limpio
     return environment.nombreSelected || 'clinica-prueba';
   }
 
