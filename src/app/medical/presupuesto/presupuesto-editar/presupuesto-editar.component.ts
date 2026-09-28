@@ -41,6 +41,7 @@ export class PresupuestoEditarComponent {
   isediting = false;
   isdisabled = false;
   isdoctor = false;
+  cargando = false;
   name = '';
   surname = '';
   n_doc: number;
@@ -511,33 +512,58 @@ export class PresupuestoEditarComponent {
       this.specialities = resp.specialities;
     })
   }
-
-  /**
+/**
    * 🏢 EVENTO ENTERPRISE: Al cambiar la especialidad en la clínica,
    * filtra de inmediato los médicos asignados a esa área.
    */
- onSpecialityChange(specialityId: number): void {
-    this.speciality_id = specialityId;
+  onSpecialityChange(specialityId: any): void {
+    // 1. Sanificamos forzadamente el ID a número entero
+    this.speciality_id = specialityId ? Number(specialityId) : null;
     this.medicosFiltrados = [];
-    this.doctor_id_selected = null;
+    this.doctor_id_selected = null; // Limpiamos selección previa del médico
 
-    if (!specialityId) return;
+    if (!this.speciality_id) {
+      this.cdr.detectChanges();
+      return;
+    }
 
-    // Buscamos la especialidad seleccionada en el pool cargado de Laravel
-    const spec = this.specialities.find((s: any) => s.id === specialityId);
+    // 2. Buscamos la especialidad en el pool cargado de Laravel
+    const spec = this.specialities.find((s: any) => Number(s.id) === this.speciality_id);
+    
     if (spec) {
-      // Extraemos el chorro de datos crudo que viene de la relación with()
+      // Jalamos la relación de tu modelo 'active_doctors'
       const rawDoctors = spec.active_doctors;
 
       if (rawDoctors) {
-        // 🚀 BLINDAJE DE TIPADO: Si ya es un arreglo lo asigna; si es un objeto único lo envuelve en []
-        this.medicosFiltrados = Array.isArray(rawDoctors) ? rawDoctors : [rawDoctors];
-      } else {
-        this.medicosFiltrados = [];
+        // 🚀 TRATAMIENTO ADAPTATIVO ENTERPRISE:
+        // Si Laravel envía un Objeto Asociativo indexado por IDs de MySQL (ej: {"3":{"id":3,"name":"Jhon"}}),
+        // Object.values() extrae únicamente las fichas de los médicos y arma un Array [ {id:3, name:"Jhon"} ]
+        if (typeof rawDoctors === 'object' && !Array.isArray(rawDoctors)) {
+          this.medicosFiltrados = Object.values(rawDoctors);
+        } else if (Array.isArray(rawDoctors)) {
+          this.medicosFiltrados = rawDoctors;
+        }
+        
+        // Saneamos que no viajen registros nulos o inconsistentes de MAMP
+        this.medicosFiltrados = this.medicosFiltrados.filter((m: any) => m && m.id);
       }
     }
+
+    // 3. Forzamos a Angular a enterarse del cambio de datos para repintar el select del médico
+    this.cdr.detectChanges();
+    
+    console.log('🏢 [Modo Clínica] ID Especialidad Sincronizada:', this.speciality_id);
+    console.log('👥 [Modo Clínica] Array de Médicos Iterable:', this.medicosFiltrados);
   }
 
+  /**
+   * 🏢 EVENTO ENTERPRISE: Captura el cambio del médico especialista asignado
+   */
+  onDoctorChange(doctorId: any): void {
+    this.doctor_id_selected = doctorId ? Number(doctorId) : null;
+    this.cdr.detectChanges(); // Forzamos repintado en caliente
+    console.log('🏢 [Modo Clínica] Médico Seleccionado:', this.doctor_id_selected);
+  }
 
   filterPatient() {
     this.appointmentService.getPatient(this.n_doc + "").subscribe((resp: any) => {
@@ -611,16 +637,37 @@ export class PresupuestoEditarComponent {
 
   save() {
     // 🚀 ASIGNACIÓN DINÁMICA: Determinamos qué doctor y especialidad viajan según el despliegue
-    const idEspecialidadFinal = this.speciality_id;
-    const idDoctorFinal = this.isClinicMode ? this.doctor_id_selected : this.DOCTOR_SELECTED.id;
+    let idEspecialidadFinal = this.speciality_id;
+    
+    // Fallback inteligente: Si doctor_id_selected es null, busca si el perfil editado ya tenía un médico
+    let idDoctorFinal = this.isClinicMode 
+      ? (this.doctor_id_selected || this.presupuesto_selected?.doctor_id || this.doctor_id) 
+      : this.DOCTOR_SELECTED?.id;
 
+    // Si sigue en Modo Clínica pero vino vacío, hacemos un último intento extrayendo el valor del DOM
     if (this.isClinicMode && (!idDoctorFinal || !idEspecialidadFinal)) {
-      Swal.fire('Campos Incompletos', 'Debe seleccionar una especialidad y un médico especialista.', 'warning');
+      console.warn('⚠️ Alerta: Las variables TS están vacías. Ejecutando extracción forzada de respaldo.');
+      
+      // Intentamos capturar el ID de respaldo si es que estamos re-editando un presupuesto existente
+      if (this.presupuesto_selected) {
+        idEspecialidadFinal = idEspecialidadFinal || this.presupuesto_selected.speciality_id;
+        idDoctorFinal = idDoctorFinal || this.presupuesto_selected.doctor_id;
+      }
+    }
+
+    // 🔒 CONTROL MULTI-TENANT: Validación final antes del payload
+    if (this.isClinicMode && (!idDoctorFinal || !idEspecialidadFinal)) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Campos Incompletos',
+        text: 'Debe seleccionar una especialidad y asignar un médico especialista para procesar el presupuesto clínico.',
+        confirmButtonColor: '#7c3aed' // Color morado corporativo Klyntic
+      });
+      this.cargando = false;
       return;
     }
 
     const data = {
-
       medical: this.medical,
       amount: this.amount,
       description: this.description,
@@ -633,13 +680,13 @@ export class PresupuestoEditarComponent {
       surname: this.surname,
       phone: this.phone,
 
-       // Inyección de variables mapeadas polimórficamente
-      speciality_id: idEspecialidadFinal,
-      doctor_id: idDoctorFinal,
+      // Inyección de variables relacionales unificadas
+      speciality_id: Number(idEspecialidadFinal),
+      doctor_id: Number(idDoctorFinal),
       presupuesto_id: this.presupuesto_id
+    };
 
-
-    }
+    console.log('📦 [Presupuesto Save] Enviando payload unificado a Laravel:', data);
 
     if (this.presupuesto_id) {
       this.presupuestoService.editPresupuesto(data, this.presupuesto_id).subscribe((resp: any) => {
@@ -650,7 +697,6 @@ export class PresupuestoEditarComponent {
         this.procesarRespuestaServidor(resp);
       });
     }
-
   }
 
   private procesarRespuestaServidor(resp: any) {

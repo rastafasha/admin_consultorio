@@ -73,31 +73,30 @@ export class PresupuestoListaComponent implements OnInit {
   ) {
 
   }
+ 
   ngOnInit() {
     window.scrollTo(0, 0);
     this.doctorService.closeMenuSidebar();
     this.getSpecialities();
+    
     this.user = this.roleService.authService.user;
-    this.roles = Array.isArray(this.user.roles) ? this.user.roles.map(r => r.name || r) : [this.user.roles?.name || this.user.roles || ''];
-    if (this.roles.includes('DOCTOR')) {
-      this.doctor_id = this.user.id;
-      this.getDoctor();
+    
+    // Saneamiento de Roles tolerante a Mayúsculas/Minúsculas y objetos de Spatie
+    if (this.user && this.user.roles) {
+      this.roles = Array.isArray(this.user.roles) 
+        ? this.user.roles.map(r => (r.name || r).toUpperCase()) 
+        : [(this.user.roles.name || this.user.roles || '')];
+    } else {
+      this.roles = [];
     }
-    this.getTableData();
+
+    console.log('🏢 [Presupuesto Lista] Roles del usuario autenticado:', this.roles);
+
+    
+    this.getTableData(1);
   }
 
-  getDoctor() {
-
-    this.doctorService.showDoctor(this.doctor_id).subscribe({
-      next: (resp: any) => {
-        this.DOCTOR_SELECTED = resp.user;
-        this.speciality_id = this.DOCTOR_SELECTED.speciality_id;
-        this.specialitiService.showSpeciality(this.speciality_id).subscribe();
-      },
-      error: (err) => Swal.fire('Error', 'Failed to load doctor', 'error')
-    });
-  }
-
+  
   getSpecialities() {
     this.presupuestoService.listConfig().subscribe({
       next: (resp: any) => {
@@ -122,7 +121,7 @@ export class PresupuestoListaComponent implements OnInit {
       next: (resp: any) => {
         this.isLoading = false;
         this.totalDataPatient = resp.total;
-        this.presupuestoList = resp.data || [];
+        this.presupuestoList = resp.presupuestos.data || [];
         this.dataSource = new MatTableDataSource<Presupuesto>(this.presupuestoList);
         this.calculateTotalPages(this.totalDataPatient, this.pageSize);
       },

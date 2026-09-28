@@ -78,66 +78,52 @@
                                             [ngModelOptions]="{standalone: true}" type="text">
                                     </div>
                                 </div>
-                                <div class="row align-items-center">
+                                <!-- =========================================================================
+                                🏢 SECCIÓN: CONFIGURACIÓN MODO CLÍNICA VS CONSULTORIO (HTML Saneado)
+                                ========================================================================= -->
+                                <div class="row">
 
-                                    @if (!isClinicMode) {
-                                    <!-- 🩺 MODO CONSULTORIO: Renderizado tradicional estático de solo lectura -->
-                                    <div class="col-12 col-md-6 mb-3">
-                                        <div class="form-group local-forms mb-0">
-                                            <label>Especialidad <span class="text-danger">*</span></label>
-                                            <input class="form-control" type="text" [value]="specialityName" readonly
-                                                style="background-color: #f8f9fa;">
-                                        </div>
+                                    <!-- CASO A: Modo Consultorio Tradicional (Oculto en Clínicas) [4] -->
+                                    <div class="col-md-6" *ngIf="!isClinicMode">
+                                        <label class="form-label">Especialidad (Consultorio Pro)</label>
+                                        <input type="text" class="form-control" [value]="specialityName" readonly
+                                            style="background: #f1f5f9;">
                                     </div>
-                                    } @else {
-                                    <!-- 🏢 MODO CLÍNICA: Doble control interactivo para la Recepción Central -->
-                                    <div class="col-12 col-md-6 mb-3">
-                                        <div class="form-group local-forms mb-0">
-                                            <label>Seleccionar Especialidad <span class="login-danger">*</span></label>
-                                            <mat-select [(ngModel)]="speciality_id"
-                                                (selectionChange)="onSpecialityChange($event.value)"
-                                                class="form-control select" placeholder="Seleccione Especialidad">
-                                                <mat-option *ngFor="let data of specialities" [value]="data.id">
+
+                                    <!-- CASO B: Modo Clínica Enterprise (Selectores Reactivos Encadenados) [4] -->
+                                    <ng-container *ngIf="isClinicMode">
+
+                                        <!-- Selector de Especialidad -->
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Seleccionar Especialidad *</label>
+                                            <select class="form-select form-control" name="specialitySelect"
+                                                [ngModel]="speciality_id" (ngModelChange)="onSpecialityChange($event)">
+                                                <option [value]="null" disabled selected>-- Seleccione Especialidad --
+                                                </option>
+                                                <option *ngFor="let data of specialities" [value]="data.id">
                                                     {{ data.name }}
-                                                </mat-option>
-                                            </mat-select>
+                                                </option>
+                                            </select>
                                         </div>
-                                    </div>
 
-                                    <div class="col-12 col-md-6 mb-3">
-                                        <div class="form-group local-forms mb-0">
-                                            <label>Médico Especialista Asignado <span
-                                                    class="login-danger">*</span></label>
-                                            <select class="form-select text-dark font-weight-medium"
-                                                [(ngModel)]="doctor_id_selected"
-                                                [disabled]="medicosFiltrados.length === 0"
-                                                style="height: 46px; border-radius: 4px;">
-                                                <option [value]="null" disabled selected>-- Seleccione Especialista --
+                                        <!-- Selector de Médico -->
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Médico Especialista Asignado *</label>
+                                            <select class="form-select form-control" name="doctorSelect"
+                                                [ngModel]="doctor_id_selected" (ngModelChange)="onDoctorChange($event)"
+                                                [disabled]="medicosFiltrados.length === 0">
+                                                <option [value]="null" disabled selected>
+                                                    {{ medicosFiltrados.length === 0 ? '-- Primero elija Especialidad --' : '-- Seleccione Especialista --' }}
                                                 </option>
                                                 <option *ngFor="let medico of medicosFiltrados" [value]="medico.id">
                                                     Dr(a). {{ medico.surname }}, {{ medico.name }}
                                                 </option>
                                             </select>
                                         </div>
-                                    </div>
-                                    }
+
+                                    </ng-container>
 
                                 </div>
-
-
-                                <!-- <div class="col-xs-12 col-sm-3">
-
-                                    <div class="form-group ">
-                                        <div _ngcontent-rhp-c92="" class="card-header d-flex justify-content-between align-items-center">
-                                            <h5 _ngcontent-rhp-c92="" class="card-title">Laboratorio?</h5>
-                                            <div _ngcontent-rhp-c92="" class="status-toggle d-flex justify-content-between align-items-center">
-                                                <input _ngcontent-rhp-c92="" type="checkbox" id="laboratory"   class="check" name="laboratory" [checked]="laboratory === true" [ngModelOptions]="{standalone: true}" [(ngModel)]="laboratory">
-                                                <label _ngcontent-rhp-c92="" for="laboratory" class="checktoggle" value="true">checkbox</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> -->
-
                             </div>
                             <!-- paciente -->
                             <!-- activar dictado -->
