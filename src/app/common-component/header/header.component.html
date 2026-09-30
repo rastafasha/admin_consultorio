@@ -37,28 +37,7 @@
             <i class="fas fa-qrcode"></i>
         </button>
         <app-tasabcv></app-tasabcv>
-        <div class="setting-row" *ngIf="!isLoadingSwitch" [class.loading]="pushService.isProcessing$ | async">
-            <div class="setting-info">
-                <i class="fa fa-bell"></i>
-                <!-- 🔥 INYECTA ESTE BADGE ROJO EXACTAMENTE AQUÍ (Inmune a fugas de memoria): -->
-                    <span *ngIf="(unreadCount$ | async) ? (unreadCount$ | async)! > 0 : false" 
-                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger animate-bounce"
-                        style="font-size: 0.65rem; padding: 4px 6px; z-index: 10; margin-top: -5px; margin-left: -12px; background-color: #dc3545 !important; color: white !important;">
-                    {{ unreadCount$ | async }}
-                    </span>
-            </div>
-            <div class="switch-wrapper">
-                <!-- El spinner se activa correctamente de forma reactiva mientras la petición viaja al servidor -->
-                <div *ngIf="pushService.isProcessing$ | async" class="mini-spinner"></div>
-
-                <label class="switch">
-                    <!-- El switch se deshabilita mientras procesa y se marca/desmarca según la realidad del servidor -->
-                    <input type="checkbox" [disabled]="pushService.isProcessing$ | async"
-                        [checked]="pushService.isSubscribed$ | async" (change)="togglePush()">
-                    <span class="slider round"></span>
-                </label>
-            </div>
-        </div>
+        
         <app-notificacionesupdate [routes]="routes" [user]="user" [usuario]="usuario" [imagenSerUrl]="imagenSerUrl"
             [logout]="logout"></app-notificacionesupdate>
     </div>
@@ -95,23 +74,7 @@
         </div>
 
         <!-- 3. Campana de Sockets y Switch -->
-        <div class="setting-row switch-movil-compacto d-flex align-items-center" *ngIf="!isLoadingSwitch"
-            [class.loading]="pushService.isProcessing$ | async">
-            <div class="setting-info mr-1">
-                <i class="fa fa-bell" style="font-size: 16px; color: #513081;"></i>
-            </div>
-            <div class="switch-wrapper">
-                <!-- El spinner se activa correctamente de forma reactiva mientras la petición viaja al servidor -->
-                <div *ngIf="pushService.isProcessing$ | async" class="mini-spinner"></div>
-
-                <label class="switch">
-                    <!-- El switch se deshabilita mientras procesa y se marca/desmarca según la realidad del servidor -->
-                    <input type="checkbox" [disabled]="pushService.isProcessing$ | async"
-                        [checked]="pushService.isSubscribed$ | async" (change)="togglePush()">
-                    <span class="slider round"></span>
-                </label>
-            </div>
-        </div>
+        
 
         <!-- 4. Componente de notificaciones aislado -->
         <div class="notif-movil-wrapper">

@@ -42,6 +42,8 @@ export class NotificacionesupdateComponent implements OnInit, OnDestroy {
   public IMAGE_PREVISUALIZA = 'assets/img/user-06.jpg';
   public unreadCount$!: Observable<number>;
 
+  public openBox: boolean = false;
+
   constructor(
     private appointmentService: AppointmentService,
     public paymentService: PaymentService,
@@ -84,6 +86,23 @@ export class NotificacionesupdateComponent implements OnInit, OnDestroy {
         this.getUserRemoto(); // [15]
       }
     });
+  }
+
+  /**
+   * Dispara el toggle de apertura y gestiona las clases del layout central
+   */
+  public openBoxFunc(): void {
+    this.openBox = !this.openBox;
+    
+    // Sincronización con el contenedor maestro de tu plantilla de administración
+    const mainWrapper = document.getElementsByClassName('main-wrapper')[0];
+    if (mainWrapper) {
+      if (this.openBox) {
+        mainWrapper.classList.add('open-msg-box');
+      } else {
+        mainWrapper.classList.remove('open-msg-box');
+      }
+    }
   }
 
 

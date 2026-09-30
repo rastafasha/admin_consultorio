@@ -66,16 +66,16 @@
                                             <div class="follow-btn-group">
                                                 <a [routerLink]="['/doctors/list/edit/', doctor_id]"
                                                     *ngIf="isPermission('edit_doctor') && user.roles[0]  === 'SUPERADMIN' && doctor.roles[0] === 'DOCTOR' && doctor.status === 2"
-                                                    class="btn btn-info follow-btns">Edit</a>
+                                                    class="btn btn-info follow-btns">Editar</a>
                                                 <a [routerLink]="['/doctors/list/edit/', doctor_id]"
                                                     *ngIf="isPermission('edit_staff')  && user.roles[0] === 'DOCTOR' && doctor.status === 2"
-                                                    class="btn btn-info follow-btns">Edit doctor profile</a>
+                                                    class="btn btn-info follow-btns">Editar perfil</a>
                                                 <a [routerLink]="['/doctors/list/edit/', doctor_id]"
                                                     *ngIf="isPermission('edit_staff')  && user.roles[0] === 'DOCTOR' && doctor.status === 1"
-                                                    class="btn btn-info follow-btns">Edit staffDoctor profile</a>
+                                                    class="btn btn-info follow-btns">Editar staffDoctor profile</a>
                                                 <a [routerLink]="['/staffs/staff-n/', doctor_id]"
                                                     *ngIf="isPermission('edit_staff')  && user.roles[0] !== 'DOCTOR' && doctor.status === 1"
-                                                    class="btn btn-info follow-btns">Edit staff profile</a>
+                                                    class="btn btn-info follow-btns">Editar staff profile</a>
                                                 <!-- <button type="submit" class="btn btn-info message-btns">Message</button> -->
                                             </div>
                                         </div>
@@ -131,7 +131,7 @@
                                                 <h4>Dias de Trabajo</h4>
                                                 <span>{{doctor_selected?.days_name}}</span>
                                             </li>
-                                            <li>
+                                            <li *ngIf="doctor_selected?.precio_cita">
                                                 <h4>Precio Cita</h4>
                                                 <span>{{doctor_selected?.precio_cita|currency}}</span>
                                             </li>

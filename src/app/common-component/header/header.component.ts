@@ -82,9 +82,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.user = user;
       if (user) {
         this.verificarSuscripcionRealEnServidor(user.id);
+        
+        // 🟢 Sincronizamos la carga inicial con la ruta limpia
         this.notifService.cargarContadorInicial(user.id.toString());
+        
+        // 🔥 ESCUCHADOR DINÁMICO ADICIONAL: Acoplamos el WebSocket al ID del médico logueado
+        if (this.notifService['socket']) {
+          this.notifService['socket'].off(`notificacion-usuario-${user.id}`);
+          this.notifService['socket'].on(`notificacion-usuario-${user.id}`, (data: any) => {
+            if (data && data.unreadCount !== undefined) {
+              this.notifService['unreadCountSub'].next(data.unreadCount);
+            }
+          });
+        }
       }
-      this.resolverNombreHeader(); // 🔄 Recalcula si el usuario cambia
+      this.resolverNombreHeader();
     });
 
     window.scrollTo(0, 0);

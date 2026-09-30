@@ -43,10 +43,19 @@ export class NotificacionService {
     this.inicializarEcosistemaAlertas();
   }
 
-  get currentRole(): 'DOCTOR'  {
+ get currentRole(): 'DOCTOR' | 'RECEPCIN' {
     const userString = localStorage.getItem('user');
     const userObj = userString ? JSON.parse(userString) : null;
-    return userObj && (userObj.doctor_id || userObj.roles === 'DOCTOR');
+    if (!userObj) return 'RECEPCIN';
+    
+    // Evaluamos si es un ID de médico directo o si el array de roles contiene la palabra clave
+    const tieneRolDoctor = userObj.roles && (
+      Array.isArray(userObj.roles) 
+        ? userObj.roles.some((r: any) => (r.name || r) === 'DOCTOR' || (r.name || r) === 'MEDICO')
+        : (userObj.roles.name || userObj.roles) === 'DOCTOR'
+    );
+    
+    return (userObj.doctor_id || tieneRolDoctor || userObj.role === 'MEDICO') ? 'DOCTOR' : 'RECEPCIN';
   }
 
   private getOptions() {
@@ -155,42 +164,68 @@ export class NotificacionService {
           this.unreadCountSub.next(sinLeer);
         }
       },
-      error: () => this.unreadCountSub.next(0)
+      error: (err) => {
+        console.error("❌ Error de sincronización de alertas médicas:", err);
+        this.unreadCountSub.next(0);
+      }
     });
   }
 
-  private lanzarToastrEnPantalla(notif: Notificacion) {
+    private lanzarToastrEnPantalla(notif: Notificacion) {
     let toast;
     const config = { timeOut: 10000, closeButton: true, tapToDismiss: true };
     const esMedico = this.currentRole === 'DOCTOR';
 
+    console.log("🎨 Mapeando Toastr para el tipo de alerta:", notif.tipo);
+
     switch (notif.tipo) {
+      // 🟢 CASOS ADICIONADOS: Soporte nativo para la aprobación de presupuestos
+      case 'PRESUPUESTO_APROBADO':
+      case 'PRESUPUESTO_APROBADO_CLINICA':
+        toast = this.toastr.success(notif.mensaje, '🎉 Presupuesto Aprobado', config);
+        break;
+
+      case 'PRESUPUESTO_RECHAZADO':
+      case 'PRESUPUESTO_RECHAZADO_CLINICA':
+        toast = this.toastr.error(notif.mensaje, '❌ Presupuesto Rechazado', config);
+        break;
+
       case 'PAGO_RECIBIDO':
+      case 'PAGO_RECIBIDO_CLINICA':
         toast = this.toastr.success(notif.mensaje, esMedico ? '💰 Pago Reportado por Paciente' : '✅ Tu Pago ha sido Recibido', config);
         break;
-      case 'PRESUPUESTO_APROBADO':
-        toast = this.toastr.success(notif.mensaje, '🎉 ¡Presupuesto Aprobado por Paciente!', config);
-        break;
+        
+      case 'CITA_AGENDADA':
       case 'CONSULTA_NUEVA':
-        toast = this.toastr.info(notif.mensaje, '🩺 Nueva Consulta Iniciada', config);
+      case 'CONSULTA_NUEVA_CLINICA':
+        toast = this.toastr.info(notif.mensaje, '📅 Nueva Cita en Agenda', config);
         break;
+
       case 'LLAMADO_MEDICO':
-        toast = this.toastr.warning(notif.mensaje, '🚨 Llamado Urgente / Alerta', config);
+        toast = this.toastr.warning(notif.mensaje, '🚨 Llamado Urgente', config);
         break;
+
       case 'RECORDATORIO':
         toast = this.toastr.info(notif.mensaje, '⏰ Recordatorio Próxima Cita', config);
         break;
+
       default:
-        toast = this.toastr.info(notif.mensaje, '🔔 Alerta de Sistema', config);
+        // Caso de respaldo por si el enum varía
+        toast = this.toastr.info(notif.mensaje, notif.titulo || '🔔 Alerta de Sistema', config);
     }
 
-    toast.onTap.subscribe(() => {
-      this.marcarUnaComoLeida(notif._id).subscribe(() => {
-        const ruta = esMedico ? this.determinarRutaMedico(notif.tipo, notif.referenciaId) : this.determinarRutaPaciente(notif.tipo, notif.referenciaId);
-        this.router.navigate([ruta]);
+    if (toast) {
+      toast.onTap.subscribe(() => {
+        this.marcarUnaComoLeida(notif._id).subscribe(() => {
+          const ruta = esMedico 
+            ? this.determinarRutaMedico(notif.tipo, notif.referenciaId) 
+            : this.determinarRutaPaciente(notif.tipo, notif.referenciaId);
+          this.router.navigate([ruta]);
+        });
       });
-    });
+    }
   }
+
 
   marcarComoLeidas(): Observable<any> {
     return this.http.put(`${BackendApi}/klyntic/notificaciones/marcar-leidas`, {}, this.getOptions()).pipe(
@@ -211,6 +246,8 @@ export class NotificacionService {
     const userString = localStorage.getItem('user');
     const userObj = userString ? JSON.parse(userString) : null;
     const usuarioId = userObj ? userObj.id : '';
+    
+    // 🟢 RECTIFICACIÓN: Ruta limpia alineada a Express
     return this.http.get(`${BackendApi}/klyntic/notificaciones/usuario/${usuarioId}?page=${page}`, this.getOptions());
   }
 

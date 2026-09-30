@@ -218,6 +218,7 @@ export class ListAppoimentCobrosComponent {
       const nuevoEstado = data.status;
       const monto = data.monto; // Extraemos de una vez
       const appointment_id = data.appointment_id;
+      const metodo = data.metodo;
       const id = data.id;
   
       // 1. Caso: RECHAZADO (Pide motivo)
@@ -236,7 +237,7 @@ export class ListAppoimentCobrosComponent {
           }
         }).then((result) => {
           if (result.isConfirmed) {
-            this.ejecutarUpdateStatus(id, nuevoEstado, monto, appointment_id, result.value);
+            this.ejecutarUpdateStatus(id, nuevoEstado, monto, appointment_id, metodo, result.value);
           } else {
             this.getTableData(); // Revierte el select si cancela
           }
@@ -254,7 +255,7 @@ export class ListAppoimentCobrosComponent {
           cancelButtonText: 'No, revisar'
         }).then((result) => {
           if (result.isConfirmed) {
-            this.ejecutarUpdateStatus(id, nuevoEstado, monto, appointment_id);
+            this.ejecutarUpdateStatus(id, nuevoEstado, monto, appointment_id, metodo);
           } else {
             this.getTableData(); // Revierte el select si se arrepiente
           }
@@ -262,7 +263,7 @@ export class ListAppoimentCobrosComponent {
   
       } else {
         // 3. Caso: PENDIENTE (Cambio directo)
-        this.ejecutarUpdateStatus(id, nuevoEstado, monto, appointment_id);
+        this.ejecutarUpdateStatus(id, nuevoEstado, monto, appointment_id, metodo);
       }
   }
   
@@ -271,6 +272,7 @@ export class ListAppoimentCobrosComponent {
   private ejecutarUpdateStatus(id: number, nuevoEstado: string, 
     monto: any,          // <--- Nuevo parámetro
     appointment_id: any,
+    metodo: any,
     // eslint-disable-next-line @typescript-eslint/no-inferrable-types
     motivo_rechazo: string = '',
   ) {
@@ -280,6 +282,7 @@ export class ListAppoimentCobrosComponent {
         motivo_rechazo: motivo_rechazo,
          monto: monto,            // <--- Usa el parámetro
          amount: monto,            // <--- Usa el parámetro
+         metodo: metodo,           
         appointment_id: appointment_id 
       };
   
