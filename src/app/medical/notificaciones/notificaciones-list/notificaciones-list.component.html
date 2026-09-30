@@ -1,0 +1,133 @@
+<div class="page-wrapper">
+    <div class="content">
+
+        <!-- Page Header -->
+        <!-- <app-breadcum-doctor-dashboard *ngIf="isPermission('admin_dashboard')  && user.roles[0] === 'SUPERADMIN' "
+      [titlePage]="titlePage" [routes]="routes.adminDashboard"></app-breadcum-doctor-dashboard>
+    <app-breadcum-doctor-dashboard *ngIf="isPermission('admin_dashboard')  && user.roles[0] === 'ADMIN' "
+      [titlePage]="titlePage" [routes]="routes.adminDashboard"></app-breadcum-doctor-dashboard>
+    <app-breadcum-doctor-dashboard *ngIf="isPermission('doctor_dashboard') && user.roles[0] !== 'SUPERADMIN'  "
+      [titlePage]="titlePage" [routes]="routes.doctorDashboard"></app-breadcum-doctor-dashboard> -->
+        <!-- /Page Header -->
+
+        <div class="row">
+            <div class="col-sm-12">
+
+                <div class="card card-table show-entire">
+                    <div class="card-body">
+
+                        <!-- Table Header -->
+                        <div class="page-table-header mb-2">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <div class="doctor-table-blk">
+                                        <h3>Locations List</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Table Header -->
+
+                        <app-skeleton-loader *ngIf="cargando" [rows]="1" [columns]="3"></app-skeleton-loader>
+                        <app-skeleton-loader *ngIf="cargando" [rows]="4" [columns]="9"></app-skeleton-loader>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card shadow-sm">
+                                    <!-- Encabezado con acciones globales -->
+                                    <div
+                                        class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                                        <h5 class="mb-0 fw-bold text-dark">{{'Historial de Notificaciones'}}</h5>
+                                        <button *ngIf="historialNotificaciones && historialNotificaciones.length > 0 && !cargando"
+                                            class="btn btn-outline-danger btn-sm" (click)="vaciarTodo()">
+                                            <i class="fas fa-trash-alt me-1"></i> {{'Vaciar Buzón'}}
+                                        </button>
+                                    </div>
+
+                                    <div class="card-body p-0">
+                                        <!-- Estado Vacío Blindado contra loops o undefined -->
+                                        <div *ngIf="!historialNotificaciones || historialNotificaciones.length === 0 && !cargando"
+                                            class="text-center py-5 text-muted">
+                                            <i class="fas fa-bell-slash d-block fs-1 mb-2 text-muted-light"></i>
+                                            <p class="mb-0">{{'No tienes alertas registradas en el historial'}}.</p>
+                                        </div>
+
+                                        <!-- Listado de Alertas -->
+                                        <div class="list-group list-group-flush"
+                                            *ngIf="historialNotificaciones && historialNotificaciones.length > 0 && !cargando">
+                                            <div *ngFor="let notif of historialNotificaciones"
+                                                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3 border-bottom position-relative"
+                                                [style.background-color]="notif.leido ? '#fff' : '#f4f7fc'"
+                                                style="transition: background 0.2s;">
+
+                                                <!-- Todo tu bloque de información (Círculo de color, icono, textos) se queda EXACTAMENTE IGUAL -->
+
+
+                                                <div class="d-flex align-items-center grow"
+                                                    (click)="atenderNotificacion(notif)" style="cursor: pointer;">
+                                                    <!-- Contenedor del Icono con clases dinámicas corregidas -->
+                                                    <div class="p-2 rounded-circle text-white me-3 d-flex align-items-center justify-content-center"
+                                                        [ngClass]="{
+                                                            'bg-info': notif.tipo === 'CONSULTA_NUEVA' || notif.tipo === 'CITA_AGENDADA' || notif.tipo === 'RECORDATORIO',
+                                                            'bg-success': notif.tipo.includes('APROBADO'),
+                                                            'bg-warning': notif.tipo.includes('PAGO_RECIBIDO'),
+                                                            'bg-danger': notif.tipo.includes('RECHAZADO')
+                                                        }" style="width: 40px; height: 40px;">
+
+                                                       <i [ngClass]="{
+                                                        'fa-solid fa-money-bill-wave  ': notif.tipo.includes('PAGO'),
+                                                        'fa-solid fa-file-invoice-dollar  ': notif.tipo.includes('PRESUPUESTO'), 
+                                                        'fa-regular fa-calendar-check ': notif.tipo.includes('CITA') || notif.tipo.includes('CONSULTA') || notif.tipo.includes('RECORDATORIO')
+                                                    }"></i>
+
+                      
+                                                    </div>
+
+                                                    <!-- Bloque de Textos Traducidos -->
+                                                    <div>
+                                                        <!-- 1. Traduce el título usando el ENUM como clave -->
+                                                        <h6 class="mb-1 fw-bold text-dark fs-6">
+                                                            {{ 'NOTIFICATIONS.' + (notif.tipo ? notif.tipo : 'DEFAULT')
+                                                            }}
+                                                        </h6>
+                                                        <!-- 2. Traduce el mensaje por si contiene una clave i18n -->
+                                                        <p class="mb-0 text-muted small">
+                                                            {{ notif.mensaje  }}
+                                                        </p>
+                                                        <small class="text-muted-light d-block mt-1"
+                                                            style="font-size: 0.75rem;">
+                                                            {{ notif.createdAt | date:'mediumDate' }} - {{
+                                                            notif.createdAt | date:'shortTime' }}
+                                                        </small>
+                                                    </div>
+                                                </div>
+
+                                                <div class="ms-3">
+                                                    <button type="button" class="btn btn-sm btn-light border"
+                                                        (click)="eliminarIndividual(notif._id)" title="Eliminar Alerta">
+                                                        <i class="fa fa-times text-danger"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <!-- 2. Reemplazamos los botones anteriores por tus controles limpios en el card-footer -->
+                                            <div class="card-footer bg-white d-flex justify-content-center py-3"
+                                                *ngIf="historialNotificaciones && historialNotificaciones.length > 0">
+                                                <!-- Tu etiqueta nativa enganchada a la función que pide la página al backend -->
+                                                <pagination-controls
+                                                    (pageChange)="cambiarPagina($event)"></pagination-controls>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

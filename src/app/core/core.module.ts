@@ -5,6 +5,7 @@ import { CoreRoutingModule } from './core-routing.module';
 import { CoreComponent } from './core.component';
 import { SharedModule } from '../shared/shared.module';
 import { ModalComponent } from './modal/modal.component';
+import { ModalInstruccionesModule } from '../modales/modal-instrucciones.module';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { ModalComponent } from './modal/modal.component';
   imports: [
     CommonModule,
     CoreRoutingModule,
-    SharedModule
+    SharedModule,
+    ModalInstruccionesModule
   ],
 })
 export class CoreModule { }

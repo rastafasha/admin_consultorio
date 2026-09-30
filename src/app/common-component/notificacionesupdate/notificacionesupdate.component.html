@@ -4,7 +4,7 @@
   <li class="nav-item d-inline-flex align-items-center">
     <div class="apple-network-badge px-2.5 py-1 rounded-pill" 
          [ngClass]="isOnline ? 'net-online' : 'net-offline'"
-         style="height: 26px;">
+         style="height: 16px; padding: 5px;">
       <span class="net-pulse-dot me-1.5"></span>
       <span class="fw-bold" style="font-size: 0.72rem; letter-spacing: 0.3px;">
         {{ isOnline ? 'ONLINE' : 'MODO LOCAL' }}
@@ -16,23 +16,22 @@
   <li class="nav-item dropdown has-arrow logged-item">
     
     <!-- Icono de la Campana con Globo Rojo Flotante Reactivo -->
-    <a href="javascript:void(0);" class="dropdown-toggle nav-link p-1 position-relative" data-bs-toggle="dropdown" (click)="openBoxFunc()">
+    <a href="javascript:void(0);" class="dropdown-toggle nav-link campana" data-bs-toggle="dropdown" (click)="openBoxFunc()">
       <i class="fa-solid fa-bell text-secondary fs-4"></i>
       <!-- Se conecta al BehaviorSubject unificado para pintar el conteo exacto de MongoDB -->
-      <span class="badge bg-danger rounded-circle position-absolute top-30 start-100 translate-middle border border-white"
-            *ngIf="(notifService.unreadCount$ | async) as pendientes" 
-            style="font-size: 0.65rem; min-width: 16px; height: 16px; padding: 2px 4px; z-index: 5; top: 20px; left: 25px;">
+      <span class="badge bg-danger rounded-circle  brbnotificacion"
+            *ngIf="(notifService.unreadCount$ | async) as pendientes" >
         {{ pendientes }}
       </span>
     </a>
 
     <!-- MENÚ DESPLEGABLE CON SCROLL INTERACTIVO -->
-    <div class="dropdown-menu notifications" [class.show]="openBox" style="border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #f1f5f9;">
+    <div class="dropdown-menu notifications" [class.show]="openBox" >
       
       <div class="topnav-dropdown-header px-3 py-2.5 border-bottom d-flex align-items-center justify-content-betweenbg-white">
         <span class="notification-title fw-extrabold text-dark mb-0" style="font-size: 0.88rem; letter-spacing: -0.2px;">Centro de Alertas</span>
         <a href="javascript:void(0)" class="clear-noti small fw-bold text-decoration-none" style="color: #7c3aed;" (click)="markAllAsRead()">
-          Mark all as read
+          Marcar como leidos
         </a>
       </div>
 
@@ -49,6 +48,7 @@
                 
                 <!-- Avatar Circular Dinámico por Tipos de Alerta -->
                 <div class="avatar flex-shrink-0 d-flex align-items-center justify-content-center rounded-circle"
+                  
                      [ngClass]="{
                        'bg-purple-light': n.tipo?.startsWith('PRESUPUESTO_') || n.type?.startsWith('PRESUPUESTO_'),
                        'bg-success-light': n.tipo?.startsWith('PAGO_') || n.type?.startsWith('PAGO_'),
@@ -65,7 +65,7 @@
                 </div>
 
                 <!-- Textos Descriptivos de la Notificación -->
-                <div class="media-body flex-grow-1">
+                <div class="media-body flex-grow-1" (click)="atenderNotificacion(n)" style="cursor: pointer;">
                   <p class="noti-details m-0">
                     <span class="noti-title d-block fw-bold text-dark" style="font-size: 0.82rem; line-height: 1.2;">
                       {{ n.titulo }}
@@ -129,7 +129,7 @@
         </ul>
       </div>
       <div class="topnav-dropdown-footer border-top bg-white text-center py-2">
-        <a href="javascript:void(0);" class="small text-decoration-none fw-bold" style="color: #7c3aed;">Ver todas las alertas</a>
+        <a [routerLink]="['/notificaciones/list']" class="small text-decoration-none fw-bold" style="color: #7c3aed;">Ver todas las alertas</a>
       </div>
     </div>
   </li>
@@ -150,7 +150,7 @@
       </span>
 
       <!-- Bloque de Nombres con Saneamiento de Rol en móviles -->
-      <div class="user-names ms-2 d-none d-md-block text-start">
+      <div class="user-names ms-2  text-start">
         <h5 class="mb-0 fw-bold text-dark" style="font-size: 0.85rem; line-height: 1.1;">{{ user.name }}</h5>
         <span class="text-muted fw-semibold uppercase-role vermovil" style="font-size: 0.68rem; letter-spacing: 0.4px;">
           {{ roles[0] || 'Especialista' }}
@@ -161,8 +161,8 @@
     
     <!-- Menú Desplegable de Sesión Clásico -->
     <div class="dropdown-menu dropdown-menu-end" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.05); border: 1px solid #f1f5f9;">
-      <a class="dropdown-item py-2" [router_link]="['/dashboard/perfil']"><i class="fa-regular fa-user me-2 text-muted"></i> Mi Perfil</a>
-      <a class="dropdown-item py-2" [router_link]="['/dashboard/configuracion']"><i class="fa-solid fa-gear me-2 text-muted"></i> Editar Perfil</a>
+      <a *ngIf="isPermission('profile_doctor')" class="dropdown-item py-2" [routerLink]="['/doctors/profile/', user.id]"><i class="fa-regular fa-user me-2 text-muted"></i> Mi Perfil</a>
+      <a *ngIf="isPermission('edit_doctor')" class="dropdown-item py-2" [routerLink]="['/doctors/list/edit/', user.id]"><i class="fa-solid fa-gear me-2 text-muted"></i> Editar Perfil</a>
       <hr class="dropdown-divider my-1">
       <a class="dropdown-item py-2 text-danger fw-semibold" href="javascript:void(0);" (click)="onLogout()"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i> Salir</a>
     </div>

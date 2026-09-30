@@ -27,7 +27,7 @@ export interface Notificacion {
 export class NotificacionService {
   private http = inject(HttpClient);
   private toastr = inject(ToastrService);
-  private router = inject(Router);
+  public router = inject(Router);
 
   // ESTADOS REACTIVOS NUEVOS: Controlan la UI del switch de forma segura
   public isSubscribed$ = new BehaviorSubject<boolean>(false);
@@ -101,6 +101,19 @@ export class NotificacionService {
         }
       })
     );
+  }
+
+  /**
+    * 1. Carga el número de pendientes y actualiza el stream reactivo
+    */
+  cargarContador(): void {
+    this.http.get<{ ok: boolean; count: number }>(
+      `${BackendApi}/klyntic/notificaciones/unread-count`,
+      this.getOptions()
+    ).subscribe({
+      next: (res) => this.unreadCountSub.next(res.count),
+      error: () => this.unreadCountSub.next(0)
+    });
   }
 
   inicializarEcosistemaAlertas() {
@@ -219,7 +232,7 @@ export class NotificacionService {
         this.marcarUnaComoLeida(notif._id).subscribe(() => {
           const ruta = esMedico 
             ? this.determinarRutaMedico(notif.tipo, notif.referenciaId) 
-            : this.determinarRutaPaciente(notif.tipo, notif.referenciaId);
+            : this.determinarRutaAdmin(notif.tipo, notif.referenciaId);
           this.router.navigate([ruta]);
         });
       });
@@ -242,34 +255,66 @@ export class NotificacionService {
     );
   }
 
-  obtenerHistorialCompleto(page: number = 1): Observable<any> {
+ obtenerHistorialCompleto(page: number = 1): Observable<any> {
     const userString = localStorage.getItem('user');
     const userObj = userString ? JSON.parse(userString) : null;
-    const usuarioId = userObj ? userObj.id : '';
     
-    // 🟢 RECTIFICACIÓN: Ruta limpia alineada a Express
+    // 🟢 UNIFICACIÓN: Forzamos la obtención del ID exacto y su conversión a String
+    const usuarioId = userObj && userObj.id ? userObj.id.toString() : '';
+    
+    console.log('📡 Consumiendo historial de alertas para el ID:', usuarioId); // Console de control
+    
     return this.http.get(`${BackendApi}/klyntic/notificaciones/usuario/${usuarioId}?page=${page}`, this.getOptions());
   }
-
+    /**
+   * 🩺 RUTAS PARA EL ROL DE DOCTOR
+   * Estructura: modulo/accion/doctor/ID_DOCTOR
+   */
   private determinarRutaMedico(tipo: string, refId?: string): string {
-    if (!refId) return '/dashboard';
-    if (tipo.startsWith('PAGO_')) return `/dashboard/administracion/pagos/${refId}`;
-    if (tipo.startsWith('PRESUPUESTO_')) return `/dashboard/pacientes/presupuesto/${refId}`;
-    if (tipo === 'CONSULTA_NUEVA' || tipo === 'RECORDATORIO') return `/dashboard/agenda`;
+    const userString = localStorage.getItem('user');
+    const userObj = userString ? JSON.parse(userString) : null;
+    // Extraemos el ID del doctor asociado al usuario actual (por defecto 3 si no se encuentra)
+    const doctorId = userObj?.doctor_id || userObj?.id || '3';
+
+    if (tipo.startsWith('PAGO_')) {
+      return `/appointment-pay/list-pagos/doctor/${doctorId}`;
+    }
+    if (tipo.startsWith('PRESUPUESTO_')) {
+      return `/presupuesto/list/doctor`;
+    }
+    if (tipo === 'CITA_AGENDADA' || tipo === 'CONSULTA_NUEVA' || tipo === 'CONSULTA_') {
+      return `/appointments/list/doctor/${doctorId}`;
+    }
     return '/dashboard';
   }
 
-  private determinarRutaPaciente(tipo: string, refId?: string): string {
-    if (!refId) return '/app/home';
-    if (tipo.startsWith('PAGO_')) return `/app/mis-pagos`;
-    if (tipo === 'PRESUPUESTO_NUEVO') return `/app/mis-presupuestos`;
-    if (tipo === 'RECORDATORIO') return `/app/home`;
-    return '/app/home';
+  /**
+   * 💼 RUTAS PARA ADMINISTRADOR, RECEPCIÓN Y DEMÁS PERSONAL
+   * Estructura general sin segmentación de ID
+   */
+  public determinarRutaAdmin(tipo: string, refId?: string): string {
+    if (tipo.startsWith('PAGO_')) {
+      return `/appointment-pay/list`;
+    }
+    if (tipo.startsWith('PRESUPUESTO_')) {
+      return `/presupuesto/list`;
+    }
+    if (tipo === 'CITA_AGENDADA' || tipo === 'CONSULTA_NUEVA' || tipo === 'CONSULTA_') {
+      return `/appointments/list`;
+    }
+    return '/dashboard';
   }
+
 
   limpiarBuzonCompleto(): Observable<any> {
     return this.http.delete(`${BackendApi}/klyntic/notificaciones/limpiar/todas`, this.getOptions()).pipe(
       tap(() => this.unreadCountSub.next(0))
+    );
+  }
+
+   borrarNotificacion(id: string): Observable<any> {
+    return this.http.delete(`${BackendApi}/notificaciones/por_id/${id}`, this.getOptions()).pipe(
+      tap(() => this.cargarContador()) // Recarga el número actual tras la eliminación
     );
   }
 }

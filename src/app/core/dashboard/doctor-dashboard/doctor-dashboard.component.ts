@@ -358,7 +358,7 @@ export class DoctorDashboardComponent {
         next: (clinica: ConsultorioCRM | null) => {
           if (clinica) {
             this.clinicaSelected = clinica;
-            console.log(`🏢 [Dashboard CRM] Conectado al entorno corporativo: ${clinica.name}`);
+            // console.log(`🏢 [Dashboard CRM] Conectado al entorno corporativo: ${clinica.name}`);
             
             // 🎨 Inyectamos los colores de la clínica en la cabecera del DOM en caliente [5]
             this.clinicaService.aplicarEstilosDinamicos(clinica.css_personalizado);
@@ -407,7 +407,7 @@ export class DoctorDashboardComponent {
   this.doctorService.showDoctorMoneda(this.doctor.id).subscribe((resp: any) => {
     // Esto es correcto ya que tu backend devuelve { moneda: 'PERSONALIZADA' }
     this.moneda = resp.moneda; 
-    console.log("Moneda asignada:", this.moneda);
+    // console.log("Moneda asignada:", this.moneda);
   });
 }
 

@@ -51,7 +51,7 @@ export class TasabcvComponent implements OnInit {
         
         // 🏢 CASO CLINICA ENTERPRISE: Buscamos la moneda global en los settings de Laravel
         if (clinica && clinica.tipoClinica === 'Clinica') {
-          console.log('🏢 [Tasa Enterprise] Modo Clínica detectado. Extrayendo divisa de SettignService...');
+          // console.log('🏢 [Tasa Enterprise] Modo Clínica detectado. Extrayendo divisa de SettignService...');
           
           return this.settingService.getAllSettings().pipe(
             switchMap((respSettings: any) => {
@@ -106,7 +106,7 @@ export class TasabcvComponent implements OnInit {
         if (this.moneda === 'EUR') this.tasaeuro = valorTasa;
         if (this.moneda === 'PERSONALIZADA') this.tasa = valorTasa;
 
-        console.log(`📊 [Tasa Sincronizada] Moneda activa: ${this.moneda} | Valor liquidación: ${valorTasa}`);
+        // console.log(`📊 [Tasa Sincronizada] Moneda activa: ${this.moneda} | Valor liquidación: ${valorTasa}`);
       },
       error: (err) => {
         console.error("❌ Error fatal procesando el flujo de divisas cruzado:", err);

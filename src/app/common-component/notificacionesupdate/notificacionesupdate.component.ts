@@ -261,4 +261,11 @@ export class NotificacionesupdateComponent implements OnInit, OnDestroy {
     this.clearPayments();
     this.clearAppointments();
   }
+
+  atenderNotificacion(n: any) {
+    this.notifService.marcarUnaComoLeida(n._id).subscribe(() => {
+      const ruta = (this.notifService as any).determinarRutaAdmin(n.tipo, n.referenciaId);
+      this.notifService.router.navigate([ruta]);
+    });
+  }
 }

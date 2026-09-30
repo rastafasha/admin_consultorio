@@ -635,6 +635,18 @@ export class DataService {
           subMenus: [
           ],
         },
+        {
+          menuValue: 'Notificaciones',
+          route: routes.notificaciones,
+          base: routes.notificaciones,
+          hasSubRoute: false,
+          showSubRoute: false,
+          img: 'assets/img/icons/menu-icon-16.svg',
+          permision: 'view_notification',
+          show_nav: false,
+          subMenus: [
+          ],
+        },
        
 
 

@@ -28,51 +28,7 @@ export class routes {
   public static get addPayment(): string {
     return this.baseUrl + '/accounts/add-payment';
   }
-  // public static get expenses(): string {
-  //   return this.baseUrl + '/accounts/expenses';
-  // }
-  // public static get addExpense(): string {
-  //   return this.baseUrl + '/accounts/add-expense';
-  // }
-  // public static get editExpense(): string {
-  //   return this.baseUrl + '/accounts/edit-expense';
-  // }
-  // public static get invoices(): string {
-  //   return this.baseUrl + '/accounts/invoices';
-  // }
-  // public static get invoiceView(): string {
-  //   return this.baseUrl + '/accounts/invoice-view';
-  // }
-  // public static get payments(): string {
-  //   return this.baseUrl + '/accounts/payments';
-  // }
-  // public static get editPayment(): string {
-  //   return this.baseUrl + '/accounts/edit-payment';
-  // }
-  // public static get providentFund(): string {
-  //   return this.baseUrl + '/accounts/provident-fund';
-  // }
-  // public static get addProvidentFund(): string {
-  //   return this.baseUrl + '/accounts/add-provident-fund';
-  // }
-  // public static get editProvidentFund(): string {
-  //   return this.baseUrl + '/accounts/edit-provident-fund';
-  // }
-  // public static get taxes(): string {
-  //   return this.baseUrl + '/accounts/taxes';
-  // }
-  // public static get addTax(): string {
-  //   return this.baseUrl + '/accounts/add-tax';
-  // }
-  // public static get editTax(): string {
-  //   return this.baseUrl + '/accounts/edit-tax';
-  // }
-  // public static get activities(): string {
-  //   return this.baseUrl + '/activities';
-  // }
-  // public static get addAppointment(): string {
-  //   return this.baseUrl + '/appointments/add-appointment';
-  // }
+  
   public static get addAppointment(): string {
     return this.baseUrl + '/appointments/add';
   }
@@ -85,9 +41,7 @@ export class routes {
   public static get addAppointmentOdontograma(): string {
     return this.baseUrl + '/appointments/atender/local/odontograma';
   }
-  // public static get appointmentList(): string {
-  //   return this.baseUrl + '/appointments/appointment-list';
-  // }
+  
   public static get appointmentList(): string {
     return this.baseUrl + '/appointments/list';
   }
@@ -123,9 +77,7 @@ export class routes {
   public static get editBlog(): string {
     return this.baseUrl + '/blogs/edit-blog';
   }
-  // public static get calendar(): string {
-  //   return this.baseUrl + '/calendar';
-  // }
+  
   public static get calendar(): string {
     return this.baseUrl + '/appointment-calendar/show';
   }
@@ -160,24 +112,18 @@ export class routes {
   public static get patientDashboard(): string {
     return this.baseUrl + '/dashboard/patient-dashboard';
   }
-  // public static get addDepartment(): string {
-  //   return this.baseUrl + '/departments/add-department';
-  // }
+  
   public static get addDepartment(): string {
     return this.baseUrl + '/specialities/register';
   }
-  // public static get departmentList(): string {
-  //   return this.baseUrl + '/departments/department-list';
-  // }
+  
   public static get departmentList(): string {
     return this.baseUrl + '/specialities/list';
   }
   public static get editDepartment(): string {
     return this.baseUrl + '/departments/edit-department';
   }
-  // public static get addDoctor(): string {
-  //   return this.baseUrl + '/doctor/add-doctor';
-  // }
+ 
   public static get addDoctor(): string {
     return this.baseUrl + '/doctors/add';
   }
@@ -187,16 +133,16 @@ export class routes {
   public static get conectarWhatsapp(): string {
     return this.baseUrl + '/doctors/profile-whatsapp';
   }
+
+   public static get notificaciones(): string {
+    return this.baseUrl + '/notificaciones/list';
+  }
  
-  // public static get doctorProfile(): string {
-  //   return this.baseUrl + '/doctor/doctor-profile/';
-  // }
+ 
   public static get doctorSetting(): string {
     return this.baseUrl + '/doctor/doctor-setting';
   }
-  // public static get doctorsList(): string {
-  //   return this.baseUrl + '/doctor/doctors-list';
-  // }
+ ß
   public static get doctorsList(): string {
     return this.baseUrl + '/doctors/list';
   }
@@ -216,84 +162,7 @@ export class routes {
     return this.baseUrl + '/tasabcv/edit';
   }
 
-  // public static get email(): string {
-  //   return this.baseUrl + '/email';
-  // }
-  // public static get compose(): string {
-  //   return this.baseUrl + '/email/compose';
-  // }
-  // public static get confirmMail(): string {
-  //   return this.baseUrl + '/email/confirm-mail';
-  // }
-  // public static get inbox(): string {
-  //   return this.baseUrl + '/email/inbox';
-  // }
-  // public static get mailView(): string {
-  //   return this.baseUrl + '/email/mail-view';
-  // }
-  // public static get forms(): string {
-  //   return this.baseUrl + '/forms';
-  // }
-  // public static get formBasicInputs(): string {
-  //   return this.baseUrl + '/forms/form-basic-inputs';
-  // }
-  // public static get formHorizontal(): string {
-  //   return this.baseUrl + '/forms/form-horizontal';
-  // }
-  // public static get formInputGroups(): string {
-  //   return this.baseUrl + '/forms/form-input-groups';
-  // }
-  // public static get formVertical(): string {
-  //   return this.baseUrl + '/forms/form-vertical';
-  // }
-  // public static get gallery(): string {
-  //   return this.baseUrl + '/gallery';
-  // }
-  // public static get addInvoice(): string {
-  //   return this.baseUrl + '/invoice/add-invoice';
-  // }
-  // public static get createInvoice(): string {
-  //   return this.baseUrl + '/invoice/create-invoice';
-  // }
-  // public static get editInvoice(): string {
-  //   return this.baseUrl + '/invoice/edit-invoice';
-  // }
-  // public static get editInvoices(): string {
-  //   return this.baseUrl + '/invoice/edit-invoices';
-  // }
-  // public static get invoicesGrid(): string {
-  //   return this.baseUrl + '/invoice/invoices-grid';
-  // }
-  // public static get allInvoice(): string {
-  //   return this.baseUrl + '/invoice/all-invoice';
-  // }
-  // public static get invoicesCancelled(): string {
-  //   return this.baseUrl + '/invoice/invoices-cancelled';
-  // }
-  // public static get invoicesDraft(): string {
-  //   return this.baseUrl + '/invoice/invoices-draft';
-  // }
-  // public static get invoicesOverdue(): string {
-  //   return this.baseUrl + '/invoice/invoices-overdue';
-  // }
-  // public static get invoicesPaid(): string {
-  //   return this.baseUrl + '/invoice/invoices-paid';
-  // }
-  // public static get invoicesRecurring(): string {
-  //   return this.baseUrl + '/invoice/invoices-recurring';
-  // }
-  // public static get invoicesSettings(): string {
-  //   return this.baseUrl + '/invoice/invoices-settings';
-  // }
-  // public static get taxSettings(): string {
-  //   return this.baseUrl + '/invoice/tax-settings';
-  // }
-  // public static get viewInvoice(): string {
-  //   return this.baseUrl + '/invoice/view-invoice';
-  // }
-  // public static get addPatient(): string {
-  //   return this.baseUrl + '/patient/add-patient';
-  // }
+  
   public static get addPatient(): string {
     return this.baseUrl + '/patients/add';
   }
@@ -306,9 +175,7 @@ export class routes {
   public static get patientSetting(): string {
     return this.baseUrl + '/patient/patient-setting';
   }
-  // public static get patientsList(): string {
-  //   return this.baseUrl + '/patient/patients-list';
-  // }
+  
   public static get patientsList(): string {
     return this.baseUrl + '/patients/list';
   }
@@ -322,12 +189,11 @@ export class routes {
   public static get editSalary(): string {
     return this.baseUrl + '/payroll/edit-salary';
   }
-  // public static get salary(): string {
-  //   return this.baseUrl + '/payroll/salary';
-  // }
+ 
   public static get salary(): string {
     return this.baseUrl + '/appointment-pay/list';
   }
+ 
   
   public static get salaryView(): string {
     return this.baseUrl + '/payroll/salary-view';
@@ -383,9 +249,7 @@ export class routes {
   public static get addLeave(): string {
     return this.baseUrl + '/staff/add-leave';
   }
-  // public static get addStaff(): string {
-  //   return this.baseUrl + '/staff/add-staff';
-  // }
+  
   public static get addStaff(): string {
     return this.baseUrl + '/staffs/add-staff';
   }
@@ -404,9 +268,7 @@ export class routes {
   public static get staffLeave(): string {
     return this.baseUrl + '/staff/staff-leave';
   }
-  // public static get staffList(): string {
-  //   return this.baseUrl + '/staff/staff-list';
-  // }
+  
   public static get staffList(): string {
     return this.baseUrl + '/staffs/list';
   }

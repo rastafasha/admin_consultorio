@@ -9,8 +9,7 @@ const routes: Routes = [
     
     {
       path:'edit', component:TasabcvEditComponent
-    },
-    
+    }, 
   ]
   }
 ];
