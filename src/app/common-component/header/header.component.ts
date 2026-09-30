@@ -171,55 +171,22 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const estaSuscrito = this.pushService.isSubscribed$.value;
 
     if (!estaSuscrito) {
-      // 🟢 EL ADMINISTRADOR PRENDIÓ EL SWITCH
-      this.pushService.isProcessing$.next(true);
-
-      this.swPush.requestSubscription({
-        serverPublicKey: this.VAPID_PUBLIC_KEY
-      })
-        .then(sub => {
-          this.pushService.guardarPushSubscription(sub).subscribe({
-            next: () => {
-              this.pushService.isSubscribed$.next(true);
-              this.pushService.isProcessing$.next(false);
-              this.toastr.success('¡Notificaciones del Dashboard activadas! 🔔');
-            },
-            error: (err) => {
-              // 🛑 SALVAVIDAS ERROR 500: Si el backend falla, apagamos el switch de inmediato
-              console.error('Error guardando sub en backend (Error 500):', err);
-              this.pushService.isSubscribed$.next(false);
-              this.pushService.isProcessing$.next(false);
-              this.toastr.error('Error 500', 'No se pudo registrar este dispositivo en el servidor');
-            }
-          });
-        })
-        .catch(err => {
-          console.warn('Permiso denegado por el usuario:', err);
-          this.pushService.isProcessing$.next(false);
-          this.pushService.isSubscribed$.next(false);
-          this.toastr.warning('Permiso requerido', 'Debes permitir las notificaciones en la ventana del navegador');
-        });
-
+      // 🟢 EL ADMINISTRADOR PRENDIÓ EL SWITCH: Delegamos al método centralizado
+      this.pushService.subscribeToNotifications();
     } else {
-      // EL ADMINISTRADOR PRENDIÓ EL SWITCH PARA APAGARLO
+      // EL ADMINISTRADOR APAGÓ EL SWITCH
       this.pushService.isProcessing$.next(true);
 
       this.swPush.unsubscribe()
         .then(() => {
-          // Flujo ideal: El navegador desuscribió con éxito
           this.pushService.isSubscribed$.next(false);
           this.pushService.isProcessing$.next(false);
           this.toastr.info('Notificaciones del Dashboard desactivadas');
         })
         .catch(err => {
-          // 🟢 EL SALVAVIDAS: El navegador arrojó el error de que el Service Worker no está activo
           console.warn('Error al desuscribir del service worker en local:', err);
-
-          // Forzamos el apagado del switch en la interfaz de usuario para que no se quede bloqueado
           this.pushService.isSubscribed$.next(false);
           this.pushService.isProcessing$.next(false);
-
-          // Le avisamos al usuario con un mensaje amigable
           this.toastr.info('Notificaciones desactivadas localmente.');
         });
     }

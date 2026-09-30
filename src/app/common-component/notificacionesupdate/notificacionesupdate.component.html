@@ -43,7 +43,7 @@
               *ngFor="let n of notifService.listaNotificaciones"
               [class.unread-ticket-bg]="!n.leido"
               (click)="notifService.marcarUnaComoLeida(n._id)">
-            <a href="javascript:void(0);" class="text-decoration-none">
+            <a (click)="atenderNotificacion(n)" class="text-decoration-none">
               <div class="media d-flex gap-2.5">
                 
                 <!-- Avatar Circular Dinámico por Tipos de Alerta -->

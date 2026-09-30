@@ -266,6 +266,8 @@ export class NotificacionService {
     
     return this.http.get(`${BackendApi}/klyntic/notificaciones/usuario/${usuarioId}?page=${page}`, this.getOptions());
   }
+
+  
     /**
    * 🩺 RUTAS PARA EL ROL DE DOCTOR
    * Estructura: modulo/accion/doctor/ID_DOCTOR
@@ -280,7 +282,7 @@ export class NotificacionService {
       return `/appointment-pay/list-pagos/doctor/${doctorId}`;
     }
     if (tipo.startsWith('PRESUPUESTO_')) {
-      return `/presupuesto/list/doctor`;
+      return `/presupuesto/edit/${refId}`;
     }
     if (tipo === 'CITA_AGENDADA' || tipo === 'CONSULTA_NUEVA' || tipo === 'CONSULTA_') {
       return `/appointments/list/doctor/${doctorId}`;
@@ -297,7 +299,7 @@ export class NotificacionService {
       return `/appointment-pay/list`;
     }
     if (tipo.startsWith('PRESUPUESTO_')) {
-      return `/presupuesto/list`;
+      return `/presupuesto/edit/${refId}`;
     }
     if (tipo === 'CITA_AGENDADA' || tipo === 'CONSULTA_NUEVA' || tipo === 'CONSULTA_') {
       return `/appointments/list`;
@@ -313,7 +315,7 @@ export class NotificacionService {
   }
 
    borrarNotificacion(id: string): Observable<any> {
-    return this.http.delete(`${BackendApi}/notificaciones/por_id/${id}`, this.getOptions()).pipe(
+    return this.http.delete(`${BackendApi}/klyntic/notificaciones/por_id/${id}`, this.getOptions()).pipe(
       tap(() => this.cargarContador()) // Recarga el número actual tras la eliminación
     );
   }

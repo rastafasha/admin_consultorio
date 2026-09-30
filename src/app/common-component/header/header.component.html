@@ -37,7 +37,20 @@
             <i class="fas fa-qrcode"></i>
         </button>
         <app-tasabcv></app-tasabcv>
-        
+         <div class="setting-row" *ngIf="!isLoadingSwitch" [class.loading]="pushService.isProcessing$ | async">
+            
+            <div class="switch-wrapper">
+                <!-- El spinner se activa correctamente de forma reactiva mientras la petición viaja al servidor -->
+                <div *ngIf="pushService.isProcessing$ | async" class="mini-spinner"></div>
+
+                <label class="switch">
+                    <!-- El switch se deshabilita mientras procesa y se marca/desmarca según la realidad del servidor -->
+                    <input type="checkbox" [disabled]="pushService.isProcessing$ | async"
+                        [checked]="pushService.isSubscribed$ | async" (change)="togglePush()">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
         <app-notificacionesupdate [routes]="routes" [user]="user" [usuario]="usuario" [imagenSerUrl]="imagenSerUrl"
             [logout]="logout"></app-notificacionesupdate>
     </div>
@@ -74,7 +87,21 @@
         </div>
 
         <!-- 3. Campana de Sockets y Switch -->
-        
+        <div class="setting-row switch-movil-compacto d-flex align-items-center" *ngIf="!isLoadingSwitch"
+            [class.loading]="pushService.isProcessing$ | async">
+            
+            <div class="switch-wrapper">
+                <!-- El spinner se activa correctamente de forma reactiva mientras la petición viaja al servidor -->
+                <div *ngIf="pushService.isProcessing$ | async" class="mini-spinner"></div>
+
+                <label class="switch">
+                    <!-- El switch se deshabilita mientras procesa y se marca/desmarca según la realidad del servidor -->
+                    <input type="checkbox" [disabled]="pushService.isProcessing$ | async"
+                        [checked]="pushService.isSubscribed$ | async" (change)="togglePush()">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
 
         <!-- 4. Componente de notificaciones aislado -->
         <div class="notif-movil-wrapper">

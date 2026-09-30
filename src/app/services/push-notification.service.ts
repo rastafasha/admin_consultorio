@@ -58,47 +58,75 @@ export class PushNotificationService {
     this.isSubscribed$.next(!!sub);
   }
 
-  subscribeToNotifications() {
-  this.isProcessing$.next(true);
-  
-  this.swPush.requestSubscription({
-    serverPublicKey: this.VAPID_PUBLIC_KEY
-  })
-  .then(sub => {
-    // 1. EXTRAER EL TOKEN
-    const miToken = localStorage.getItem('token') || '';
-
-    // 2. CONFIGURAR EL HEADER
-    const headers = {
-      'x-token': miToken
-    };
+    subscribeToNotifications() {
+    this.isProcessing$.next(true);
     
-    console.log('Enviando con token:', miToken);
+    this.swPush.requestSubscription({
+      serverPublicKey: this.VAPID_PUBLIC_KEY
+    })
+    .then(sub => {
+      const userString = localStorage.getItem('user');
+      const userObj = userString ? JSON.parse(userString) : null;
+      const currentUid = userObj && userObj.id ? userObj.id.toString() : 'GUEST';
+      const miToken = localStorage.getItem('token') || '';
 
-    // 3. HACER EL POST AL BACKEND (Usa tu variable de URL correcta)
-    // Cambié urlBackend por el nombre de tu variable real si es necesario
-    this.http.post(this.urlBackedNotification, sub, { headers }).subscribe({
-      next: () => {
-        console.log('✅ ¡Suscripción guardada con éxito!');
-        this.isSubscribed$.next(true);
-        this.isProcessing$.next(false);
-        this.toastr.success('¡Notificaciones activadas!'); 
-      },
-      error: err => {
-        console.error('❌ Error al guardar la suscripción:', err);
-        this.isProcessing$.next(false);
-        this.toastr.error('Error', 'No se pudo registrar el dispositivo en el servidor');
-      }
+      // Convertimos la suscripción nativa a un JSON plano para evitar errores de compilación
+      const subJson = sub.toJSON();
+
+      const payloadBody = {
+        endpoint: subJson.endpoint,
+        expirationTime: subJson.expirationTime,
+        keys: subJson.keys, 
+        userId: currentUid 
+      };
+
+      const headers = {
+        'x-token': miToken,
+        'x-uid': currentUid,
+        'X-Tenant-Slug': localStorage.getItem('tenant-slug') || 'default'
+      };
+      
+      console.log('📡 [PWA SYNC] Despachando payload hacia Node para el usuario:', currentUid);
+
+      // 4. HACER EL POST AL BACKEND
+      this.http.post(this.urlBackedNotification, payloadBody, { headers }).subscribe({
+        next: () => {
+          console.log('✅ ¡Suscripción guardada con éxito en MongoDB Atlas!');
+          this.isSubscribed$.next(true);
+          this.isProcessing$.next(false);
+          this.toastr.success('¡Notificaciones activadas!'); 
+
+          // =========================================================================
+          // 🚀 GLOBO NATIVO CORPORATIVO INSTANTÁNEO RE-INYECTADO
+          // =========================================================================
+          if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.ready.then((registration) => {
+              const opcionesNotificacion: any = {
+                body: 'Canal corporativo Klyntic. Recibirás aquí los reportes de pagos y alertas de agenda en vivo.',
+                icon: 'assets/img/logo.png', // Ajusta esta ruta a los iconos de tu build de admin/browser
+                badge: 'assets/img/logo.png',
+                vibrate:[200, 100, 200], 
+                tag: 'bienvenida-admin-klyntic'
+              };
+
+              registration.showNotification('💼 ¡Dashboard Admin Conectado!', opcionesNotificacion);
+            }).catch(swErr => console.log('Aviso: Service Worker no disponible para el globo inmediato:', swErr));
+          }
+          // =========================================================================
+        },
+        error: err => {
+          console.error('❌ Error al guardar la suscripción:', err);
+          this.isProcessing$.next(false);
+          this.toastr.error('Error', 'No se pudo registrar el dispositivo');
+        }
+      });
+    })
+    .catch(err => {
+      console.warn('Registro de notificaciones push cancelado o bloqueado:', err);
+      this.isProcessing$.next(false);
     });
+  }
 
-  })
-  .catch(err => {
-    // 🚀 SALVAVIDAS: Si el usuario rechaza el permiso o cierra la ventana, liberamos el botón
-    console.warn('El usuario rechazó las notificaciones o el navegador lo bloqueó:', err);
-    this.isProcessing$.next(false);
-    this.toastr.warning('Permiso denegado', 'Debes permitir las notificaciones en el navegador para activarlas.');
-  });
-}
 
 guardarPushSubscription(subcripcion: any){
       const url = `${this.urlBackedNotification}`;
@@ -108,8 +136,6 @@ guardarPushSubscription(subcripcion: any){
 
  
 
-
- 
 
 
 
