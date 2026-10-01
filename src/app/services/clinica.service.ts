@@ -77,11 +77,11 @@ export class ClinicaService {
 
     // 🚀 BYPASS SAAS: Si el subdominio es tu subdominio maestro fijo de médicos independientes,
     // apagamos el modo clínica de inmediato y saltamos la consulta a MongoDB Atlas.
-    if (slugFormateado === 'consultorio') {
-      this.isClinicMode = false;
-      this.clinicaActual = null;
-      return of(null);
-    }
+    if (environment.IS_CLINIC_DEPLOYMENT === false || slugFormateado === 'consultorio') {
+    this.isClinicMode = false;
+    this.clinicaActual = null;
+    return of(null);
+  }
 
     if (this.clinicaCache$ && this.cacheSlug === slugFormateado) {
       return this.clinicaCache$;

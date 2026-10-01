@@ -13,7 +13,7 @@ export const environment = {
     
     backend_CRM_node:"http://localhost:3000/api",
     nombreSelected:'clinica-prueba',
-    IS_CLINIC_DEPLOYMENT: true,
+    IS_CLINIC_DEPLOYMENT: false,
     
     //conexion a node y manejo de notificaciones
     // backend_node:"https://back-klyntic-envios.onrender.com/api",

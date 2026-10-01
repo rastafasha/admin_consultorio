@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { DoctorService } from '../../../services/doctor.service';
 import { RolesService } from '../../../services/roles.service';
 import { NotificacionService } from '../../../services/notificacion.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-notificaciones-list',
@@ -86,12 +87,32 @@ export class NotificacionesListComponent {
     });
   }
 
+ 
+
   vaciarTodo() {
-    if (confirm('¿Estás seguro de que deseas eliminar todas las notificaciones de tu historial?')) {
-      this.notiService.limpiarBuzonCompleto().subscribe(() => {
-        this.historialNotificaciones = [];
+  
+      Swal.fire({
+        title: '¿Estás seguro de que deseas eliminar todas las notificaciones de tu historial?',
+        text: "No podras recuperarlo!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, Borrar!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.notiService.limpiarBuzonCompleto().subscribe((resp: any) => {
+            this.historialNotificaciones = [];
+          })
+          Swal.fire(
+            'Borrado!',
+            'Historial borrado.',
+            'success'
+          )
+          this.ngOnInit();
+        }
       });
+  
     }
-  }
 
 }

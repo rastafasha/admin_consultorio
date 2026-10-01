@@ -134,16 +134,16 @@ export class ListDoctorComponent {
   private getTableData(page=1): void {
     this.appointmentList = [];
     this.serialNumberArray = [];
-
+    this.isLoading = true;
     this.appointmentpayService.listAppointmentPaysByDoctor(this.doctor_id, page, this.searchDataValue, 
      this.date_start,this.date_end).subscribe((resp:any)=>{
-      console.log(resp);
 
       this.totalDataPatient = resp.total;
       this.appointmentList = resp.appointmentpays;
       // this.getTableDataGeneral();
       this.dataSource = new MatTableDataSource<any>(this.appointmentList);
       this.calculateTotalPages(this.totalDataPatient, this.pageSize);
+      this.isLoading = false;
     })
   }
 

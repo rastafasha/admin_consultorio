@@ -83,10 +83,10 @@ export class NotificacionesupdateComponent implements OnInit, OnDestroy {
       this.user = user; 
       this.roles = user?.roles ? (Array.isArray(user.roles) ? user.roles.map(r => r.name || r).flat() : [user.roles.name || user.roles]) : []; 
       if (user) { 
-        this.getUserRemoto(); 
+        // this.getUserRemoto(); 
         
         // 🚀 ADOPCIÓN DE LA FUNCIÓN HUÉRFANA: La llamamos de forma proactiva una vez que el usuario está autenticado
-        this.loadNotifications();
+        // this.loadNotifications();
       }
     });
   }

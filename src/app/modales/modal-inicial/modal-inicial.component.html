@@ -13,38 +13,102 @@
           <span class="step-line"></span>
           <span class="step-circle" [class.active]="currentStep >= 2">2</span>
         </div>
+
         <div *ngIf="currentStep === 1">
-          <h2>¡Bienvenido al Admin Klyntic! </h2>
-          <p>En esta sección podrás ver:</p>
-          <ul>
-            <li>El comportamiento diario, mensual y anual del comportamiento de tu Consultorio.</li>
-            <li>Pacientes Recientes</li>
-            <li>Citas Pendientes</li>
-            <li>Pagos y Transferencias</li>
-            <li>El sistema te notificará en tiempo real</li>
-          </ul>
-          <p>Además tienes mas opciones en el menu lateral Izquierdo</p>
-          <small>Eventualmente estaremos mejorando y agregando más opciones, con actualiaciones periodicas, </small>
-          <small>En el momento de cada actualización de la Aplicación, aparecerá un mensaje en el lado superior de la aplicación, sólo debes actualizar y en segundos continuar con tu jornada.</small>
+          <!-- Encabezado Original con Estilo Klyntic -->
+      <div class="modal-header border-0 pb-0 pt-4 px-4 d-flex flex-column align-items-center">
+        <h2 class="modal-title font-weight-bold" id="modalInicialLabel">🚀 ¡Bienvenido al Admin Klyntic!</h2>
+        <p class="text-muted text-center mt-2 small">En esta sección podrás ver el comportamiento diario, mensual y anual de tu Consultorio.</p>
+      </div>
+          <div class="row mb-4">
+          <div class="col-md-6 mb-2">
+            <div class="d-flex align-items-center gap-2">
+              <span class="text-info">👥</span>
+              <span class="text-dark font-weight-medium">Pacientes Recientes y Citas Pendientes.</span>
+            </div>
+          </div>
+          <div class="col-md-6 mb-2">
+            <div class="d-flex align-items-center gap-2">
+              <span class="text-warning">💳</span>
+              <span class="text-dark font-weight-medium">Control de Pagos y Transferencias.</span>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="d-flex align-items-center gap-2">
+              <span class="text-success">⚡</span>
+              <span class="text-dark font-weight-medium">El sistema te notificará toda la actividad en tiempo real.</span>
+            </div>
+          </div>
         </div>
+
+           <!-- ℹ️ SECCIÓN 2: Información de Soporte (Tu texto original intacto) -->
+        <p class="text-secondary small mb-3">
+          Además tienes más opciones en el menú lateral Izquierdo. Eventualmente estaremos mejorando y agregando más opciones con actualizaciones periódicas.
+        </p>
+
+        <div class="p-3 bg-light rounded border border-info-subtle mb-3">
+          <p class="text-dark small mb-0 font-weight-medium">
+            🔄 <strong>Sobre las actualizaciones:</strong> En el momento de cada actualización de la Aplicación, aparecerá un mensaje en el lado superior; sólo debes actualizar y en segundos continuar con tu jornada.
+          </p>
+        </div>
+          <div class="imgcuadro">
+            <img src="./assets/img/updateMess.png" class="img-fluid" style="width: 100%; display: block; margin:auto" alt="">
+          </div>
+
+          <div class="setup-guide-box p-3 rounded-lg border mb-4 mt-3" style="background-color: #fffaf0; border-color: #ffe4b5 !important;">
+          <h5 class="font-weight-bold text-dark mb-3" style="color: #b02b2b !important;">🛠️ Pasos iniciales obligatorios antes de empezar:</h5>
+          
+          <div class="row text-start layout-pasos">
+            <!-- PASO 1 -->
+            <div class="col-md-4 mb-md-0 mb-3 px-3">
+              <span class="badge bg-info text-white mb-2">Paso 1</span>
+              <p class="text-dark small mb-0"><strong>Registra tus datos:</strong> Ve al menú y completa tu perfil y dirección médica.</p>
+            </div>
+            <!-- PASO 2 -->
+            <div class="col-md-4 mb-md-0 mb-3 px-3 border-md-start">
+              <span class="badge bg-warning text-dark mb-2">Paso 2</span>
+              <p class="text-dark small mb-0"><strong>Métodos de pago:</strong> Ve a <em>Transferencias Recientes</em> y configura tus cuentas.</p>
+            </div>
+            <!-- PASO 3 -->
+            <div class="col-md-4 px-3 border-md-start">
+              <span class="badge bg-success text-white mb-2">Paso 3</span>
+              <p class="text-dark small mb-0"><strong>Crear Citas:</strong> Recuerda que el sistema exige <em>crear al paciente primero</em>.</p>
+            </div>
+          </div>
+        </div>
+        </div>
+        
         <div *ngIf="currentStep === 2">
           <h2>Instalalo en tu Dispositivo! </h2>
           <p>Si puedes ver este icon en la barra de dirección:</p>
-          <img src="./assets/img/barra1.png" class="img-fluid" style="width: 100%; display: block; margin:auto" alt="">
+          <div class="imgcuadro">
+            <img src="./assets/img/barra1.png" class="img-fluid" style="width: 100%; display: block; margin:auto" alt="">
+
+          </div>
           <p>ó</p>
-          <img src="./assets/img/barra2.png" class="img-fluid" style="width: 100%; display: block; margin:auto" alt="">
+          <div class="imgcuadro">
+            <img src="./assets/img/barra2.png" class="img-fluid" style="width: 100%; display: block; margin:auto" alt="">
+
+          </div>
           <div class="row mt-5">
             <div class="col-12 col-sm-6">
               <p>1 Pulsa sobre el icono y podras instalarlo en tu dispositivo (Computador, Tabla, Movil):</p>
-              <img src="./assets/img/install.png" class="img-fluid" style="width: 100%; display: block; margin:auto" alt="">
+              <div class="imgcuadro">
+                <img src="./assets/img/install.png" class="img-fluid" style="width: 100%; display: block; margin:auto" alt="">
+
+              </div>
               <p>2 Pulsa el Boton Install</p>
             </div>
             <div class="col-12 col-sm-6">
               <p>3 Agregalo a tu barra de Inicio:</p>
-              <img src="./assets/img/instalado.png" class="img-fluid" style="width: 100%; display: block; margin:auto" alt="">
+              <div class="imgcuadro">
+                <img src="./assets/img/instalado.png" class="img-fluid" style="width: 100%; display: block; margin:auto" alt="">
+
+              </div>
             </div>
           </div>
         </div>
+
         <div class="text-center mt-4">
           <button *ngIf="currentStep === 1" class="btn btn-info btn-md text-uppercase me-2" (click)="nextStep()">
             Siguiente

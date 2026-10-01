@@ -7,10 +7,10 @@ export const environment = {
 
     backend_node:"http://localhost:5000/api",
     socket_url:"http://localhost:5000",
+    backend_CRM_node:"http://localhost:3000/api",
 
     nombreSelected:'clinica-prueba',
-    backend_CRM_node:"http://localhost:3000/api",
-    IS_CLINIC_DEPLOYMENT: true,
+    IS_CLINIC_DEPLOYMENT: false,
     
     
     //conexion a node y manejo de notificaciones

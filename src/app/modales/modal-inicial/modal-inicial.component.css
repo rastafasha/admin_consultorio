@@ -88,15 +88,117 @@ h2{
   margin: 0 10px;
 }
 
-.botonesmodal{
-  display: flex;
-  flex-direction: row;
-  gap:10px
+
+.imgcuadro{
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 5px;
+  width: 100%;
+  height: auto;
+  margin: 5px;
 }
 
-@media (max-width:780px) {
-  .botonesmodal{
-  display: flex;
-  flex-direction: column;
+
+
+
+
+/* =========================================================================
+   🚀 CALIBRACIÓN ATÓMICA DE CAPAS PARA EL MODAL INICIAL (Klyntic Enterprise)
+   ========================================================================= */
+
+
+/* 🎛️ INDICADORES DE PASOS */
+.step-indicators {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
 }
+
+.step-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    color: #4a5568;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.step-circle.active {
+    background: #00c0ef !important;
+    color: white !important;
+    box-shadow: 0 4px 10px rgba(0, 192, 239, 0.3);
+}
+
+.step-line {
+    flex: 1;
+    height: 3px;
+    background: #00c0ef;
+    max-width: 120px;
+    margin: 0 8px;
+    border-radius: 2px;
+}
+
+/* 🎨 CONTENEDORES Y DETALLES */
+.icon-wrapper {
+    background: #f7fafc;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.ultra-small {
+    font-size: 10px !important;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+.bg-light {
+    background-color: #f8fafc !important;
+}
+
+.check-klyntic {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+}
+
+/* 📱 RESPONSIVE DESIGN - GRID INTELIGENTE */
+.botonesmodal {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+@media (min-width: 768px) {
+    .border-md-start {
+        border-left: 1px solid #e2e8f0 !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .botonesmodal {
+        width: 100%;
+    }
+    .botonesmodal button {
+        width: 100%;
+    }
+    #modalInicial .modal-dialog {
+        margin: 15px !important;
+    }
+}
+
+/* Apagamos el backdrop automático molesto de Bootstrap */
+.modal-backdrop {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
 }
