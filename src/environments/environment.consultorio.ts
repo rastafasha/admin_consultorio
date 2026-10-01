@@ -10,6 +10,7 @@ export const environment = {
     socket_url:"https://back-klyntic-envios.onrender.com",
     
     backend_CRM_node:"https://backend-crmklyntic-mean.onrender.com/api",
+    nombreSelected: 'clinica-prueba', 
     IS_CLINIC_DEPLOYMENT: false,
 
     url_frontend: 'https://consultorio.klyntic.com/',
