@@ -8,12 +8,12 @@ export const environment = {
     backend_node: "https://back-klyntic-envios.onrender.com/api",
     //sockets tiempo real
     socket_url:"https://back-klyntic-envios.onrender.com",
+    
+    backend_CRM_node:"https://backend-crmklyntic-mean.onrender.com/api",
+    IS_CLINIC_DEPLOYMENT: false,
 
     url_frontend: 'https://consultorio.klyntic.com/',
     urlBackedNotification: 'https://back-klyntic-envios.onrender.com/api/notipush/save-subscription',
     VAPI_KEY_PUBLIC: 'BG-UDqYJkOikTb0G7nNdKcpqZm__XCl0dwbJsx-kerpEecxL5rp079U7UMZxqo5XA0i60NGOVlezm1RAMyHRTbQ',
-
-
-
 
 };

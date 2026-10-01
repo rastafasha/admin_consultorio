@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { FileSaverService } from 'ngx-filesaver';
 import Swal from 'sweetalert2';
 import { DoctorService } from '../../../services/doctor.service';
 import { RolesService } from '../../../services/roles.service';
-import * as XLSX from 'xlsx';
 import { PresupuestoService } from '../../../services/presupuesto.service';
 import { Presupuesto } from '../../../models/presupuesto.model';
 import { User } from '../../../models/user.model';
@@ -62,7 +60,6 @@ export class PresupuestoDoctorListComponent implements OnInit {
   constructor(
     public presupuestoService: PresupuestoService,
     public doctorService: DoctorService,
-    private fileSaver: FileSaverService,
     public roleService: RolesService,
     ) { }
 
@@ -234,75 +231,6 @@ private getTableData(page = 1): void {
   }
 
 
-  excelExport(){
-    const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8';
-    const EXCLE_EXTENSION = '.xlsx';
-
-    // this.getTableDataGeneral();
-    //custom code
-    const worksheet = XLSX.utils.json_to_sheet(this.presupuestoList);
-
-    const workbook = {
-      Sheets:{
-        'testingSheet': worksheet
-      },
-      SheetNames:['testingSheet']
-    }
-
-    const excelBuffer = XLSX.write(workbook, {bookType:'xlsx', type: 'array'});
-
-    const blobData = new Blob([excelBuffer],{type: EXCEL_TYPE});
-
-    this.fileSaver.save(blobData, "pacientes_db_klyntic_consult",)
-
-  }
-  csvExport(){
-    const CSV_TYPE = 'text/csv';
-    const CSV_EXTENSION = '.csv';
-
-    // this.getTableDataGeneral();
-
-    //custom code
-    const worksheet = XLSX.utils.json_to_sheet(this.presupuestoList);
-
-    const workbook = {
-      Sheets:{
-        'testingSheet': worksheet
-      },
-      SheetNames:['testingSheet']
-    }
-
-    const excelBuffer = XLSX.write(workbook, {bookType:'csv', type: 'array'});
-
-    const blobData = new Blob([excelBuffer],{type: CSV_TYPE});
-
-    this.fileSaver.save(blobData, "pacientes_db_klyntic_consult_csv", CSV_EXTENSION)
-
-  }
-  txtExport(){
-    const TXT_TYPE = 'text/txt';
-    const TXT_EXTENSION = '.txt';
-
-    // this.getTableDataGeneral();
-
-
-    //custom code
-    const worksheet = XLSX.utils.json_to_sheet(this.presupuestoList);
-
-    const workbook = {
-      Sheets:{
-        'testingSheet': worksheet
-      },
-      SheetNames:['testingSheet']
-    }
-
-    const excelBuffer = XLSX.write(workbook, {bookType:'xlsx', type: 'array'});
-
-    const blobData = new Blob([excelBuffer],{type: TXT_TYPE});
-
-    this.fileSaver.save(blobData, "pacientes_db_klyntic_consult", TXT_EXTENSION)
-
-  }
 
   cambiarStatus(data:any){
     const VALUE = data.status;

@@ -1,9 +1,6 @@
 import { Component } from '@angular/core';
 import { DoctorService } from '../../../services/doctor.service';
 import { MatTableDataSource } from '@angular/material/table';
-import { FileSaverService } from 'ngx-filesaver';
-import * as XLSX from 'xlsx';
-import { jsPDF } from 'jspdf';
 import { RolesService } from '../../../services/roles.service';
 import { routes } from '../../../shared/routes/routes';
 
@@ -41,11 +38,23 @@ export class ListDoctorComponent {
   public doctor_selected:any;
   public text_validation:any;
   public user:any;
+  isLoading = false;
+
+  titlePage = 'Listado de Doctores';
+
+   info_mis_doctores_list = `
+  <p>En esta sección :</p>
+          <ul>
+            <li>Tedrás la lista completa de tus Doctores</li>
+            <li>Con el botón + podras agregar a tu lista</li>
+            <li>Con iconos de Documentos podrás descargar en formato excel, texto y CSV esta lista para respaldo</li>
+            <li>Al Pulsar sobre el nombre del medico podras ver la ficha médica e información adicional </li>
+            <li>Al final de la lista en cada medico en el boton selector (3 puntos), podrás editar, borrar y ver </li>
+          </ul>`;
 
   constructor(
     public doctorService: DoctorService,
     public roleService: RolesService,
-    private fileSaver: FileSaverService
     ){
 
   }
@@ -69,6 +78,7 @@ export class ListDoctorComponent {
   private getTableData(): void {
     this.doctorList = [];
     this.serialNumberArray = [];
+    this.isLoading = true;
 
     this.doctorService.listDoctors().subscribe((resp:any)=>{
       
@@ -78,6 +88,7 @@ export class ListDoctorComponent {
       this.doctor_generals = resp.users.data;
       this.doctor_id = resp.users.id;
      this.getTableDataGeneral();
+     this.isLoading = false;
     })
 
   }
@@ -85,6 +96,7 @@ export class ListDoctorComponent {
   getTableDataGeneral(){
     this.doctorList = [];
     this.serialNumberArray = [];
+    this.isLoading = true;
     
     this.doctor_generals.map((res: any, index: number) => {
       const serialNumber = index + 1;
@@ -96,6 +108,7 @@ export class ListDoctorComponent {
     });
     this.dataSource = new MatTableDataSource<any>(this.doctorList);
     this.calculateTotalPages(this.totalDatadoctor, this.pageSize);
+    this.isLoading = false;
   }
   selectUser(doctor:any){
     this.doctor_selected = doctor;
@@ -181,7 +194,7 @@ export class ListDoctorComponent {
     this.limit = this.pageSize;
     this.skip = 0;
     this.currentPage = 1;
-    this.getTableDataGeneral();
+    this.ngOnInit();
     this.searchDataValue = '';
   }
 
@@ -200,99 +213,7 @@ export class ListDoctorComponent {
     }
   }
 
-  excelExport(){
-    const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8';
-    const EXCLE_EXTENSION = '.xlsx';
-
-    this.getTableDataGeneral();
-
-
-    //custom code
-    const worksheet = XLSX.utils.json_to_sheet(this.doctor_generals);
-
-    const workbook = {
-      Sheets:{
-        'testingSheet': worksheet
-      },
-      SheetNames:['testingSheet']
-    }
-
-    const excelBuffer = XLSX.write(workbook, {bookType:'xlsx', type: 'array'});
-
-    const blobData = new Blob([excelBuffer],{type: EXCEL_TYPE});
-
-    this.fileSaver.save(blobData, "doctors_db_appcitasmedicas",)
-
-  }
-  csvExport(){
-    const CSV_TYPE = 'text/csv';
-    const CSV_EXTENSION = '.csv';
-
-    this.getTableDataGeneral();
-
-    //custom code
-    const worksheet = XLSX.utils.json_to_sheet(this.doctor_generals);
-
-    const workbook = {
-      Sheets:{
-        'testingSheet': worksheet
-      },
-      SheetNames:['testingSheet']
-    }
-
-    const excelBuffer = XLSX.write(workbook, {bookType:'csv', type: 'array'});
-
-    const blobData = new Blob([excelBuffer],{type: CSV_TYPE});
-
-    this.fileSaver.save(blobData, "doctors_db_appcitasmedicas", CSV_EXTENSION)
-
-  }
-
-  txtExport(){
-    const TXT_TYPE = 'text/txt';
-    const TXT_EXTENSION = '.txt';
-
-    this.getTableDataGeneral();
-
-
-    //custom code
-    const worksheet = XLSX.utils.json_to_sheet(this.doctor_generals);
-
-    const workbook = {
-      Sheets:{
-        'testingSheet': worksheet
-      },
-      SheetNames:['testingSheet']
-    }
-
-    const excelBuffer = XLSX.write(workbook, {bookType:'xlsx', type: 'array'});
-
-    const blobData = new Blob([excelBuffer],{type: TXT_TYPE});
-
-    this.fileSaver.save(blobData, "doctors_db_appcitasmedicas", TXT_EXTENSION)
-
-  }
-
-  pdfExport(){
-    // var doc = new jspdf(); 
-    
-    // const worksheet = XLSX.utils.json_to_sheet(this.doctor_generals);
-
-    // const workbook = {
-    //   Sheets:{
-    //     'testingSheet': worksheet
-    //   },
-    //   SheetNames:['testingSheet']
-    // }
-
-    // doc.html(document.body, {
-    //   callback: function (doc) {
-    //     doc.save('doctors_db_appcitasmedicas.pdf');
-    //   }
-    // });
-
-  }
-
+ 
   cambiarStatus(data:any){
     const VALUE = data.status;
     console.log(VALUE);

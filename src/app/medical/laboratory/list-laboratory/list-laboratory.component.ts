@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { FileSaverService } from 'ngx-filesaver';
-import * as XLSX from 'xlsx';
-import { jsPDF } from 'jspdf';
 import { DoctorService } from '../../../services/doctor.service';
 import { AppointmentService } from '../../../services/appointment.service';
 import { LaboratoryService } from '../../../services/laboratory.service';
@@ -53,7 +50,6 @@ export class ListLaboratoryComponent {
     public appointmentService: AppointmentService,
     public doctorService: DoctorService,
     public laboratoryService: LaboratoryService,
-    private fileSaver: FileSaverService,
     public roleService: RolesService,
     ){
 
@@ -222,98 +218,7 @@ export class ListLaboratoryComponent {
     }
   }
 
-  excelExport(){
-    const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8';
-    const EXCLE_EXTENSION = '.xlsx';
-
-    this.getTableDataGeneral();
-
-
-    //custom code
-    const worksheet = XLSX.utils.json_to_sheet(this.appointmentList);
-
-    const workbook = {
-      Sheets:{
-        'testingSheet': worksheet
-      },
-      SheetNames:['testingSheet']
-    }
-
-    const excelBuffer = XLSX.write(workbook, {bookType:'xlsx', type: 'array'});
-
-    const blobData = new Blob([excelBuffer],{type: EXCEL_TYPE});
-
-    this.fileSaver.save(blobData, "citas_db_appcitasmedicas",)
-
-  }
-  csvExport(){
-    const CSV_TYPE = 'text/csv';
-    const CSV_EXTENSION = '.csv';
-
-    this.getTableDataGeneral();
-
-    //custom code
-    const worksheet = XLSX.utils.json_to_sheet(this.appointmentList);
-
-    const workbook = {
-      Sheets:{
-        'testingSheet': worksheet
-      },
-      SheetNames:['testingSheet']
-    }
-
-    const excelBuffer = XLSX.write(workbook, {bookType:'csv', type: 'array'});
-
-    const blobData = new Blob([excelBuffer],{type: CSV_TYPE});
-
-    this.fileSaver.save(blobData, "citas_db_appcitasmedicas", CSV_EXTENSION)
-
-  }
-
-  txtExport(){
-    const TXT_TYPE = 'text/txt';
-    const TXT_EXTENSION = '.txt';
-
-    this.getTableDataGeneral();
-
-
-    //custom code
-    const worksheet = XLSX.utils.json_to_sheet(this.appointmentList);
-
-    const workbook = {
-      Sheets:{
-        'testingSheet': worksheet
-      },
-      SheetNames:['testingSheet']
-    }
-
-    const excelBuffer = XLSX.write(workbook, {bookType:'xlsx', type: 'array'});
-
-    const blobData = new Blob([excelBuffer],{type: TXT_TYPE});
-
-    this.fileSaver.save(blobData, "citas_db_appcitasmedicas", TXT_EXTENSION)
-
-  }
-
-  pdfExport(){
-    // var doc = new jspdf(); 
-    
-    // const worksheet = XLSX.utils.json_to_sheet(this.staff_generals);
-
-    // const workbook = {
-    //   Sheets:{
-    //     'testingSheet': worksheet
-    //   },
-    //   SheetNames:['testingSheet']
-    // }
-
-    // doc.html(document.body, {
-    //   callback: function (doc) {
-    //     doc.save('staffs_db_appcitasmedicas.pdf');
-    //   }
-    // });
-
-  }
+ 
 
   cambiarStatus(data:any){
     const VALUE = data.confimation;

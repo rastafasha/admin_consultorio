@@ -32,6 +32,7 @@ export class SpecialitieNComponent implements OnInit {
   ) {
     this.specialitieForm = this.fb.group({
       name: ['', Validators.required],
+      price: ['', Validators.required],
       state: [1, Validators.required]
     });
   }
@@ -54,6 +55,7 @@ export class SpecialitieNComponent implements OnInit {
       this.specialitie_selected = resp;
       this.specialitieForm.patchValue({
         name: this.specialitie_selected.name,
+        price: this.specialitie_selected.price,
         state: this.specialitie_selected.state
       });
       this.isLoading = false;

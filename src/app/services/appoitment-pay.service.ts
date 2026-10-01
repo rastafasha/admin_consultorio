@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { url_servicios } from '../config/config';
-import { AuthService } from '../shared/auth/auth.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,32 +20,24 @@ export class AppoitmentPayService {
     return this.http.get(URL, {headers:headers});
   }
 
-  listAppointmentPays(page=1, 
-                      search_doctor='', 
-                      search_patient='', 
-                      speciality_id=0, 
-                      date_start= '',
-                      date_end= '',
-                      ){
-    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
-    let LINK = "";
-    if(search_doctor){
-      LINK+="&search_doctor="+search_doctor;
-    }
-    if(search_patient){
-      LINK+="&search_patient="+search_patient;
-    }
-    if(speciality_id){
-      LINK+="&speciality_id="+speciality_id;
-    }
-    if(date_start){
-      LINK+="&date_start="+date_start;
-    }
-    if(date_end){
-      LINK+="&date_end="+date_end;
-    }
-    const URL = url_servicios+'/appointmentpay?page='+page+LINK;
-    return this.http.get(URL, {headers:headers});
+  listAppointmentPays(page=1, search_doctor='', search_patient='', speciality_id=0, date_start='', date_end='', clinica_id=null) {
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.token});
+    
+    // 🏗️ SANEADO ENTERPRISE: Aseguramos el primer parámetro fijo
+    let LINK = `?page=${page}`;
+    
+    if(search_doctor)   LINK += "&search_doctor=" + search_doctor;
+    if(search_patient)  LINK += "&search_patient=" + search_patient;
+    if(speciality_id)   LINK += "&speciality_id=" + speciality_id;
+    if(date_start)      LINK += "&date_start=" + date_start;
+    if(date_end)        LINK += "&date_end=" + date_end;
+    if(clinica_id)      LINK += "&clinica_id=" + clinica_id; 
+
+    // 🚀 UNIFICACIÓN CRÍTICA: Cambiado '/appointment/pay' por '/appointmentpay/'
+    const URL = url_servicios + '/appointmentpay/' + LINK;
+    console.log("📡 [Caja API] Disparando URL unificada:", URL);
+    
+    return this.http.get(URL, { headers: headers });
   }
 
   listAppointmentPaysByDoctor(

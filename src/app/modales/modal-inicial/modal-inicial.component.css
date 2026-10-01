@@ -1,3 +1,55 @@
+/* 🚀 ANTÍDOTO ATÓMICO: Evita la acumulación de opacidad en el fondo */
+.modal-backdrop.show {
+    opacity: 0.5 !important; /* Mantiene el fondo oscuro estándar de Bootstrap */
+}
+
+/* =========================================================================
+   🚀 CALIBRACIÓN ATÓMICA DE CAPAS PARA EL MODAL INICIAL
+   ========================================================================= */
+
+/* 1. La capa raíz será una ventana invisible que permite hacer clics */
+#modalInicial {
+    background-color: transparent !important; /* QUITAMOS el color gris de aquí */
+    z-index: 1055 !important;                /* Nivel estándar de Bootstrap 5 superior */
+    pointer-events: none !important;          /* 🚀 CLAVE: Permite que los clics atraviesen las zonas vacías */
+}
+
+/* 2. Trasladamos el fondo translúcido controlado ÚNICAMENTE al diálogo */
+#modalInicial .modal-dialog {
+    pointer-events: auto !important;          /* 🚀 CLAVE: Devuelve la interactividad total a los botones y la tarjeta */
+    z-index: 1056 !important;
+    margin-top: 2% !important;               /* Lo baja un poco para centrarlo simétricamente */
+}
+
+/* 3. Forzamos al cuadro interno a ser 100% BLANCO SÓLIDO Y NÍTIDO */
+#modalInicial .modal-content {
+    background-color: #ffffff !important;     /* 🟢 Blanco puro sin heredar transparencias */
+    color: #212529 !important;
+    border-radius: 16px !important;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3) !important; /* Sombreado pronunciado para darle profundidad */
+    border: none !important;
+    opacity: 1 !important;                    /* Asegura la máxima nitidez */
+}
+
+/* 4. Blindaje estricto de fuentes para romper lavados de color */
+#modalInicial h2,
+#modalInicial h3,
+#modalInicial p,
+#modalInicial li,
+#modalInicial span {
+    color: #212529 !important;                /* Gris oscuro corporativo ultra legible */
+    opacity: 1 !important;
+    font-weight: 500;
+}
+
+/* 5. Apagamos por completo el backdrop automático de Bootstrap que congela la pantalla */
+.modal-backdrop {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
+
 h2{
     color: #b02b2b !important;
     text-align: center;

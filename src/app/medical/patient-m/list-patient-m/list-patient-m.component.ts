@@ -47,6 +47,16 @@ export class ListPatientMComponent {
   public doctor_id:any;
   public roles:any;
 
+  info_mis_pacientes_list = `
+  <p>En esta sección :</p>
+          <ul>
+            <li>Tedrás la lista completa de tus Pacientes</li>
+            <li>Con el botón + podras agregar a tu lista</li>
+            <li>Con iconos de Documentos podrás descargar en formato excel, texto y CSV esta lista para respaldo</li>
+            <li>Al Pulsar sobre el nombre del paciente podras ver la ficha médica e información adicional </li>
+            <li>Al final de la lista en cada paciente en el boton selector (3 puntos), podrás crear Recipe para ese paciente, editar y ver </li>
+          </ul>`;
+
   constructor(
     public patientService: PatientMService,
     public doctorService: DoctorService,
@@ -59,16 +69,45 @@ export class ListPatientMComponent {
   ngOnInit() {
     window.scrollTo(0, 0);
     this.doctorService.closeMenuSidebar();
-    this.getTableData();
-    const USER = localStorage.getItem("user");
-    this.user = JSON.parse(USER ? USER: '');
-    this.doctor_id = this.user.id;
+    
+    // 🚀 SANEADO SEGURO: Recuperamos el usuario activo del servicio centralizado
     this.user = this.roleService.authService.user;
-    this.roles = this.user.roles[0];
+    
+    if (this.user) {
+      this.doctor_id = this.user.id;
+      
+      // 🛡️ VALIDACIÓN POLIMÓRFICA: Evaluamos si el rol viene como objeto de Spatie o como string plano
+      if (this.user.roles && this.user.roles.length > 0) {
+        const primerRol = this.user.roles[0];
+        this.roles = typeof primerRol === 'object' ? primerRol.name : primerRol;
+      } else {
+        this.roles = 'RECEPCION'; // Valor de respaldo seguro para evitar la pantalla en blanco
+      }
+    } else {
+      // Plan de contingencia si el Auth no ha cargado en frío
+      const userLocal = localStorage.getItem("user");
+      if (userLocal) {
+        try {
+          const parsedUser = JSON.parse(userLocal);
+          this.user = parsedUser;
+          this.doctor_id = parsedUser?.id;
+          this.roles = parsedUser?.roles?.[0]?.name || parsedUser?.roles?.[0] || 'RECEPCION';
+        } catch (e) {
+          console.error("Error al parsear el usuario de respaldo:", e);
+        }
+      }
+    }
 
-    this.ativatedRoute.params.subscribe((resp:any)=>{
-      this.doctor_id = resp.doctor_id;
-     });
+    // Escuchamos parámetros de la ruta de forma segura
+    this.ativatedRoute.params.subscribe((resp: any) => {
+      if (resp && resp.doctor_id) {
+        this.doctor_id = resp.doctor_id;
+      }
+    });
+
+    // 📊 EJECUTAMOS LA CARGA DE LA GRILLA
+    
+    this.getTableData();
   }
 
   isPermission(permission:string){
@@ -84,6 +123,7 @@ export class ListPatientMComponent {
   private getTableData(page=1): void {
     this.patientList = [];
     this.serialNumberArray = [];
+    this.isLoading = true;
 
     this.patientService.listPatients(page, this.searchDataValue).subscribe((resp:any)=>{
       // console.log(resp);
@@ -94,6 +134,7 @@ export class ListPatientMComponent {
       // this.getTableDataGeneral();
       this.dataSource = new MatTableDataSource<any>(this.patientList);
       this.calculateTotalPages(this.totalDataPatient, this.pageSize);
+       this.isLoading = false;
     })
   }
 
@@ -202,7 +243,7 @@ export class ListPatientMComponent {
     this.limit = this.pageSize;
     this.skip = 0;
     this.currentPage = 1;
-    this.getTableData();
+    this.ngOnInit();
     this.searchDataValue = '';
   }
 

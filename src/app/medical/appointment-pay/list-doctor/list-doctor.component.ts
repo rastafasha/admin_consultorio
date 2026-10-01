@@ -6,7 +6,7 @@ import * as XLSX from 'xlsx';
 import { jsPDF } from 'jspdf';
 import { DoctorService } from '../../../services/doctor.service';
 import { ActivatedRoute } from '@angular/router';
-import { SettignService } from '../../../core/settings/settigs.service';
+import { SettignService } from '../../../services/settigs.service';
 import { routes } from '../../../shared/routes/routes';
 
 declare var $:any;

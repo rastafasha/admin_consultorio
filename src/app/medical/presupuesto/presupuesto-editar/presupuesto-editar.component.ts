@@ -11,9 +11,10 @@ import { AppointmentService } from '../../../services/appointment.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Patient } from '../../../models/patient.model';
 import { Doctor, Speciality } from '../../../models/presupuesto.model';
-import { AuthService } from '../../../shared/auth/auth.service';
 import { routes } from '../../../shared/routes/routes';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../../../services/auth.service';
+import { environment } from '../../../../environments/environment';
 declare let $: any;
 
 @Component({
@@ -40,6 +41,7 @@ export class PresupuestoEditarComponent {
   isediting = false;
   isdisabled = false;
   isdoctor = false;
+  cargando = false;
   name = '';
   surname = '';
   n_doc: number;
@@ -81,6 +83,12 @@ export class PresupuestoEditarComponent {
   specialities: Speciality[];
   DOCTOR_SELECTED: any;
   presupuestoSeleccionado: any;
+  // 🔒 CAPTURA EL FLAG INYECTADO POR VERCEL AL COMPILAR
+  public readonly isClinicMode = environment.IS_CLINIC_DEPLOYMENT;
+
+  // Variables para la gestión de Clínica Enterprise
+  public medicosFiltrados: any[] = [];
+  public doctor_id_selected: any = null;
 
   // dictado
   recognition: any;
@@ -436,6 +444,7 @@ export class PresupuestoEditarComponent {
     }
   }
 
+//dictado para telefonos con ios 18 o mas
 //    toggleDictado(event: any) {
 //   this.isListening = event.target.checked;
 
@@ -481,24 +490,79 @@ export class PresupuestoEditarComponent {
 
 
 
+  
+
+  getDoctor() {
+    this.isLoading = true;
+    this.doctorService.showDoctor(this.doctor_id).subscribe((resp: any) => {
+      this.DOCTOR_SELECTED = resp.user;
+      
+      // 🩺 MODO CONSULTORIO: Comportamiento original intacto
+      if (!this.isClinicMode) {
+        this.speciality_id = this.DOCTOR_SELECTED.speciality_id;
+        this.specialitiService.showSpeciality(this.speciality_id).subscribe((resp: any) => {
+          this.specialityName = resp.name;
+        });
+      }
+      this.isLoading = false;
+    });
+  }
   getSpecialities() {
     this.presupuestoService.listConfig().subscribe((resp: any) => {
       this.specialities = resp.specialities;
     })
   }
+/**
+   * 🏢 EVENTO ENTERPRISE: Al cambiar la especialidad en la clínica,
+   * filtra de inmediato los médicos asignados a esa área.
+   */
+  onSpecialityChange(specialityId: any): void {
+    // 1. Sanificamos forzadamente el ID a número entero
+    this.speciality_id = specialityId ? Number(specialityId) : null;
+    this.medicosFiltrados = [];
+    this.doctor_id_selected = null; // Limpiamos selección previa del médico
 
-  getDoctor() {
-    this.isLoading = true
-    this.doctorService.showDoctor(this.doctor_id).subscribe((resp: any) => {
-      this.DOCTOR_SELECTED = resp.user;
-      this.speciality_id = this.DOCTOR_SELECTED.speciality_id;
+    if (!this.speciality_id) {
+      this.cdr.detectChanges();
+      return;
+    }
 
-      this.speciality_id = this.DOCTOR_SELECTED.speciality_id;
-      this.specialitiService.showSpeciality(this.speciality_id).subscribe((resp: any) => {
-        this.specialityName = resp.name
-      })
-      this.isLoading = false
-    })
+    // 2. Buscamos la especialidad en el pool cargado de Laravel
+    const spec = this.specialities.find((s: any) => Number(s.id) === this.speciality_id);
+    
+    if (spec) {
+      // Jalamos la relación de tu modelo 'active_doctors'
+      const rawDoctors = spec.active_doctors;
+
+      if (rawDoctors) {
+        // 🚀 TRATAMIENTO ADAPTATIVO ENTERPRISE:
+        // Si Laravel envía un Objeto Asociativo indexado por IDs de MySQL (ej: {"3":{"id":3,"name":"Jhon"}}),
+        // Object.values() extrae únicamente las fichas de los médicos y arma un Array [ {id:3, name:"Jhon"} ]
+        if (typeof rawDoctors === 'object' && !Array.isArray(rawDoctors)) {
+          this.medicosFiltrados = Object.values(rawDoctors);
+        } else if (Array.isArray(rawDoctors)) {
+          this.medicosFiltrados = rawDoctors;
+        }
+        
+        // Saneamos que no viajen registros nulos o inconsistentes de MAMP
+        this.medicosFiltrados = this.medicosFiltrados.filter((m: any) => m && m.id);
+      }
+    }
+
+    // 3. Forzamos a Angular a enterarse del cambio de datos para repintar el select del médico
+    this.cdr.detectChanges();
+    
+    console.log('🏢 [Modo Clínica] ID Especialidad Sincronizada:', this.speciality_id);
+    console.log('👥 [Modo Clínica] Array de Médicos Iterable:', this.medicosFiltrados);
+  }
+
+  /**
+   * 🏢 EVENTO ENTERPRISE: Captura el cambio del médico especialista asignado
+   */
+  onDoctorChange(doctorId: any): void {
+    this.doctor_id_selected = doctorId ? Number(doctorId) : null;
+    this.cdr.detectChanges(); // Forzamos repintado en caliente
+    console.log('🏢 [Modo Clínica] Médico Seleccionado:', this.doctor_id_selected);
   }
 
   filterPatient() {
@@ -572,8 +636,38 @@ export class PresupuestoEditarComponent {
 
 
   save() {
-    const data = {
+    // 🚀 ASIGNACIÓN DINÁMICA: Determinamos qué doctor y especialidad viajan según el despliegue
+    let idEspecialidadFinal = this.speciality_id;
+    
+    // Fallback inteligente: Si doctor_id_selected es null, busca si el perfil editado ya tenía un médico
+    let idDoctorFinal = this.isClinicMode 
+      ? (this.doctor_id_selected || this.presupuesto_selected?.doctor_id || this.doctor_id) 
+      : this.DOCTOR_SELECTED?.id;
 
+    // Si sigue en Modo Clínica pero vino vacío, hacemos un último intento extrayendo el valor del DOM
+    if (this.isClinicMode && (!idDoctorFinal || !idEspecialidadFinal)) {
+      console.warn('⚠️ Alerta: Las variables TS están vacías. Ejecutando extracción forzada de respaldo.');
+      
+      // Intentamos capturar el ID de respaldo si es que estamos re-editando un presupuesto existente
+      if (this.presupuesto_selected) {
+        idEspecialidadFinal = idEspecialidadFinal || this.presupuesto_selected.speciality_id;
+        idDoctorFinal = idDoctorFinal || this.presupuesto_selected.doctor_id;
+      }
+    }
+
+    // 🔒 CONTROL MULTI-TENANT: Validación final antes del payload
+    if (this.isClinicMode && (!idDoctorFinal || !idEspecialidadFinal)) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Campos Incompletos',
+        text: 'Debe seleccionar una especialidad y asignar un médico especialista para procesar el presupuesto clínico.',
+        confirmButtonColor: '#7c3aed' // Color morado corporativo Klyntic
+      });
+      this.cargando = false;
+      return;
+    }
+
+    const data = {
       medical: this.medical,
       amount: this.amount,
       description: this.description,
@@ -586,75 +680,38 @@ export class PresupuestoEditarComponent {
       surname: this.surname,
       phone: this.phone,
 
-      speciality_id: this.DOCTOR_SELECTED.speciality_id,
-      presupuesto_id: this.presupuesto_id,
-      doctor_id: this.DOCTOR_SELECTED.id,
+      // Inyección de variables relacionales unificadas
+      speciality_id: Number(idEspecialidadFinal),
+      doctor_id: Number(idDoctorFinal),
+      presupuesto_id: this.presupuesto_id
+    };
 
-      // ...this.atentionForm.value,
-
-
-    }
-
-
+    console.log('📦 [Presupuesto Save] Enviando payload unificado a Laravel:', data);
 
     if (this.presupuesto_id) {
       this.presupuestoService.editPresupuesto(data, this.presupuesto_id).subscribe((resp: any) => {
-        console.log(data);
-        if (resp.message == 403) {
-          this.text_validation = resp.message_text;
-          Swal.fire({
-            position: "top-end",
-            icon: "warning",
-            title: this.text_validation,
-            showConfirmButton: false,
-            timer: 1500
-          });
-        } else {
-          this.text_success = 'Se guardó la informacion del Laboratorio con la cita'
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: this.text_success,
-            showConfirmButton: false,
-            timer: 1500
-          });
-          if (this.user.roles[0] === 'DOCTOR') {
-            this.router.navigate(['/presupuesto/list/doctor']);
-          } else {
-
-            this.router.navigate(['/presupuesto/list']);
-          }
-        }
-      })
+        this.procesarRespuestaServidor(resp);
+      });
     } else {
-      console.log('Creating new presupuesto with data:', data);
       this.presupuestoService.createPresupuesto(data).subscribe((resp: any) => {
-        if (resp.message == 403) {
-          this.text_validation = resp.message_text;
-          Swal.fire({
-            position: "top-end",
-            icon: "warning",
-            title: this.text_validation,
-            showConfirmButton: false,
-            timer: 1500
-          });
-        } else {
-          this.text_success = 'Se guardó la informacion del Laboratorio con la cita'
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: this.text_success,
-            showConfirmButton: false,
-            timer: 1500
-          });
-          if (this.user.roles[0] === 'DOCTOR') {
-            this.router.navigate(['/presupuesto/list/doctor']);
-          } else {
+        this.procesarRespuestaServidor(resp);
+      });
+    }
+  }
 
-            this.router.navigate(['/presupuesto/list']);
-          }
-        }
-      })
+  private procesarRespuestaServidor(resp: any) {
+    if (resp.message == 403) {
+      this.text_validation = resp.message_text;
+      Swal.fire({ position: "top-end", icon: "warning", title: this.text_validation, showConfirmButton: false, timer: 1500 });
+    } else {
+      this.text_success = 'El presupuesto ha sido procesado de manera exitosa.';
+      Swal.fire({ position: "top-end", icon: "success", title: this.text_success, showConfirmButton: false, timer: 1500 });
+      
+      if (this.user.roles[0] === 'DOCTOR') {
+        this.router.navigate(['/presupuesto/list/doctor']);
+      } else {
+        this.router.navigate(['/presupuesto/list']);
+      }
     }
   }
 }

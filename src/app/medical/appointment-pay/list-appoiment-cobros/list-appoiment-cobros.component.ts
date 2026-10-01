@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
-import * as XLSX from 'xlsx';
 import { MatTableDataSource } from '@angular/material/table';
-import { FileSaverService } from 'ngx-filesaver';
 import { DoctorService } from '../../../services/doctor.service';
 import { PaymentService } from '../../../services/payment.service';
 import { ActivatedRoute } from '@angular/router';
@@ -45,13 +43,22 @@ export class ListAppoimentCobrosComponent {
   public patient_selected:any;
   public user:any;
   public doctor_id:any;
+  public isLoading = false;
   pagoSeleccionado:Payment
+
+  info_trasnferencias = `
+  <p>En esta sección :</p>
+          <ul>
+            <li>Lista de Transferencias Recibidas</li>
+            <li>Filtrar por número de referencia</li>
+            <li>Una vez confirmado con tu Banco, podrás Cambiar el Estado del pago</li>
+            <li>Una vez este confirmado el pago, recomendamos que accedas a Pagos Recienes para ver tus avances finacieros</li>
+          </ul>`;
 
   constructor(
     public paymentService: PaymentService,
     public doctorService: DoctorService,
     public ativatedRoute: ActivatedRoute,
-    private fileSaver: FileSaverService
     ){
 
   }
@@ -92,7 +99,7 @@ export class ListAppoimentCobrosComponent {
   private getTableData(page=1): void {
     this.paymentList = [];
     this.serialNumberArray = [];
-
+    this.isLoading = true;
     this.paymentService.getAll(page, this.searchReferencia).subscribe((resp:any)=>{
       // console.log(resp.payments.data);
       this.paymentList = resp.payments.data;
@@ -103,6 +110,7 @@ export class ListAppoimentCobrosComponent {
       this.getTableDataGeneral();
       this.dataSource = new MatTableDataSource<any>(this.paymentList);
       this.calculateTotalPages(this.totalDataPayment, this.pageSize);
+      this.isLoading = false;
     })
   }
 
@@ -204,121 +212,13 @@ export class ListAppoimentCobrosComponent {
   }
 
 
-  excelExport(){
-    const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8';
-    const EXCLE_EXTENSION = '.xlsx';
-
-    this.getTableDataGeneral();
-
-
-    //custom code
-    const worksheet = XLSX.utils.json_to_sheet(this.paymentList);
-
-    const workbook = {
-      Sheets:{
-        'testingSheet': worksheet
-      },
-      SheetNames:['testingSheet']
-    }
-
-    const excelBuffer = XLSX.write(workbook, {bookType:'xlsx', type: 'array'});
-
-    const blobData = new Blob([excelBuffer],{type: EXCEL_TYPE});
-
-    this.fileSaver.save(blobData, "transferencias_db_appcitasmedicas",)
-
-  }
-  csvExport(){
-    const CSV_TYPE = 'text/csv';
-    const CSV_EXTENSION = '.csv';
-
-    this.getTableDataGeneral();
-
-    //custom code
-    const worksheet = XLSX.utils.json_to_sheet(this.paymentList);
-
-    const workbook = {
-      Sheets:{
-        'testingSheet': worksheet
-      },
-      SheetNames:['testingSheet']
-    }
-
-    const excelBuffer = XLSX.write(workbook, {bookType:'csv', type: 'array'});
-
-    const blobData = new Blob([excelBuffer],{type: CSV_TYPE});
-
-    this.fileSaver.save(blobData, "transferencias_db_appcitasmedicas", CSV_EXTENSION)
-
-  }
-
-  txtExport(){
-    const TXT_TYPE = 'text/txt';
-    const TXT_EXTENSION = '.txt';
-
-    this.getTableDataGeneral();
-
-
-    //custom code
-    const worksheet = XLSX.utils.json_to_sheet(this.paymentList);
-
-    const workbook = {
-      Sheets:{
-        'testingSheet': worksheet
-      },
-      SheetNames:['testingSheet']
-    }
-
-    const excelBuffer = XLSX.write(workbook, {bookType:'xlsx', type: 'array'});
-
-    const blobData = new Blob([excelBuffer],{type: TXT_TYPE});
-
-    this.fileSaver.save(blobData, "transferencias_db_appcitasmedicas", TXT_EXTENSION)
-
-  }
-
-  pdfExport(){
-    // var doc = new jspdf(); 
-    
-    // const worksheet = XLSX.utils.json_to_sheet(this.patientList);
-
-    // const workbook = {
-    //   Sheets:{
-    //     'testingSheet': worksheet
-    //   },
-    //   SheetNames:['testingSheet']
-    // }
-
-    // doc.html(document.body, {
-    //   callback: function (doc) {
-    //     doc.save('patients_db_appcitasmedicas.pdf');
-    //   }
-    // });
-
-  }
-
-  // cambiarStatus(data:any){
-  //   const VALUE = data.status;
-  //   console.log(VALUE);
-    
-  //   this.paymentService.updateStatus(data, data.id).subscribe(
-  //     resp =>{
-  //       console.log(resp);
-  //       // Swal.fire('Actualizado', `actualizado correctamente`, 'success');
-  //       // this.toaster.open({
-  //       //   text:'Producto Actualizado!',
-  //       //   caption:'Mensaje de Validación',
-  //       //   type:'success',
-  //       // })
-  //       this.getTableData();
-  //     }
-  //   )
-  // }
+ 
 
    cambiarStatus(data: any) {
       const nuevoEstado = data.status;
       const monto = data.monto; // Extraemos de una vez
       const appointment_id = data.appointment_id;
+      const metodo = data.metodo;
       const id = data.id;
   
       // 1. Caso: RECHAZADO (Pide motivo)
@@ -337,7 +237,7 @@ export class ListAppoimentCobrosComponent {
           }
         }).then((result) => {
           if (result.isConfirmed) {
-            this.ejecutarUpdateStatus(id, nuevoEstado, monto, appointment_id, result.value);
+            this.ejecutarUpdateStatus(id, nuevoEstado, monto, appointment_id, metodo, result.value);
           } else {
             this.getTableData(); // Revierte el select si cancela
           }
@@ -355,7 +255,7 @@ export class ListAppoimentCobrosComponent {
           cancelButtonText: 'No, revisar'
         }).then((result) => {
           if (result.isConfirmed) {
-            this.ejecutarUpdateStatus(id, nuevoEstado, monto, appointment_id);
+            this.ejecutarUpdateStatus(id, nuevoEstado, monto, appointment_id, metodo);
           } else {
             this.getTableData(); // Revierte el select si se arrepiente
           }
@@ -363,7 +263,7 @@ export class ListAppoimentCobrosComponent {
   
       } else {
         // 3. Caso: PENDIENTE (Cambio directo)
-        this.ejecutarUpdateStatus(id, nuevoEstado, monto, appointment_id);
+        this.ejecutarUpdateStatus(id, nuevoEstado, monto, appointment_id, metodo);
       }
   }
   
@@ -372,6 +272,7 @@ export class ListAppoimentCobrosComponent {
   private ejecutarUpdateStatus(id: number, nuevoEstado: string, 
     monto: any,          // <--- Nuevo parámetro
     appointment_id: any,
+    metodo: any,
     // eslint-disable-next-line @typescript-eslint/no-inferrable-types
     motivo_rechazo: string = '',
   ) {
@@ -381,6 +282,7 @@ export class ListAppoimentCobrosComponent {
         motivo_rechazo: motivo_rechazo,
          monto: monto,            // <--- Usa el parámetro
          amount: monto,            // <--- Usa el parámetro
+         metodo: metodo,           
         appointment_id: appointment_id 
       };
   

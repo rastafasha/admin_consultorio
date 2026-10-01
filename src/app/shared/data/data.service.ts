@@ -194,7 +194,7 @@ export class DataService {
               show_nav: true,
             },
             {
-              menuValue: 'Listado superamdin',
+              menuValue: 'Lista pacientes',
               route: routes.patientsList,
               base: routes.patientsList,
               permision: 'list_patient',
@@ -239,14 +239,14 @@ export class DataService {
               show_nav: true,
             },
             {
-              menuValue: 'Listado (S)',
+              menuValue: 'Listado',
               route: routes.appointmentList,
               base: routes.appointmentList,
               permision: 'list_appointment',
               show_nav: true,
             },
             {
-              menuValue: 'Listado',
+              menuValue: 'Listado Doctor',
               route: routes.appointmentListDoct,
               base: routes.appointmentListDoct,
               permision: 'list_appointment_doctor',
@@ -382,18 +382,18 @@ export class DataService {
           ],
         },
         // Calendario
-        {
-          menuValue: 'Calendario',
-          route: routes.calendar,
-          hasSubRoute: false,
-          showSubRoute: false,
-          icon: 'fa-calendar',
-          faIcon: true,
-          base: 'calendar',
-          permision: 'calendar',
-          show_nav: true,
-          subMenus: [],
-        },
+        // {
+        //   menuValue: 'Calendario',
+        //   route: routes.calendar,
+        //   hasSubRoute: false,
+        //   showSubRoute: false,
+        //   icon: 'fa-calendar',
+        //   faIcon: true,
+        //   base: 'calendar',
+        //   permision: 'calendar',
+        //   show_nav: true,
+        //   subMenus: [],
+        // },
         // Tasa BCV
         {
           menuValue: 'Tasa Moneda',
@@ -632,6 +632,18 @@ export class DataService {
           img: 'assets/img/icons/menu-icon-16.svg',
           permision: 'list_presupuesto_doctor',
           show_nav: true,
+          subMenus: [
+          ],
+        },
+        {
+          menuValue: 'Notificaciones',
+          route: routes.notificaciones,
+          base: routes.notificaciones,
+          hasSubRoute: false,
+          showSubRoute: false,
+          img: 'assets/img/icons/menu-icon-16.svg',
+          permision: 'view_notification',
+          show_nav: false,
           subMenus: [
           ],
         },

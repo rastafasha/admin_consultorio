@@ -14,12 +14,13 @@ import { TasabcveuroEditComponent } from './tasabcveuro-edit/tasabcveuro-edit.co
 import { TasapersonalizadaEditComponent } from './tasapersonalizada-edit/tasapersonalizada-edit.component';
 
 
-
-@NgModule({ declarations: [
+@NgModule({ 
+    declarations: [
         TasabcvComponent,
         TasabcvEditComponent,
         TasabcveuroEditComponent,
-        TasapersonalizadaEditComponent
+        TasapersonalizadaEditComponent,
+        
     ], imports: [
         CommonModule,
         TasabcvRoutingModule,

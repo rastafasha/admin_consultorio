@@ -89,6 +89,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('./medical/tasabcv/tasabcv.module').then((m) => m.TasabcvModule),
   },
+  {
+    path: 'notificaciones',
+    loadChildren: () =>
+      import('./medical/notificaciones/notificaciones.module').then((m) => m.NotificacionesModule),
+  },
   
   {
     path: 'error',

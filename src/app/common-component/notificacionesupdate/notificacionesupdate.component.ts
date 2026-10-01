@@ -4,12 +4,12 @@ import { AppointmentService } from "../../services/appointment.service";
 import { PaymentService } from "../../services/payment.service";
 import { RolesService } from "../../services/roles.service";
 import { StaffService } from "../../services/staff.service";
-import { AuthService } from "../../shared/auth/auth.service";
 import { Observable, Subscription } from "rxjs";
 import { NotificacionService } from "../../services/notificacion.service";
 import { ToastrService } from "ngx-toastr";
 import { PushNotificationService } from "../../services/push-notification.service";
 import { ConnectionService } from "../../services/connection.service";
+import { AuthService } from "../../services/auth.service";
 
 @Component({
   selector: "app-notificacionesupdate",
@@ -42,6 +42,8 @@ export class NotificacionesupdateComponent implements OnInit, OnDestroy {
   public IMAGE_PREVISUALIZA = 'assets/img/user-06.jpg';
   public unreadCount$!: Observable<number>;
 
+  public openBox: boolean = false;
+
   constructor(
     private appointmentService: AppointmentService,
     public paymentService: PaymentService,
@@ -58,52 +60,60 @@ export class NotificacionesupdateComponent implements OnInit, OnDestroy {
     const userString = localStorage.getItem('user');
     const userObj = userString ? JSON.parse(userString) : null;
 
-    // Escucha activa del estado del WiFi de la clínica [15]
+    // Escucha activa del estado del WiFi de la clínica
     this.networkSub = this.connectionService.checkStatus().subscribe(status => {
       this.isOnline = status;
     });
 
-    // 🚀 LÍNEA INYECTADA: Enlazamos el conteo del globo directamente con el BehaviorSubject del servicio
+    // Enlazamos el conteo del globo directamente con el BehaviorSubject del servicio
     this.unreadCount$ = this.notifService.unreadCount$;
 
     if (userObj && userObj.id) {
       const uid = userObj.id.toString();
-      this.notifService.cargarContadorInicial(uid); // [15]
+      this.notifService.cargarContadorInicial(uid); 
 
-      if (Notification.permission === 'granted') { // [15]
-        this.pushService.isSubscribed$.next(true); // [15]
+      if (Notification.permission === 'granted') { 
+        this.pushService.isSubscribed$.next(true); 
       } else {
-        this.pushService.isSubscribed$.next(false); // [15]
+        this.pushService.isSubscribed$.next(false); 
       }
     }
 
-    this.userSubscription = this.authService.currentUser$.subscribe((user) => { // [15]
-      this.user = user; // [15]
-      this.roles = user?.roles ? (Array.isArray(user.roles) ? user.roles.map(r => r.name || r).flat() : [user.roles.name || user.roles]) : []; // [15]
-      if (user) { // [15]
-        this.getUserRemoto(); // [15]
+    this.userSubscription = this.authService.currentUser$.subscribe((user) => { 
+      this.user = user; 
+      this.roles = user?.roles ? (Array.isArray(user.roles) ? user.roles.map(r => r.name || r).flat() : [user.roles.name || user.roles]) : []; 
+      if (user) { 
+        this.getUserRemoto(); 
+        
+        // 🚀 ADOPCIÓN DE LA FUNCIÓN HUÉRFANA: La llamamos de forma proactiva una vez que el usuario está autenticado
+        this.loadNotifications();
       }
     });
   }
 
-
-
-  ngOnDestroy(): void {
-    if (this.networkSub) {
-      this.networkSub.unsubscribe();
-    }
-    if (this.userSubscription) {
-      this.userSubscription.unsubscribe();
+  /**
+   * Dispara el toggle de apertura y gestiona las clases del layout central
+   */
+  public openBoxFunc(): void {
+    this.openBox = !this.openBox;
+    
+    const mainWrapper = document.getElementsByClassName('main-wrapper')[0];
+    if (mainWrapper) {
+      if (this.openBox) {
+        mainWrapper.classList.add('open-msg-box');
+      } else {
+        mainWrapper.classList.remove('open-msg-box');
+      }
     }
   }
 
-  /**
-   * 🔥 NUEVO: Esta función controla el comportamiento del switch en tu HTML
-   */
+  ngOnDestroy(): void {
+    if (this.networkSub) this.networkSub.unsubscribe();
+    if (this.userSubscription) this.userSubscription.unsubscribe();
+  }
+
   onSwitchChange(event: any): void {
     const nuevoEstado = event.target.checked;
-
-    // Validamos que tengamos el ID del usuario antes de enviar la petición
     const userString = localStorage.getItem('user');
     const userObj = userString ? JSON.parse(userString) : null;
     const userId = userObj ? userObj.id : null;
@@ -119,23 +129,38 @@ export class NotificacionesupdateComponent implements OnInit, OnDestroy {
         this.toastr.success('Preferencias de notificación actualizadas.');
       },
       error: (err) => {
-        // 🛑 CONTROL DE ERROR 500: Si el servidor falla, el interruptor vuelve a su estado anterior en la UI
         event.target.checked = !nuevoEstado;
         this.notifService.isSubscribed$.next(!nuevoEstado);
-
         this.toastr.error('Ocurrió un error en el servidor (500). Inténtalo de nuevo.', 'Error del Sistema');
         console.error('Detalle técnico del error 500:', err);
       }
     });
   }
 
+  /**
+   * 🚀 DISCRIMINACIÓN INTELIGENTE DE CARGA AUTOMÁTICA
+   * Trae los datos de backend segmentando por los permisos reales del usuario
+   */
   private loadNotifications(): void {
+    if (!this.user?.id) return;
+
     setTimeout(() => {
-      this.getAppointmentRecientes();
-      this.getAppointmentRecientesbyDoctor();
-      this.getTrastransferenciasRecientesByDoctor();
-      this.getTrastransferenciasRecientes();
-    }, 3000);
+      const userString = localStorage.getItem('user');
+      const userObj = userString ? JSON.parse(userString) : null;
+      
+      // Verificamos si el rol en sesión es un Especialista
+      const esMedico = userObj && (userObj.doctor_id || userObj.role === 'MEDICO' || userObj.role === 'DOCTOR');
+
+      if (esMedico) {
+        console.log('🩺 [LOAD] Cargando sábanas contables exclusivas del MÉDICO ID:', this.user.id);
+        this.getAppointmentRecientesbyDoctor();
+        this.getTrastransferenciasRecientesByDoctor();
+      } else {
+        console.log('🏢 [LOAD] Cargando grillas globales para PERSONAL DE RECEPCIÓN / ADMIN');
+        this.getAppointmentRecientes();
+        this.getTrastransferenciasRecientes();
+      }
+    }, 2500); // 2.5 segundos de respiro para no ahogar la carga inicial del login
   }
 
   getUserRemoto(): void {
@@ -146,65 +171,51 @@ export class NotificacionesupdateComponent implements OnInit, OnDestroy {
   }
 
   getAppointmentRecientesbyDoctor() {
-    this.appointmentService.pendingsbyDoctor(this.user.id).subscribe(
-      (response: any) => {
-        this.appointments_doctors = response.appointments.data;
-        this.total = response.total;
+    this.appointmentService.pendingsbyDoctor(this.user.id).subscribe({
+      next: (response: any) => {
+        this.appointments_doctors = response.appointments?.data || [];
+        this.total = response.total || 0;
       },
-      (error) => {
-        console.log(error);
-      }
-    );
+      error: (err) => console.log('Error appointments doctor:', err)
+    });
   }
 
   getAppointmentRecientes() {
-    this.appointmentService.pendings().subscribe(
-      (response: any) => {
-        this.appointments = response.appointments.data;
-        this.total = response.total;
-        this.totalTApp = response.total;
+    this.appointmentService.pendings().subscribe({
+      next: (response: any) => {
+        this.appointments = response.appointments?.data || [];
+        this.total = response.total || 0;
+        this.totalTApp = response.total || 0;
       },
-      (error) => {
-        console.log(error);
-      }
-    );
+      error: (err) => console.log('Error appointments globales:', err)
+    });
   }
 
   getTrastransferenciasRecientesByDoctor() {
-    this.paymentService.pendingsbyDoctor(this.user.id).subscribe(
-      (response: any) => {
-        this.payments_doctors = response.payments.data;
-        this.totalT = response.total;
+    this.paymentService.pendingsbyDoctor(this.user.id).subscribe({
+      next: (response: any) => {
+        this.payments_doctors = response.payments?.data || [];
+        this.totalT = response.total || 0;
       },
-      (error) => {
-        console.log(error);
-      }
-    );
+      error: (err) => console.log('Error pagos doctor:', err)
+    });
   }
 
   getTrastransferenciasRecientes() {
-    this.paymentService.pendings().subscribe(
-      (response: any) => {
-        this.payments = response.payments.data;
-        this.totalTTr = response.total;
+    this.paymentService.pendings().subscribe({
+      next: (response: any) => {
+        this.payments = response.payments?.data || [];
+        this.totalTTr = response.total || 0;
       },
-      (error) => {
-        console.log(error);
-      }
-    );
+      error: (err) => console.log('Error pagos globales:', err)
+    });
   }
 
-  onLogout() {
-    this.authService.logout();
-  }
+  onLogout() { this.authService.logout(); }
 
   isPermission(permission: string) {
-    if (this.user.roles.includes("SUPERADMIN")) {
-      return true;
-    }
-    if (this.user.permissions.includes(permission)) {
-      return true;
-    }
+    if (this.user?.roles?.includes("SUPERADMIN")) return true;
+    if (this.user?.permissions?.includes(permission)) return true;
     return false;
   }
 
@@ -228,18 +239,29 @@ export class NotificacionesupdateComponent implements OnInit, OnDestroy {
     }
   }
 
-  clearPayments(): void {
-    this.payments_doctors = [];
-    this.totalT = 0;
+  clearPayments(): void { this.payments_doctors = []; this.totalT = 0; }
+  clearAppointments(): void { this.appointments_doctors = []; this.total = 0; }
+  markAllAsRead(): void { this.clearPayments(); this.clearAppointments(); }
+
+  /**
+   * 🎯 NAVEGACIÓN INTELIGENTE CON DISCRIMINACIÓN DE PERMISOS
+   * Consume el ruteador adaptivo del servicio para mandar a cada rol a su URL legítima
+   */
+    atenderNotificacion(n: any) {
+    this.notifService.marcarUnaComoLeida(n._id).subscribe(() => {
+      
+      // 🟢 CONDICIÓN DIRECTA EN EL TS: Rápido y sin rebuscamientos
+      const userString = localStorage.getItem('user');
+      const userObj = userString ? JSON.parse(userString) : null;
+      const esMedico = userObj && (userObj.doctor_id || userObj.role === 'DOCTOR');
+
+      // Llamamos directo a la función del servicio que corresponda
+      const ruta = esMedico 
+        ? (this.notifService as any).determinarRutaMedico(n.tipo, n.referenciaId)
+        : (this.notifService as any).determinarRutaAdmin(n.tipo, n.referenciaId);
+
+      this.notifService.router.navigate([ruta]);
+    });
   }
 
-  clearAppointments(): void {
-    this.appointments_doctors = [];
-    this.total = 0;
-  }
-
-  markAllAsRead(): void {
-    this.clearPayments();
-    this.clearAppointments();
-  }
 }

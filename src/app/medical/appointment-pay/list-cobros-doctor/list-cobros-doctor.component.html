@@ -29,7 +29,9 @@
 
                   </div>
                 </div>
-                <app-export-lists></app-export-lists>
+                <app-export-lists [dataToExport]="paymentList" filenamePrefix="listado_pagos_doctor"
+                    exportPermission="list_appointments">
+                  </app-export-lists>
               </div>
             </div>
             <!-- /Table Header -->

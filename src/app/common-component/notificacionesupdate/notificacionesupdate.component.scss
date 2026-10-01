@@ -1,9 +1,54 @@
+/* 🟢 ACOPLAMIENTOS PARA NOTIFICACIONES VIVAS */
+.unread-ticket-bg {
+    background-color: #fdfcff !important;
+    border-left: 3px solid #7c3aed !important;
+}
+
+.bg-purple-light {
+    background-color: #f3e8ff;
+
+    .text-purple {
+        color: #7c3aed;
+    }
+}
+
+.bg-success-light {
+    background-color: #dcfce7;
+}
+
+.bg-info-light {
+    background-color: #e0f2fe;
+}
+
+.live-unread-dot {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 6px;
+    height: 6px;
+    background-color: #ef4444;
+    border-radius: 50%;
+}
+
+.uppercase-role {
+    text-transform: uppercase;
+}
+
+.notifications {
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f1f5f9;
+}
+
+
 .notifications .drop-scroll {
     height: auto;
-    width: 400px; /* Se mantiene en computadoras */
+    width: 400px;
+    /* Se mantiene en computadoras */
 
     // 🚀 MEJORA RESPONSIVA CRÍTICA:
-    max-width: 320px; /* Evita que en celulares sea más grande que la pantalla */
+    max-width: 320px;
+    /* Evita que en celulares sea más grande que la pantalla */
     box-sizing: border-box;
 }
 
@@ -11,25 +56,95 @@
     display: block;
 }
 
+.brbnotificacion {
+    font-size: 0.65rem !important;
+    min-width: 16px;
+    height: 16px;
+    padding: 2px 4px;
+    z-index: 5;
+    top: 13px !important;
+    left: 20px !important;
+    position: absolute !important;
+    border: 1px white solid;
+
+    // position-absolute top-30 start-100 translate-middle border border-white
+}
+
+.campana {
+    position: relative;
+    padding: 10px;
+}
+
+.user-names {
+    display: block;
+}
+
 /* =========================================================================
    📱 AJUSTE PARA PANTALLAS DE CELULARES (Hasta 480px de ancho)
    ========================================================================= */
 @media (max-width: 480px) {
-    /* Forzamos al contenedor principal del dropdown a posicionarse correctamente */
-    .notifications.dropdown-menu {
-        position: absolute !important;
-        left: auto !important;
-        right: 0 !important; /* Lo pega al borde derecho de la pantalla del celular */
-        width: 320px !important;
-        transform: translate3d(0px, 45px, 0px) !important; /* Ajusta la altura de caída del menú */
+
+    /* Forzamos al contenedor de la campana a ser el ancla real */
+    .setting-info, .campana {
+        position: relative !important;
+        top: 0 !important; /* Eliminamos desfases */
     }
 
+    /* El menú se posicionará de forma absoluta EXACTAMENTE debajo de la campana */
+    /* 🚀 LA CLAVE: Sacamos el dropdown del flujo del header con position fixed */
+    .notifications.dropdown-menu {
+        position: fixed !important; 
+        display: block !important;  /* Asegura la visibilidad activa */
+        
+        /* Coordenadas flotantes fijas respecto a la pantalla del móvil */
+        top: 56px !important;
+        left: -180px !important;
+        right: 0px !important;
+        
+        /* El recuadro calculará el ancho de la pantalla restando los márgenes laterales */
+        width: calc(100vw - 24px) !important; 
+        max-width: none !important;
+        
+        /* Eliminamos cualquier translate, margen o rotación heredada */
+        transform: none !important; 
+        margin: 0 auto !important;
+        z-index: 99999 !important;  /* Lo superpone ante cualquier componente o mapa */
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18) !important;
+    }
+
+    /* Forzamos a la caja interna a adaptarse de forma elástica */
     .notifications .drop-scroll {
-        width: 100% !important; /* Ocupa la totalidad de los 320px del menú */
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        max-height: 360px !important; /* Añade scroll interno si hay más de dos alertas */
+        overflow-y: auto !important;
     }
-    .net-status-text{
-        display: none !important; /* Oculta el texto de conectividad en móviles */
+
+    /* Limpieza estricta de elementos colindantes en móvil */
+    .net-status-text, 
+    .user-profile-list .user-names,
+    .vermovil {
+        display: none !important;
     }
+
+    /* 🚀 Corrección de la campana: Quitamos el top negativo que descuadraba el clic */
+    .campana {
+        top: 0 !important;
+        position: relative !important;
+    }
+    .campana i{
+       transform: translate(0px, -20px);
+    }
+    .brbnotificacion {
+    top: -7px !important;
+}
+
+    .user-profile-list .user-names {
+        display: none !important;
+    }
+
+
 }
 
 /* El resto de tus clases (.globowhite, .globoblack, etc.) se quedan exactamente igual abajo */
@@ -37,7 +152,8 @@
     display: flex;
     width: 30px;
     height: 30px;
-    transform: translate(20px, 10px); /* Ajuste viejo de PC */
+    transform: translate(20px, 10px);
+    /* Ajuste viejo de PC */
 }
 
 .globoblack {
@@ -64,16 +180,18 @@ body.dark .globowhite {
    ========================================================================= */
 @media (max-width: 767.98px) {
 
-    .user-menu.nav > li > a {
-    height: 20px;
-}
+    .user-menu.nav>li>a {
+        height: 20px;
+    }
+
     // 1. Forzamos a la lista principal a ordenarse de izquierda a derecha (Fila)
     ul.user-menu {
         display: flex !important;
         flex-direction: row !important;
         align-items: center !important;
         justify-content: flex-end !important;
-        gap: 8px !important; /* Espacio de separación entre la campana y la J */
+        gap: 8px !important;
+        /* Espacio de separación entre la campana y la J */
         float: none !important;
         margin: 0 !important;
         padding: 0 !important;
@@ -81,7 +199,7 @@ body.dark .globowhite {
     }
 
     // 2. Quitamos márgenes innecesarios a los elementos de la lista
-    ul.user-menu > li.nav-item {
+    ul.user-menu>li.nav-item {
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -93,14 +211,15 @@ body.dark .globowhite {
     // 3. Alineamos el contenido interno del perfil (la J y el icono de la flecha)
     .user-profile-list .user-link {
         display: flex !important;
-        flex-direction: row !important; /* Asegura orden horizontal interno */
+        flex-direction: row !important;
+        /* Asegura orden horizontal interno */
         align-items: center !important;
         gap: 4px !important;
         padding: 0 !important;
     }
 
     .user-profile-list .user-names {
-        display: flex !important;
+        // display: flex ;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
@@ -109,7 +228,8 @@ body.dark .globowhite {
         h5 {
             font-size: 13px !important;
             font-weight: bold !important;
-            color: #513081 !important; /* Color morado institucional */
+            color: #513081 !important;
+            /* Color morado institucional */
             margin: 0 !important;
             line-height: 1 !important;
         }
@@ -149,6 +269,7 @@ body.dark .globowhite {
         font-size: 12px;
         color: #007bff;
         text-decoration: none;
+
         &:hover {
             text-decoration: underline;
         }
@@ -161,69 +282,74 @@ body.dark .globowhite {
    ========================================================================== */
 
 .apple-network-badge {
-  border: 1px solid transparent;
-  font-size: 0.68rem; // Tamaño compacto para la barra de usuario
-  letter-spacing: 0.5px;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  user-select: none;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid transparent;
+    font-size: 0.68rem; // Tamaño compacto para la barra de usuario
+    letter-spacing: 0.5px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    user-select: none;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 
-  // El punto indicador circular base
-  .net-pulse-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    display: inline-block;
-    flex-shrink: 0;
-  }
-
-  // --- Estado Conectado (Verde Esmeralda) ---
-  &.net-online {
-    background-color: rgba(39, 201, 63, 0.1) !important;
-    color: #1e7e34 !important; // Verde oscuro legible sobre fondo claro
-    border: 1px solid rgba(39, 201, 63, 0.25) !important;
-
+    // El punto indicador circular base
     .net-pulse-dot {
-      background-color: #28a745;
-      box-shadow: 0 0 6px rgba(39, 201, 63, 0.5);
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        display: inline-block;
+        flex-shrink: 0;
     }
-  }
 
-  // --- Estado Desconectado (Naranja de Advertencia) ---
-  &.net-offline {
-    background-color: rgba(255, 159, 10, 0.12) !important;
-    color: #d35400 !important; // Naranja óxido legible sobre blanco
-    border: 1px solid rgba(255, 159, 10, 0.3) !important;
-    animation: appleBadgePulse 2s infinite ease-in-out;
+    // --- Estado Conectado (Verde Esmeralda) ---
+    &.net-online {
+        background-color: rgba(39, 201, 63, 0.1) !important;
+        color: #1e7e34 !important; // Verde oscuro legible sobre fondo claro
+        border: 1px solid rgba(39, 201, 63, 0.25) !important;
 
-    .net-pulse-dot {
-      background-color: #ff9f0a;
-      box-shadow: 0 0 6px rgba(255, 159, 10, 0.6);
-      animation: dotPulseMobile 1.2s infinite ease-in-out;
+        .net-pulse-dot {
+            background-color: #28a745;
+            box-shadow: 0 0 6px rgba(39, 201, 63, 0.5);
+        }
     }
-  }
+
+    // --- Estado Desconectado (Naranja de Advertencia) ---
+    &.net-offline {
+        background-color: rgba(255, 159, 10, 0.12) !important;
+        color: #d35400 !important; // Naranja óxido legible sobre blanco
+        border: 1px solid rgba(255, 159, 10, 0.3) !important;
+        animation: appleBadgePulse 2s infinite ease-in-out;
+
+        .net-pulse-dot {
+            background-color: #ff9f0a;
+            box-shadow: 0 0 6px rgba(255, 159, 10, 0.6);
+            animation: dotPulseMobile 1.2s infinite ease-in-out;
+        }
+    }
 }
 
 /* --- Animaciones de Pulsación --- */
 @keyframes dotPulseMobile {
-  0%, 100% { 
-    transform: scale(1); 
-    opacity: 1; 
-  }
-  50% { 
-    transform: scale(1.4); 
-    opacity: 0.4; 
-  }
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.4);
+        opacity: 0.4;
+    }
 }
 
 @keyframes appleBadgePulse {
-  0%, 100% { 
-    border-color: rgba(255, 159, 10, 0.3); 
-  }
-  50% { 
-    border-color: rgba(255, 159, 10, 0.6); 
-  }
-}
 
+    0%,
+    100% {
+        border-color: rgba(255, 159, 10, 0.3);
+    }
+
+    50% {
+        border-color: rgba(255, 159, 10, 0.6);
+    }
+}

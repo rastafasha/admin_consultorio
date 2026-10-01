@@ -122,12 +122,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-12 col-md-4 col-xl-4">
-                                    <div class="form-group local-forms">
-                                        <label>Educación/Especialidad</label>
-                                        <input class="form-control" formControlName="designation" type="text">
-                                    </div>
-                                </div>
+                                ß
                                 <div class="col-12 col-md-6 col-xl-4" *ngIf="user?.roles[0] === 'SUPERADMIN'">
                                     <div class="form-group local-forms">
                                         <label>Roles <span class="login-danger">*</span></label>
@@ -143,7 +138,7 @@
                                         </mat-error>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6 col-xl-4" *ngIf="user?.roles[0] === 'ADMIN'">
+                                <div class="col-12 col-md-6 col-xl-4" >
                                     <div class="form-group local-forms">
                                         <label>Roles <span class="login-danger">*</span></label>
                                         <mat-select formControlName="role_id" class="form-control select"
@@ -154,12 +149,12 @@
                                         </mat-select>
                                     </div>
                                 </div>
-                                <div class="col-12">
+                                <!-- <div class="col-12">
                                     <div class="form-group local-forms">
                                         <label>Dirección</label>
                                         <textarea class="form-control" formControlName="address" rows="3"></textarea>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="col-12 col-md-6 col-xl-6">
                                     <div class="form-group local-top-form">
                                         <label class="local-top">Avatar</label>

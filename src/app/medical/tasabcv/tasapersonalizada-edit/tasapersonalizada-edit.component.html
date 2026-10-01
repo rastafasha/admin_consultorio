@@ -1,55 +1,66 @@
-<div class="col-sm-12">
-    <div class="card">
-        <div class="card-body">
-
-            <app-loading *ngIf="isLoading"></app-loading>
-            <form *ngIf="!isLoading">
-
-                <div class="row align-items-center">
-                    <div class="col-xs-12 col-sm-6">
-                        <div class="row">
-
-                            <div class="col-12 ">
-                                <div class="form-group local-forms">
-                                    <label for="exampleInputEmail1">Precio</label>
-                                    <input [(ngModel)]="precio_dia" name="precio_dia" type="text" class="form-control"
-                                        [ngModelOptions]="{standalone: true}">
-                                </div>
-                            </div>
-                            <div class="col-12 mb-3">
-                                <button class="btn btn-primary  btn-sm" (click)="save()">+ Agregar</button>
-                            </div>
+<div class="row">
+    <!-- Formulario -->
+    <div class="col-12 col-md-5 mb-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body p-4">
+                <h5 class="card-title fw-bold text-secondary mb-3">Establecer Tasa Fija Personalizada</h5>
+                
+                @if (moneda === 'PERSONALIZADA') {
+                    <div class="form-group mb-3">
+                        <label class="form-label fw-semibold text-muted small">Valor de Liquidación Interno</label>
+                        <div class="input-group" style="height: 46px;">
+                            <span class="input-group-text bg-light text-secondary fw-bold">Bs.</span>
+                            <input type="number" class="form-control" [(ngModel)]="precio_dia" placeholder="Ej: 45.00" style="height: 100%;">
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-6">
-                        <div class="table-responsive">
-                            <table class="table mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Monto</th>
-                                        <th>Fecha</th>
-                                        <th>Opciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>{{tasasPersonalizada.precio_dia}}</td>
-                                        <td>{{tasasPersonalizada.createdAt|date}}</td>
-                                        <td>
-                                            <button class="btn btn-danger btn-sm" (click)="deleteTasa(tasasPersonalizada)">x</button>
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-                            </table>
+                    <button (click)="save()" [disabled]="isLoading || !precio_dia" class="btn btn-warning text-dark w-100 fw-bold d-flex align-items-center justify-content-center" style="height: 46px; border-radius: 4px;">
+                        <i class="bi bi-shield-lock me-2"></i>Fijar Tasa de Sistema
+                    </button>
+                } @else {
+                    <div class="alert alert-warning border-0 p-3 mb-0 d-flex align-items-start">
+                        <i class="bi bi-exclamation-triangle-fill me-3 fs-4 text-warning"></i>
+                        <div>
+                            <strong class="d-block text-dark">Moneda No Coincide</strong>
+                            <small class="text-muted">El establecimiento está configurado bajo la divisa <strong>{{ moneda }}</strong>. Diríjase al panel correspondiente para actualizar su valor.</small>
                         </div>
                     </div>
-
-                </div>
-
-            </form>
-
+                }
+            </div>
         </div>
     </div>
 
+    <!-- Estado Actual Fijo -->
+    <div class="col-12 col-md-7 mb-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body p-4">
+                <h5 class="card-title fw-bold text-secondary mb-3">Tasa Fija Activa en Sistema</h5>
+
+                @if (isLoading) {
+                    <div class="d-flex justify-content-center align-items-center py-5">
+                        <div class="spinner-border text-warning" role="status"></div>
+                    </div>
+                } @else if (tasasPersonalizada) {
+                    <div class="p-4 border rounded bg-light border-warning-subtle d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted d-block small fw-bold text-uppercase mb-1">Monto de Liquidación</span>
+                            <h2 class="fw-extrabold text-dark mb-1">Bs. {{ tasasPersonalizada?.precio_dia }}</h2>
+                            <small class="text-muted d-block mt-2" >
+                                <i class="bi bi-clock me-1"></i>Última actualización: {{ tasasPersonalizada?.createdAt || tasasPersonalizada?.updatedAt | date:'dd/MM/yyyy hh:mm A' }}
+                            </small>
+                        </div>
+                        <div>
+                            <button (click)="deleteTasa(tasasPersonalizada)" class="btn btn-outline-danger border-0 p-3 rounded-circle" title="Remover Tasa Fija">
+                                <i class="fa fa-trash fs-3"></i>  
+                            </button>
+                            <!-- <button class="btn btn-danger btn-sm" (click)="deleteTasa(tasasPersonalizada)">x</button> -->
+                        </div>
+                    </div>
+                } @else {
+                    <div class="text-center py-4">
+                        <p class="text-muted mb-0">No se encuentra configurada ninguna tasa fija activa para este establecimiento actualmente.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 </div>

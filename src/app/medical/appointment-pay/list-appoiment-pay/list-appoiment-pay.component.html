@@ -21,20 +21,17 @@
               <div class="row align-items-center">
                 <div class="col">
                   <div class="doctor-table-blk">
+                    <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm"
+                      (click)="modalListaTransferencias.open()" title="Ayuda de la sección">
+                      <i class="fas fa-question"></i>
+                    </button>
                     <h3>{{titlePage}}</h3>
-                    <!-- <div class="doctor-search-blk">
-                                            <div class="top-nav-search table-search-blk">
-                                                    <input type="text" class="form-control" placeholder="Search here" [(ngModel)]="searchDataValue"
-                                                    (ngModelChange)="searchData(searchDataValue)">
-                                                    <a class="btn"><img src="assets/img/icons/search-normal.svg" alt=""></a>
-                                            </div>
-                                            <div class="add-group">
-                                               <a href="javascript:;" class="btn btn-primary doctor-refresh ms-2"><img src="assets/img/icons/re-fresh.svg" alt=""></a>
-                                            </div>
-                                        </div> -->
+
                   </div>
                 </div>
-                <app-export-lists></app-export-lists>
+                <app-export-lists [dataToExport]="appointmentList" filenamePrefix="listado_pagos_citas"
+                    exportPermission="list_appointments">
+                  </app-export-lists>
               </div>
             </div>
             <!-- /Table Header -->
@@ -79,10 +76,16 @@
                     </div>
                   </div>
                   <div class="col-12 col-md-6 col-xl-4">
-                    <div class="doctor-submit">
+                    <div class="add-group">
+                      <div class="doctor-submit">
                       <button type="button" class="btn btn-primary submit-list-form me-2"
                         (click)="searchData()">Buscar</button>
                     </div>
+                      <a href="javascript:;" (click)="PageSize()" class="btn btn-primary doctor-refresh ms-2"><img
+                          src="assets/img/icons/re-fresh.svg" alt=""></a>
+                    </div>
+                    
+
                   </div>
                 </div>
               </form>
@@ -397,3 +400,5 @@
     </div>
   </div>
 </div>
+<app-modal-instrucciones [info]="info_pagos_citas" sectionId="lista_pagos_citas"
+  #modalListaTransferencias></app-modal-instrucciones>

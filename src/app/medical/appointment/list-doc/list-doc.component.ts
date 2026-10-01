@@ -1,9 +1,6 @@
 import { Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { AppointmentService } from '../../../services/appointment.service';
-import { FileSaverService } from 'ngx-filesaver';
-import * as XLSX from 'xlsx';
-import { jsPDF } from 'jspdf';
 import { DoctorService } from '../../../services/doctor.service';
 import { RolesService } from '../../../services/roles.service';
 import { ActivatedRoute } from '@angular/router';
@@ -72,7 +69,6 @@ export class ListDocComponent {
   constructor(
     public appointmentService: AppointmentService,
     public doctorService: DoctorService,
-    private fileSaver: FileSaverService,
     private ativatedRoute: ActivatedRoute,
     public roleService: RolesService,
     ){
@@ -271,76 +267,7 @@ export class ListDocComponent {
   }
 
 
-  excelExport(){
-    const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8';
-    const EXCLE_EXTENSION = '.xlsx';
-
-    this.getTableDataGeneral();
-    //custom code
-    const worksheet = XLSX.utils.json_to_sheet(this.appointmentList);
-
-    const workbook = {
-      Sheets:{
-        'testingSheet': worksheet
-      },
-      SheetNames:['testingSheet']
-    }
-
-    const excelBuffer = XLSX.write(workbook, {bookType:'xlsx', type: 'array'});
-
-    const blobData = new Blob([excelBuffer],{type: EXCEL_TYPE});
-
-    this.fileSaver.save(blobData, "pacientes_db_klyntic_consultorio",)
-
-  }
-  csvExport(){
-    const CSV_TYPE = 'text/csv';
-    const CSV_EXTENSION = '.csv';
-
-    this.getTableDataGeneral();
-
-    //custom code
-    const worksheet = XLSX.utils.json_to_sheet(this.appointmentList);
-
-    const workbook = {
-      Sheets:{
-        'testingSheet': worksheet
-      },
-      SheetNames:['testingSheet']
-    }
-
-    const excelBuffer = XLSX.write(workbook, {bookType:'csv', type: 'array'});
-
-    const blobData = new Blob([excelBuffer],{type: CSV_TYPE});
-
-    this.fileSaver.save(blobData, "pacientes_db_klyntic_consultorio_csv", CSV_EXTENSION)
-
-  }
-  txtExport(){
-    const TXT_TYPE = 'text/txt';
-    const TXT_EXTENSION = '.txt';
-
-    this.getTableDataGeneral();
-
-
-    //custom code
-    const worksheet = XLSX.utils.json_to_sheet(this.appointmentList);
-
-    const workbook = {
-      Sheets:{
-        'testingSheet': worksheet
-      },
-      SheetNames:['testingSheet']
-    }
-
-    const excelBuffer = XLSX.write(workbook, {bookType:'xlsx', type: 'array'});
-
-    const blobData = new Blob([excelBuffer],{type: TXT_TYPE});
-
-    this.fileSaver.save(blobData, "pacientes_db_klyntic_consultorio_txt", TXT_EXTENSION)
-
-  }
-
+  
   cambiarStatus(data:any){
     const VALUE = data.confimation;
     console.log(VALUE);

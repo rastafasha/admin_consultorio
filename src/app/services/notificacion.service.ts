@@ -27,7 +27,7 @@ export interface Notificacion {
 export class NotificacionService {
   private http = inject(HttpClient);
   private toastr = inject(ToastrService);
-  private router = inject(Router);
+  public router = inject(Router);
 
   // ESTADOS REACTIVOS NUEVOS: Controlan la UI del switch de forma segura
   public isSubscribed$ = new BehaviorSubject<boolean>(false);
@@ -43,10 +43,19 @@ export class NotificacionService {
     this.inicializarEcosistemaAlertas();
   }
 
-  get currentRole(): 'DOCTOR'  {
+ get currentRole(): 'DOCTOR' | 'RECEPCIN' {
     const userString = localStorage.getItem('user');
     const userObj = userString ? JSON.parse(userString) : null;
-    return userObj && (userObj.doctor_id || userObj.roles === 'DOCTOR');
+    if (!userObj) return 'RECEPCIN';
+    
+    // Evaluamos si es un ID de médico directo o si el array de roles contiene la palabra clave
+    const tieneRolDoctor = userObj.roles && (
+      Array.isArray(userObj.roles) 
+        ? userObj.roles.some((r: any) => (r.name || r) === 'DOCTOR' || (r.name || r) === 'MEDICO')
+        : (userObj.roles.name || userObj.roles) === 'DOCTOR'
+    );
+    
+    return (userObj.doctor_id || tieneRolDoctor || userObj.role === 'MEDICO') ? 'DOCTOR' : 'RECEPCIN';
   }
 
   private getOptions() {
@@ -92,6 +101,19 @@ export class NotificacionService {
         }
       })
     );
+  }
+
+  /**
+    * 1. Carga el número de pendientes y actualiza el stream reactivo
+    */
+  cargarContador(): void {
+    this.http.get<{ ok: boolean; count: number }>(
+      `${BackendApi}/klyntic/notificaciones/unread-count`,
+      this.getOptions()
+    ).subscribe({
+      next: (res) => this.unreadCountSub.next(res.count),
+      error: () => this.unreadCountSub.next(0)
+    });
   }
 
   inicializarEcosistemaAlertas() {
@@ -155,42 +177,68 @@ export class NotificacionService {
           this.unreadCountSub.next(sinLeer);
         }
       },
-      error: () => this.unreadCountSub.next(0)
+      error: (err) => {
+        console.error("❌ Error de sincronización de alertas médicas:", err);
+        this.unreadCountSub.next(0);
+      }
     });
   }
 
-  private lanzarToastrEnPantalla(notif: Notificacion) {
+    private lanzarToastrEnPantalla(notif: Notificacion) {
     let toast;
     const config = { timeOut: 10000, closeButton: true, tapToDismiss: true };
     const esMedico = this.currentRole === 'DOCTOR';
 
+    console.log("🎨 Mapeando Toastr para el tipo de alerta:", notif.tipo);
+
     switch (notif.tipo) {
+      // 🟢 CASOS ADICIONADOS: Soporte nativo para la aprobación de presupuestos
+      case 'PRESUPUESTO_APROBADO':
+      case 'PRESUPUESTO_APROBADO_CLINICA':
+        toast = this.toastr.success(notif.mensaje, '🎉 Presupuesto Aprobado', config);
+        break;
+
+      case 'PRESUPUESTO_RECHAZADO':
+      case 'PRESUPUESTO_RECHAZADO_CLINICA':
+        toast = this.toastr.error(notif.mensaje, '❌ Presupuesto Rechazado', config);
+        break;
+
       case 'PAGO_RECIBIDO':
+      case 'PAGO_RECIBIDO_CLINICA':
         toast = this.toastr.success(notif.mensaje, esMedico ? '💰 Pago Reportado por Paciente' : '✅ Tu Pago ha sido Recibido', config);
         break;
-      case 'PRESUPUESTO_APROBADO':
-        toast = this.toastr.success(notif.mensaje, '🎉 ¡Presupuesto Aprobado por Paciente!', config);
-        break;
+        
+      case 'CITA_AGENDADA':
       case 'CONSULTA_NUEVA':
-        toast = this.toastr.info(notif.mensaje, '🩺 Nueva Consulta Iniciada', config);
+      case 'CONSULTA_NUEVA_CLINICA':
+        toast = this.toastr.info(notif.mensaje, '📅 Nueva Cita en Agenda', config);
         break;
+
       case 'LLAMADO_MEDICO':
-        toast = this.toastr.warning(notif.mensaje, '🚨 Llamado Urgente / Alerta', config);
+        toast = this.toastr.warning(notif.mensaje, '🚨 Llamado Urgente', config);
         break;
+
       case 'RECORDATORIO':
         toast = this.toastr.info(notif.mensaje, '⏰ Recordatorio Próxima Cita', config);
         break;
+
       default:
-        toast = this.toastr.info(notif.mensaje, '🔔 Alerta de Sistema', config);
+        // Caso de respaldo por si el enum varía
+        toast = this.toastr.info(notif.mensaje, notif.titulo || '🔔 Alerta de Sistema', config);
     }
 
-    toast.onTap.subscribe(() => {
-      this.marcarUnaComoLeida(notif._id).subscribe(() => {
-        const ruta = esMedico ? this.determinarRutaMedico(notif.tipo, notif.referenciaId) : this.determinarRutaPaciente(notif.tipo, notif.referenciaId);
-        this.router.navigate([ruta]);
+    if (toast) {
+      toast.onTap.subscribe(() => {
+        this.marcarUnaComoLeida(notif._id).subscribe(() => {
+          const ruta = esMedico 
+            ? this.determinarRutaMedico(notif.tipo, notif.referenciaId) 
+            : this.determinarRutaAdmin(notif.tipo, notif.referenciaId);
+          this.router.navigate([ruta]);
+        });
       });
-    });
+    }
   }
+
 
   marcarComoLeidas(): Observable<any> {
     return this.http.put(`${BackendApi}/klyntic/notificaciones/marcar-leidas`, {}, this.getOptions()).pipe(
@@ -207,32 +255,68 @@ export class NotificacionService {
     );
   }
 
-  obtenerHistorialCompleto(page: number = 1): Observable<any> {
+ obtenerHistorialCompleto(page: number = 1): Observable<any> {
     const userString = localStorage.getItem('user');
     const userObj = userString ? JSON.parse(userString) : null;
-    const usuarioId = userObj ? userObj.id : '';
+    
+    // 🟢 UNIFICACIÓN: Forzamos la obtención del ID exacto y su conversión a String
+    const usuarioId = userObj && userObj.id ? userObj.id.toString() : '';
+    
+    console.log('📡 Consumiendo historial de alertas para el ID:', usuarioId); // Console de control
+    
     return this.http.get(`${BackendApi}/klyntic/notificaciones/usuario/${usuarioId}?page=${page}`, this.getOptions());
   }
 
+  
+    /**
+   * 🩺 RUTAS PARA EL ROL DE DOCTOR
+   * Estructura: modulo/accion/doctor/ID_DOCTOR
+   */
   private determinarRutaMedico(tipo: string, refId?: string): string {
-    if (!refId) return '/dashboard';
-    if (tipo.startsWith('PAGO_')) return `/dashboard/administracion/pagos/${refId}`;
-    if (tipo.startsWith('PRESUPUESTO_')) return `/dashboard/pacientes/presupuesto/${refId}`;
-    if (tipo === 'CONSULTA_NUEVA' || tipo === 'RECORDATORIO') return `/dashboard/agenda`;
+    const userString = localStorage.getItem('user');
+    const userObj = userString ? JSON.parse(userString) : null;
+    // Extraemos el ID del doctor asociado al usuario actual (por defecto 3 si no se encuentra)
+    const doctorId = userObj?.doctor_id || userObj?.id || '3';
+
+    if (tipo.startsWith('PAGO_')) {
+      return `/appointment-pay/list-pagos/doctor/${doctorId}`;
+    }
+    if (tipo.startsWith('PRESUPUESTO_')) {
+      return `/presupuesto/edit/${refId}`;
+    }
+    if (tipo === 'CITA_AGENDADA' || tipo === 'CONSULTA_NUEVA' || tipo === 'CONSULTA_') {
+      return `/appointments/list/doctor/${doctorId}`;
+    }
     return '/dashboard';
   }
 
-  private determinarRutaPaciente(tipo: string, refId?: string): string {
-    if (!refId) return '/app/home';
-    if (tipo.startsWith('PAGO_')) return `/app/mis-pagos`;
-    if (tipo === 'PRESUPUESTO_NUEVO') return `/app/mis-presupuestos`;
-    if (tipo === 'RECORDATORIO') return `/app/home`;
-    return '/app/home';
+  /**
+   * 💼 RUTAS PARA ADMINISTRADOR, RECEPCIÓN Y DEMÁS PERSONAL
+   * Estructura general sin segmentación de ID
+   */
+  public determinarRutaAdmin(tipo: string, refId?: string): string {
+    if (tipo.startsWith('PAGO_')) {
+      return `/appointment-pay/list`;
+    }
+    if (tipo.startsWith('PRESUPUESTO_')) {
+      return `/presupuesto/edit/${refId}`;
+    }
+    if (tipo === 'CITA_AGENDADA' || tipo === 'CONSULTA_NUEVA' || tipo === 'CONSULTA_') {
+      return `/appointments/list`;
+    }
+    return '/dashboard';
   }
+
 
   limpiarBuzonCompleto(): Observable<any> {
     return this.http.delete(`${BackendApi}/klyntic/notificaciones/limpiar/todas`, this.getOptions()).pipe(
       tap(() => this.unreadCountSub.next(0))
+    );
+  }
+
+   borrarNotificacion(id: string): Observable<any> {
+    return this.http.delete(`${BackendApi}/klyntic/notificaciones/por_id/${id}`, this.getOptions()).pipe(
+      tap(() => this.cargarContador()) // Recarga el número actual tras la eliminación
     );
   }
 }

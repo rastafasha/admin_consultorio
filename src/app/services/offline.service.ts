@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ConnectionService } from './connection.service';
 import { url_servicios } from '../config/config';
 import Swal from 'sweetalert2';
-import { AuthService } from '../shared/auth/auth.service';
+import { AuthService } from './auth.service';
 
 interface OfflineRequest {
   urlPath: string;    // Ejemplo: '/appointment-atention/store'

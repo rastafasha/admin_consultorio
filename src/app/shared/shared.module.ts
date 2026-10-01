@@ -21,7 +21,8 @@ import { PipesModule } from '../pipes/pipes.module';
 import { TasabcvComponent } from '../common-component/tasabcv/tasabcv.component';
 import { ModalInstruccionesModule } from "../modales/modal-instrucciones.module";
 
-@NgModule({ declarations: [
+@NgModule({
+    declarations: [
         HeaderComponent,
         SidebarComponent,
         NotificacionesupdateComponent,
@@ -46,35 +47,38 @@ import { ModalInstruccionesModule } from "../modales/modal-instrucciones.module"
         SidebarComponent,
         NotificacionesupdateComponent,
     ], imports: [CommonModule,
-    NgxBootstrapModule,
-    CountUpModule,
-    NgApexchartsModule,
-    NgCircleProgressModule.forRoot({
-        "radius": 40,
-        "space": -10,
-        "outerStrokeWidth": 10,
-        "innerStrokeWidth": 10,
-        "animationDuration": 1000,
-        "clockwise": false,
-        "startFromZero": false,
-        "lazy": false,
-        "outerStrokeLinecap": "square",
-        "showSubtitle": false,
-        "showTitle": false,
-        "showUnits": false,
-        "showBackground": false
-    }),
-    SlickCarouselModule,
-    materialModule,
-    NgxEditorModule,
-    FullCalendarModule,
-    MatSortModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgxMaterialTimepickerModule,
-    RouterModule,
-    PipesModule, ModalInstruccionesModule], providers: [
-        DataService,
-        provideHttpClient(withInterceptorsFromDi()),
-    ] })
+        NgxBootstrapModule,
+        CountUpModule,
+        NgApexchartsModule,
+        NgCircleProgressModule.forRoot({
+            "radius": 40,
+            "space": -10,
+            "outerStrokeWidth": 10,
+            "innerStrokeWidth": 10,
+            "animationDuration": 1000,
+            "clockwise": false,
+            "startFromZero": false,
+            "lazy": false,
+            "outerStrokeLinecap": "square",
+            "showSubtitle": false,
+            "showTitle": false,
+            "showUnits": false,
+            "showBackground": false
+        }),
+        SlickCarouselModule,
+        materialModule,
+        NgxEditorModule,
+        FullCalendarModule,
+        MatSortModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NgxMaterialTimepickerModule,
+        RouterModule,
+        PipesModule, 
+        ModalInstruccionesModule
+    ], providers: [
+            DataService,
+            provideHttpClient(withInterceptorsFromDi()),
+        ]
+})
 export class SharedModule { }

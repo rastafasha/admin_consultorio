@@ -28,18 +28,12 @@
                       <i class="fas fa-question"></i>
                     </button>
                     <h3>{{titlePage}}</h3>
-                    <!-- <div class="doctor-search-blk">
-                                            <div class="top-nav-search table-search-blk">
-                                                    <input  class="form-control" placeholder="Search here" [(ngModel)]="searchDataValue"
-                                                    (ngModelChange)="searchData()">
-                                                    <a class="btn"><img src="assets/img/icons/search-normal.svg" alt=""></a>
-                                            </div>
-                                            
-                                        </div> -->
                   </div>
                 </div>
 
-                <app-export-lists></app-export-lists>
+                <app-export-lists [dataToExport]="presupuestoList" filenamePrefix="listado_presupuestos"
+                    exportPermission="list_appointments">
+                  </app-export-lists>
               </div>
             </div>
             <!-- /Table Header -->
@@ -47,28 +41,12 @@
             <div class="staff-search-table">
               <form>
                 <div class="row">
-                  <!-- <div class="col-12 col-md-6 col-xl-4">  
-                                      <div class="form-group local-forms">
-                                          <label >Doctor Name </label>
-                                          <input [(ngModel)]="searchDataDoctor" name="searchDataDoctor" class="form-control" type="text"  >
-                                      </div>
-                                  </div> -->
                   <div class="col-12 col-md-6 col-xl-4">
                     <div class="form-group local-forms">
                       <label>Paciente </label>
                       <input [(ngModel)]="searchDataPatient" name="searchDataPatient" class="form-control" type="text">
                     </div>
                   </div>
-                  <!-- <div class="col-12 col-md-6 col-xl-4">
-                                      <div class="form-group local-forms">
-                                          <label >Specialities </label>
-                                          <mat-select [(ngModel)]="speciality_id" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Select Speciality">
-                                            <mat-option *ngFor="let data of specialities" [value]="data.id">
-                                            {{data.name}}
-                                            </mat-option>
-                                        </mat-select>
-                                      </div>
-                                  </div> -->
                   <div class="col-12 col-md-6 col-xl-4">
                     <div class="form-group local-forms">
                       <label>Fecha </label>
@@ -85,7 +63,6 @@
                   <div class="add-group col-12 col-md-6 col-xl-4">
                     <a [routerLink]="['/presupuesto/crear/']" *ngIf="isPermission('register_presupuesto')"
                       class="btn btn-primary add-pluss ms-2"><img src="assets/img/icons/plus.svg" alt=""></a>
-                    <!-- <a routerLink="/appointments/add" *ngIf="isPermission('add_cita_doctor')" class="btn btn-primary add-pluss ms-2"><img src="assets/img/icons/plus.svg" alt=""></a> -->
                     <a href="javascript:;" (click)="PageSize()" class="btn btn-primary doctor-refresh ms-2"><img
                         src="assets/img/icons/re-fresh.svg" alt=""></a>
                   </div>

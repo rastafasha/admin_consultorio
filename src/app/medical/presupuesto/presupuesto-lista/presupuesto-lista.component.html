@@ -1,156 +1,208 @@
 <div class="page-wrapper">
-    <div class="content">
-    
-       <!-- Page Header -->
-       <app-breadcum-doctor-dashboard *ngIf="isPermission('admin_dashboard')  && user.roles[0] === 'SUPERADMIN' " [titlePage]="titlePage" [routes]="routes.adminDashboard"></app-breadcum-doctor-dashboard>
-       <app-breadcum-doctor-dashboard *ngIf="isPermission('admin_dashboard')  && user.roles[0] === 'ADMIN' " [titlePage]="titlePage" [routes]="routes.adminDashboard"></app-breadcum-doctor-dashboard>
-       <app-breadcum-doctor-dashboard *ngIf="isPermission('doctor_dashboard') && user.roles[0] !== 'SUPERADMIN'  " [titlePage]="titlePage" [routes]="routes.doctorDashboard"></app-breadcum-doctor-dashboard>
-       <!-- /Page Header -->
-        <app-skeleton-loader *ngIf="isLoading" [rows]="5" [columns]="4"></app-skeleton-loader>
-        
-        
-        <div class="row" *ngIf="!isLoading">
-            <div class="col-sm-12">
-            
-                <div class="card card-table show-entire">
-                    <div class="card-body">
-                    
-                        <!-- Table Header -->
-                        <div class="page-table-header mb-2">
-                            <div class="row align-items-center">
-                                <div class="col">
-                                    <div class="doctor-table-blk">
-                                        <h3>Listado</h3>
-                                        <div class="doctor-search-blk">
-                                            <div class="top-nav-search table-search-blk">
-                                                    <input  class="form-control" placeholder="Search here" [(ngModel)]="searchDataValue"
-                                                    (ngModelChange)="searchData()">
-                                                    <a class="btn"><img src="assets/img/icons/search-normal.svg" alt=""></a>
-                                            </div>
-                                            
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                  <div class="form-group local-forms">
-                                    <label >Speciality <span class="login-danger">*</span></label>
-                                    <mat-select [(ngModel)]="speciality_id" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Select Speciality">
-                                        <mat-option *ngFor="let data of specialities" [value]="data.id">
-                                        {{data.name}}
-                                        </mat-option>
-                                    </mat-select>
-                                </div>
-                                </div>
-                                <div class="col">
-                                  <div class="form-group local-forms">
-                                    <label >Fecha <span class="login-danger">*</span></label>
-                                    <input class="form-control datetimepicker" name="date" [(ngModel)]="date" type="date"   >
-                                  </div>
-                                </div>
-                                <div class="col">
-                                  <div class="add-group">
-<a href="#" onclick="return false" (click)="searchData()" class="btn btn-dark add-pluss ms-2">Filtrar</a>
-                                    <a [routerLink]="['/presupuesto/crear/']" *ngIf="isPermission('register_presupuesto')" class="btn btn-primary add-pluss ms-2" ><img src="assets/img/icons/plus.svg" alt=""></a>
-                                    <a href="javascript:;" (click)="PageSize()" class="btn btn-primary doctor-refresh ms-2"><img src="assets/img/icons/re-fresh.svg" alt=""></a>
-                                </div>
-                                </div>
-                                <app-export-lists></app-export-lists>
-                            </div>
+  <div class="content">
+
+    <!-- Page Header -->
+    <app-breadcum-doctor-dashboard *ngIf="isPermission('admin_dashboard')  && user.roles[0] === 'SUPERADMIN' "
+      [titlePage]="titlePage" [routes]="routes.adminDashboard"></app-breadcum-doctor-dashboard>
+    <app-breadcum-doctor-dashboard *ngIf="isPermission('admin_dashboard')  && user.roles[0] === 'ADMIN' "
+      [titlePage]="titlePage" [routes]="routes.adminDashboard"></app-breadcum-doctor-dashboard>
+    <app-breadcum-doctor-dashboard *ngIf="isPermission('doctor_dashboard') && user.roles[0] !== 'SUPERADMIN'  "
+      [titlePage]="titlePage" [routes]="routes.doctorDashboard"></app-breadcum-doctor-dashboard>
+    <!-- /Page Header -->
+    <!-- <app-skeleton-loader *ngIf="isLoading" [rows]="5" [columns]="4"></app-skeleton-loader> -->
+
+
+    <div class="row" >
+      <div class="col-sm-12">
+
+        <div class="card card-table show-entire">
+          <div class="card-body">
+
+            <!-- Table Header -->
+            <div class="page-table-header mb-4 card p-3 shadow-sm border-0">
+
+              <!-- 🔹 FILA SUPERIOR: Título Principal de la Sección de Presupuestos -->
+              <div class="row mb-3 align-items-center">
+                <div class="col">
+                  <div class="doctor-table-blk">
+                    <button class="btn btn-outline-primary btn-sm rounded-circle shadow-sm"
+                      (click)="modalListaPresupuesto.open()" title="Ayuda de la sección">
+                      <i class="fas fa-question"></i>
+                    </button>
+                    <h3>{{titlePage}}</h3>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 🔹 FILA CENTRAL: Panel Unificado de Filtros y Acción Rápida -->
+              <div class="row g-3 align-items-end">
+
+                <!-- 1. Buscador General por Texto (Corregido con Lupa Alineada) -->
+                <div class="col-12 col-md-6 col-lg-3">
+                  <div class="form-group mb-0">
+                    <label class="form-label fw-semibold text-secondary small mb-1">Buscar Paciente / Notas</label>
+                    <div class="input-group position-relative" style="height: 46px;">
+                      <input type="text" class="form-control ps-3 pe-5" placeholder="Escriba aquí..."
+                        [(ngModel)]="searchDataValue" (ngModelChange)="searchData()"
+                        style="height: 100%; border-radius: 4px; background-color: #f8f9fa;">
+                      <span
+                        class="position-absolute top-50 translate-middle-y end-0 me-3 d-flex align-items-center justify-content-center"
+                        style="z-index: 5; pointer-events: none;">
+                        <img src="assets/img/icons/search-normal.svg" alt="Buscar"
+                          style="width: 18px; height: 18px; opacity: 0.6;">
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 2. Filtro Selector de Especialidades -->
+                <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+                  <div class="form-group local-forms mb-0">
+                    <label>Speciality <span class="login-danger">*</span></label>
+                    <mat-select [(ngModel)]="speciality_id" [ngModelOptions]="{standalone: true}"
+                      class="form-control select" placeholder="Select Speciality" (selectionChange)="searchData()">
+                      <mat-option *ngFor="let data of specialities" [value]="data.id">
+                        {{data.name}}
+                      </mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+
+                <!-- 3. Selector de Fecha de Creación/Emisión -->
+                <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+                  <div class="form-group local-forms mb-0">
+                    <label>Fecha <span class="login-danger">*</span></label>
+                    <input class="form-control datetimepicker" name="date" [(ngModel)]="date" type="date"
+                      (change)="searchData()">
+                  </div>
+                </div>
+
+                <!-- 4. Bloque Compacto de Botones Administrativos (Alineación Perfecta) -->
+                <div class="col-12 col-md-6 col-lg-3 d-flex justify-content-lg-end">
+                  <div
+                    class="add-group d-flex align-items-center gap-2 w-100 justify-content-start justify-content-md-end">
+
+                    <!-- Botón Ejecutar Filtro Seguro -->
+                    <button (click)="searchData()"
+                      class="btn btn-dark fw-medium px-4 d-flex align-items-center justify-content-center text-capitalize"
+                      style="height: 46px; border-radius: 4px;">
+                      Filtrar
+                    </button>
+
+                    <!-- Botón Añadir Nuevo Presupuesto -->
+                    <a [routerLink]="['/presupuesto/crear/']" *ngIf="isPermission('register_presupuesto')"
+                      class="btn btn-primary d-flex align-items-center justify-content-center p-0"
+                      style="width: 46px; height: 46px; border-radius: 4px;" title="Crear Presupuesto">
+                      <img src="assets/img/icons/plus.svg" alt="Agregar" style="width: 18px; height: 18px;">
+                    </a>
+
+                    <!-- Botón Limpiar/Resetear Filtros -->
+                    <a href="javascript:;" (click)="PageSize()"
+                      class="btn btn-primary doctor-refresh d-flex align-items-center justify-content-center p-0"
+                      style="width: 46px; height: 46px; border-radius: 4px;" title="Refrescar Listado">
+                      <img src="assets/img/icons/re-fresh.svg" alt="Refrescar" style="width: 18px; height: 18px;">
+                    </a>
+
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- 📊 Fila Inferior Opcional: Inyección del Componente de Exportación -->
+              <div class="row mt-3">
+                <div class="col-12 d-flex justify-content-end">
+                  <app-export-lists [dataToExport]="presupuestoList" filenamePrefix="listado_presupuestos"
+                    exportPermission="list_appointments">
+                  </app-export-lists>
+                </div>
+              </div>
+
+            </div>
+            <!-- /Table Header -->
+            <app-loading *ngIf="isLoading"></app-loading>
+            <div class="table-responsive" *ngIf="!isLoading">
+              <table matSort (matSortChange)="sortData($event)"
+                class="table border-0 custom-table comman-table datatable mb-0">
+                <thead>
+                  <tr>
+
+                    <th mat-sort-header="name">Doctor</th>
+                    <th mat-sort-header="email">Paciente</th>
+                    <th mat-sort-header="n_doc">Especialidad</th>
+                    <th mat-sort-header="status">Status</th>
+                    <th mat-sort-header="confirmar" *ngIf="isPermission('edit_presupuesto')">Confirmar</th>
+                    <th mat-sort-header="created">Creación</th>
+                    <th></th> <!--acciones -->
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of presupuestoList">
+
+                    <td>{{data.doctor.full_name}}</td>
+                    <td>
+                      <a class="dropdown-item" [routerLink]="[routes.patientProfile, data.patient.id]"
+                        *ngIf="isPermission('profile_patient')">
+                        {{data.patient.full_name}}
+                      </a>
+                      <span *ngIf="!isPermission('profile_patient')">
+                        {{data.patient.full_name}}
+                      </span>
+
+                    </td>
+                    <!-- <td>{{data.segment_hour.format_segment.format_hour_start + ' - ' + data.segment_hour.format_segment.format_hour_end}}</td> -->
+                    <td>{{data.speciality.name}}</td>
+                    <td><button [ngClass]="{'status-green' : data.status === 2, 'status-pink' : data.status === 1}"
+                        class="custom-badge">{{data.status === 1 ? 'Pendiente' : 'Confirmado'}}</button></td>
+
+                    <td *ngIf="isPermission('edit_presupuesto')">
+                      <!--begin::Input-->
+                      <select class="form-control form-select-solid fw-bolder" name="state" [(ngModel)]="data.status"
+                        (change)="cambiarStatus(data)" placeholder="state">
+                        <option [value]="1">Pendiente</option>
+                        <option [value]="2">Confirmado</option>
+                      </select>
+                    </td>
+                    <td>{{data.created_at | date:"shortDate" }}</td>
+
+                    <td class="text-end">
+                      <div class="dropdown dropdown-action">
+                        <a href="javascript:void(0);" class="action-icon dropdown-toggle" data-bs-toggle="dropdown"
+                          aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                          <a class="dropdown-item" [routerLink]="['/presupuesto/edit/', data.id]"
+                            *ngIf="isPermission('edit_presupuesto')"><i class="fa-solid fa-pencil m-r-5"></i> Editar</a>
+                          <a class="dropdown-item" href="javascript:void(0)" (click)="onDeletePresupuesto(data.id)"
+                            *ngIf="isPermission('delete_presupuesto')"><i class="fa-solid fa-trash m-r-5"></i>
+                            Eliminar</a>
+
                         </div>
-                        <!-- /Table Header -->
-                        
-                        <div class="table-responsive">
-                            <table matSort (matSortChange)="sortData($event)" class="table border-0 custom-table comman-table datatable mb-0">
-                                <thead>
-                                    <tr>
-                                        
-                                        <th mat-sort-header="name">Doctor</th>
-                                        <th mat-sort-header="email">Paciente</th>
-                                        <th mat-sort-header="n_doc">Especialidad</th>
-                                        <th mat-sort-header="status">Status</th>
-                                        <th mat-sort-header="confirmar" *ngIf="isPermission('edit_presupuesto')">Confirmar</th>
-                                        <th mat-sort-header="created">Creación</th>
-                                         <th ></th> <!--acciones -->
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let data of presupuestoList">
-                                        
-                                        <td>{{data.doctor.full_name}}</td>
-                                        <td>
-                                          <a class="dropdown-item" [routerLink]="[routes.patientProfile, data.patient.id]" 
-                                          *ngIf="isPermission('profile_patient')">
-                                            {{data.patient.full_name}}
-                                          </a>
-                                          <span *ngIf="!isPermission('profile_patient')">
-                                            {{data.patient.full_name}}
-                                          </span>
+                      </div>
+                    </td>
 
-                                        </td>
-                                        <!-- <td>{{data.segment_hour.format_segment.format_hour_start + ' - ' + data.segment_hour.format_segment.format_hour_end}}</td> -->
-                                        <td>{{data.speciality.name}}</td>
-                                        <td><button [ngClass]="{'status-green' : data.status === 2, 'status-pink' : data.status === 1}" class="custom-badge">{{data.status === 1 ? 'Pendiente' : 'Confirmado'}}</button></td>
-                                        
-                                        <td *ngIf="isPermission('edit_presupuesto')">
-                                          <!--begin::Input-->
-                                          <select
-                                          class="form-control form-select-solid fw-bolder"
-                                          name="state" [(ngModel)]="data.status" (change)="cambiarStatus(data)"
-                                          placeholder="state">
-                                          <option [value]="1">Pendiente</option>    
-                                          <option [value]="2">Confirmado</option>
-                                            </select>
-                                        </td>
-                                        <td>{{data.created_at | date:"shortDate" }}</td>
-                                        
-                                        <td class="text-end">
-                                            <div class="dropdown dropdown-action" >
-                                                <a href="javascript:void(0);" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <a class="dropdown-item" [routerLink]="['/presupuesto/edit/', data.id]" *ngIf="isPermission('edit_presupuesto')"><i class="fa-solid fa-pencil m-r-5"></i> Editar</a>
-                                                    <a class="dropdown-item" href="javascript:void(0)" (click)="onDeletePresupuesto(data.id)" *ngIf="isPermission('delete_presupuesto')"><i class="fa-solid fa-trash m-r-5"></i> Eliminar</a>
-                                                   
-                                                </div>
-                                            </div>
-                                        </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="table_footer">
+                <div class="col-sm-12 col-md-5">
+                  <div class="dataTables_info">
+                    Showing {{ serialNumberArray[0] }} to
+                    {{ serialNumberArray[serialNumberArray.length - 1] }} of
+                    {{ totalDataPatient }} entries
+                  </div>
+                </div>
 
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div class="table_footer">
-                                <div class="col-sm-12 col-md-5">
-                                  <div class="dataTables_info">
-                                    Showing {{ serialNumberArray[0] }} to
-                                    {{ serialNumberArray[serialNumberArray.length - 1] }} of
-                                    {{ totalDataPatient }} entries
-                                  </div>
-                                </div>
-                
-                                <div class="col-sm-12 col-md-7">
-                                  <div class="pagination_section">
-                                    <ul class="pagination">
-                                      <li
-                                        class="page-item"
-                                        [ngClass]="{
+                <div class="col-sm-12 col-md-7">
+                  <div class="pagination_section">
+                    <ul class="pagination">
+                      <li class="page-item" [ngClass]="{
                                           disabled: currentPage === 1
-                                        }"
-                                      >
-                                        <a
-                                          (click)="getMoreData('previous')"
-                                          class="page-link"
-                                          href="javascript:void(0);"
-                                          tabindex="-1"
-                                          >Previous</a
-                                        >
-                                      </li>
-                
-                                      <ng-container
-                                        *ngFor="let item of pageNumberArray; let i = index"
-                                      >
-                                        <li
-                                          class="page-item"
-                                          [class.active]="item === currentPage"
-                                          [ngClass]="
+                                        }">
+                        <a (click)="getMoreData('previous')" class="page-link" href="javascript:void(0);"
+                          tabindex="-1">Previous</a>
+                      </li>
+
+                      <ng-container *ngFor="let item of pageNumberArray; let i = index">
+                        <li class="page-item" [class.active]="item === currentPage" [ngClass]="
                                             (pageNumberArray[currentPage - 2] > item &&
                                               item !== 1 &&
                                               pageNumberArray.length > 6) ||
@@ -160,78 +212,55 @@
                                               pageNumberArray.length !== item)
                                               ? 'hide-page-no'
                                               : 'show-page-no'
-                                          "
-                                        >
-                                          <a
-                                            (click)="moveToPage(item)"
-                                            class="page-link"
-                                            href="javascript:void(0);"
-                                          >
-                                            {{ item }}
-                                          </a>
-                                        </li>
-                                        <li
-                                          class="page-item"
-                                          *ngIf="
+                                          ">
+                          <a (click)="moveToPage(item)" class="page-link" href="javascript:void(0);">
+                            {{ item }}
+                          </a>
+                        </li>
+                        <li class="page-item" *ngIf="
                                             i === 0 &&
                                             pageNumberArray.length > 6 &&
                                             currentPage > 2
-                                          "
-                                          [hidden]="currentPage === 1"
-                                          (click)="moveToPage(currentPage - 2)"
-                                        >
-                                          <a class="page-link" href="javascript:void(0);">
-                                            ...
-                                          </a>
-                                        </li>
-                                        <li
-                                          *ngIf="
+                                          " [hidden]="currentPage === 1" (click)="moveToPage(currentPage - 2)">
+                          <a class="page-link" href="javascript:void(0);">
+                            ...
+                          </a>
+                        </li>
+                        <li *ngIf="
                                             i === pageNumberArray.length - 2 &&
                                             pageNumberArray.length > 6
-                                          "
-                                          [hidden]="
+                                          " [hidden]="
                                             currentPage >=
                                               pageNumberArray[pageNumberArray.length - 2] ||
                                             totalData <
                                               serialNumberArray[serialNumberArray.length - 1]
-                                          "
-                                          class="page-item"
-                                          (click)="moveToPage(currentPage + 2)"
-                                        >
-                                          <a class="page-link" href="javascript:void(0);">
-                                            ...
-                                          </a>
-                                        </li>
-                                      </ng-container>
-                
-                                      <li
-                                        class="page-item"
-                                        [ngClass]="{
+                                          " class="page-item" (click)="moveToPage(currentPage + 2)">
+                          <a class="page-link" href="javascript:void(0);">
+                            ...
+                          </a>
+                        </li>
+                      </ng-container>
+
+                      <li class="page-item" [ngClass]="{
                                           disabled:
                                             currentPage ===
                                               pageNumberArray[pageNumberArray.length - 1] ||
                                               presupuestoList.length === 0
-                                        }"
-                                      >
-                                        <a
-                                          (click)="getMoreData('next')"
-                                          class="page-link"
-                                          href="javascript:void(0);"
-                                          >Next
-                                        </a>
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </div>
-                              </div>
-                        </div>
-                        
-                    </div>
-                </div>							
-            </div>					
+                                        }">
+                        <a (click)="getMoreData('next')" class="page-link" href="javascript:void(0);">Next
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
-
-
- 
+<app-modal-instrucciones [info]="info_mis_presupuestos_list" sectionId="mis_presupuesto"
+  #modalListaPresupuesto></app-modal-instrucciones>

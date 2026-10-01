@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../shared/auth/auth.service';
 import { routes } from '../../shared/routes/routes';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
     selector: 'app-login',
@@ -134,7 +134,7 @@ export class LoginComponent implements OnInit {
       if(this.user.roles == 'ENFERMERA' ){
         this.router.navigate([routes.doctorDashboard]);
       }
-      if(this.user.roles == 'RECEPCIÓN' ){
+      if(this.user.roles == 'RECEPCION' ){
         this.router.navigate([routes.adminDashboard]);
       }
       if(this.user.roles == 'GUEST' ){

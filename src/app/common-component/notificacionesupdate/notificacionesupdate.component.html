@@ -1,93 +1,171 @@
-<ul class="nav user-menu float-end d-flex align-items-center gap-2">
+<ul class="nav user-menu mt-0">
+  
+  <!-- 📶 1. ACCESORIO DE CONECTIVIDAD (LOOK APPLE PREMIUM) -->
+  <li class="nav-item d-inline-flex align-items-center">
+    <div class="apple-network-badge px-2.5 py-1 rounded-pill" 
+         [ngClass]="isOnline ? 'net-online' : 'net-offline'"
+         style="height: 16px; padding: 5px;">
+      <span class="net-pulse-dot me-1.5"></span>
+      <span class="fw-bold" style="font-size: 0.72rem; letter-spacing: 0.3px;">
+        {{ isOnline ? 'ONLINE' : 'MODO LOCAL' }}
+      </span>
+    </div>
+  </li>
 
-    <!-- =========================================================================
-         🎯 INDICADOR DE RED INTEGRADO (Estilo Cápsula Premium Apple)
-         ========================================================================= -->
-    <li class="nav-item d-flex align-items-center me-2">
-        <div class="apple-network-badge d-flex align-items-center gap-2 px-2.5 py-1.5 rounded-pill" 
-             [ngClass]="isOnline ? 'net-online' : 'net-offline'">
-            <span class="net-pulse-dot"></span>
-            <span class="net-status-text font-monospace fw-bold">
-                {{ isOnline ? 'ONLINE' : 'MODO LOCAL' }}
-            </span>
-        </div>
-    </li>
+  <!-- 🔔 2. MENÚ DROPDOWN CENTRAL DE ALERTAS Y TICKETS -->
+  <li class="nav-item dropdown has-arrow logged-item">
+    
+    <!-- Icono de la Campana con Globo Rojo Flotante Reactivo -->
+    <a href="javascript:void(0);" class="dropdown-toggle nav-link campana" data-bs-toggle="dropdown" (click)="openBoxFunc()">
+      <i class="fa-solid fa-bell text-secondary fs-4"></i>
+      <!-- Se conecta al BehaviorSubject unificado para pintar el conteo exacto de MongoDB -->
+      <span class="badge bg-danger rounded-circle  brbnotificacion"
+            *ngIf="(notifService.unreadCount$ | async) as pendientes" >
+        {{ pendientes }}
+      </span>
+    </a>
 
-    <!-- Dropdown de Notificaciones (Tu lógica original intacta) -->
-    <li class="nav-item dropdown d-block" *ngIf="isPermission('view_notification') && user.roles[0] === 'DOCTOR'">
-        <!-- Botón del Dropdown -->
-        <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="assets/img/icons/note-icon-02.svg" alt="Notification Icon">
-            <span class="pulse" *ngIf="payments_doctors?.length > 0 || appointments_doctors?.length > 0"></span>
+    <!-- MENÚ DESPLEGABLE CON SCROLL INTERACTIVO -->
+    <div class="dropdown-menu notifications" [class.show]="openBox" >
+      
+      <div class="topnav-dropdown-header px-3 py-2.5 border-bottom d-flex align-items-center justify-content-betweenbg-white">
+        <span class="notification-title fw-extrabold text-dark mb-0" style="font-size: 0.88rem; letter-spacing: -0.2px;">Centro de Alertas</span>
+        <a href="javascript:void(0)" class="clear-noti small fw-bold text-decoration-none" style="color: #7c3aed;" (click)="markAllAsRead()">
+          Marcar como leidos
         </a>
+      </div>
 
-        <!-- Menú Desplegable -->
-        <div class="dropdown-menu notifications">
-            <div class="topnav-dropdown-header d-flex justify-content-between align-items-center">
-                <span>Notifications</span>
-                <a href="javascript:void(0);" class="clear-noti"
-                    *ngIf="payments_doctors?.length > 0 || appointments_doctors?.length > 0" (click)="markAllAsRead()">
-                    Mark all as read
-                </a>
-            </div>
+      <div class="drop-scroll" style="max-height: 320px; overflow-y: auto; background-color: #f8fafc;">
+        <ul class="notification-list p-0 m-0">
 
-            <div class="drop-scroll">
-                <ul class="notification-list">
-                    <!-- Notificación de Pagos -->
-                    <li class="notification-message" *ngIf="payments_doctors?.length > 0 && isPermission('view_notification_pagos')">
-                        <a [routerLink]="[routes.trasfereciasListDoctor, user.id]">
-                            <div class="media">
-                                <span class="avatar"><img alt="User Image" src="assets/img/user.jpg" class="img-fluid"></span>
-                                <div class="media-body">
-                                    <p class="noti-details"><span class="noti-title">Verificación Transferencia</span> Nueva transferencia por confirmar</p>
-                                    <p class="noti-time"><span class="notification-time">Tiene {{totalT}} pendientes</span></p>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-
-                    <!-- Notificación de Citas -->
-                    <li class="notification-message" *ngIf="appointments_doctors?.length > 0 && isPermission('view_notification_appointment')">
-                        <a [routerLink]="[routes.appointmentListDoct, user.id]">
-                            <div class="media">
-                                <span class="avatar avatar-letter">V</span>
-                                <div class="media-body">
-                                    <p class="noti-details"><span class="noti-title">Verificación Cita</span> Verifique las nuevas citas por atender</p>
-                                    <p class="noti-time"><span class="notification-time">Tiene {{total}} pendientes</span></p>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-
-                    <!-- Estado Vacío -->
-                    <li class="notification-message text-center p-3" *ngIf="!(payments_doctors?.length > 0) && !(appointments_doctors?.length > 0)">
-                        <p class="text-muted m-0">No tienes notificaciones pendientes</p>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </li>
-
-    <!-- Menú Perfil de Usuario (Tu lógica original intacta) -->
-    <li class="nav-item dropdown has-arrow user-profile-list">
-        <a href="javascript:void(0);" class="dropdown-toggle nav-link user-link" data-bs-toggle="dropdown">
-            <div class="user-names">
-                <h5 class="d-none d-md-block">{{user.name}}</h5>
-                <h5 class="d-block d-md-none">{{ (user.name | slice:0:1) }}</h5>
-                <span class="vermovil">{{user.roles}}</span>
-            </div>
-            <span class="user-img vermovil">
-                <div *ngIf="userremoto?.avatar">
-                    <img [src]="userremoto.avatar | imagenPipe:'staffs'">
+          <!-- 🟢 FILA A: BUCLE DINÁMICO DE TICKETS (Presupuestos, Pagos Nuevos de Laravel -> MongoDB) -->
+          <li class="notification-message p-3 bg-white border-bottom position-relative transition-all"
+              *ngFor="let n of notifService.listaNotificaciones"
+              [class.unread-ticket-bg]="!n.leido"
+              (click)="notifService.marcarUnaComoLeida(n._id)">
+            <a (click)="atenderNotificacion(n)" class="text-decoration-none">
+              <div class="media d-flex gap-2.5">
+                
+                <!-- Avatar Circular Dinámico por Tipos de Alerta -->
+                <div class="avatar flex-shrink-0 d-flex align-items-center justify-content-center rounded-circle"
+                  
+                     [ngClass]="{
+                       'bg-purple-light': n.tipo?.startsWith('PRESUPUESTO_') || n.type?.startsWith('PRESUPUESTO_'),
+                       'bg-success-light': n.tipo?.startsWith('PAGO_') || n.type?.startsWith('PAGO_'),
+                       'bg-info-light': n.tipo === 'CITA_AGENDADA' || n.tipo === 'CONSULTA_NUEVA'
+                     }" 
+                     style="width: 38px; height: 38px;">
+                  <i class="fa-solid" 
+                     [ngClass]="{
+                       'fa-file-invoice-dollar text-purple': n.tipo?.startsWith('PRESUPUESTO_') || n.type?.startsWith('PRESUPUESTO_'),
+                       'fa-wallet text-success': n.tipo?.startsWith('PAGO_') || n.type?.startsWith('PAGO_'),
+                       'fa-calendar-check text-info': n.tipo === 'CITA_AGENDADA' || n.tipo === 'CONSULTA_NUEVA'
+                     }">
+                  </i>
                 </div>
-            </span>
-        </a>
-        <div class="dropdown-menu">
-            <a *ngIf="isPermission('profile_doctor')" class="dropdown-item" [routerLink]="['/doctors/profile/', user.id]">Mi Perfil</a>
-            <a *ngIf="isPermission('edit_doctor')" class="dropdown-item" [routerLink]="['/doctors/list/edit/', user.id]">Editar Perfil</a>
-            <a *ngIf="isPermission('edit_staff')" class="dropdown-item" [routerLink]="['/staffs/staff-n/', user.id]">Editar Perfil</a>
-            <a class="dropdown-item" style="cursor: pointer;" (click)="onLogout()">Salir</a>
+
+                <!-- Textos Descriptivos de la Notificación -->
+                <div class="media-body flex-grow-1" (click)="atenderNotificacion(n)" style="cursor: pointer;">
+                  <p class="noti-details m-0">
+                    <span class="noti-title d-block fw-bold text-dark" style="font-size: 0.82rem; line-height: 1.2;">
+                      {{ n.titulo }}
+                    </span>
+                    <span class="noti-text text-secondary d-block mt-1" style="font-size: 0.76rem; line-height: 1.35;">
+                      {{ n.mensaje }}
+                    </span>
+                  </p>
+                  <span class="noti-time d-block mt-1 text-muted" style="font-size: 0.68rem;">
+                    {{ n.fecha || n.createdAt | date:'shortTime' }} - {{ n.fecha || n.createdAt | date:'dd/MM/yyyy' }}
+                  </span>
+                </div>
+
+              </div>
+            </a>
+            <!-- Punto rojo de alerta flotante si no ha sido leído -->
+            <span class="live-unread-dot" *ngIf="!n.leido"></span>
+          </li>
+
+          <!-- 🔵 FILA B: ACCESOS TRADICIONALES DE LARAVEL CORE (Citas/Pagos fijos) -->
+          <li class="notification-message p-3 bg-white border-bottom" *ngIf="totalT > 0" (click)="clearPayments()">
+            <a href="javascript:void(0);" class="text-decoration-none">
+              <div class="media d-flex gap-2.5">
+                <div class="avatar bg-success-light rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; flex-shrink: 0;">
+                  <i class="fa-solid fa-money-bill-transfer text-success"></i>
+                </div>
+                <div class="media-body">
+                  <span class="d-block fw-bold text-dark" style="font-size: 0.82rem;">Verificación Transferencia</span>
+                  <p class="text-secondary m-0 mt-0.5" style="font-size: 0.76rem; line-height: 1.35;">
+                    Nueva transferencia por confirmar. Tiene <strong>{{ totalT }}</strong> pendientes.
+                  </p>
+                </div>
+              </div>
+            </a>
+          </li>
+
+          <li class="notification-message p-3 bg-white border-bottom" *ngIf="total > 0" (click)="clearAppointments()">
+            <a href="javascript:void(0);" class="text-decoration-none">
+              <div class="media d-flex gap-2.5">
+                <div class="avatar bg-info-light rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; flex-shrink: 0;">
+                  <i class="fa-solid fa-user-doctor text-info"></i>
+                </div>
+                <div class="media-body">
+                  <span class="d-block fw-bold text-dark" style="font-size: 0.82rem;">Verificación Cita</span>
+                  <p class="text-secondary m-0 mt-0.5" style="font-size: 0.76rem; line-height: 1.35;">
+                    Verifique las nuevas citas por atender. Tiene <strong>{{ total }}</strong> pendientes.
+                  </p>
+                </div>
+              </div>
+            </a>
+          </li>
+
+          <!-- 📭 CONTROL DE ESTADO COMPLETAMENTE VACÍO -->
+          <div class="text-center py-5 bg-white text-muted small" 
+               *ngIf="notifService.listaNotificaciones.length === 0 && totalT === 0 && total === 0">
+            <i class="fa-solid fa-bell-slash d-block fs-3 mb-2 text-secondary" style="color: #cbd5e1;"></i>
+            <span class="fw-bold d-block text-dark" style="font-size: 0.8rem;">Tu buzón está al día</span>
+            No tienes notificaciones pendientes.
+          </div>
+
+        </ul>
+      </div>
+      <div class="topnav-dropdown-footer border-top bg-white text-center py-2">
+        <a [routerLink]="['/notificaciones/list']" class="small text-decoration-none fw-bold" style="color: #7c3aed;">Ver todas las alertas</a>
+      </div>
+    </div>
+  </li>
+
+  <!-- 🧑‍⚕️ 3. MENÚ DE PERFIL DEL USUARIO ACTIVO (MÉDICO / RECEPCIÓN) -->
+  <li class="nav-item dropdown has-arrow user-profile-list" *ngIf="user">
+    <a href="javascript:void(0);" class="dropdown-toggle nav-link user-link d-flex align-items-center" data-bs-toggle="dropdown">
+      
+      <!-- Avatar circular de iniciales con tu globowhite/globoblack integrado -->
+      <span class="user-img position-relative d-inline-block">
+        <div class="avatar-initials rounded-circle d-flex align-items-center justify-content-center fw-bold text-white" 
+             style="width: 32px; height: 32px; background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); font-size: 0.85rem;">
+          {{ (user.name | slice:0:1) }}
         </div>
-    </li>
+        <!-- Tus esferas de modo oscuro integradas -->
+        <!-- <span class="globowhite"></span>
+        <span class="globoblack"></span> -->
+      </span>
+
+      <!-- Bloque de Nombres con Saneamiento de Rol en móviles -->
+      <div class="user-names ms-2  text-start">
+        <h5 class="mb-0 fw-bold text-dark" style="font-size: 0.85rem; line-height: 1.1;">{{ user.name }}</h5>
+        <span class="text-muted fw-semibold uppercase-role vermovil" style="font-size: 0.68rem; letter-spacing: 0.4px;">
+          {{ roles[0] || 'Especialista' }}
+        </span>
+      </div>
+
+    </a>
+    
+    <!-- Menú Desplegable de Sesión Clásico -->
+    <div class="dropdown-menu dropdown-menu-end" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.05); border: 1px solid #f1f5f9;">
+      <a *ngIf="isPermission('profile_doctor')" class="dropdown-item py-2" [routerLink]="['/doctors/profile/', user.id]"><i class="fa-regular fa-user me-2 text-muted"></i> Mi Perfil</a>
+      <a *ngIf="isPermission('edit_doctor')" class="dropdown-item py-2" [routerLink]="['/doctors/list/edit/', user.id]"><i class="fa-solid fa-gear me-2 text-muted"></i> Editar Perfil</a>
+      <hr class="dropdown-divider my-1">
+      <a class="dropdown-item py-2 text-danger fw-semibold" href="javascript:void(0);" (click)="onLogout()"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i> Salir</a>
+    </div>
+  </li>
 
 </ul>

@@ -1,7 +1,50 @@
-<div class="col-auto text-end float-end ms-auto download-grp">
+<!-- <div class="col-auto text-end float-end ms-auto download-grp">
     <a type="button" *ngIf="isPermission('export_pdf')" (click)="pdfExport()" class=" me-2"><img src="assets/img/icons/pdf-icon-01.svg"   alt="Export to Pdf"  title="Export to Pdf"></a>
     <a type="button" *ngIf="isPermission('export_text')" (click)="txtExport()" class=" me-2"><img src="assets/img/icons/pdf-icon-02.svg"   alt="Export to TXT" title="Export to TXT"></a>
     <a type="button" *ngIf="isPermission('export_csv')" (click)="csvExport()" class=" me-2"><img src="assets/img/icons/pdf-icon-03.svg"    alt="Export to CSV" title="Export to CSV"></a>
     <a type="button" *ngIf="isPermission('export_xsl')" (click)="excelExport()" ><img src="assets/img/icons/pdf-icon-04.svg"   alt="Export to XLS" title="Export to XLS"></a>
    
-</div>
+</div> -->
+
+@if (isPermission(exportPermission)) {
+  <!-- <div class="d-inline-flex align-items-center gap-2 export-buttons-wrapper"> -->
+  <div class="col-auto text-end float-end ms-auto download-grp d-inline-flex gap-2 ">
+    
+    <!-- Botón XLS (Excel) -->
+    @if (isPermission('export_xls')) {
+      <button (click)="excelExport()" class="btn btn-outline-success btn-sm px-3 d-flex align-items-center gap-1 border-success-subtle bg-white shadow-sm" style="height: 38px; border-radius: 4px;" title="Exportar a XLS">
+        <!-- <i class="bi bi-file-earmark-excel-fill text-success fs-5"></i>
+        <span class="fw-medium text-dark small">Export to XLS</span> -->
+        <img src="assets/img/icons/pdf-icon-04.svg"   alt="Export to XLS" title="Export to XLS">
+      </button>
+    }
+
+    <!-- Botón CSV -->
+    @if (isPermission('export_csv')) {
+      <button (click)="csvExport()" class="btn btn-outline-secondary btn-sm px-3 d-flex align-items-center gap-1 border-secondary-subtle bg-white shadow-sm" style="height: 38px; border-radius: 4px;" title="Exportar a CSV">
+        <!-- <i class="bi bi-file-earmark-spreadsheet-fill text-secondary fs-5"></i>
+        <span class="fw-medium text-dark small">Export to CSV</span> -->
+        <img src="assets/img/icons/pdf-icon-03.svg"    alt="Export to CSV" title="Export to CSV">
+      </button>
+    }
+
+    <!-- Botón TXT -->
+    @if (isPermission('export_txt')) {
+      <button (click)="txtExport()" class="btn btn-outline-dark btn-sm px-3 d-flex align-items-center gap-1 border-dark-subtle bg-white shadow-sm" style="height: 38px; border-radius: 4px;" title="Exportar a TXT">
+        <!-- <i class="bi bi-file-earmark-text-fill text-dark fs-5"></i>
+        <span class="fw-medium text-dark small">Export to TXT</span> -->
+        <img src="assets/img/icons/pdf-icon-02.svg"   alt="Export to TXT" title="Export to TXT">
+      </button>
+    }
+
+    <!-- Botón PDF -->
+    @if (isPermission('export_pdf')) {
+      <button (click)="pdfExport()" class="btn btn-outline-danger btn-sm px-3 d-flex align-items-center gap-1 border-danger-subtle bg-white shadow-sm" style="height: 38px; border-radius: 4px;" title="Exportar a PDF">
+        <!-- <i class="bi bi-file-earmark-pdf-fill text-danger fs-5"></i>
+        <span class="fw-medium text-dark small">Export to PDF</span> -->
+        <img src="assets/img/icons/pdf-icon-01.svg"   alt="Export to Pdf"  title="Export to Pdf">
+      </button>
+    }
+
+  </div>
+}
