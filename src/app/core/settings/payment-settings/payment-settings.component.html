@@ -16,7 +16,7 @@
         </div>
         <!-- /Page Header -->
 
-        <div class="settings-menu-links">
+        <div class="settings-menu-links" *ngIf="isEnterprise === true">
             <ul class="nav nav-tabs menu-tabs">
                 <li class="nav-item " >
                     <a class="nav-link" [routerLink]="routes.settings">Configuración General</a>
