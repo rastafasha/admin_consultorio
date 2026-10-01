@@ -57,10 +57,10 @@ export class AuthInterceptor implements HttpInterceptor {
       // 🏢 COMPONENTE MULTI-TENANT GLOBAL: Viaja a ambos mundos por seguridad
       // =========================================================================
       if (tenantSlug) {
-        // Saneamos ambos headers para darle soporte tanto al backend viejo como al nuevo
-        headers = headers.append('X-Tenant-Slug', tenantSlug)
-                         .append('X-Clinica-Slug', tenantSlug);
+        // 🟢 DEJAMOS ÚNICAMENTE LA CABECERA OFICIAL QUE ESPERA TU LARAVEL Enterprise
+        headers = headers.append('X-Tenant-Slug', tenantSlug);
       }
+      
     }
 
     return next.handle(req.clone({ headers, params })).pipe(
