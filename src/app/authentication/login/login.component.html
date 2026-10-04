@@ -24,7 +24,9 @@
                     alt="klyntic"
                   />
                   <p style="text-align:center;">Admin Citas Médicas.</p>
-                  <p style="text-align:center;">Consultorio.</p>
+                  <p style="text-align:center;" *ngIf="clinicaSelected?.tipoClinica === 'Clinica'">Clinica.</p>
+                  <p style="text-align:center;" *ngIf="clinicaSelected?.tipoClinica !== 'Clinica'">Consultorio.</p>
+                   
                 </div>
                 <h2 *ngIf="!isLoading">Ingresar</h2>
                 <h4 *ngIf="isLoading">Cargando ingreso ...</h4>

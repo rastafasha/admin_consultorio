@@ -88,6 +88,11 @@ h2{
   margin: 0 10px;
 }
 
+.step-label {
+    font-size: 12px;
+    color: #999;
+    transition: all 0.3s ease;
+}
 
 .imgcuadro{
   border: 1px solid #ccc;

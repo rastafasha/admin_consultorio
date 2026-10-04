@@ -83,9 +83,17 @@ export class ModalInicialComponent implements AfterViewInit, OnDestroy {
 
     
   }
-
+  //1
   nextStep() { this.currentStep = 2; }
+  //2
+  nextStep1() { this.currentStep = 3; }
   prevStep() { this.currentStep = 1; }
+  //3
+  prevStep1() { this.currentStep = 2; }
+  
+  
+
+  
 
   ngOnDestroy() {
     // 🧹 Limpieza al destruir el componente para evitar fugas de memoria

@@ -10,8 +10,13 @@
       <div class="modal-body">
         <div class="step-indicators text-center mb-4">
           <span class="step-circle" [class.active]="currentStep >= 1">1</span>
+          <span class="step-label">Bienvenida</span>
           <span class="step-line"></span>
           <span class="step-circle" [class.active]="currentStep >= 2">2</span>
+          <span class="step-label">Primeros Pasos</span>
+          <span class="step-line"></span>
+          <span class="step-circle" [class.active]="currentStep >= 3">3</span>
+          <span class="step-label">Instalacion</span>
         </div>
 
         <div *ngIf="currentStep === 1">
@@ -55,6 +60,15 @@
             <img src="./assets/img/updateMess.png" class="img-fluid" style="width: 100%; display: block; margin:auto" alt="">
           </div>
 
+          <div class="text-center mt-4">
+          <button *ngIf="currentStep === 1" class="btn btn-info btn-md text-uppercase me-2" (click)="nextStep()">
+            Siguiente
+          </button>
+          
+        </div>
+        </div>
+        
+        <div *ngIf="currentStep === 2">
           <div class="setup-guide-box p-3 rounded-lg border mb-4 mt-3" style="background-color: #fffaf0; border-color: #ffe4b5 !important;">
           <h5 class="font-weight-bold text-dark mb-3" style="color: #b02b2b !important;">🛠️ Pasos iniciales obligatorios antes de empezar:</h5>
           
@@ -76,16 +90,19 @@
             </div>
           </div>
         </div>
+        <div class="text-center mt-4">
+          <button *ngIf="currentStep === 2" class="btn btn-secondary btn-md me-2" (click)="prevStep()">
+            Volver
+          </button>
+          <button *ngIf="currentStep === 2" class="btn btn-info btn-md text-uppercase me-2" (click)="nextStep1()">
+            Siguiente
+          </button>
         </div>
-        
-        <div *ngIf="currentStep === 2">
+        </div>
+        <div *ngIf="currentStep === 3">
           <h2>Instalalo en tu Dispositivo! </h2>
           <p>Si puedes ver este icon en la barra de dirección:</p>
-          <div class="imgcuadro">
-            <img src="./assets/img/barra1.png" class="img-fluid" style="width: 100%; display: block; margin:auto" alt="">
-
-          </div>
-          <p>ó</p>
+         
           <div class="imgcuadro">
             <img src="./assets/img/barra2.png" class="img-fluid" style="width: 100%; display: block; margin:auto" alt="">
 
@@ -102,21 +119,19 @@
             <div class="col-12 col-sm-6">
               <p>3 Agregalo a tu barra de Inicio:</p>
               <div class="imgcuadro">
-                <img src="./assets/img/instalado.png" class="img-fluid" style="width: 100%; display: block; margin:auto" alt="">
+                <img src="./assets/img/instalado.png" class="img-fluid" style="width: auto; display: block; margin: 0 auto" alt="">
 
               </div>
             </div>
           </div>
-        </div>
-
-        <div class="text-center mt-4">
-          <button *ngIf="currentStep === 1" class="btn btn-info btn-md text-uppercase me-2" (click)="nextStep()">
-            Siguiente
-          </button>
-          <button *ngIf="currentStep === 2" class="btn btn-secondary btn-md me-2" (click)="prevStep()">
+          <div class="text-center mt-4">
+          <button *ngIf="currentStep === 3" class="btn btn-secondary btn-md me-2" (click)="prevStep1()">
             Volver
           </button>
         </div>
+        </div>
+
+        
       </div>
       <div class="modal-footer botonesmodal">
         <button type="button" class="btn btn-outline-success me-2" (click)="onClose()">Continuar</button>

@@ -336,7 +336,6 @@ export class AdminDashboardComponent {
     window.scrollTo(0, 0);
     this.getDashboardAdmin();
     this.getDashboardAdminYear();
-    this.cargarDatosUsuario(); // Tu lógica existente para recuperar el LocalStorage
     this.sincronizarContextoClinica();
     // this.getAppointmentPending();
     let USER = localStorage.getItem("user");
@@ -372,11 +371,7 @@ export class AdminDashboardComponent {
       });
   }
 
-  cargarDatosUsuario() {
-    if (localStorage.getItem('user')) {
-      this.user = JSON.parse(localStorage.getItem('user') || '{}');
-    }
-  }
+ 
 
   ngOnDestroy(): void {
     // 🧹 Apagamos la suscripción para evitar fugas de memoria en MAMP
@@ -384,7 +379,7 @@ export class AdminDashboardComponent {
       this.clinicaSubscription.unsubscribe();
     }
   }
-
+ 
   getAppointmentPending(){
     this.appointmentService.pendings().subscribe((resp:any)=>{
       // console.log(resp);
