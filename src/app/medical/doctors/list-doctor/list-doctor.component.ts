@@ -79,17 +79,30 @@ export class ListDoctorComponent {
     this.doctorList = [];
     this.serialNumberArray = [];
     this.isLoading = true;
+    if(this.user.roles.includes('SUPERADMIN')) {
+      this.doctorService.listDoctors().subscribe((resp:any)=>{
+        
+        // console.log(resp);
+  
+        this.totalDatadoctor = resp.users.data.length;
+        this.doctor_generals = resp.users.data;
+        this.doctor_id = resp.users.id;
+       this.getTableDataGeneral();
+       this.isLoading = false;
+      })
 
-    this.doctorService.listDoctors().subscribe((resp:any)=>{
-      
-      // console.log(resp);
-
-      this.totalDatadoctor = resp.users.data.length;
-      this.doctor_generals = resp.users.data;
-      this.doctor_id = resp.users.id;
-     this.getTableDataGeneral();
-     this.isLoading = false;
-    })
+    }else{
+       this.doctorService.listDoctorsClinica(this.user.clinica_id).subscribe((resp:any)=>{
+        
+        // console.log(resp);
+  
+        this.totalDatadoctor = resp.users.data.length;
+        this.doctor_generals = resp.users.data;
+        this.doctor_id = resp.users.id;
+       this.getTableDataGeneral();
+       this.isLoading = false;
+      })
+    }
 
   }
 

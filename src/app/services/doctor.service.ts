@@ -25,6 +25,11 @@ export class DoctorService {
     const URL = url_servicios+"/doctors";
     return this.http.get(URL, {headers:headers});
   }
+  listDoctorsClinica(clinica_id:number){
+    const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
+    const URL = url_servicios+"/doctors/clinica/"+clinica_id;
+    return this.http.get(URL, {headers:headers});
+  }
   listConfig(){
     const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token})
     const URL = url_servicios+'/doctors/config';
