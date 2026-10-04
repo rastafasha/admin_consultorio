@@ -19,6 +19,7 @@ export class PubListComponent {
   public publicidadd: any ;
   dataSource!: MatTableDataSource<any>;
 
+  public isLoading = false;
   public showFilter = false;
   public searchDataValue = '';
   public searchReferencia = '';
@@ -79,6 +80,7 @@ export class PubListComponent {
     this.publicidadList = [];
     this.serialNumberArray = [];
 
+    this.isLoading = true;
     this.pubService.listPubs().subscribe((resp:any)=>{
       // console.log(resp.payments.data);
       this.publicidadList = resp.pubs.data;
@@ -89,13 +91,14 @@ export class PubListComponent {
       this.getTableDataGeneral();
       this.dataSource = new MatTableDataSource<any>(this.publicidadList);
       this.calculateTotalPages(this.totalDataPublicidad, this.pageSize);
+      this.isLoading = false;
     })
   }
 
   getTableDataGeneral(){
     this.publicidadList = [];
     this.serialNumberArray = [];
-    
+    this.isLoading = true;
     this.publicidad_generals.map((res: any, index: number) => {
       const serialNumber = index + 1;
       if (index >= this.skip && serialNumber <= this.limit) {
@@ -106,6 +109,7 @@ export class PubListComponent {
     });
     this.dataSource = new MatTableDataSource<any>(this.publicidadList);
     this.calculateTotalPages(this.totalDataPublicidad, this.pageSize);
+    this.isLoading = false;
   }
   
 
@@ -191,18 +195,10 @@ export class PubListComponent {
 
   cambiarStatus(data:any){
     const VALUE = data.status;
-    console.log(VALUE);
     
     this.pubService.updateStatus(data, data.id).subscribe(
       resp =>{
-        console.log(resp);
-        // Swal.fire('Actualizado', `actualizado correctamente`, 'success');
-        // this.toaster.open({
-        //   text:'Producto Actualizado!',
-        //   caption:'Mensaje de Validación',
-        //   type:'success',
-        // })
-        this.getTableData();
+        this.ngOnInit();
       }
     )
   }
@@ -222,6 +218,7 @@ export class PubListComponent {
         $("body").removeAttr("style");
 
         this.publicidad_selected = null;
+        this.ngOnInit();
       }
     })
   }
@@ -257,7 +254,7 @@ export class PubListComponent {
         $("body").removeAttr("style");
 
         this.publicidad_selected = null;
-        this.getTableData();
+        this.ngOnInit();
       }
     })
   }
@@ -282,7 +279,7 @@ export class PubListComponent {
         this.publicidad_selected = null;
         this.FILE_AVATAR = null;
         this.IMAGE_PREVISUALIZA = null;
-        this.getTableData();
+        this.ngOnInit();
       }
     })
   }
@@ -301,7 +298,6 @@ export class PubListComponent {
 
   getPublicidad(){
     this.pubService.getPub(this.publicidad_selected.id).subscribe((resp:any)=>{
-      console.log(resp);
       this.publicidadd = resp.publicidad;
     })
   }

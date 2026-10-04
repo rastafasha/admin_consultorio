@@ -79,11 +79,17 @@
     display: block;
 }
 
+.indicador{
+    font-size: 0.72rem; letter-spacing: 0.3px;
+}
+
 /* =========================================================================
    📱 AJUSTE PARA PANTALLAS DE CELULARES (Hasta 480px de ancho)
    ========================================================================= */
 @media (max-width: 480px) {
-
+    .indicador{
+    display: none !important;
+}
     /* Forzamos al contenedor de la campana a ser el ancla real */
     .setting-info, .campana {
         position: relative !important;
@@ -98,7 +104,7 @@
         
         /* Coordenadas flotantes fijas respecto a la pantalla del móvil */
         top: 56px !important;
-        left: -180px !important;
+        left: -230px !important;
         right: 0px !important;
         
         /* El recuadro calculará el ancho de la pantalla restando los márgenes laterales */

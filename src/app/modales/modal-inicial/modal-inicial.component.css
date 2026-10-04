@@ -10,7 +10,7 @@
 /* 1. La capa raíz será una ventana invisible que permite hacer clics */
 #modalInicial {
     background-color: transparent !important; /* QUITAMOS el color gris de aquí */
-    z-index: 1055 !important;                /* Nivel estándar de Bootstrap 5 superior */
+    z-index: 99999 !important;                /* Nivel estándar de Bootstrap 5 superior */
     pointer-events: none !important;          /* 🚀 CLAVE: Permite que los clics atraviesen las zonas vacías */
 }
 
