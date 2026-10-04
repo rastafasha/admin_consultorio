@@ -18,6 +18,13 @@ export class PatientMService {
     const URL = url_servicios+'/patients?page='+page+"&search="+search;
     return this.http.get(URL, {headers:headers});
   }
+  listClinicaPatients(page=1, search='', clinica_id:number){
+    const headers = new HttpHeaders({'Authorization': 'Bearer '+this.authService.token})
+    const URL = url_servicios+'/patients/clinica/'+clinica_id+'?page='+page+"&search="+search;
+    return this.http.get(URL, {headers:headers});
+  }
+
+  
   listPatientDocts(doctor_id:number, page=1,  search=''){
     const headers = new HttpHeaders({'Authorization': 'Bearer '+this.authService.token})
     const URL = url_servicios+'/patients/byDoctor/'+doctor_id+'/?page='+page+"&search="+search;
