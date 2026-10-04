@@ -111,7 +111,7 @@ export class ListPatientMComponent {
   }
 
   isPermission(permission: string) {
-    if (this.user.roles.includes('SUPERADMIN')) {
+    if (this.user.roles[0].includes('SUPERADMIN')) {
       return true;
     }
     if (this.user.permissions.includes(permission)) {
@@ -124,7 +124,7 @@ export class ListPatientMComponent {
     this.patientList = [];
     this.serialNumberArray = [];
     this.isLoading = true;
-    if (this.user.roles.includes('SUPERADMIN')) {
+    if (this.user.roles[0].includes('SUPERADMIN')) {
       this.patientService.listPatients(page, this.searchDataValue).subscribe((resp: any) => {
 
         this.totalDataPatient = resp.total;

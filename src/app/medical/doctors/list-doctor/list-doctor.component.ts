@@ -38,6 +38,7 @@ export class ListDoctorComponent {
   public doctor_selected:any;
   public text_validation:any;
   public user:any;
+  public roles:any;
   isLoading = false;
 
   titlePage = 'Listado de Doctores';
@@ -62,11 +63,14 @@ export class ListDoctorComponent {
     window.scrollTo(0, 0);
     this.doctorService.closeMenuSidebar();
     this.getTableData();
-    this.user = this.roleService.authService.user;
+    // this.user = this.roleService.authService.user;
+    // console.log(this.user)
+    let USER = localStorage.getItem("user");
+    this.user = JSON.parse(USER ? USER: '');
   }
 
   isPermission(permission:string){
-    if(this.user.roles.includes('SUPERADMIN')){
+    if(this.user.roles[0] === 'SUPERADMIN'){
       return true;
     }
     if(this.user.permissions.includes(permission)){
@@ -79,11 +83,8 @@ export class ListDoctorComponent {
     this.doctorList = [];
     this.serialNumberArray = [];
     this.isLoading = true;
-    if(this.user.roles.includes('SUPERADMIN')) {
+    if(this.user.roles[0] === 'SUPERADMIN') {
       this.doctorService.listDoctors().subscribe((resp:any)=>{
-        
-        // console.log(resp);
-  
         this.totalDatadoctor = resp.users.data.length;
         this.doctor_generals = resp.users.data;
         this.doctor_id = resp.users.id;
@@ -93,9 +94,6 @@ export class ListDoctorComponent {
 
     }else{
        this.doctorService.listDoctorsClinica(this.user.clinica_id).subscribe((resp:any)=>{
-        
-        // console.log(resp);
-  
         this.totalDatadoctor = resp.users.data.length;
         this.doctor_generals = resp.users.data;
         this.doctor_id = resp.users.id;
