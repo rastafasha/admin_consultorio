@@ -24,8 +24,11 @@
 
         <!-- 🎯 3. El Texto cierra el carril izquierdo -->
         <span class="nmclin">
-            <span class="ms-2 fw-semibold text-dark">
-            Klyntic |
+            <span *ngIf="!esClinica" class="ms-2 fw-semibold text-dark">
+            Klyntic Pro
+            </span>
+            <span *ngIf="esClinica" class="ms-2 fw-semibold text-dark">
+            Klyntic Enterprise
             </span>
             <span class="ms-2 fw-semibold text-dark">
              {{ nombreDesplegable }}

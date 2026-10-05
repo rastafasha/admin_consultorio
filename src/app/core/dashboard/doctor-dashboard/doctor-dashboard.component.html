@@ -28,7 +28,8 @@
                         </mat-select>
                     </div>
                     <div class="morning-user">
-                        <h2>Buen día, Dr.<span>{{user.name}}</span></h2>
+                        <h2 *ngIf="doctor.gender === 1">Buen día, Dr.<span>{{user.name}}</span></h2>
+                        <h2 *ngIf="doctor.gender === 2">Buen día, Dra.<span>{{user.name}}</span></h2>
                         <!-- 🏢 CONTROL ENTERPRISE KLYNTIC: Muestra los datos de la sucursal en el subdominio clínico -->
                         @if (clinicaSelected?.tipoClinica === 'Clinica') {
                         <p class="mb-0">
@@ -98,7 +99,7 @@
 
         <!-- doctor activado -->
         <app-loading *ngIf="isLoadingDataInicial"></app-loading>
-        <div class="doctor-list-blk" *ngIf="!isLoadingDataInicial && doctor && doctor.id">
+        <div class="doctor-list-blk" *ngIf="!isLoadingDataInicial && doctor && doctor.id && doctor.status === 2">
             <div class="row">
                 <!-- Citas -->
                 <div class="col-xl-3 col-md-6 col-xs-12 col-sm-6">
