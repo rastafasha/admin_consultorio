@@ -10,25 +10,25 @@
 /* 1. La capa raíz será una ventana invisible que permite hacer clics */
 #modalInicial {
     background-color: transparent !important; /* QUITAMOS el color gris de aquí */
-    z-index: 99999 !important;                /* Nivel estándar de Bootstrap 5 superior */
-    pointer-events: none !important;          /* 🚀 CLAVE: Permite que los clics atraviesen las zonas vacías */
+    z-index: 99999 !important; /* Nivel estándar de Bootstrap 5 superior */
+    pointer-events: none !important; /* 🚀 CLAVE: Permite que los clics atraviesen las zonas vacías */
 }
 
 /* 2. Trasladamos el fondo translúcido controlado ÚNICAMENTE al diálogo */
 #modalInicial .modal-dialog {
-    pointer-events: auto !important;          /* 🚀 CLAVE: Devuelve la interactividad total a los botones y la tarjeta */
+    pointer-events: auto !important; /* 🚀 CLAVE: Devuelve la interactividad total a los botones y la tarjeta */
     z-index: 1056 !important;
-    margin-top: 2% !important;               /* Lo baja un poco para centrarlo simétricamente */
+    margin-top: 2% !important; /* Lo baja un poco para centrarlo simétricamente */
 }
 
 /* 3. Forzamos al cuadro interno a ser 100% BLANCO SÓLIDO Y NÍTIDO */
 #modalInicial .modal-content {
-    background-color: #ffffff !important;     /* 🟢 Blanco puro sin heredar transparencias */
+    background-color: #ffffff !important; /* 🟢 Blanco puro sin heredar transparencias */
     color: #212529 !important;
     border-radius: 16px !important;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3) !important; /* Sombreado pronunciado para darle profundidad */
     border: none !important;
-    opacity: 1 !important;                    /* Asegura la máxima nitidez */
+    opacity: 1 !important; /* Asegura la máxima nitidez */
 }
 
 /* 4. Blindaje estricto de fuentes para romper lavados de color */
@@ -37,7 +37,7 @@
 #modalInicial p,
 #modalInicial li,
 #modalInicial span {
-    color: #212529 !important;                /* Gris oscuro corporativo ultra legible */
+    color: #212529 !important; /* Gris oscuro corporativo ultra legible */
     opacity: 1 !important;
     font-weight: 500;
 }
@@ -49,43 +49,41 @@
     visibility: hidden !important;
 }
 
-
-h2{
+h2 {
     color: #b02b2b !important;
     text-align: center;
 }
 
-
 .step-indicators {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
 }
 
 .step-circle {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #ddd;
-  color: #666;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 18px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #ddd;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
 }
 
 .step-circle.active {
-  background: #00c0ef;
-  color: white;
+    background: #00c0ef;
+    color: white;
 }
 
 .step-line {
-  flex: 1;
-  height: 2px;
-  background: #ddd;
-  margin: 0 10px;
+    flex: 1;
+    height: 2px;
+    background: #ddd;
+    margin: 0 10px;
 }
 
 .step-label {
@@ -94,23 +92,27 @@ h2{
     transition: all 0.3s ease;
 }
 
-.imgcuadro{
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 5px;
-  width: 100%;
-  height: auto;
-  margin: 5px;
+.imgcuadro {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 5px;
+    width: 100%;
+    height: auto;
+    margin: 5px;
 }
 
-
-
-
+@media (max-width: 768px) {
+    .modal-body {
+        z-index: 9999;
+        height: 65vh;
+        overflow: hidden;
+        overflow-y: scroll;
+    }
+}
 
 /* =========================================================================
    🚀 CALIBRACIÓN ATÓMICA DE CAPAS PARA EL MODAL INICIAL (Klyntic Enterprise)
    ========================================================================= */
-
 
 /* 🎛️ INDICADORES DE PASOS */
 .step-indicators {
@@ -157,7 +159,7 @@ h2{
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
 .ultra-small {
