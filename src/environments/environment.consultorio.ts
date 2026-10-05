@@ -1,12 +1,12 @@
-// src/environments/environment.prod.ts
-
-// 🚨 1. Ejecutamos la lógica en la primera línea del archivo (fuera del export)
-// Esto lee la URL que el usuario escribió en su navegador.
+// 🏢 1. Analizamos el host del navegador en caliente
 const host = window.location.hostname.toLowerCase();
+const domainParts = host.split('.');
 
-// 🚨 2. Evaluamos la URL en caliente. 
-// Si la URL tiene ".admin.", da TRUE (Clínica Enterprise). Si no, da FALSE (Consultorio).
-const esClinicaEnterprise = host.includes('.admin.');
+// 🏢 2. Lógica polimórfica alineada con tu servicio:
+// Es un despliegue de clínica si tiene subdominio (3 partes o más) 
+// y no es el dominio raíz limpio ni el subdominio genérico de médicos independientes
+const esDespliegueClinica = domainParts.length >= 3 && domainParts[0] !== 'www' && domainParts[0] !== 'consultorio';
+
 
 export const environment = {
     production: true,
@@ -22,11 +22,11 @@ export const environment = {
     socket_url: "https://back-klyntic-envios.onrender.com",
     backend_CRM_node: "https://backend-crmklyntic-mean.onrender.com/api",
     
-    // 🚀 4. Mapeamos los flags usando la variable que creamos arriba
-    IS_CLINIC_DEPLOYMENT: esClinicaEnterprise,
-    nombreSelected: esClinicaEnterprise ? 'clinica-enterprise' : 'consultorio-independiente', 
+    // 🚀 Ahora el flag es dinámico y compatible con el Caso A y Caso B de tu servicio
+    IS_CLINIC_DEPLOYMENT: esDespliegueClinica,
+    nombreSelected: esDespliegueClinica ? 'clinica-dinamica' : 'consultorio-independiente', 
 
-    url_frontend: esClinicaEnterprise 
+    url_frontend: esDespliegueClinica 
         ? 'https://consultorio.klyntic.com/' 
         : 'https://clinica.admin.klyntic.com/',
 

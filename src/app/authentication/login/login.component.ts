@@ -70,7 +70,6 @@ export class LoginComponent implements OnInit {
      */
     sincronizarContextoClinica(): void {
       
-      
       // 1. Extraemos el subdominio/slug (ej: 'clinica-prueba') [5]
       const slug = this.clinicaService.obtenerSlugDeUrl();
   
@@ -80,7 +79,7 @@ export class LoginComponent implements OnInit {
           next: (clinica: ConsultorioCRM | null) => {
             if (clinica) {
               this.clinicaSelected = clinica;
-              console.log(`🏢 [Dashboard CRM] Conectado al entorno corporativo: ${clinica.name}`);
+              // console.log(`🏢 [Dashboard CRM] Conectado al entorno corporativo: ${clinica.name}`);
               
               // 🎨 Inyectamos los colores de la clínica en la cabecera del DOM en caliente [5]
               this.clinicaService.aplicarEstilosDinamicos(clinica.css_personalizado);
