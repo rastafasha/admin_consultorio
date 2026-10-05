@@ -3,6 +3,7 @@ import { DoctorService } from '../../../services/doctor.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { RolesService } from '../../../services/roles.service';
 import { routes } from '../../../shared/routes/routes';
+import { StaffService } from '../../../services/staff.service';
 
 
 declare var $:any;  
@@ -38,6 +39,8 @@ export class ListDoctorComponent {
   public doctor_selected:any;
   public text_validation:any;
   public user:any;
+  public usuario:any;
+  public clinicaid:any;
   public roles:any;
   isLoading = false;
 
@@ -55,18 +58,25 @@ export class ListDoctorComponent {
 
   constructor(
     public doctorService: DoctorService,
+    public personalService: StaffService,
     public roleService: RolesService,
     ){
 
   }
   ngOnInit() {
     window.scrollTo(0, 0);
-    this.doctorService.closeMenuSidebar();
-    this.getTableData();
-    // this.user = this.roleService.authService.user;
-    // console.log(this.user)
     let USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER: '');
+    this.getUserRemoto();
+    this.doctorService.closeMenuSidebar();
+    this.getTableData();
+    
+  }
+  getUserRemoto(){
+    this.personalService.getUser(this.user.id).subscribe((resp:any)=>{
+      this.usuario = resp.user;
+      this.clinicaid = resp.user.clinica_id
+    })  
   }
 
   isPermission(permission:string){
@@ -82,8 +92,8 @@ export class ListDoctorComponent {
   private getTableData(): void {
     this.doctorList = [];
     this.serialNumberArray = [];
-    this.isLoading = true;
     if(this.user.roles[0] === 'SUPERADMIN') {
+      this.isLoading = true;
       this.doctorService.listDoctors().subscribe((resp:any)=>{
         this.totalDatadoctor = resp.users.data.length;
         this.doctor_generals = resp.users.data;
@@ -93,7 +103,8 @@ export class ListDoctorComponent {
       })
 
     }else{
-       this.doctorService.listDoctorsClinica(this.user.clinica_id).subscribe((resp:any)=>{
+      this.isLoading = true;
+       this.doctorService.listDoctorsClinica(this.clinicaid).subscribe((resp:any)=>{
         this.totalDatadoctor = resp.users.data.length;
         this.doctor_generals = resp.users.data;
         this.doctor_id = resp.users.id;

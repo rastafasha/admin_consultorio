@@ -18,6 +18,7 @@ export const environment = {
     backend_CRM_node:"http://localhost:3000/api",
 
     // nombreSelected:'clinica-prueba',
+    // IS_CLINIC_DEPLOYMENT: true, // para pruebas en local modo clinicia
     IS_CLINIC_DEPLOYMENT: esClinicaEnterprise,
     nombreSelected: esClinicaEnterprise ? 'clinica-prueba' : 'clinica-prueba', 
     // nombreSelected: esClinicaEnterprise ? 'clinica-prueba' : 'consultorio-independiente', 
