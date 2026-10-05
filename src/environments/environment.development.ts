@@ -19,7 +19,8 @@ export const environment = {
 
     // nombreSelected:'clinica-prueba',
     IS_CLINIC_DEPLOYMENT: esClinicaEnterprise,
-    nombreSelected: esClinicaEnterprise ? 'clinica-prueba' : 'consultorio-independiente', 
+    nombreSelected: esClinicaEnterprise ? 'clinica-prueba' : 'clinica-prueba', 
+    // nombreSelected: esClinicaEnterprise ? 'clinica-prueba' : 'consultorio-independiente', 
 
     url_frontend: esClinicaEnterprise 
         ? 'https://consultorio.klyntic.com/' 

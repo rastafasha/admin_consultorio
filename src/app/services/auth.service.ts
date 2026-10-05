@@ -55,22 +55,18 @@ export class AuthService {
   }
 
 
-
-
   login(email: string, password: string) {
     // localStorage.setItem('authenticated', 'true');
     // this.router.navigate([routes.adminDashboard]);
     const URL = url_servicios + "/login";
     return this.http.post(URL, { email: email, password: password }).pipe(
       map((auth: any) => {
-        console.log(auth);
         const result = this.saveLocalStorage(auth);
         // Despertamos al motor de sockets con las credenciales nuevas de inmediato
         this.notificacionService.inicializarEcosistemaAlertas();
         return result;
       }),
       catchError((error: any) => {
-        console.log(error);
         return of(undefined);
       })
     );
@@ -82,7 +78,6 @@ export class AuthService {
     const URL = url_servicios + '/me';
     return this.http.post(URL, data, { headers });
   }
-
 
 
 

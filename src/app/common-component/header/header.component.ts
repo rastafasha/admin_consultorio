@@ -44,6 +44,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   // 🔒 Captura el flag inyectado por Vercel al compilar
   public readonly isClinicMode = environment.IS_CLINIC_DEPLOYMENT;
 
+  public clinic: any;
   public nombreDesplegable: string = '';
   public esClinica: boolean = false; // Flag que determinará el comportamiento global
 
@@ -146,6 +147,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
       // 🏢 VERCEL BUILD CLINICA: Consume de Node.js / MongoDB usando el Slug de la URL
       const slug = this.clinicaService.obtenerSlugDeUrl();
       this.clinicaService.getClinicaBySlugCached(slug).subscribe((clinica: ConsultorioCRM | null) => {
+        
+        this.clinic = clinica
         if (clinica) {
           this.nombreDesplegable = clinica.name; // Ej: "Clínica Metropolitana" desde el CRM
         } else {

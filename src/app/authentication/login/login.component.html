@@ -23,13 +23,14 @@
                     style="width: 35%; display: flex; margin: auto;"
                     alt="klyntic"
                   />
-                  <p style="text-align:center; margin-bottom: 0px;">Admin Citas Médicas.</p>
-                  <p style="text-align:center;" *ngIf="clinicaSelected?.tipoClinica === 'Clinica'">Clinica.</p>
-                  <p style="text-align:center;" *ngIf="clinicaSelected?.tipoClinica !== 'Clinica'">Consultorio.</p>
+                  <!-- <p style="text-align:center; margin-bottom: 0px;">Admin Citas Médicas.</p> -->
+                  <p style="text-align:center;" *ngIf="clinicaSelected?.tipoClinica === 'Clinica'">Klyntic Enterprise |Clinica.</p>
+                  <p style="text-align:center;" *ngIf="clinicaSelected?.tipoClinica !== 'Clinica'">Klyntic Pro | Consultorio.</p>
                    
                 </div>
                 <h2 *ngIf="!isLoading">Ingresar</h2>
                 <h4 *ngIf="isLoading" style="text-align:center;">Cargando ingreso ...</h4>
+                <app-loading *ngIf="isLoading"></app-loading>
                 <!-- Form -->
                 <form *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="loginFormSubmit()">
                   <div class="form-group">
