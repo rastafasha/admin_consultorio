@@ -6,6 +6,7 @@ import { routes } from '../../../shared/routes/routes';
 import { SettignService } from '../../../services/settigs.service';
 import { environment } from '../../../../environments/environment';
 import { ClinicaService } from '../../../services/clinica.service';
+import { StaffService } from '../../../services/staff.service';
 
 @Component({
     selector: 'app-general-settings',
@@ -26,6 +27,11 @@ export class GeneralSettingsComponent implements OnInit {
   // Variables de control de datos existentes
   public settings: any[] = [];
   public setting_selectedId: any = null;
+  public setting: any = null;
+
+  public user:any;
+  public usuario:any;
+  public clinicaid:any;
 
   // Manejo de carga de archivos multimedia (Logos/Banners de la Clínica)
   public FILE_AVATAR: any = null;
@@ -44,15 +50,30 @@ export class GeneralSettingsComponent implements OnInit {
   public settingService = inject(SettignService);
   public doctorService = inject(DoctorService);
   public clinicaService = inject(ClinicaService);
+  public personalService = inject(StaffService);
 
   ngOnInit(): void {
     this.inicializarFormularioReactivo();
-    this.getSettings();
+    let USER = localStorage.getItem("user");
+    this.user = JSON.parse(USER ? USER: '');
+    this.getUserRemoto();
+
+    
     this.doctorService.closeMenuSidebar();
     // 🏢 Si es modo clínica, cargamos de inmediato el nombre real desde MongoDB
     if (this.isClinicMode) {
       this.cargarNombreDesdeCRM();
     }
+
+    
+  }
+
+  getUserRemoto(){
+    this.personalService.getUser(this.user.id).subscribe((resp:any)=>{
+      this.usuario = resp.user;
+      this.clinicaid = resp.user.clinica_id
+      this.getSettings();
+    })  
   }
    /**
    * 🛰️ Recupera el nombre de la clínica usando el subdominio/slug de la URL
@@ -87,18 +108,20 @@ export class GeneralSettingsComponent implements OnInit {
    * 🛰️ Recupera las configuraciones de la base de datos de Laravel
    */
   getSettings(): void {
-  this.settingService.getAllSettings().subscribe({
+  this.settingService.getSettingByClinicaId(this.clinicaid).subscribe({
     next: (resp: any) => {
-      console.log('📡 [Configuración] Datos cargados de Laravel:', resp);
-      if (resp && resp.settings && resp.settings.data && resp.settings.data.length > 0) {
-        this.settings = resp.settings.data;
-        const currentSetting = resp.settings.data[0];
+      
+      // 🟢 CORREGIDO: Evaluamos directamente la propiedad 'setting' que envía tu JSON
+      if (resp && resp.setting) {
+        this.setting = resp.setting;
+        const currentSetting = resp.setting;
         this.setting_selectedId = currentSetting.id;
 
-        // Evaluamos si el backend ya reporta que es una clínica (0 o 1 / false o true)
-        this.isClinic = !!currentSetting.is_clinic;
+        // 🟢 SOLUCIÓN SIN 'is_clinic': Evaluamos si tiene un clinica_id válido. 
+        // Si no es null ni undefined, sabemos que es una clínica (true), de lo contrario es independiente (false).
+        this.isClinic = currentSetting.clinica_id !== null && currentSetting.clinica_id !== undefined;
 
-        // 🔄 Llenado automático incluyendo el discriminador de negocio
+        // 🔄 Llenado automático usando los campos reales de tu base de datos
         this.formGroup.patchValue({
           name: currentSetting.name,
           address: currentSetting.address,
@@ -108,17 +131,20 @@ export class GeneralSettingsComponent implements OnInit {
           zip: currentSetting.zip,
           country: currentSetting.country,
           moneda: currentSetting.moneda || 'USD',
-          is_clinic: this.isClinic
+          // Mapeamos el booleano al formulario si tu vista de Angular lo requiere
+          is_clinic: this.isClinic 
         });
 
-        if (currentSetting.img_logo) {
-          this.IMAGE_PREVISUALIZA = currentSetting.img_logo;
+        // 🟢 CORREGIDO: En tu recurso de Laravel el campo se llama 'avatar', no 'img_logo'
+        if (currentSetting.avatar) {
+          this.IMAGE_PREVISUALIZA = currentSetting.avatar;
         }
       }
     },
     error: (err) => console.error('Error descargando configuraciones del servidor:', err)
   });
 }
+
 
   /**
    * 🖼️ Gestiona la previsualización del logotipo de la clínica mitigando formatos inválidos

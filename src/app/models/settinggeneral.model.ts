@@ -1,5 +1,6 @@
 export class SettingGeneral {
     id: number;
+    clinica_id: number;
     name: string;
     address: string;
     phone: string;

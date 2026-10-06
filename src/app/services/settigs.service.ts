@@ -37,10 +37,10 @@ export class SettignService {
     return this.http.get(`${this.baseUrl}/setting`, { headers });
   }
 
-  getSettingById(setting_id: any): Observable<any> {
+  getSettingByClinicaId(clinica_id: any): Observable<any> {
 
     const headers = new HttpHeaders({'Authorization': 'Bearer ' +this.authService.token});
-    return this.http.get(`${this.baseUrl}/setting/show/${setting_id}`, { headers });
+    return this.http.get(`${this.baseUrl}/setting/show/${clinica_id}`, { headers });
   }
 
   createSetting(data: any): Observable<any> {

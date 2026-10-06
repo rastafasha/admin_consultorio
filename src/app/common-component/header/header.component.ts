@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { PushNotificationService } from '../../services/push-notification.service';
 import { ClinicaService, ConsultorioCRM } from '../../services/clinica.service';
 import { AuthService } from '../../services/auth.service';
+import { StaffService } from '../../services/staff.service';
 
 @Component({
   selector: 'app-header',
@@ -47,7 +48,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   public clinic: any;
   public nombreDesplegable: string = '';
   public esClinica: boolean = false; // Flag que determinará el comportamiento global
-
+public clinicaid:any;
 
   constructor(
     public router: Router,
@@ -59,6 +60,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private swPush: SwPush,
     private toastr: ToastrService,
     public notifService: NotificacionService,
+    public personalService: StaffService,
     private clinicaService: ClinicaService,
 
   ) {
@@ -107,7 +109,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.getDoctor();
       }
     });
-    this.getSettings();
+    
+
+    this.getUserRemoto();
+  }
+
+  getUserRemoto(){
+    this.personalService.getUser(this.user.id).subscribe((resp:any)=>{
+      this.usuario = resp.user;
+      this.clinicaid = resp.user.clinica_id
+      this.getSettings();
+    })  
   }
 
   /**
@@ -128,14 +140,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   getSettings() {
-    this.settingService.getAllSettings().subscribe((resp: any) => {
-      this.settings = resp.settings.data;
-      this.setting_selectedId = resp.settings.data[0].id;
-      this.avatar_setting = resp.settings.data[0].avatar;
+    this.settingService.getSettingByClinicaId(this.clinicaid).subscribe((resp: any) => {
+      this.settings = resp.setting;
+      this.setting_selectedId = resp.setting.id;
+      this.avatar_setting = resp.setting.avatar;
       
       // Si es consultorio, dependemos del nombre guardado en Laravel
       if (!this.isClinicMode) {
-        this.name_setting = resp.settings.data[0].name;
+        this.name_setting = resp.setting.name;
       }
       
       this.resolverNombreHeader();
