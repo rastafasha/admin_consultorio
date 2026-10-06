@@ -26,6 +26,7 @@ import { routes } from '../../../shared/routes/routes';
 import { ClinicaService, ConsultorioCRM } from '../../../services/clinica.service';
 import { Subscription } from 'rxjs';
 import { ModalInstruccionesComponent } from '../../../modales/modal-instrucciones/modal-instrucciones.component';
+import { StaffService } from '../../../services/staff.service';
 export type ChartOptions = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   series: ApexAxisChartSeries | any;
@@ -104,6 +105,9 @@ export class AdminDashboardComponent {
   public query_patients_speciality_porcentaje:any = [];
   public query_income_year:any = [];
   public user: any;
+
+  public usuario:any;
+  public clinicaid:any;
   //datos reales
 
   // Variables de control de usuario que ya manejas
@@ -175,6 +179,7 @@ export class AdminDashboardComponent {
     public doctorService : DoctorService,
     public appointmentService : AppointmentService,
     private clinicaService : ClinicaService,
+    private personalService : StaffService,
     
     ) {
       this.chartOptionsOne = {
@@ -334,12 +339,20 @@ export class AdminDashboardComponent {
   ngOnInit(){
     this.doctorService.closeMenuSidebar();
     window.scrollTo(0, 0);
-    this.getDashboardAdmin();
-    this.getDashboardAdminYear();
     this.sincronizarContextoClinica();
     // this.getAppointmentPending();
     let USER = localStorage.getItem("user");
     this.user = JSON.parse(USER ? USER: '');
+    this.getUserRemoto();
+  }
+
+  getUserRemoto(){
+    this.personalService.getUser(this.user.id).subscribe((resp:any)=>{
+      this.usuario = resp.user;
+      this.clinicaid = resp.user.clinica_id
+      this.getDashboardAdmin();
+      this.getDashboardAdminYear();
+    })  
   }
 
   /**
